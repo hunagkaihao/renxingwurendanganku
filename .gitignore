@@ -1,0 +1,68 @@
+# .NET build output and per-user IDE state
+**/[Bb]in/
+**/[Oo]bj/
+**/publish/
+**/.vs/
+**/.idea/
+**/*.user
+**/*.suo
+
+# JavaScript dependencies and generated bundles
+**/node_modules/
+**/dist/
+**/build/
+**/coverage/
+**/.cache/
+
+# Editor and operating-system metadata
+**/.vscode/
+**/.DS_Store
+**/Thumbs.db
+
+# Local logs and temporary files
+**/*.log
+**/*.tmp
+**/*.temp
+**/*.bak
+**/*.swp
+**/*.swo
+
+# Local environment and package-registry credentials
+**/.env
+**/.env.*
+!**/.env.example
+!**/.env.sample
+**/.npmrc
+
+# Local runtime configuration currently contains non-empty database credentials.
+# Keep the working copies for local execution, but never publish them.
+/RenXing_WCS/Ecs.HttpApi.Host/appsettings.json
+/RenXing_PLCServer/Shared/ConfigFiles/globalsettings.json
+/RenXing_PLCServer/Shared/ConfigFiles/log4net.config
+/RenXing_PLCServer/PlcServer.Server/App.config
+
+# Per-machine publishing and template caches
+**/Properties/PublishProfiles/
+**/.vstemplates.*
+/RenXing_WCS/TemplateEngineHost/vs/
+
+# Local migration command notes (database migrations themselves remain tracked)
+**/*.txt
+
+# Graphify deliverables are committed; only machine-local and transient data is ignored.
+**/graphify-out/cache/
+**/graphify-out/__pycache__/
+**/graphify-out/.graphify_python
+**/graphify-out/.graphify_root
+**/graphify-out/.graphify_detect.json
+**/graphify-out/.graphify_extract.json
+**/graphify-out/.graphify_ast.json
+**/graphify-out/.graphify_semantic.json
+**/graphify-out/.graphify_analysis.json
+**/graphify-out/.graphify_cached.json
+**/graphify-out/.graphify_uncached.txt
+**/graphify-out/.graphify_semantic_new.json
+**/graphify-out/.graphify_chunk_*.json
+**/graphify-out/.graphify_labels.json.sig
+**/graphify-out/.needs_update
+**/graphify-out/20??-??-??/

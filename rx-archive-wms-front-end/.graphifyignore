@@ -1,0 +1,48 @@
+# Graphify indexes production architecture only.
+graphify-out/
+
+# Dependencies, build output, caches, and IDE metadata.
+node_modules/
+dist/
+build/
+coverage/
+.cache/
+.idea/
+.vscode/
+
+# Tests, mocks, fixtures, samples, demos, and examples.
+test/
+tests/
+__tests__/
+__mocks__/
+mock/
+mocks/
+fixtures/
+**/test/
+**/tests/
+**/__tests__/
+**/__mocks__/
+**/mock/
+**/mocks/
+**/fixtures/
+**/demo/
+**/demos/
+**/example/
+**/examples/
+**/*.test.*
+**/*.spec.*
+
+# Generated clients, deployment scaffolding, and static assets are not business logic.
+nswag/
+_nginx/
+public/
+**/*.map
+**/*.md
+**/*.txt
+**/*.png
+**/*.jpg
+**/*.jpeg
+**/*.gif
+**/*.svg
+CHANGELOG*
+index.html

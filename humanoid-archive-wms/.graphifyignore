@@ -1,0 +1,50 @@
+# Graphify indexes production architecture only.
+graphify-out/
+
+# Build output, package caches, IDE metadata, and generated code.
+**/bin/
+**/obj/
+**/packages/
+**/.vs/
+**/.idea/
+**/*.Designer.cs
+**/*.generated.cs
+**/*.g.cs
+**/*.sln
+**/*.abpsln.json
+*.sln
+*.abpsln.json
+
+# Tests, mocks, fixtures, samples, demos, and console test clients.
+**/test/
+**/tests/
+**/__tests__/
+**/__mocks__/
+**/mock/
+**/mocks/
+**/fixtures/
+**/Samples/
+**/samples/
+**/Demo/
+**/demo/
+**/Examples/
+**/examples/
+**/*Tests/
+**/*TestBase/
+**/*ConsoleTestApp/
+**/*.test.*
+**/*.spec.*
+
+# Generated persistence history and static web output are not business logic.
+**/Migrations/
+**/wwwroot/
+
+# Deployment manifests and prose are outside the callable business graph.
+**/docker-compose*.yml
+**/*.md
+**/*.txt
+**/*.png
+**/*.jpg
+**/*.jpeg
+**/*.gif
+**/*.svg

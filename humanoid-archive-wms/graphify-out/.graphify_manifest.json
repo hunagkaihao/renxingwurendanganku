@@ -1,0 +1,3177 @@
+{
+  "Lion.AbpPro.sln": {
+    "mtime": 1787549986.158349,
+    "ast_hash": "2bba360f6a3643fbc10e23922d35460d",
+    "semantic_hash": "2bba360f6a3643fbc10e23922d35460d"
+  },
+  "frameworks/CAP/src/Lion.AbpPro.CAP/AbpProAbpCapConsumerServiceSelector.cs": {
+    "mtime": 1787549986.1626732,
+    "ast_hash": "ce7268e2258513994fc827da88afc564",
+    "semantic_hash": "ce7268e2258513994fc827da88afc564"
+  },
+  "frameworks/CAP/src/Lion.AbpPro.CAP/AbpProAbpCapDistributedEventBus.cs": {
+    "mtime": 1787549986.1626732,
+    "ast_hash": "3480f733d2c64e4aca30a9eb4c24440a",
+    "semantic_hash": "3480f733d2c64e4aca30a9eb4c24440a"
+  },
+  "frameworks/CAP/src/Lion.AbpPro.CAP/AbpProAbpCapModule.cs": {
+    "mtime": 1787549986.163846,
+    "ast_hash": "6e2f976f87fa3e86411ff1651044532f",
+    "semantic_hash": "6e2f976f87fa3e86411ff1651044532f"
+  },
+  "frameworks/CAP/src/Lion.AbpPro.CAP/AbpProAbpCapServiceCollectionExtensions.cs": {
+    "mtime": 1787549986.163846,
+    "ast_hash": "145a1283e06533349206439b798b3a6d",
+    "semantic_hash": "145a1283e06533349206439b798b3a6d"
+  },
+  "frameworks/CAP/src/Lion.AbpPro.CAP/Lion.AbpPro.CAP.csproj": {
+    "mtime": 1787549986.1648426,
+    "ast_hash": "ddd69f9ca39a96f65ea12bcf41b3c872",
+    "semantic_hash": "ddd69f9ca39a96f65ea12bcf41b3c872"
+  },
+  "frameworks/Extensions/src/Lion.AbpPro.Extension/Customs/Dtos/CustomeListResultDto.cs": {
+    "mtime": 1787549986.1672614,
+    "ast_hash": "d2dad8fe010fbdb969024478dd990882",
+    "semantic_hash": "d2dad8fe010fbdb969024478dd990882"
+  },
+  "frameworks/Extensions/src/Lion.AbpPro.Extension/Customs/Dtos/CustomePagedResultDto.cs": {
+    "mtime": 1787549986.1672614,
+    "ast_hash": "0cfc4a9fc5ac0779dfc114f856e1e91d",
+    "semantic_hash": "0cfc4a9fc5ac0779dfc114f856e1e91d"
+  },
+  "frameworks/Extensions/src/Lion.AbpPro.Extension/Customs/Dtos/FromSelector.cs": {
+    "mtime": 1787549986.1686454,
+    "ast_hash": "d2832dfa1b751c64015583a854031ff0",
+    "semantic_hash": "d2832dfa1b751c64015583a854031ff0"
+  },
+  "frameworks/Extensions/src/Lion.AbpPro.Extension/Customs/Dtos/IdInput.cs": {
+    "mtime": 1787549986.1686454,
+    "ast_hash": "d128e569841ab32e459a63a67d7c245b",
+    "semantic_hash": "d128e569841ab32e459a63a67d7c245b"
+  },
+  "frameworks/Extensions/src/Lion.AbpPro.Extension/Customs/Dtos/IdIntInput.cs": {
+    "mtime": 1787549986.1696422,
+    "ast_hash": "12627283e1d5ed6bf860d33ab2798e71",
+    "semantic_hash": "12627283e1d5ed6bf860d33ab2798e71"
+  },
+  "frameworks/Extensions/src/Lion.AbpPro.Extension/Customs/Dtos/PagingBase.cs": {
+    "mtime": 1787549986.1696422,
+    "ast_hash": "2bc7d54a601a642f6bcca5c6470c2f3d",
+    "semantic_hash": "2bc7d54a601a642f6bcca5c6470c2f3d"
+  },
+  "frameworks/Extensions/src/Lion.AbpPro.Extension/Customs/Dtos/WrapResult.cs": {
+    "mtime": 1787549986.1706424,
+    "ast_hash": "904c2efebdc8851941e663799e212e2a",
+    "semantic_hash": "904c2efebdc8851941e663799e212e2a"
+  },
+  "frameworks/Extensions/src/Lion.AbpPro.Extension/Customs/Guard.cs": {
+    "mtime": 1787549986.1706424,
+    "ast_hash": "8fed804c4a12685b44c21bc34b9e6064",
+    "semantic_hash": "8fed804c4a12685b44c21bc34b9e6064"
+  },
+  "frameworks/Extensions/src/Lion.AbpPro.Extension/Customs/Http/HttpClientHelper.cs": {
+    "mtime": 1787549986.1716425,
+    "ast_hash": "1247850db2f4c9b5a0cc7216c536f9d5",
+    "semantic_hash": "1247850db2f4c9b5a0cc7216c536f9d5"
+  },
+  "frameworks/Extensions/src/Lion.AbpPro.Extension/Customs/Http/NetClient.cs": {
+    "mtime": 1787549986.1726427,
+    "ast_hash": "a0f61326ed1cc885f611164dce1c4abb",
+    "semantic_hash": "a0f61326ed1cc885f611164dce1c4abb"
+  },
+  "frameworks/Extensions/src/Lion.AbpPro.Extension/Lion.AbpPro.Extension.csproj": {
+    "mtime": 1787549986.1726427,
+    "ast_hash": "638d4986c2565dd5bd9065cf57b747ee",
+    "semantic_hash": "638d4986c2565dd5bd9065cf57b747ee"
+  },
+  "frameworks/Extensions/src/Lion.AbpPro.Extension/System/BooleanExtensions.cs": {
+    "mtime": 1787549986.1736429,
+    "ast_hash": "832d0278bf066d545aed5acd0860dd69",
+    "semantic_hash": "832d0278bf066d545aed5acd0860dd69"
+  },
+  "frameworks/Extensions/src/Lion.AbpPro.Extension/System/Collections/Generic/CollectionExtensions.cs": {
+    "mtime": 1787549986.1756437,
+    "ast_hash": "23b054d6ed151797f56bf2ae2f043c6c",
+    "semantic_hash": "23b054d6ed151797f56bf2ae2f043c6c"
+  },
+  "frameworks/Extensions/src/Lion.AbpPro.Extension/System/Collections/Generic/EnumerableExtensions.cs": {
+    "mtime": 1787549986.1756437,
+    "ast_hash": "faecc4a0c7ccbce39eed2ad1e6416650",
+    "semantic_hash": "faecc4a0c7ccbce39eed2ad1e6416650"
+  },
+  "frameworks/Extensions/src/Lion.AbpPro.Extension/System/DateTimeExtensions.cs": {
+    "mtime": 1787549986.1766436,
+    "ast_hash": "e8b2d5a038760001d2a6dba7a8d85bd5",
+    "semantic_hash": "e8b2d5a038760001d2a6dba7a8d85bd5"
+  },
+  "frameworks/Extensions/src/Lion.AbpPro.Extension/System/EnumExtensions.cs": {
+    "mtime": 1787549986.1774502,
+    "ast_hash": "bcea775edc411e3a0cb1f101ef78c976",
+    "semantic_hash": "bcea775edc411e3a0cb1f101ef78c976"
+  },
+  "frameworks/Extensions/src/Lion.AbpPro.Extension/System/ExceptionExtensions.cs": {
+    "mtime": 1787549986.1774502,
+    "ast_hash": "87fa0614050d255f9b0c0c0549b42cac",
+    "semantic_hash": "87fa0614050d255f9b0c0c0549b42cac"
+  },
+  "frameworks/Extensions/src/Lion.AbpPro.Extension/System/Linq/QueryableExtensions.cs": {
+    "mtime": 1787549986.1784468,
+    "ast_hash": "0b158f631a647e6380d80dcf909100ae",
+    "semantic_hash": "0b158f631a647e6380d80dcf909100ae"
+  },
+  "frameworks/Extensions/src/Lion.AbpPro.Extension/System/Reflection/AssemblyExtensions.cs": {
+    "mtime": 1787549986.179447,
+    "ast_hash": "35b70e9119b9e7fe6f41deed3a789ad4",
+    "semantic_hash": "35b70e9119b9e7fe6f41deed3a789ad4"
+  },
+  "frameworks/Extensions/src/Lion.AbpPro.Extension/System/Reflection/MemberInfoExtensions.cs": {
+    "mtime": 1787549986.180447,
+    "ast_hash": "eddc5eda4ba8dae25f1c83b973fc071b",
+    "semantic_hash": "eddc5eda4ba8dae25f1c83b973fc071b"
+  },
+  "frameworks/Extensions/src/Lion.AbpPro.Extension/System/Reflection/MethodInfoExtensions.cs": {
+    "mtime": 1787549986.1809027,
+    "ast_hash": "a21f4b0a72e2e02e691f67d48318fdf2",
+    "semantic_hash": "a21f4b0a72e2e02e691f67d48318fdf2"
+  },
+  "frameworks/Extensions/src/Lion.AbpPro.Extension/System/Reflection/PropertyInfoExtensions.cs": {
+    "mtime": 1787549986.1809027,
+    "ast_hash": "e45c3f15bcdd775c832bebce4a49f38a",
+    "semantic_hash": "e45c3f15bcdd775c832bebce4a49f38a"
+  },
+  "frameworks/Extensions/src/Lion.AbpPro.Extension/System/StringExtensions.cs": {
+    "mtime": 1787549986.1819458,
+    "ast_hash": "51bb254acb98425e0194b8e891c331d7",
+    "semantic_hash": "51bb254acb98425e0194b8e891c331d7"
+  },
+  "frameworks/Extensions/src/Lion.AbpPro.Extension/System/Text/StringBuilderExtensions.cs": {
+    "mtime": 1787549986.1829429,
+    "ast_hash": "bc79e216ffcde635e15e95da07440d09",
+    "semantic_hash": "bc79e216ffcde635e15e95da07440d09"
+  },
+  "gateways/Lion.AbpPro.WebGateway/Lion.AbpPro.WebGateway.csproj": {
+    "mtime": 1787549986.1844072,
+    "ast_hash": "a569572b0822676b4bac88c975cc2d9c",
+    "semantic_hash": "a569572b0822676b4bac88c975cc2d9c"
+  },
+  "gateways/Lion.AbpPro.WebGateway/Program.cs": {
+    "mtime": 1787549986.1844072,
+    "ast_hash": "44ef751c3851d6d9803b62aa723ef9bc",
+    "semantic_hash": "44ef751c3851d6d9803b62aa723ef9bc"
+  },
+  "gateways/Lion.AbpPro.WebGateway/Properties/launchSettings.json": {
+    "mtime": 1787549986.185818,
+    "ast_hash": "b82e411ceb2eca6dc4fe6d173c40a6b3",
+    "semantic_hash": "b82e411ceb2eca6dc4fe6d173c40a6b3"
+  },
+  "gateways/Lion.AbpPro.WebGateway/Startup.cs": {
+    "mtime": 1787549986.1868153,
+    "ast_hash": "7fa0fefb626ddfc7c14136c1259e02c5",
+    "semantic_hash": "7fa0fefb626ddfc7c14136c1259e02c5"
+  },
+  "gateways/Lion.AbpPro.WebGateway/WebGatewayModule.cs": {
+    "mtime": 1787549986.1868153,
+    "ast_hash": "5a6a388bb3e46cdbc5c8dee2a6930199",
+    "semantic_hash": "5a6a388bb3e46cdbc5c8dee2a6930199"
+  },
+  "gateways/Lion.AbpPro.WebGateway/appsettings.Consul.json": {
+    "mtime": 1787549986.1878152,
+    "ast_hash": "edebfbdcd292a3745fa74e3441daffed",
+    "semantic_hash": "edebfbdcd292a3745fa74e3441daffed"
+  },
+  "gateways/Lion.AbpPro.WebGateway/appsettings.json": {
+    "mtime": 1787549986.1878152,
+    "ast_hash": "4948e08b680e0e1db8dc2e80f1610957",
+    "semantic_hash": "4948e08b680e0e1db8dc2e80f1610957"
+  },
+  "global.json": {
+    "mtime": 1787549986.1888154,
+    "ast_hash": "d3b27bbf99cb35b6619f60ba8f44eed1",
+    "semantic_hash": "d3b27bbf99cb35b6619f60ba8f44eed1"
+  },
+  "modules/WarehouseManagement/WarehouseManagement.abpmdl.json": {
+    "mtime": 1787549986.2004104,
+    "ast_hash": "ada9d98737b035cc476a7f5941501261",
+    "semantic_hash": "ada9d98737b035cc476a7f5941501261"
+  },
+  "modules/WarehouseManagement/WarehouseManagement.abpsln.json": {
+    "mtime": 1787549986.2004104,
+    "ast_hash": "1d7e5a1da4c7f5aa16b5d4b18cdddda2",
+    "semantic_hash": "1d7e5a1da4c7f5aa16b5d4b18cdddda2"
+  },
+  "modules/WarehouseManagement/WarehouseManagement.sln": {
+    "mtime": 1787549986.201476,
+    "ast_hash": "8905343a486a707aba3836f0bd6884d1",
+    "semantic_hash": "8905343a486a707aba3836f0bd6884d1"
+  },
+  "modules/WarehouseManagement/database/entrypoint.sh": {
+    "mtime": 1787549986.2037084,
+    "ast_hash": "1a297aa1e85bd480834a3eaf10f5633b",
+    "semantic_hash": "1a297aa1e85bd480834a3eaf10f5633b"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/ArchiveBoxs/Dto/ArchiveBoxDetailDto.cs": {
+    "mtime": 1787549986.2077363,
+    "ast_hash": "8904374d96903178d4637cb848097582",
+    "semantic_hash": "8904374d96903178d4637cb848097582"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/ArchiveBoxs/Dto/ArchiveBoxDto.cs": {
+    "mtime": 1787549986.2087367,
+    "ast_hash": "326ea09ca9c443cebea3676dfbdf713d",
+    "semantic_hash": "326ea09ca9c443cebea3676dfbdf713d"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/ArchiveBoxs/Dto/CreateArchiveBoxDto.cs": {
+    "mtime": 1787549986.2087367,
+    "ast_hash": "146e7b9dd74653d04bd71116155baf3a",
+    "semantic_hash": "146e7b9dd74653d04bd71116155baf3a"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/ArchiveBoxs/Dto/PagingArchiveBoxDetailInput.cs": {
+    "mtime": 1787549986.210157,
+    "ast_hash": "61d033065b3ea54e55fc19d56366cbc2",
+    "semantic_hash": "61d033065b3ea54e55fc19d56366cbc2"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/ArchiveBoxs/Dto/PagingArchiveBoxListInput.cs": {
+    "mtime": 1787549986.210157,
+    "ast_hash": "c68fb5ba2351846ff05558a6a562560d",
+    "semantic_hash": "c68fb5ba2351846ff05558a6a562560d"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/ArchiveBoxs/IArchiveBoxAppService.cs": {
+    "mtime": 1787549986.2111535,
+    "ast_hash": "da104fffee01dddfb41406398bcc7ae3",
+    "semantic_hash": "da104fffee01dddfb41406398bcc7ae3"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Archives/Dto/ArchiveDto.cs": {
+    "mtime": 1787549986.2121537,
+    "ast_hash": "d1d00e1d98b21cf881fed08d3dd3fba6",
+    "semantic_hash": "d1d00e1d98b21cf881fed08d3dd3fba6"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Archives/Dto/CreateArchiveDto.cs": {
+    "mtime": 1787549986.213154,
+    "ast_hash": "f64f5b1348c174abe0b98aa6c963a1bc",
+    "semantic_hash": "f64f5b1348c174abe0b98aa6c963a1bc"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Archives/Dto/PagingArchiveListInput.cs": {
+    "mtime": 1787549986.213154,
+    "ast_hash": "124520f4e32a635d1bf854df413c4865",
+    "semantic_hash": "124520f4e32a635d1bf854df413c4865"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Archives/IArchiveAppService.cs": {
+    "mtime": 1787549986.214154,
+    "ast_hash": "14bbdcf19913fe62a9bd20c218039f68",
+    "semantic_hash": "14bbdcf19913fe62a9bd20c218039f68"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Boards/Dto/SevenDayTasksDto.cs": {
+    "mtime": 1787549986.2151544,
+    "ast_hash": "6c69e5d34a5d640c544c9888a296c492",
+    "semantic_hash": "6c69e5d34a5d640c544c9888a296c492"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Boards/Dto/StockInfoDto.cs": {
+    "mtime": 1787549986.2161546,
+    "ast_hash": "d7e536d8bc934d5ea23ab26cf60fa303",
+    "semantic_hash": "d7e536d8bc934d5ea23ab26cf60fa303"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Boards/Dto/TodayTasksDto.cs": {
+    "mtime": 1787549986.2161546,
+    "ast_hash": "7fdcde3fa93e0a44bebf1d07a1f5c796",
+    "semantic_hash": "7fdcde3fa93e0a44bebf1d07a1f5c796"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Boards/IBoardAppService.cs": {
+    "mtime": 1787549986.2171547,
+    "ast_hash": "bd4ed48dc852eb0258346bafba95e1b2",
+    "semantic_hash": "bd4ed48dc852eb0258346bafba95e1b2"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Cells/Dto/CellDto.cs": {
+    "mtime": 1787549986.218717,
+    "ast_hash": "e0dc3b81936c279d775615342af02b23",
+    "semantic_hash": "e0dc3b81936c279d775615342af02b23"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Cells/Dto/CellInitDto.cs": {
+    "mtime": 1787549986.218717,
+    "ast_hash": "decf69def442b5cfbc7633bed66da900",
+    "semantic_hash": "decf69def442b5cfbc7633bed66da900"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Cells/Dto/CreateCellDto.cs": {
+    "mtime": 1787549986.219717,
+    "ast_hash": "7fab576eeb42daa81dca4a6e480ba0b7",
+    "semantic_hash": "7fab576eeb42daa81dca4a6e480ba0b7"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Cells/Dto/CreateStationDto.cs": {
+    "mtime": 1787549986.2202778,
+    "ast_hash": "12431a0d32d024c5ab1cc1874e3e53a8",
+    "semantic_hash": "12431a0d32d024c5ab1cc1874e3e53a8"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Cells/Dto/CustomCreateCellDto.cs": {
+    "mtime": 1787549986.2202778,
+    "ast_hash": "530bd8e03a8495d85d86b8ac750d44cf",
+    "semantic_hash": "530bd8e03a8495d85d86b8ac750d44cf"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Cells/Dto/PagingCellListInput.cs": {
+    "mtime": 1787549986.2202778,
+    "ast_hash": "0cab8ceede1a5dff68985808d6cae01e",
+    "semantic_hash": "0cab8ceede1a5dff68985808d6cae01e"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Cells/Dto/PagingCellOutput.cs": {
+    "mtime": 1787549986.2217777,
+    "ast_hash": "b64b619ff6ef020cd6548a3767338a52",
+    "semantic_hash": "b64b619ff6ef020cd6548a3767338a52"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Cells/Dto/UpdateCellDto.cs": {
+    "mtime": 1787549986.2217777,
+    "ast_hash": "6591223445495c9a5500728693e9ad95",
+    "semantic_hash": "6591223445495c9a5500728693e9ad95"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Cells/ICellAppService.cs": {
+    "mtime": 1787549986.222775,
+    "ast_hash": "9b62715f9f3ca444586f36a25bb29fc4",
+    "semantic_hash": "9b62715f9f3ca444586f36a25bb29fc4"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/CheckHiss/Dto/CheckDetailHisDto.cs": {
+    "mtime": 1787549986.2237718,
+    "ast_hash": "149be6c3f6b57492157a002c4d9f3ea8",
+    "semantic_hash": "149be6c3f6b57492157a002c4d9f3ea8"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/CheckHiss/Dto/CheckHisDto.cs": {
+    "mtime": 1787549986.224772,
+    "ast_hash": "9ab6f996badef9f771cddabe898ac8e2",
+    "semantic_hash": "9ab6f996badef9f771cddabe898ac8e2"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/CheckHiss/Dto/PagingCheckDetailHisDto.cs": {
+    "mtime": 1787549986.224772,
+    "ast_hash": "f5d00fb0f256aa0ffb7a5923f62cac4f",
+    "semantic_hash": "f5d00fb0f256aa0ffb7a5923f62cac4f"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/CheckHiss/Dto/PagingCheckHisDto.cs": {
+    "mtime": 1787549986.2257724,
+    "ast_hash": "6c4e0103bb5f682499c6ae444b056ef6",
+    "semantic_hash": "6c4e0103bb5f682499c6ae444b056ef6"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/CheckHiss/ICheckHisAppService.cs": {
+    "mtime": 1787549986.2257724,
+    "ast_hash": "cc2fd571116aed25e58097bad51fdc07",
+    "semantic_hash": "cc2fd571116aed25e58097bad51fdc07"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Checks/Dto/CheckDetailDto.cs": {
+    "mtime": 1787549986.2280157,
+    "ast_hash": "c7500791705be36a75c5fe130ed75aa6",
+    "semantic_hash": "c7500791705be36a75c5fe130ed75aa6"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Checks/Dto/CheckDto.cs": {
+    "mtime": 1787549986.2280157,
+    "ast_hash": "f28886592158a47b8d48cc6299de1628",
+    "semantic_hash": "f28886592158a47b8d48cc6299de1628"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Checks/Dto/CreateCheckDto.cs": {
+    "mtime": 1787549986.2290158,
+    "ast_hash": "66b1b6537ee7a0c4963e24b2456abad6",
+    "semantic_hash": "66b1b6537ee7a0c4963e24b2456abad6"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Checks/Dto/PagingCheckDetailInput.cs": {
+    "mtime": 1787549986.2290158,
+    "ast_hash": "97c37233f21a344a04b57d6857786158",
+    "semantic_hash": "97c37233f21a344a04b57d6857786158"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Checks/Dto/PagingCheckListInput.cs": {
+    "mtime": 1787549986.2303517,
+    "ast_hash": "2807cd2491fccd22cd18130e5289152d",
+    "semantic_hash": "2807cd2491fccd22cd18130e5289152d"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Checks/Dto/UpdateCheckDetailDto.cs": {
+    "mtime": 1787549986.2303517,
+    "ast_hash": "018bd26e4764bba2b533bb8763585f53",
+    "semantic_hash": "018bd26e4764bba2b533bb8763585f53"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Checks/ICheckAppService.cs": {
+    "mtime": 1787549986.2313483,
+    "ast_hash": "2eb9624a59328aa4fd9a1a7f97cd4771",
+    "semantic_hash": "2eb9624a59328aa4fd9a1a7f97cd4771"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Faces/Dto/AddFaceDto.cs": {
+    "mtime": 1787549986.233006,
+    "ast_hash": "36bac790f90003752f0395e08899ceca",
+    "semantic_hash": "36bac790f90003752f0395e08899ceca"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Faces/Dto/FaceDto.cs": {
+    "mtime": 1787549986.233006,
+    "ast_hash": "e57bf2fd87a4e8596408244caabf69ef",
+    "semantic_hash": "e57bf2fd87a4e8596408244caabf69ef"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Faces/Dto/FaceLoginDto.cs": {
+    "mtime": 1787549986.2340066,
+    "ast_hash": "fac82b4784e17bcec9dac4f27285f62a",
+    "semantic_hash": "fac82b4784e17bcec9dac4f27285f62a"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Faces/Dto/GetFaceDto.cs": {
+    "mtime": 1787549986.2340066,
+    "ast_hash": "0fe9a3603bbcbd12a1a6c4ed221ae4cb",
+    "semantic_hash": "0fe9a3603bbcbd12a1a6c4ed221ae4cb"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Faces/Dto/IFaceAppService.cs": {
+    "mtime": 1787549986.235159,
+    "ast_hash": "683ddbc33f21fc1ed33eb6b2bbd942a6",
+    "semantic_hash": "683ddbc33f21fc1ed33eb6b2bbd942a6"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Fingers/Dto/AddVeinDto.cs": {
+    "mtime": 1787549986.2361555,
+    "ast_hash": "8d2cde6fb7a4cd8e01a44c7e5fd0e0a8",
+    "semantic_hash": "8d2cde6fb7a4cd8e01a44c7e5fd0e0a8"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Fingers/Dto/VeinDto.cs": {
+    "mtime": 1787549986.2361555,
+    "ast_hash": "d7b62cc2bacc9a2763269b8b51fc727b",
+    "semantic_hash": "d7b62cc2bacc9a2763269b8b51fc727b"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Fingers/IVeinAppService.cs": {
+    "mtime": 1787549986.2376604,
+    "ast_hash": "8fd0a7268796e498d849f1a109a03bcd",
+    "semantic_hash": "8fd0a7268796e498d849f1a109a03bcd"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Goodss/Dto/CreateGoodsDto.cs": {
+    "mtime": 1787549986.2396579,
+    "ast_hash": "399b88541836414617d5b885dc7ae2a0",
+    "semantic_hash": "399b88541836414617d5b885dc7ae2a0"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Goodss/Dto/GoodsDto.cs": {
+    "mtime": 1787549986.2396579,
+    "ast_hash": "c4168412ada9a69de3040cc3c8691213",
+    "semantic_hash": "c4168412ada9a69de3040cc3c8691213"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Goodss/Dto/GoodsSelectDto.cs": {
+    "mtime": 1787549986.240658,
+    "ast_hash": "dc8b1a50ad04330e5795942865c4b2bd",
+    "semantic_hash": "dc8b1a50ad04330e5795942865c4b2bd"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Goodss/Dto/PagingGoodsListInput.cs": {
+    "mtime": 1787549986.2413795,
+    "ast_hash": "18c36510edb35891e1dcb370cf14d681",
+    "semantic_hash": "18c36510edb35891e1dcb370cf14d681"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Goodss/Dto/PagingGoodsOutput.cs": {
+    "mtime": 1787549986.2413795,
+    "ast_hash": "f007c3db876c0b0b532952d0e64dbfca",
+    "semantic_hash": "f007c3db876c0b0b532952d0e64dbfca"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Goodss/Dto/UpdateGoodsDto.cs": {
+    "mtime": 1787549986.242376,
+    "ast_hash": "086b751ae665a585d124ffac1a722bd5",
+    "semantic_hash": "086b751ae665a585d124ffac1a722bd5"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Goodss/IGoodsAppService.cs": {
+    "mtime": 1787549986.242376,
+    "ast_hash": "d1156414752f0313a055b5f79c2ddbd8",
+    "semantic_hash": "d1156414752f0313a055b5f79c2ddbd8"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/LogFiles/Dto/LogFileDto.cs": {
+    "mtime": 1787549986.2443764,
+    "ast_hash": "b59717943bd9ee725357f9649f451602",
+    "semantic_hash": "b59717943bd9ee725357f9649f451602"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/LogFiles/ILogFileAppService.cs": {
+    "mtime": 1787549986.2443764,
+    "ast_hash": "c478a81a5434ce851c64c20921f537a5",
+    "semantic_hash": "c478a81a5434ce851c64c20921f537a5"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Permissions/WarehouseManagementPermissionDefinitionProvider.cs": {
+    "mtime": 1787549986.2453766,
+    "ast_hash": "dcfd54c5cc99b6ebe40e715099db3da0",
+    "semantic_hash": "dcfd54c5cc99b6ebe40e715099db3da0"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Permissions/WarehouseManagementPermissions.cs": {
+    "mtime": 1787549986.246377,
+    "ast_hash": "accda28420d42c7ca7c337aae1bc5235",
+    "semantic_hash": "accda28420d42c7ca7c337aae1bc5235"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Plans/Dto/CreatePlanDetailInput.cs": {
+    "mtime": 1787549986.2473774,
+    "ast_hash": "646e5c69aa83bc7793105c31b850305c",
+    "semantic_hash": "646e5c69aa83bc7793105c31b850305c"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Plans/Dto/CreatePlanDto.cs": {
+    "mtime": 1787549986.2483776,
+    "ast_hash": "67dcf8691cca8e87688e4342c833d40d",
+    "semantic_hash": "67dcf8691cca8e87688e4342c833d40d"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Plans/Dto/PagingPlanListInput.cs": {
+    "mtime": 1787549986.2483776,
+    "ast_hash": "b3e35ee41f33cb47147fdf91daac70a6",
+    "semantic_hash": "b3e35ee41f33cb47147fdf91daac70a6"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Plans/Dto/PlanDetailDto.cs": {
+    "mtime": 1787549986.249677,
+    "ast_hash": "05281b41eb5471d94de13eff57e53b9f",
+    "semantic_hash": "05281b41eb5471d94de13eff57e53b9f"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Plans/Dto/PlanDto.cs": {
+    "mtime": 1787549986.249677,
+    "ast_hash": "b7a311bc256d210ad6eb76f96896b131",
+    "semantic_hash": "b7a311bc256d210ad6eb76f96896b131"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Plans/Dto/UpdatePlanDto.cs": {
+    "mtime": 1787549986.250674,
+    "ast_hash": "42b7bb2afe7404cdc8ecd4c90fd7e851",
+    "semantic_hash": "42b7bb2afe7404cdc8ecd4c90fd7e851"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Plans/IPlanAppService.cs": {
+    "mtime": 1787549986.250674,
+    "ast_hash": "4deeb3249f48a4c7fb6727bfc37686ac",
+    "semantic_hash": "4deeb3249f48a4c7fb6727bfc37686ac"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/RfidCodes/Dto/CreateRfidCodeDto.cs": {
+    "mtime": 1787549986.2526743,
+    "ast_hash": "84a9a951319c568b2a04063940f1f619",
+    "semantic_hash": "84a9a951319c568b2a04063940f1f619"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/RfidCodes/Dto/PagingArchiveBoxListInput.cs": {
+    "mtime": 1787549986.2526743,
+    "ast_hash": "cfbf4d086f9501404c81b8d17a21f558",
+    "semantic_hash": "cfbf4d086f9501404c81b8d17a21f558"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/RfidCodes/Dto/RfidCodeDto.cs": {
+    "mtime": 1787549986.2540379,
+    "ast_hash": "c404af197e2abb1b186df3b1bd8c846c",
+    "semantic_hash": "c404af197e2abb1b186df3b1bd8c846c"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/RfidCodes/IRfidCodeAppService.cs": {
+    "mtime": 1787549986.2540379,
+    "ast_hash": "5af9987957e85c9bfdcec72980fbd25a",
+    "semantic_hash": "5af9987957e85c9bfdcec72980fbd25a"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/StockTasks/Dto/CreateBindBoxStockTaskDto.cs": {
+    "mtime": 1787549986.257035,
+    "ast_hash": "d1d2e9d300b1a0ddf1af0d20d2025a31",
+    "semantic_hash": "d1d2e9d300b1a0ddf1af0d20d2025a31"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/StockTasks/Dto/CreateStockTaskDetailByBarcodeInput.cs": {
+    "mtime": 1787549986.2580352,
+    "ast_hash": "627b7b3add9e2cef3c01a3ac74688e04",
+    "semantic_hash": "627b7b3add9e2cef3c01a3ac74688e04"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/StockTasks/Dto/CreateStockTaskDetailInput.cs": {
+    "mtime": 1787549986.2580352,
+    "ast_hash": "d27525aff6663bb0a16a34b45aad7896",
+    "semantic_hash": "d27525aff6663bb0a16a34b45aad7896"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/StockTasks/Dto/CreateStockTaskDto.cs": {
+    "mtime": 1787549986.259205,
+    "ast_hash": "66d95cb60cc795b657c3f2e4bcc24556",
+    "semantic_hash": "66d95cb60cc795b657c3f2e4bcc24556"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/StockTasks/Dto/DaysSumDto.cs": {
+    "mtime": 1787549986.259205,
+    "ast_hash": "3063add523358a03889dfe9f5856bff8",
+    "semantic_hash": "3063add523358a03889dfe9f5856bff8"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/StockTasks/Dto/DeleteStockTaskDetailInput.cs": {
+    "mtime": 1787549986.2602024,
+    "ast_hash": "ab793521c6b4a88194f2e28e1445a0ad",
+    "semantic_hash": "ab793521c6b4a88194f2e28e1445a0ad"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/StockTasks/Dto/ManageMain.cs": {
+    "mtime": 1787549986.2602024,
+    "ast_hash": "9f511e90a0343fb7b961a74cffa00ab4",
+    "semantic_hash": "9f511e90a0343fb7b961a74cffa00ab4"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/StockTasks/Dto/OutCellTrue.cs": {
+    "mtime": 1787549986.2612028,
+    "ast_hash": "2e8005297a00240d9252b960d8f5ea2f",
+    "semantic_hash": "2e8005297a00240d9252b960d8f5ea2f"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/StockTasks/Dto/PagingStockTaskDetailInput.cs": {
+    "mtime": 1787549986.2612028,
+    "ast_hash": "c73d098ae2645278aec9b3059575a618",
+    "semantic_hash": "c73d098ae2645278aec9b3059575a618"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/StockTasks/Dto/PagingStockTaskDetailOutput.cs": {
+    "mtime": 1787549986.262203,
+    "ast_hash": "23e3bd963edac0d389a9315eb298e554",
+    "semantic_hash": "23e3bd963edac0d389a9315eb298e554"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/StockTasks/Dto/PagingStockTaskListInput.cs": {
+    "mtime": 1787549986.2632031,
+    "ast_hash": "6045c1fe94f82cc5fa4610c341bb7049",
+    "semantic_hash": "6045c1fe94f82cc5fa4610c341bb7049"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/StockTasks/Dto/PagingStockTaskOutput.cs": {
+    "mtime": 1787549986.2632031,
+    "ast_hash": "7a3b854dff2f05cb7dde139f1754836b",
+    "semantic_hash": "7a3b854dff2f05cb7dde139f1754836b"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/StockTasks/Dto/PickOutDto.cs": {
+    "mtime": 1787549986.2642033,
+    "ast_hash": "4e84752e10d5738af3b0871044d839c1",
+    "semantic_hash": "4e84752e10d5738af3b0871044d839c1"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/StockTasks/Dto/StockTaskDetailDto.cs": {
+    "mtime": 1787549986.2642033,
+    "ast_hash": "acc86143a8d27058f40b41f695f0ba69",
+    "semantic_hash": "acc86143a8d27058f40b41f695f0ba69"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/StockTasks/Dto/StockTaskDto.cs": {
+    "mtime": 1787549986.2652037,
+    "ast_hash": "6dc7a29fe1009145bc246ccf48cf98dd",
+    "semantic_hash": "6dc7a29fe1009145bc246ccf48cf98dd"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/StockTasks/Dto/UpdateStockTaskCellDto.cs": {
+    "mtime": 1787549986.2652037,
+    "ast_hash": "bd021ea29ab0ddff4a2133dd4056c988",
+    "semantic_hash": "bd021ea29ab0ddff4a2133dd4056c988"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/StockTasks/Dto/UpdateStockTaskDetailDto.cs": {
+    "mtime": 1787549986.2662053,
+    "ast_hash": "01b010646fbbfd573852aaa74ea99b2e",
+    "semantic_hash": "01b010646fbbfd573852aaa74ea99b2e"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/StockTasks/Dto/UpdateStockTaskDto.cs": {
+    "mtime": 1787549986.2670527,
+    "ast_hash": "591b0d95f7a5359563cf9e564e0ee519",
+    "semantic_hash": "591b0d95f7a5359563cf9e564e0ee519"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/StockTasks/IStockTaskAppService.cs": {
+    "mtime": 1787549986.2670527,
+    "ast_hash": "4123c5911fa39ba74465f5d05a8c4468",
+    "semantic_hash": "4123c5911fa39ba74465f5d05a8c4468"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/StockTasks/IStockTaskDetailAppService.cs": {
+    "mtime": 1787549986.268049,
+    "ast_hash": "e0183a9838ed679bfdf559518c3aa3a0",
+    "semantic_hash": "e0183a9838ed679bfdf559518c3aa3a0"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/TaskHiss/Dto/CreateTaskHisDto.cs": {
+    "mtime": 1787549986.2692611,
+    "ast_hash": "b7183fed1dc13bf3665b5b5bfc445f06",
+    "semantic_hash": "b7183fed1dc13bf3665b5b5bfc445f06"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/TaskHiss/Dto/PagingTaskHisDetailInput.cs": {
+    "mtime": 1787549986.2702613,
+    "ast_hash": "c703509e06cf637a23f6e1e9cf652451",
+    "semantic_hash": "c703509e06cf637a23f6e1e9cf652451"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/TaskHiss/Dto/PagingTaskHisListInput.cs": {
+    "mtime": 1787549986.2707942,
+    "ast_hash": "4c1cda7d7af596da28b0375887602a14",
+    "semantic_hash": "4c1cda7d7af596da28b0375887602a14"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/TaskHiss/Dto/TaskHisDetailDto.cs": {
+    "mtime": 1787549986.2707942,
+    "ast_hash": "a500ef9ff36313dc51b3988b955ba51a",
+    "semantic_hash": "a500ef9ff36313dc51b3988b955ba51a"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/TaskHiss/Dto/TaskHisDto.cs": {
+    "mtime": 1787549986.2717907,
+    "ast_hash": "c9479d25601a400cf1529f33bb6f95e3",
+    "semantic_hash": "c9479d25601a400cf1529f33bb6f95e3"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/TaskHiss/ITaskHisAppService.cs": {
+    "mtime": 1787549986.2717907,
+    "ast_hash": "c611bc2d2138ed6243777daa2ce8cbee",
+    "semantic_hash": "c611bc2d2138ed6243777daa2ce8cbee"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/WarehouseManagement.Application.Contracts.abppkg.json": {
+    "mtime": 1787549986.272791,
+    "ast_hash": "465d624b155fe70dd0f8ec96011c18cc",
+    "semantic_hash": "465d624b155fe70dd0f8ec96011c18cc"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/WarehouseManagement.Application.Contracts.csproj": {
+    "mtime": 1787549986.272791,
+    "ast_hash": "ad993b0ae17cc6af129808dfa8d462cc",
+    "semantic_hash": "ad993b0ae17cc6af129808dfa8d462cc"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/WarehouseManagementApplicationContractsModule.cs": {
+    "mtime": 1787549986.2737913,
+    "ast_hash": "3e5669213408a7af81dfb486c09f466f",
+    "semantic_hash": "3e5669213408a7af81dfb486c09f466f"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/WarehouseManagementRemoteServiceConsts.cs": {
+    "mtime": 1787549986.2737913,
+    "ast_hash": "f1be66d91cbed9d9661d36fab974811c",
+    "semantic_hash": "f1be66d91cbed9d9661d36fab974811c"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Warehouses/Dto/CreateWarehouseAreaDto.cs": {
+    "mtime": 1787549986.2757916,
+    "ast_hash": "61171a7492101e4296b55634fad3ecd1",
+    "semantic_hash": "61171a7492101e4296b55634fad3ecd1"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Warehouses/Dto/CreateWarehouseDto.cs": {
+    "mtime": 1787549986.2757916,
+    "ast_hash": "446a404e719279e57aa64a9e7371bda4",
+    "semantic_hash": "446a404e719279e57aa64a9e7371bda4"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Warehouses/Dto/PagingWarehouseAreaListInput.cs": {
+    "mtime": 1787549986.2767918,
+    "ast_hash": "5a3e3dc5121303a4f6e8eb9d8babfd7e",
+    "semantic_hash": "5a3e3dc5121303a4f6e8eb9d8babfd7e"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Warehouses/Dto/PagingWarehouseListInput.cs": {
+    "mtime": 1787549986.2767918,
+    "ast_hash": "80587bae5033c7c4675d53f71c6beac1",
+    "semantic_hash": "80587bae5033c7c4675d53f71c6beac1"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Warehouses/Dto/UpdateWarehouseAreaDto.cs": {
+    "mtime": 1787549986.278203,
+    "ast_hash": "d34e54afb734dbc9736a0782abdeba3e",
+    "semantic_hash": "d34e54afb734dbc9736a0782abdeba3e"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Warehouses/Dto/UpdateWarehouseDto.cs": {
+    "mtime": 1787549986.278203,
+    "ast_hash": "5f26e308c75807fcaf3b23a00c37c170",
+    "semantic_hash": "5f26e308c75807fcaf3b23a00c37c170"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Warehouses/Dto/WarehouseAreaDto.cs": {
+    "mtime": 1787549986.2792032,
+    "ast_hash": "6bb99e0db4f91252232d134882033846",
+    "semantic_hash": "6bb99e0db4f91252232d134882033846"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Warehouses/Dto/WarehouseDto.cs": {
+    "mtime": 1787549986.2802036,
+    "ast_hash": "a39704f4d3b33c0ada515c3c4d8beeb3",
+    "semantic_hash": "a39704f4d3b33c0ada515c3c4d8beeb3"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/Warehouses/IWarehouseAppService.cs": {
+    "mtime": 1787549986.2802036,
+    "ast_hash": "33fef693f4fe4abc1977653784b7c4d1",
+    "semantic_hash": "33fef693f4fe4abc1977653784b7c4d1"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/WcsTasks/Dto/Cells.cs": {
+    "mtime": 1787549986.282204,
+    "ast_hash": "9934beb72b263d260983f4cc15c49252",
+    "semantic_hash": "9934beb72b263d260983f4cc15c49252"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/WcsTasks/Dto/CheckOrderCreateDto.cs": {
+    "mtime": 1787549986.282204,
+    "ast_hash": "3a474a1851403edd38836c46b929e53d",
+    "semantic_hash": "3a474a1851403edd38836c46b929e53d"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/WcsTasks/Dto/CheckOrderResultDto.cs": {
+    "mtime": 1787549986.283204,
+    "ast_hash": "244faf39c344fe3b6db9092c7f94c259",
+    "semantic_hash": "244faf39c344fe3b6db9092c7f94c259"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/WcsTasks/Dto/CommuStateDto.cs": {
+    "mtime": 1787549986.283204,
+    "ast_hash": "4b73d02172edd870825dac45c25d1a2b",
+    "semantic_hash": "4b73d02172edd870825dac45c25d1a2b"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/WcsTasks/Dto/ListResultSstatesDto.cs": {
+    "mtime": 1787549986.2844112,
+    "ast_hash": "3e4ef75a9d7c844167c58613940a858d",
+    "semantic_hash": "3e4ef75a9d7c844167c58613940a858d"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/WcsTasks/Dto/OpenDoorDto.cs": {
+    "mtime": 1787549986.2844112,
+    "ast_hash": "9cb6ebd684f0a66bd80874c0e4a26305",
+    "semantic_hash": "9cb6ebd684f0a66bd80874c0e4a26305"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/WcsTasks/Dto/OpenDoorForOrderDto.cs": {
+    "mtime": 1787549986.2854083,
+    "ast_hash": "09194ca38cfffb6106ccc440920550f7",
+    "semantic_hash": "09194ca38cfffb6106ccc440920550f7"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/WcsTasks/Dto/OrderCodeDto.cs": {
+    "mtime": 1787549986.2854083,
+    "ast_hash": "8c4841b5592f117105e49d9ae2376d68",
+    "semantic_hash": "8c4841b5592f117105e49d9ae2376d68"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/WcsTasks/Dto/OrderDto.cs": {
+    "mtime": 1787549986.2864084,
+    "ast_hash": "5b845a77616c9f2a638b9c201dc320be",
+    "semantic_hash": "5b845a77616c9f2a638b9c201dc320be"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/WcsTasks/Dto/PlcNodeDto.cs": {
+    "mtime": 1787549986.2864084,
+    "ast_hash": "b8bef3d82b495339b16022ef0fe6d006",
+    "semantic_hash": "b8bef3d82b495339b16022ef0fe6d006"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/WcsTasks/Dto/ResultCheckDto.cs": {
+    "mtime": 1787549986.2874088,
+    "ast_hash": "a1bf117f16f72bbbe26dae780728a057",
+    "semantic_hash": "a1bf117f16f72bbbe26dae780728a057"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/WcsTasks/Dto/ResultCommuStateDto.cs": {
+    "mtime": 1787549986.2874088,
+    "ast_hash": "ae09b95b971c03db790f600e419f7f27",
+    "semantic_hash": "ae09b95b971c03db790f600e419f7f27"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/WcsTasks/Dto/ResultPlcNodeDto.cs": {
+    "mtime": 1787549986.288409,
+    "ast_hash": "6114d54b6fd8e627d215e8a0ba3a4fda",
+    "semantic_hash": "6114d54b6fd8e627d215e8a0ba3a4fda"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/WcsTasks/Dto/ResultStatesDto.cs": {
+    "mtime": 1787549986.2894092,
+    "ast_hash": "a1d88cee0b512394a7d43aa15e638893",
+    "semantic_hash": "a1d88cee0b512394a7d43aa15e638893"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/WcsTasks/Dto/ResultWcsTaskDto.cs": {
+    "mtime": 1787549986.2894092,
+    "ast_hash": "cdc6ec732ed899d35ee683b255afc42f",
+    "semantic_hash": "cdc6ec732ed899d35ee683b255afc42f"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/WcsTasks/Dto/StockOrderCreateDto.cs": {
+    "mtime": 1787549986.2904093,
+    "ast_hash": "723bc98205d4bc2f09bbdf8f1a64754c",
+    "semantic_hash": "723bc98205d4bc2f09bbdf8f1a64754c"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/WcsTasks/Dto/WcsCallBackRequest.cs": {
+    "mtime": 1787549986.2904093,
+    "ast_hash": "32c3ab170a1444a5b224a685812d513d",
+    "semantic_hash": "32c3ab170a1444a5b224a685812d513d"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application.Contracts/WcsTasks/IWcsTaskAppService.cs": {
+    "mtime": 1787549986.2914095,
+    "ast_hash": "9d16ad07bded92f69f9762001f0f2dc6",
+    "semantic_hash": "9d16ad07bded92f69f9762001f0f2dc6"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application/ArchiveBoxs/ArchiveBoxAppService.cs": {
+    "mtime": 1787549986.29241,
+    "ast_hash": "60af8e6aec13afd6ce00e91580c72eaa",
+    "semantic_hash": "60af8e6aec13afd6ce00e91580c72eaa"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application/Archives/ArchiveAppService.cs": {
+    "mtime": 1787549986.29341,
+    "ast_hash": "85dd8000a376d4ad2374e2c81422be35",
+    "semantic_hash": "85dd8000a376d4ad2374e2c81422be35"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application/Boards/BoardAppService.cs": {
+    "mtime": 1787549986.2944102,
+    "ast_hash": "668b574069fa9e0b7124fbb66ecf1cde",
+    "semantic_hash": "668b574069fa9e0b7124fbb66ecf1cde"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application/Cells/CellAppService.cs": {
+    "mtime": 1787549986.2954106,
+    "ast_hash": "61ed934a3b93195db81265d426fc4304",
+    "semantic_hash": "61ed934a3b93195db81265d426fc4304"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application/CheckHiss/CheckHisAppService.cs": {
+    "mtime": 1787549986.2966654,
+    "ast_hash": "8ac86dac6274be8612e582a08e4c063f",
+    "semantic_hash": "8ac86dac6274be8612e582a08e4c063f"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application/Checks/CheckAppService.cs": {
+    "mtime": 1787549986.2976632,
+    "ast_hash": "0d8f4e348d1b0bdb6cb5d10aeb270e5e",
+    "semantic_hash": "0d8f4e348d1b0bdb6cb5d10aeb270e5e"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application/Faces/FaceAppService.cs": {
+    "mtime": 1787549986.2986631,
+    "ast_hash": "295d8297d90757cbc0f48773d3aaf9bd",
+    "semantic_hash": "295d8297d90757cbc0f48773d3aaf9bd"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application/Fingers/VeinAppService.cs": {
+    "mtime": 1787549986.2986631,
+    "ast_hash": "6c5f88df18abe237f2c078dd488c4b0f",
+    "semantic_hash": "6c5f88df18abe237f2c078dd488c4b0f"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application/Goodss/GoodsAppService.cs": {
+    "mtime": 1787549986.3006637,
+    "ast_hash": "32d64fad87562f4c18390336c2fe4804",
+    "semantic_hash": "32d64fad87562f4c18390336c2fe4804"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application/LogFiles/LogFileAppService.cs": {
+    "mtime": 1787549986.3016639,
+    "ast_hash": "2d211f624107c624f4970f59e8d5b893",
+    "semantic_hash": "2d211f624107c624f4970f59e8d5b893"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application/Plans/PlanAppService.cs": {
+    "mtime": 1787549986.3026643,
+    "ast_hash": "9d60fd246688ca6ff72f673d4a772a24",
+    "semantic_hash": "9d60fd246688ca6ff72f673d4a772a24"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application/RfidCodes/RfidCodeAppService.cs": {
+    "mtime": 1787549986.3036644,
+    "ast_hash": "7b1b8c8228249a3587390db0eed50a91",
+    "semantic_hash": "7b1b8c8228249a3587390db0eed50a91"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application/StockTasks/StockTaskAppService.cs": {
+    "mtime": 1787549986.3046649,
+    "ast_hash": "ed70c0023d987f092b6de4862fed4848",
+    "semantic_hash": "ed70c0023d987f092b6de4862fed4848"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application/TaskHiss/TaskHisAppService.cs": {
+    "mtime": 1787549986.305665,
+    "ast_hash": "72dd11845487a641550f01abf21169de",
+    "semantic_hash": "72dd11845487a641550f01abf21169de"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application/WarehouseManagement.Application.abppkg.json": {
+    "mtime": 1787549986.305665,
+    "ast_hash": "3304d059db38a64255729a306cf77bce",
+    "semantic_hash": "3304d059db38a64255729a306cf77bce"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application/WarehouseManagement.Application.csproj": {
+    "mtime": 1787549986.3070242,
+    "ast_hash": "77e8f3ab9edf31c0f16fd2da764139f1",
+    "semantic_hash": "77e8f3ab9edf31c0f16fd2da764139f1"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application/WarehouseManagementAppService.cs": {
+    "mtime": 1787549986.3070242,
+    "ast_hash": "7e28b51ccb80e74935efa1ecd6f36d0d",
+    "semantic_hash": "7e28b51ccb80e74935efa1ecd6f36d0d"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application/WarehouseManagementApplicationAutoMapperProfile.cs": {
+    "mtime": 1787549986.3080246,
+    "ast_hash": "e054142eb37767216e5b6bd14baa0447",
+    "semantic_hash": "e054142eb37767216e5b6bd14baa0447"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application/WarehouseManagementApplicationModule.cs": {
+    "mtime": 1787549986.3080246,
+    "ast_hash": "80ada8665edd833434e8448bded0b9ad",
+    "semantic_hash": "80ada8665edd833434e8448bded0b9ad"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application/Warehouses/WarehouseAppService.cs": {
+    "mtime": 1787549986.309025,
+    "ast_hash": "b0d186f9c2c1ec8535c48f5e77572225",
+    "semantic_hash": "b0d186f9c2c1ec8535c48f5e77572225"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Application/WcsTasks/WcsTaskAppService.cs": {
+    "mtime": 1787549986.310025,
+    "ast_hash": "432f3ed5e60914c96e855b98f7e47980",
+    "semantic_hash": "432f3ed5e60914c96e855b98f7e47980"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Cells/CellRunStatus.cs": {
+    "mtime": 1787549986.3114672,
+    "ast_hash": "cad00124f944a517ea15a14cf850d6b1",
+    "semantic_hash": "cad00124f944a517ea15a14cf850d6b1"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Cells/CellStatus.cs": {
+    "mtime": 1787549986.3124907,
+    "ast_hash": "ecef1aaf40b397f12164bdd2bb3df972",
+    "semantic_hash": "ecef1aaf40b397f12164bdd2bb3df972"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Cells/CellType.cs": {
+    "mtime": 1787549986.3124907,
+    "ast_hash": "c53339eaa7229ac8f472fc5ef9a21dca",
+    "semantic_hash": "c53339eaa7229ac8f472fc5ef9a21dca"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Checks/CheckStatus.cs": {
+    "mtime": 1787549986.3139043,
+    "ast_hash": "5bddb9ceeb721ff2978e19f54ea702c2",
+    "semantic_hash": "5bddb9ceeb721ff2978e19f54ea702c2"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Checks/CheckType.cs": {
+    "mtime": 1787549986.3149047,
+    "ast_hash": "b7c7da1a650b1681dc7ad1ef8e163884",
+    "semantic_hash": "b7c7da1a650b1681dc7ad1ef8e163884"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Goodss/AreaType.cs": {
+    "mtime": 1787549986.3158379,
+    "ast_hash": "0e7fe025f323e7d4bfd04fe45c0be833",
+    "semantic_hash": "0e7fe025f323e7d4bfd04fe45c0be833"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Goodss/GoodsBaseDto.cs": {
+    "mtime": 1787549986.3168344,
+    "ast_hash": "c6f1e257e2e68a30b86c026343937b50",
+    "semantic_hash": "c6f1e257e2e68a30b86c026343937b50"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Goodss/GoodsStatus.cs": {
+    "mtime": 1787549986.3168344,
+    "ast_hash": "12a8012a142f24060d488fba756f1c7c",
+    "semantic_hash": "12a8012a142f24060d488fba756f1c7c"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Goodss/InstrumentType.cs": {
+    "mtime": 1787549986.3180883,
+    "ast_hash": "b2e38a92833b963a1ea885b9d7b0d295",
+    "semantic_hash": "b2e38a92833b963a1ea885b9d7b0d295"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Goodss/ShapeType.cs": {
+    "mtime": 1787549986.3180883,
+    "ast_hash": "cff1069af2c6b6a229f9114b5e3ade13",
+    "semantic_hash": "cff1069af2c6b6a229f9114b5e3ade13"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Localization/WarehouseManagementResource.cs": {
+    "mtime": 1787549986.3324761,
+    "ast_hash": "66fadb1ff97e7d36a2c1b140d93c7a4a",
+    "semantic_hash": "66fadb1ff97e7d36a2c1b140d93c7a4a"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Localization/WarehouseManagement/ar.json": {
+    "mtime": 1787549986.320085,
+    "ast_hash": "a847e3e0a213bd2398a9675a5a2cc08a",
+    "semantic_hash": "a847e3e0a213bd2398a9675a5a2cc08a"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Localization/WarehouseManagement/cs.json": {
+    "mtime": 1787549986.320085,
+    "ast_hash": "a45525e67ec9502a3aec69d5e41348e3",
+    "semantic_hash": "a45525e67ec9502a3aec69d5e41348e3"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Localization/WarehouseManagement/de-DE.json": {
+    "mtime": 1787549986.3210855,
+    "ast_hash": "f13ae3698be1d48cd51688815cca3805",
+    "semantic_hash": "f13ae3698be1d48cd51688815cca3805"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Localization/WarehouseManagement/en-GB.json": {
+    "mtime": 1787549986.3210855,
+    "ast_hash": "8e3a912d1191ceaecfa6ac83eddb58f4",
+    "semantic_hash": "8e3a912d1191ceaecfa6ac83eddb58f4"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Localization/WarehouseManagement/en.json": {
+    "mtime": 1787549986.322174,
+    "ast_hash": "17f79fbbd5f803f8721607e8a7fa472e",
+    "semantic_hash": "17f79fbbd5f803f8721607e8a7fa472e"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Localization/WarehouseManagement/es.json": {
+    "mtime": 1787549986.322174,
+    "ast_hash": "c19aea001b5329d2cdef21c651b11b64",
+    "semantic_hash": "c19aea001b5329d2cdef21c651b11b64"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Localization/WarehouseManagement/fi.json": {
+    "mtime": 1787549986.3231707,
+    "ast_hash": "4b348343037daba88267c46a5b32589e",
+    "semantic_hash": "4b348343037daba88267c46a5b32589e"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Localization/WarehouseManagement/fr.json": {
+    "mtime": 1787549986.3231707,
+    "ast_hash": "cb146733467684d08495bb0fd2054d72",
+    "semantic_hash": "cb146733467684d08495bb0fd2054d72"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Localization/WarehouseManagement/hi.json": {
+    "mtime": 1787549986.3241708,
+    "ast_hash": "c712b2db4f76b76918a3755edc542ce5",
+    "semantic_hash": "c712b2db4f76b76918a3755edc542ce5"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Localization/WarehouseManagement/hu.json": {
+    "mtime": 1787549986.3241708,
+    "ast_hash": "95e289d3759292cb62d02c0790a6c357",
+    "semantic_hash": "95e289d3759292cb62d02c0790a6c357"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Localization/WarehouseManagement/is.json": {
+    "mtime": 1787549986.3251712,
+    "ast_hash": "b25598f24169504e7f40132ddac9463c",
+    "semantic_hash": "b25598f24169504e7f40132ddac9463c"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Localization/WarehouseManagement/it.json": {
+    "mtime": 1787549986.3261716,
+    "ast_hash": "f32e322c2b3f51f03c677ad841dc174a",
+    "semantic_hash": "f32e322c2b3f51f03c677ad841dc174a"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Localization/WarehouseManagement/nl.json": {
+    "mtime": 1787549986.3261716,
+    "ast_hash": "e79a50788b95f2f424d0bed03b01fbc6",
+    "semantic_hash": "e79a50788b95f2f424d0bed03b01fbc6"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Localization/WarehouseManagement/pl-PL.json": {
+    "mtime": 1787549986.3271716,
+    "ast_hash": "4cd85136561bec47c9b65927dfa91b65",
+    "semantic_hash": "4cd85136561bec47c9b65927dfa91b65"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Localization/WarehouseManagement/pt-BR.json": {
+    "mtime": 1787549986.3271716,
+    "ast_hash": "569fef4e6c27e278626420efd4c568a2",
+    "semantic_hash": "569fef4e6c27e278626420efd4c568a2"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Localization/WarehouseManagement/ro-RO.json": {
+    "mtime": 1787549986.328172,
+    "ast_hash": "25940560eb7d553ca526ba26ca1671d9",
+    "semantic_hash": "25940560eb7d553ca526ba26ca1671d9"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Localization/WarehouseManagement/ru.json": {
+    "mtime": 1787549986.328172,
+    "ast_hash": "52d8a6554002a246754a8f0672c4544c",
+    "semantic_hash": "52d8a6554002a246754a8f0672c4544c"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Localization/WarehouseManagement/sk.json": {
+    "mtime": 1787549986.3291721,
+    "ast_hash": "e609c66e441ab7f35e9a27c320df66e6",
+    "semantic_hash": "e609c66e441ab7f35e9a27c320df66e6"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Localization/WarehouseManagement/sl.json": {
+    "mtime": 1787549986.3291721,
+    "ast_hash": "fc3044eb0a122ebfdd72c0da4b1bbd5d",
+    "semantic_hash": "fc3044eb0a122ebfdd72c0da4b1bbd5d"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Localization/WarehouseManagement/tr.json": {
+    "mtime": 1787549986.3304791,
+    "ast_hash": "59a514f08647293ba202184206660f94",
+    "semantic_hash": "59a514f08647293ba202184206660f94"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Localization/WarehouseManagement/vi.json": {
+    "mtime": 1787549986.3304791,
+    "ast_hash": "9a68f8e544a64ff6069f82c84892e5be",
+    "semantic_hash": "9a68f8e544a64ff6069f82c84892e5be"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Localization/WarehouseManagement/zh-Hans.json": {
+    "mtime": 1787549986.3314757,
+    "ast_hash": "9117f02a5fe6cc332f75fd39fa31e27c",
+    "semantic_hash": "9117f02a5fe6cc332f75fd39fa31e27c"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Localization/WarehouseManagement/zh-Hant.json": {
+    "mtime": 1787549986.3314757,
+    "ast_hash": "02fb88bb7269a9370b3840c6cf1cdddc",
+    "semantic_hash": "02fb88bb7269a9370b3840c6cf1cdddc"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Plans/PlanExecuteType.cs": {
+    "mtime": 1787549986.3334763,
+    "ast_hash": "143d52d52ccd071972d462cf17909864",
+    "semantic_hash": "143d52d52ccd071972d462cf17909864"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Plans/PlanListDto.cs": {
+    "mtime": 1787549986.3334763,
+    "ast_hash": "ff3e7573309451739b3c74c58b657986",
+    "semantic_hash": "ff3e7573309451739b3c74c58b657986"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Plans/PlanListStatus.cs": {
+    "mtime": 1787549986.3344765,
+    "ast_hash": "284f4795429af67206478d9258c6c4fd",
+    "semantic_hash": "284f4795429af67206478d9258c6c4fd"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Plans/PlanPriority.cs": {
+    "mtime": 1787549986.335274,
+    "ast_hash": "223a91fcea0e683d7c809cf41cf0c570",
+    "semantic_hash": "223a91fcea0e683d7c809cf41cf0c570"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Plans/PlanStatus.cs": {
+    "mtime": 1787549986.335274,
+    "ast_hash": "59b32757911f159236df0c3349944ac5",
+    "semantic_hash": "59b32757911f159236df0c3349944ac5"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Plans/PlanTypeGroup.cs": {
+    "mtime": 1787549986.3362706,
+    "ast_hash": "08d2b8d6531c6d6f0bed11ac4339028c",
+    "semantic_hash": "08d2b8d6531c6d6f0bed11ac4339028c"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Plans/PlanTypeInout.cs": {
+    "mtime": 1787549986.3362706,
+    "ast_hash": "e0ec0c03fa7323d68fd10a61dff332f1",
+    "semantic_hash": "e0ec0c03fa7323d68fd10a61dff332f1"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Plans/StockOutStrategy.cs": {
+    "mtime": 1787549986.3362706,
+    "ast_hash": "f0e798d3abbed2565af9e2ad103ae577",
+    "semantic_hash": "f0e798d3abbed2565af9e2ad103ae577"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/StockTasks/ManageStatus.cs": {
+    "mtime": 1787549986.3377764,
+    "ast_hash": "2ad5e38bb35cff06c1f1bbad679f972d",
+    "semantic_hash": "2ad5e38bb35cff06c1f1bbad679f972d"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/StockTasks/ManageType.cs": {
+    "mtime": 1787549986.3387828,
+    "ast_hash": "3498707bfc412d4b8a8f1cbe2eae9da4",
+    "semantic_hash": "3498707bfc412d4b8a8f1cbe2eae9da4"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/StockTasks/StockTaskCanceledEto.cs": {
+    "mtime": 1787549986.3387828,
+    "ast_hash": "ad3dc9967d6b4579ba3c73b88135efce",
+    "semantic_hash": "ad3dc9967d6b4579ba3c73b88135efce"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/StockTasks/StockTaskCompletedEto.cs": {
+    "mtime": 1787549986.3402166,
+    "ast_hash": "abefd330ed668228f06a17ae8ff50d10",
+    "semantic_hash": "abefd330ed668228f06a17ae8ff50d10"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/StockTasks/StockTaskDetailEto.cs": {
+    "mtime": 1787549986.341214,
+    "ast_hash": "727c552c5f191ed02e9232b3a194c51a",
+    "semantic_hash": "727c552c5f191ed02e9232b3a194c51a"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/StockTasks/TaskCompletedHisEto.cs": {
+    "mtime": 1787549986.341214,
+    "ast_hash": "879d8ac4ffa65d7d453dc3cc8667065f",
+    "semantic_hash": "879d8ac4ffa65d7d453dc3cc8667065f"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/WarehouseManagement.Domain.Shared.abppkg.json": {
+    "mtime": 1787549986.3422143,
+    "ast_hash": "006bc34e225ddecb9f8513bfbf6dc86c",
+    "semantic_hash": "006bc34e225ddecb9f8513bfbf6dc86c"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/WarehouseManagement.Domain.Shared.csproj": {
+    "mtime": 1787549986.3422143,
+    "ast_hash": "5aabce0d0fda0f37263ca1c65c912b0e",
+    "semantic_hash": "5aabce0d0fda0f37263ca1c65c912b0e"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/WarehouseManagementDomainSharedModule.cs": {
+    "mtime": 1787549986.3432145,
+    "ast_hash": "2553e9831da415f9914c17dda2f08f48",
+    "semantic_hash": "2553e9831da415f9914c17dda2f08f48"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/WarehouseManagementErrorCodes.cs": {
+    "mtime": 1787549986.3432145,
+    "ast_hash": "068cdf80021c1d1274dc5d25f4e95fd2",
+    "semantic_hash": "068cdf80021c1d1274dc5d25f4e95fd2"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Warehouses/WarehouseAreaType.cs": {
+    "mtime": 1787549986.3442147,
+    "ast_hash": "ce1622bf045232d97946dd28021ff862",
+    "semantic_hash": "ce1622bf045232d97946dd28021ff862"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/Warehouses/WarehouseType.cs": {
+    "mtime": 1787549986.3452148,
+    "ast_hash": "574f78b9c71bb42cbe181faa46d2fe05",
+    "semantic_hash": "574f78b9c71bb42cbe181faa46d2fe05"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain.Shared/WcsTasks/WcsOrderStatus.cs": {
+    "mtime": 1787549986.346215,
+    "ast_hash": "27652bb924beb86a6a9bdbd444420faf",
+    "semantic_hash": "27652bb924beb86a6a9bdbd444420faf"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/ArchiveBoxDetailDomainService.cs": {
+    "mtime": 1787549986.3472154,
+    "ast_hash": "cef9e4db55553d5098d22b0eb61f38aa",
+    "semantic_hash": "cef9e4db55553d5098d22b0eb61f38aa"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/ArchiveBoxDomainService.cs": {
+    "mtime": 1787549986.3472154,
+    "ast_hash": "df7b25219487e563a78ce758872a23da",
+    "semantic_hash": "df7b25219487e563a78ce758872a23da"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/ArchiveBoxs/Aggregates/ArchiveBox.cs": {
+    "mtime": 1787549986.3492434,
+    "ast_hash": "ba373ee1c9dac729db6723aed3beffeb",
+    "semantic_hash": "ba373ee1c9dac729db6723aed3beffeb"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/ArchiveBoxs/Aggregates/ArchiveBoxDetail.cs": {
+    "mtime": 1787549986.3492434,
+    "ast_hash": "83a78b3895331df5c8b43331cccc10dc",
+    "semantic_hash": "83a78b3895331df5c8b43331cccc10dc"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/ArchiveBoxs/ArchiveBoxDetailManager.cs": {
+    "mtime": 1787549986.3502433,
+    "ast_hash": "5c8fb6ea14316e2389f827af679f32f3",
+    "semantic_hash": "5c8fb6ea14316e2389f827af679f32f3"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/ArchiveBoxs/ArchiveBoxManager.cs": {
+    "mtime": 1787549986.351002,
+    "ast_hash": "847524c474f914a74958e827281a868c",
+    "semantic_hash": "847524c474f914a74958e827281a868c"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/ArchiveBoxs/IArchiveBoxDetailRepository.cs": {
+    "mtime": 1787549986.351002,
+    "ast_hash": "5dca6b369f2ae1ce201586125db59af4",
+    "semantic_hash": "5dca6b369f2ae1ce201586125db59af4"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/ArchiveBoxs/IArchiveBoxRepository.cs": {
+    "mtime": 1787549986.3519983,
+    "ast_hash": "6e372d382d098876df9dd50615eed46b",
+    "semantic_hash": "6e372d382d098876df9dd50615eed46b"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/ArchiveDomainService.cs": {
+    "mtime": 1787549986.3519983,
+    "ast_hash": "4d40803dfa403e87dccd1f9c6fa5e5ad",
+    "semantic_hash": "4d40803dfa403e87dccd1f9c6fa5e5ad"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/Archives/Aggregates/Archive.cs": {
+    "mtime": 1787549986.353999,
+    "ast_hash": "b12dd05f774674661fb935f4b4c037d9",
+    "semantic_hash": "b12dd05f774674661fb935f4b4c037d9"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/Archives/ArchiveManager.cs": {
+    "mtime": 1787549986.353999,
+    "ast_hash": "9f17d206f0cffb7abfa54fe062ff8cce",
+    "semantic_hash": "9f17d206f0cffb7abfa54fe062ff8cce"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/Archives/IArchiveRepository.cs": {
+    "mtime": 1787549986.354999,
+    "ast_hash": "2897ef413c5d9f088efff1520bc85b17",
+    "semantic_hash": "2897ef413c5d9f088efff1520bc85b17"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/CellDomainService.cs": {
+    "mtime": 1787549986.354999,
+    "ast_hash": "47c917715a6535b087997d7b4c3ff5d9",
+    "semantic_hash": "47c917715a6535b087997d7b4c3ff5d9"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/Cells/Cell.cs": {
+    "mtime": 1787549986.3559992,
+    "ast_hash": "3645f15b98305c7cc418719e6918d919",
+    "semantic_hash": "3645f15b98305c7cc418719e6918d919"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/Cells/CellManager.cs": {
+    "mtime": 1787549986.3569996,
+    "ast_hash": "5d0c6e2f1585fc7a300930543b6b2317",
+    "semantic_hash": "5d0c6e2f1585fc7a300930543b6b2317"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/Cells/ICellRepository.cs": {
+    "mtime": 1787549986.3569996,
+    "ast_hash": "adc6ff8f9b95a266ecb7ffe0b6f54064",
+    "semantic_hash": "adc6ff8f9b95a266ecb7ffe0b6f54064"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/CheckDetailDomainService.cs": {
+    "mtime": 1787549986.3579998,
+    "ast_hash": "0f6a846baa7a43b8895e6c0b8029c8fa",
+    "semantic_hash": "0f6a846baa7a43b8895e6c0b8029c8fa"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/CheckDetailHisDomainService.cs": {
+    "mtime": 1787549986.3590002,
+    "ast_hash": "012ae2b0cd18e580e0f423c61e7c5c59",
+    "semantic_hash": "012ae2b0cd18e580e0f423c61e7c5c59"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/CheckDomainService.cs": {
+    "mtime": 1787549986.3590002,
+    "ast_hash": "59c6d94c9bb98177c278cebcfb99274a",
+    "semantic_hash": "59c6d94c9bb98177c278cebcfb99274a"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/CheckHisDomainService.cs": {
+    "mtime": 1787549986.3600004,
+    "ast_hash": "4c425e5fadc90cbd50971215969ee7a7",
+    "semantic_hash": "4c425e5fadc90cbd50971215969ee7a7"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/CheckHiss/Aggregates/CheckDetailHis.cs": {
+    "mtime": 1787549986.3610005,
+    "ast_hash": "acf17d176b3314dff275787e7d77927d",
+    "semantic_hash": "acf17d176b3314dff275787e7d77927d"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/CheckHiss/Aggregates/CheckHis.cs": {
+    "mtime": 1787549986.3620007,
+    "ast_hash": "17e6e56734abb458c6d1c8f982996adc",
+    "semantic_hash": "17e6e56734abb458c6d1c8f982996adc"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/CheckHiss/CheckDetailHisManager.cs": {
+    "mtime": 1787549986.3620007,
+    "ast_hash": "c3bf13974ae9d10b610240f605e6c7c0",
+    "semantic_hash": "c3bf13974ae9d10b610240f605e6c7c0"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/CheckHiss/CheckHisManager.cs": {
+    "mtime": 1787549986.363001,
+    "ast_hash": "411abe7cb59742b6c55067cdf235a736",
+    "semantic_hash": "411abe7cb59742b6c55067cdf235a736"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/CheckHiss/ICheckDetailHisRepository.cs": {
+    "mtime": 1787549986.363001,
+    "ast_hash": "f5c69c3c44044cdaabfb36f48e9e6e56",
+    "semantic_hash": "f5c69c3c44044cdaabfb36f48e9e6e56"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/CheckHiss/ICheckHisRepository.cs": {
+    "mtime": 1787549986.36411,
+    "ast_hash": "d6e4ed9bb7415eef5ee2532952eff6c2",
+    "semantic_hash": "d6e4ed9bb7415eef5ee2532952eff6c2"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/Checks/Aggregates/Check.cs": {
+    "mtime": 1787549986.3651104,
+    "ast_hash": "40537f3767e61ae7499daf4c3cb9ee16",
+    "semantic_hash": "40537f3767e61ae7499daf4c3cb9ee16"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/Checks/Aggregates/CheckDetail.cs": {
+    "mtime": 1787549986.3661106,
+    "ast_hash": "3785d26759fab1c0d5f7ba2c41aad237",
+    "semantic_hash": "3785d26759fab1c0d5f7ba2c41aad237"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/Checks/CheckDetailManager.cs": {
+    "mtime": 1787549986.3661106,
+    "ast_hash": "4c58d93fdcf50da5e603eef49046472c",
+    "semantic_hash": "4c58d93fdcf50da5e603eef49046472c"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/Checks/CheckManager.cs": {
+    "mtime": 1787549986.3671107,
+    "ast_hash": "c77888181b4f2dead2fcc58c7b248280",
+    "semantic_hash": "c77888181b4f2dead2fcc58c7b248280"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/Checks/ICheckDetailRepository.cs": {
+    "mtime": 1787549986.3671107,
+    "ast_hash": "69f00b63532eec445cd15a6aa2a4bbb4",
+    "semantic_hash": "69f00b63532eec445cd15a6aa2a4bbb4"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/Checks/ICheckRepository.cs": {
+    "mtime": 1787549986.368335,
+    "ast_hash": "3a86121e220d1fbfb0bac5aad3f6f18b",
+    "semantic_hash": "3a86121e220d1fbfb0bac5aad3f6f18b"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/ERPApiDomainService.cs": {
+    "mtime": 1787549986.368335,
+    "ast_hash": "e6880147058610c5429209752770bbc1",
+    "semantic_hash": "e6880147058610c5429209752770bbc1"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/EventHandlers/StockTaskCanceledHisLocalEventHandler.cs": {
+    "mtime": 1787549986.3693323,
+    "ast_hash": "4d569895946ae8e9b199d8c4bb2e05aa",
+    "semantic_hash": "4d569895946ae8e9b199d8c4bb2e05aa"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/EventHandlers/StockTaskCanceledLocalEventHandler.cs": {
+    "mtime": 1787549986.3703325,
+    "ast_hash": "1214f7b5b6c7a8b4472700f9c218699a",
+    "semantic_hash": "1214f7b5b6c7a8b4472700f9c218699a"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/EventHandlers/StockTaskCompletedEventHandler.cs": {
+    "mtime": 1787549986.3703325,
+    "ast_hash": "54f1880427d32e76d2e738d535f3660a",
+    "semantic_hash": "54f1880427d32e76d2e738d535f3660a"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/EventHandlers/StockTaskCompletedHisLocalEventHandler.cs": {
+    "mtime": 1787549986.3715978,
+    "ast_hash": "992b2c057de90c125d004b8794c04374",
+    "semantic_hash": "992b2c057de90c125d004b8794c04374"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/EventHandlers/StockTaskCompletedLocalEventHandler.cs": {
+    "mtime": 1787549986.3715978,
+    "ast_hash": "6594bc6ae36b683f460a9a2e736ffa2c",
+    "semantic_hash": "6594bc6ae36b683f460a9a2e736ffa2c"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/Faces/Aggregates/Face.cs": {
+    "mtime": 1787549986.3731332,
+    "ast_hash": "297792a985861f38dd2eaf0736ee19ef",
+    "semantic_hash": "297792a985861f38dd2eaf0736ee19ef"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/Faces/Aggregates/IFaceRepository.cs": {
+    "mtime": 1787549986.3741302,
+    "ast_hash": "0f7248ffc95abb98862a30b3c2a588e6",
+    "semantic_hash": "0f7248ffc95abb98862a30b3c2a588e6"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/Fingers/Aggregates/IVeinRepository.cs": {
+    "mtime": 1787549986.3751304,
+    "ast_hash": "9870847c1ec2a1ed84fbaafc55bf9b2e",
+    "semantic_hash": "9870847c1ec2a1ed84fbaafc55bf9b2e"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/Fingers/Aggregates/Vein.cs": {
+    "mtime": 1787549986.3761306,
+    "ast_hash": "dbae150dfa50572bcb318ad01ae92045",
+    "semantic_hash": "dbae150dfa50572bcb318ad01ae92045"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/GoodsDomainService.cs": {
+    "mtime": 1787549986.3771307,
+    "ast_hash": "56ca5d03e30985cc77827682cf90eab5",
+    "semantic_hash": "56ca5d03e30985cc77827682cf90eab5"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/Goodss/Aggregates/Goods.cs": {
+    "mtime": 1787549986.3781314,
+    "ast_hash": "6593b997ddf303498c111a1c8f7bc6fe",
+    "semantic_hash": "6593b997ddf303498c111a1c8f7bc6fe"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/Goodss/Aggregates/GoodsClass.cs": {
+    "mtime": 1787549986.3791313,
+    "ast_hash": "8ad17ef1a7d6f497d8a4a09cac30e4f4",
+    "semantic_hash": "8ad17ef1a7d6f497d8a4a09cac30e4f4"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/Goodss/Aggregates/GoodsType.cs": {
+    "mtime": 1787549986.3791313,
+    "ast_hash": "7b0bdf1c14c854a02bbf2f462f6ce092",
+    "semantic_hash": "7b0bdf1c14c854a02bbf2f462f6ce092"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/Goodss/GoodsManager.cs": {
+    "mtime": 1787549986.3801315,
+    "ast_hash": "b7a6002ea960a278ea39ffe847d2bd39",
+    "semantic_hash": "b7a6002ea960a278ea39ffe847d2bd39"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/Goodss/IGoodsRepository.cs": {
+    "mtime": 1787549986.3801315,
+    "ast_hash": "e5932aca563e1227f46d31a7f5eb484a",
+    "semantic_hash": "e5932aca563e1227f46d31a7f5eb484a"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/IOControlDomainService.cs": {
+    "mtime": 1787549986.381132,
+    "ast_hash": "e42628d9f68d4e58353aac4a41c5f893",
+    "semantic_hash": "e42628d9f68d4e58353aac4a41c5f893"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/LogFiles/LogFile.cs": {
+    "mtime": 1787549986.3825512,
+    "ast_hash": "65897baa83d8bc700c6dd1fe861dd54f",
+    "semantic_hash": "65897baa83d8bc700c6dd1fe861dd54f"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/LogFiles/LogFileManager.cs": {
+    "mtime": 1787549986.3825512,
+    "ast_hash": "27568a601f4e06c1738b2ca30fb01c73",
+    "semantic_hash": "27568a601f4e06c1738b2ca30fb01c73"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/PlanDomainService.cs": {
+    "mtime": 1787549986.3835514,
+    "ast_hash": "3e58f4386497ebfed8733b29ec0f3377",
+    "semantic_hash": "3e58f4386497ebfed8733b29ec0f3377"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/Plans/Aggregates/Plan.cs": {
+    "mtime": 1787549986.3845515,
+    "ast_hash": "18d0cd480a39e7409af1f2c2e8845e43",
+    "semantic_hash": "18d0cd480a39e7409af1f2c2e8845e43"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/Plans/Aggregates/PlanList.cs": {
+    "mtime": 1787549986.3855517,
+    "ast_hash": "303600e92cf1213b09483c723f95e2f6",
+    "semantic_hash": "303600e92cf1213b09483c723f95e2f6"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/Plans/Aggregates/PlanType.cs": {
+    "mtime": 1787549986.3855517,
+    "ast_hash": "cc4b653a01f1518847f3811d76f7cc4b",
+    "semantic_hash": "cc4b653a01f1518847f3811d76f7cc4b"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/Plans/IPlanListRepository.cs": {
+    "mtime": 1787549986.386552,
+    "ast_hash": "316bdee3aa10aaf80b023c01c6a25a77",
+    "semantic_hash": "316bdee3aa10aaf80b023c01c6a25a77"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/Plans/IPlanRepository.cs": {
+    "mtime": 1787549986.386552,
+    "ast_hash": "cd45f3937d4d0332df85abba8bfec01f",
+    "semantic_hash": "cd45f3937d4d0332df85abba8bfec01f"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/Plans/PlanManager.cs": {
+    "mtime": 1787549986.387553,
+    "ast_hash": "c81abf29250a60217bfde94c53c8186b",
+    "semantic_hash": "c81abf29250a60217bfde94c53c8186b"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/ReceiveRestApiDomainService.cs": {
+    "mtime": 1787549986.387553,
+    "ast_hash": "885007f6a8e68ebaa1b8548a249e4cca",
+    "semantic_hash": "885007f6a8e68ebaa1b8548a249e4cca"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/RfidCodeDomainService.cs": {
+    "mtime": 1787549986.3889866,
+    "ast_hash": "091363bd6ceb171ecc9d59871f8c04a7",
+    "semantic_hash": "091363bd6ceb171ecc9d59871f8c04a7"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/RfidCodes/Aggregates/Rfid.cs": {
+    "mtime": 1787549986.389987,
+    "ast_hash": "54c56c46be600f9e566ccf849f8b0ca0",
+    "semantic_hash": "54c56c46be600f9e566ccf849f8b0ca0"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/RfidCodes/IRfidCodeRepository.cs": {
+    "mtime": 1787549986.390987,
+    "ast_hash": "42df51cbadd32871248b2ea0df364827",
+    "semantic_hash": "42df51cbadd32871248b2ea0df364827"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/RfidCodes/RfidCodeManager.cs": {
+    "mtime": 1787549986.390987,
+    "ast_hash": "eb3edc24275faf080ee3ac5d9cf406a4",
+    "semantic_hash": "eb3edc24275faf080ee3ac5d9cf406a4"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/SendRestApiDomainService.cs": {
+    "mtime": 1787549986.3920796,
+    "ast_hash": "d4782e0c70b9e7d1018908fc556aad01",
+    "semantic_hash": "d4782e0c70b9e7d1018908fc556aad01"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/Settings/WarehouseManagementSettingDefinitionProvider.cs": {
+    "mtime": 1787549986.393077,
+    "ast_hash": "093e38ca32522b1f058f07ae0e82c423",
+    "semantic_hash": "093e38ca32522b1f058f07ae0e82c423"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/Settings/WarehouseManagementSettings.cs": {
+    "mtime": 1787549986.393077,
+    "ast_hash": "b3cb7f59374c137eeca5d10eda3a808e",
+    "semantic_hash": "b3cb7f59374c137eeca5d10eda3a808e"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/ShelfDomainService.cs": {
+    "mtime": 1787549986.3940768,
+    "ast_hash": "0bd3249e8efdddeab8c515c6c79bab88",
+    "semantic_hash": "0bd3249e8efdddeab8c515c6c79bab88"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/StockTaskDomainService.cs": {
+    "mtime": 1787549986.3940768,
+    "ast_hash": "67ccb2a9cb302f2b105b303d953a9a87",
+    "semantic_hash": "67ccb2a9cb302f2b105b303d953a9a87"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/StockTasks/Aggregates/StockTask.cs": {
+    "mtime": 1787549986.3961236,
+    "ast_hash": "e514f33da9fe61b447d00fb7e9a85f6b",
+    "semantic_hash": "e514f33da9fe61b447d00fb7e9a85f6b"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/StockTasks/Aggregates/StockTaskDetail.cs": {
+    "mtime": 1787549986.3961236,
+    "ast_hash": "b1bb0182608894fff4d41ca808b8818e",
+    "semantic_hash": "b1bb0182608894fff4d41ca808b8818e"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/StockTasks/Aggregates/StockTaskType.cs": {
+    "mtime": 1787549986.3971238,
+    "ast_hash": "a24ad7c2ceaac0512026de58c4eb4b15",
+    "semantic_hash": "a24ad7c2ceaac0512026de58c4eb4b15"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/StockTasks/IStockTaskDetailRepository.cs": {
+    "mtime": 1787549986.3971238,
+    "ast_hash": "83facc9bb5eb546386eb7aff29f0a2b6",
+    "semantic_hash": "83facc9bb5eb546386eb7aff29f0a2b6"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/StockTasks/IStockTaskRepository.cs": {
+    "mtime": 1787549986.3982568,
+    "ast_hash": "b10be2605393f557883ff57f84eea273",
+    "semantic_hash": "b10be2605393f557883ff57f84eea273"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/StockTasks/StockTaskManager.cs": {
+    "mtime": 1787549986.3982568,
+    "ast_hash": "cc9292de51e04ba0067de33de5cd0a60",
+    "semantic_hash": "cc9292de51e04ba0067de33de5cd0a60"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/StorageBoxDetailDomainService.cs": {
+    "mtime": 1787549986.3993628,
+    "ast_hash": "4181dcfb8023461072a6f3cf920f5ac4",
+    "semantic_hash": "4181dcfb8023461072a6f3cf920f5ac4"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/StorageBoxDomainService.cs": {
+    "mtime": 1787549986.3993628,
+    "ast_hash": "af3cc837b7ccdcf8a672e41bda5c9420",
+    "semantic_hash": "af3cc837b7ccdcf8a672e41bda5c9420"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/TaskHisDomainService.cs": {
+    "mtime": 1787549986.4003632,
+    "ast_hash": "ac3b6da3ec21531847108fab7dda2d6d",
+    "semantic_hash": "ac3b6da3ec21531847108fab7dda2d6d"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/TaskHiss/Aggregates/TaskHis.cs": {
+    "mtime": 1787549986.4013631,
+    "ast_hash": "7e7e1bea397b8c2722c1a43747363244",
+    "semantic_hash": "7e7e1bea397b8c2722c1a43747363244"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/TaskHiss/Aggregates/TaskHisDetail.cs": {
+    "mtime": 1787549986.4023635,
+    "ast_hash": "c2a974ca2dbffd4acdb083428bd17ccc",
+    "semantic_hash": "c2a974ca2dbffd4acdb083428bd17ccc"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/TaskHiss/ITaskHisDetailRepository.cs": {
+    "mtime": 1787549986.4023635,
+    "ast_hash": "ffda0eb508b110086daa8275755adfee",
+    "semantic_hash": "ffda0eb508b110086daa8275755adfee"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/TaskHiss/ITaskHisRepository.cs": {
+    "mtime": 1787549986.4033637,
+    "ast_hash": "2bf360c5ca49dff62496ad16b53aa84a",
+    "semantic_hash": "2bf360c5ca49dff62496ad16b53aa84a"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/TaskHiss/TaskHisManager.cs": {
+    "mtime": 1787549986.4033637,
+    "ast_hash": "045dd7228c83fd1fb6011c5289e3b568",
+    "semantic_hash": "045dd7228c83fd1fb6011c5289e3b568"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/TestSiteDomainService.cs": {
+    "mtime": 1787549986.4045253,
+    "ast_hash": "28517de786ebfbaf23e54d4955b14624",
+    "semantic_hash": "28517de786ebfbaf23e54d4955b14624"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/WarehouseDomainService.cs": {
+    "mtime": 1787549986.4045253,
+    "ast_hash": "f730da94b93d4f2d8cfb56ea76ae1558",
+    "semantic_hash": "f730da94b93d4f2d8cfb56ea76ae1558"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/WarehouseManagement.Domain.abppkg.json": {
+    "mtime": 1787549986.4055254,
+    "ast_hash": "9b68623b6c96ed5a0f303b029b1c49fd",
+    "semantic_hash": "9b68623b6c96ed5a0f303b029b1c49fd"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/WarehouseManagement.Domain.csproj": {
+    "mtime": 1787549986.4055254,
+    "ast_hash": "55c1cb5173c2eb52e3983113a8eeb4ce",
+    "semantic_hash": "55c1cb5173c2eb52e3983113a8eeb4ce"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/WarehouseManagementDbProperties.cs": {
+    "mtime": 1787549986.4067924,
+    "ast_hash": "94b5f1113e2adc6682e0deb04570f090",
+    "semantic_hash": "94b5f1113e2adc6682e0deb04570f090"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/WarehouseManagementDomainModule.cs": {
+    "mtime": 1787549986.4067924,
+    "ast_hash": "58dc4983cbf2e4e2e92240429b96e3ee",
+    "semantic_hash": "58dc4983cbf2e4e2e92240429b96e3ee"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/Warehouses/Aggregates/LogicArea.cs": {
+    "mtime": 1787549986.4091845,
+    "ast_hash": "2f28c06966835babde6b970995728ad5",
+    "semantic_hash": "2f28c06966835babde6b970995728ad5"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/Warehouses/Aggregates/Warehouse.cs": {
+    "mtime": 1787549986.4091845,
+    "ast_hash": "fe27d769a00fd56b9ca954aad13d8b09",
+    "semantic_hash": "fe27d769a00fd56b9ca954aad13d8b09"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/Warehouses/Aggregates/WarehouseArea.cs": {
+    "mtime": 1787549986.4101846,
+    "ast_hash": "6d9ded12537bb8c3fc27f52358069a0b",
+    "semantic_hash": "6d9ded12537bb8c3fc27f52358069a0b"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/Warehouses/ILogicAreaRepository.cs": {
+    "mtime": 1787549986.4101846,
+    "ast_hash": "445d391f12976ca602acfc33785b6e80",
+    "semantic_hash": "445d391f12976ca602acfc33785b6e80"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/Warehouses/IWarehouseAreaRepository.cs": {
+    "mtime": 1787549986.411311,
+    "ast_hash": "ac70578aae937cfbe712844a96affbf7",
+    "semantic_hash": "ac70578aae937cfbe712844a96affbf7"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/Warehouses/IWarehouseRepository.cs": {
+    "mtime": 1787549986.411311,
+    "ast_hash": "697ea3271c8587e7eb9ca7c77c3c9392",
+    "semantic_hash": "697ea3271c8587e7eb9ca7c77c3c9392"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/Warehouses/WarehouseManager.cs": {
+    "mtime": 1787549986.4124804,
+    "ast_hash": "eaf0aaa52d349b872cefcc61a2e30cdf",
+    "semantic_hash": "eaf0aaa52d349b872cefcc61a2e30cdf"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/WcsTaskDomainService.cs": {
+    "mtime": 1787549986.4124804,
+    "ast_hash": "7654b3dde28f590746a797b8fcb682d0",
+    "semantic_hash": "7654b3dde28f590746a797b8fcb682d0"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Domain/WcsTasks/WcsApiManager.cs": {
+    "mtime": 1787549986.4134805,
+    "ast_hash": "7e5ba14c4dd5b371192b8a530ed8c03f",
+    "semantic_hash": "7e5ba14c4dd5b371192b8a530ed8c03f"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/EntityFrameworkCore/ArchiveBoxDetails/ArchiveBoxDetailEfCoreQueryableExtensions.cs": {
+    "mtime": 1787549986.4154809,
+    "ast_hash": "252d105c101699c412e0e4152078d69a",
+    "semantic_hash": "252d105c101699c412e0e4152078d69a"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/EntityFrameworkCore/ArchiveBoxDetails/EfCoreArchiveBoxDetailRepository.cs": {
+    "mtime": 1787549986.416481,
+    "ast_hash": "9b7dbef929f46fb44cde1eb123133eb4",
+    "semantic_hash": "9b7dbef929f46fb44cde1eb123133eb4"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/EntityFrameworkCore/ArchiveBoxs/ArchiveBoxEfCoreQueryableExtensions.cs": {
+    "mtime": 1787549986.4174812,
+    "ast_hash": "abc43c6d96e35589a8569dedb0680ce1",
+    "semantic_hash": "abc43c6d96e35589a8569dedb0680ce1"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/EntityFrameworkCore/ArchiveBoxs/EfCoreArchiveBoxRepository.cs": {
+    "mtime": 1787549986.4174812,
+    "ast_hash": "2775d080d7e9dbdc14fc5dd84814266b",
+    "semantic_hash": "2775d080d7e9dbdc14fc5dd84814266b"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/EntityFrameworkCore/Archives/ArchiveEfCoreQueryableExtensions.cs": {
+    "mtime": 1787549986.4184816,
+    "ast_hash": "32b88cd1263a25078c364289b0572e40",
+    "semantic_hash": "32b88cd1263a25078c364289b0572e40"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/EntityFrameworkCore/Archives/EfCoreArchiveRepository.cs": {
+    "mtime": 1787549986.4194818,
+    "ast_hash": "00f11882d8e6fdf7ef81f78469d003fa",
+    "semantic_hash": "00f11882d8e6fdf7ef81f78469d003fa"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/EntityFrameworkCore/Cells/CellEfCoreQueryableExtensions.cs": {
+    "mtime": 1787549986.4207234,
+    "ast_hash": "3d4ee0e42762e6df2ff248242848b029",
+    "semantic_hash": "3d4ee0e42762e6df2ff248242848b029"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/EntityFrameworkCore/Cells/EfCoreCellRepository.cs": {
+    "mtime": 1787549986.4217207,
+    "ast_hash": "6a5b488431492efbe25ce05e2e5ab2bc",
+    "semantic_hash": "6a5b488431492efbe25ce05e2e5ab2bc"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/EntityFrameworkCore/CheckHiss/CheckHisEfCoreQueryableExtensions.cs": {
+    "mtime": 1787549986.4217207,
+    "ast_hash": "85d4146c6c5f3731e7f5881e185fd64d",
+    "semantic_hash": "85d4146c6c5f3731e7f5881e185fd64d"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/EntityFrameworkCore/CheckHiss/EfCoreCheckDetailHisRepository.cs": {
+    "mtime": 1787549986.422721,
+    "ast_hash": "2cd7245747a6cdfa56600b44c5fde149",
+    "semantic_hash": "2cd7245747a6cdfa56600b44c5fde149"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/EntityFrameworkCore/CheckHiss/EfCoreCheckHisRepository.cs": {
+    "mtime": 1787549986.4237175,
+    "ast_hash": "dcf9f9e03731e56542dda4998d51ca71",
+    "semantic_hash": "dcf9f9e03731e56542dda4998d51ca71"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/EntityFrameworkCore/Checks/CheckEfCoreQueryableExtensions.cs": {
+    "mtime": 1787549986.424787,
+    "ast_hash": "59edb414dee9e53cd34084cb21ab4bd4",
+    "semantic_hash": "59edb414dee9e53cd34084cb21ab4bd4"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/EntityFrameworkCore/Checks/EfCoreCheckDetailRepository.cs": {
+    "mtime": 1787549986.424787,
+    "ast_hash": "91877a78fa081f44c64f1b4c37b83be9",
+    "semantic_hash": "91877a78fa081f44c64f1b4c37b83be9"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/EntityFrameworkCore/Checks/EfCoreCheckRepository.cs": {
+    "mtime": 1787549986.4257872,
+    "ast_hash": "fbe0af7a129b5b88d80547ef21832864",
+    "semantic_hash": "fbe0af7a129b5b88d80547ef21832864"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/EntityFrameworkCore/Faces/EfCoreFaceRepository.cs": {
+    "mtime": 1787549986.4270003,
+    "ast_hash": "32d8d86556d1e4d079a642c690f2d28c",
+    "semantic_hash": "32d8d86556d1e4d079a642c690f2d28c"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/EntityFrameworkCore/Faces/FaceEfCoreQueryableExtensions.cs": {
+    "mtime": 1787549986.4270003,
+    "ast_hash": "c6b8ab9c9190cc7c5768e68551ff1baa",
+    "semantic_hash": "c6b8ab9c9190cc7c5768e68551ff1baa"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/EntityFrameworkCore/Fingers/EfCoreVeinRepository.cs": {
+    "mtime": 1787549986.4280005,
+    "ast_hash": "ab6bfd01133c3bdc1ff4e09c91711104",
+    "semantic_hash": "ab6bfd01133c3bdc1ff4e09c91711104"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/EntityFrameworkCore/Fingers/VeinEfCoreQueryableExtensions.cs": {
+    "mtime": 1787549986.4290009,
+    "ast_hash": "c5f7fe3085ba11b3b567352ba33d401d",
+    "semantic_hash": "c5f7fe3085ba11b3b567352ba33d401d"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/EntityFrameworkCore/Goodss/EfCoreGoodsRepository.cs": {
+    "mtime": 1787549986.4300008,
+    "ast_hash": "ff6951d799899148449b2514bbbe9998",
+    "semantic_hash": "ff6951d799899148449b2514bbbe9998"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/EntityFrameworkCore/Goodss/GoodsEfCoreQueryableExtensions.cs": {
+    "mtime": 1787549986.4300008,
+    "ast_hash": "74aa73994f365c3b7198a06216097876",
+    "semantic_hash": "74aa73994f365c3b7198a06216097876"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/EntityFrameworkCore/IWarehouseManagementDbContext.cs": {
+    "mtime": 1787549986.4310012,
+    "ast_hash": "c93e7b3c7bb59d551a8e080643aa51c2",
+    "semantic_hash": "c93e7b3c7bb59d551a8e080643aa51c2"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/EntityFrameworkCore/Plans/EfCorePlanListRepository.cs": {
+    "mtime": 1787549986.4320016,
+    "ast_hash": "c18328942f74a73e3cf00fb47872b708",
+    "semantic_hash": "c18328942f74a73e3cf00fb47872b708"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/EntityFrameworkCore/Plans/EfCorePlanRepository.cs": {
+    "mtime": 1787549986.433002,
+    "ast_hash": "c5f14d69b089e183055666d7c5bfbf77",
+    "semantic_hash": "c5f14d69b089e183055666d7c5bfbf77"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/EntityFrameworkCore/Plans/PlanEfCoreQueryableExtensions.cs": {
+    "mtime": 1787549986.433002,
+    "ast_hash": "3748741fe049a990e6399968f983ffa8",
+    "semantic_hash": "3748741fe049a990e6399968f983ffa8"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/EntityFrameworkCore/RfidCodes/EFCoreRfidRepository.cs": {
+    "mtime": 1787549986.434074,
+    "ast_hash": "7a6904e8e30245ab23ab58162e0fbaf6",
+    "semantic_hash": "7a6904e8e30245ab23ab58162e0fbaf6"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/EntityFrameworkCore/RfidCodes/RfidEfCoreQueryableExtensions.cs": {
+    "mtime": 1787549986.4350708,
+    "ast_hash": "334d02d9839b46c7bfccb8011e106d24",
+    "semantic_hash": "334d02d9839b46c7bfccb8011e106d24"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/EntityFrameworkCore/StockTaskDetails/EfCoreStockTaskRepository.cs": {
+    "mtime": 1787549986.436071,
+    "ast_hash": "ac392ddfbf7bae8730c3dd6d33ac335f",
+    "semantic_hash": "ac392ddfbf7bae8730c3dd6d33ac335f"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/EntityFrameworkCore/StockTasks/EfCoreStockTaskRepository.cs": {
+    "mtime": 1787549986.437071,
+    "ast_hash": "7da76786660f63b2b7a35f487ccb62e4",
+    "semantic_hash": "7da76786660f63b2b7a35f487ccb62e4"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/EntityFrameworkCore/StockTasks/StockTaskEfCoreQueryableExtensions.cs": {
+    "mtime": 1787549986.437071,
+    "ast_hash": "aafaa0c04447c7b3abaac347fa919eb4",
+    "semantic_hash": "aafaa0c04447c7b3abaac347fa919eb4"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/EntityFrameworkCore/TaskHiss/EfCoreTaskHisDetailRepository.cs": {
+    "mtime": 1787549986.4385762,
+    "ast_hash": "eededa0e1c6c675d9b49c3ef50da4fcf",
+    "semantic_hash": "eededa0e1c6c675d9b49c3ef50da4fcf"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/EntityFrameworkCore/TaskHiss/EfCoreTaskHisRepository.cs": {
+    "mtime": 1787549986.4385762,
+    "ast_hash": "51502962edcced6060d9068737d64712",
+    "semantic_hash": "51502962edcced6060d9068737d64712"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/EntityFrameworkCore/TaskHiss/TaskHisEfCoreQueryableExtensions.cs": {
+    "mtime": 1787549986.4395728,
+    "ast_hash": "07ba5d437c3879b87a25f85a88412a8a",
+    "semantic_hash": "07ba5d437c3879b87a25f85a88412a8a"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/EntityFrameworkCore/WarehouseManagementDbContext.cs": {
+    "mtime": 1787549986.4395728,
+    "ast_hash": "678255d5ef0f0fd03dc7f2dceecda3b2",
+    "semantic_hash": "678255d5ef0f0fd03dc7f2dceecda3b2"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/EntityFrameworkCore/WarehouseManagementDbContextModelCreatingExtensions.cs": {
+    "mtime": 1787549986.440943,
+    "ast_hash": "cf6b39c5345527e2656dd4749d90c7dc",
+    "semantic_hash": "cf6b39c5345527e2656dd4749d90c7dc"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/EntityFrameworkCore/WarehouseManagementEntityFrameworkCoreModule.cs": {
+    "mtime": 1787549986.440943,
+    "ast_hash": "a4abf75073a7e73e6dee78442d8bcbf9",
+    "semantic_hash": "a4abf75073a7e73e6dee78442d8bcbf9"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/EntityFrameworkCore/Warehouses/EfCoreLogicAreaRepository.cs": {
+    "mtime": 1787549986.4419432,
+    "ast_hash": "9024e456580427f98908519221534163",
+    "semantic_hash": "9024e456580427f98908519221534163"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/EntityFrameworkCore/Warehouses/EfCoreWarehouseAreaRepository.cs": {
+    "mtime": 1787549986.4429433,
+    "ast_hash": "f767daba4d64480bf83d735967e509b3",
+    "semantic_hash": "f767daba4d64480bf83d735967e509b3"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/EntityFrameworkCore/Warehouses/EfCoreWarehouseRepository.cs": {
+    "mtime": 1787549986.4429433,
+    "ast_hash": "e7a94aa3c9bce10ff9608b947b9ea32e",
+    "semantic_hash": "e7a94aa3c9bce10ff9608b947b9ea32e"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/WarehouseManagement.EntityFrameworkCore.abppkg.json": {
+    "mtime": 1787549986.4443426,
+    "ast_hash": "8869ac9623ab1e8b6fd7ca0d731912e8",
+    "semantic_hash": "8869ac9623ab1e8b6fd7ca0d731912e8"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.EntityFrameworkCore/WarehouseManagement.EntityFrameworkCore.csproj": {
+    "mtime": 1787549986.4453833,
+    "ast_hash": "95c16f52d057fd7edea64d3551c186cd",
+    "semantic_hash": "95c16f52d057fd7edea64d3551c186cd"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.HttpApi.Client/WarehouseManagement.HttpApi.Client.abppkg.json": {
+    "mtime": 1787549986.4466078,
+    "ast_hash": "2f7146b2f3964baa3e8d3a252a9bb282",
+    "semantic_hash": "2f7146b2f3964baa3e8d3a252a9bb282"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.HttpApi.Client/WarehouseManagement.HttpApi.Client.csproj": {
+    "mtime": 1787549986.4479513,
+    "ast_hash": "8988d4d783246c49ea0a86d6e0d3e3e0",
+    "semantic_hash": "8988d4d783246c49ea0a86d6e0d3e3e0"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.HttpApi.Client/WarehouseManagementHttpApiClientModule.cs": {
+    "mtime": 1787549986.4479513,
+    "ast_hash": "cb866018e102eb2bf2bb33c2dc2bb8a6",
+    "semantic_hash": "cb866018e102eb2bf2bb33c2dc2bb8a6"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.HttpApi/ArchiveBox/ArchiveBoxsController.cs": {
+    "mtime": 1787549986.4495113,
+    "ast_hash": "01c568c53a3ad2e60a6aaa41c3741674",
+    "semantic_hash": "01c568c53a3ad2e60a6aaa41c3741674"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.HttpApi/Archives/ArchivesController.cs": {
+    "mtime": 1787549986.4500155,
+    "ast_hash": "903d5fee6c6e8fde16c14c2b27beab7e",
+    "semantic_hash": "903d5fee6c6e8fde16c14c2b27beab7e"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.HttpApi/Boards/BoardsController.cs": {
+    "mtime": 1787549986.4510126,
+    "ast_hash": "8edb8930cec4a2f39069c72b544572e0",
+    "semantic_hash": "8edb8930cec4a2f39069c72b544572e0"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.HttpApi/Cells/CellsController.cs": {
+    "mtime": 1787549986.4520128,
+    "ast_hash": "fc2475e7eaade2fbda5045a961d801f1",
+    "semantic_hash": "fc2475e7eaade2fbda5045a961d801f1"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.HttpApi/CheckHiss/CheckHissController.cs": {
+    "mtime": 1787549986.453013,
+    "ast_hash": "9862b7070d529deacab023619d378844",
+    "semantic_hash": "9862b7070d529deacab023619d378844"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.HttpApi/Checks/ChecksController.cs": {
+    "mtime": 1787549986.454071,
+    "ast_hash": "cc8f092dbb670643841e32a792f41eb0",
+    "semantic_hash": "cc8f092dbb670643841e32a792f41eb0"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.HttpApi/Faces/FaceController.cs": {
+    "mtime": 1787549986.4550714,
+    "ast_hash": "552b1bbaddaea50f14fec009a05d3902",
+    "semantic_hash": "552b1bbaddaea50f14fec009a05d3902"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.HttpApi/Fingers/VeinController.cs": {
+    "mtime": 1787549986.4560714,
+    "ast_hash": "f446dcb62a6d7f8264f286ff60166e38",
+    "semantic_hash": "f446dcb62a6d7f8264f286ff60166e38"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.HttpApi/Goodss/GoodssController.cs": {
+    "mtime": 1787549986.4570718,
+    "ast_hash": "58b41470b1c5215e363666f726cefd37",
+    "semantic_hash": "58b41470b1c5215e363666f726cefd37"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.HttpApi/LogFiles/LogFilesController.cs": {
+    "mtime": 1787549986.458072,
+    "ast_hash": "f76bcc3e0cbd614cef693e9fa33b6377",
+    "semantic_hash": "f76bcc3e0cbd614cef693e9fa33b6377"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.HttpApi/Plans/PlansController.cs": {
+    "mtime": 1787549986.459072,
+    "ast_hash": "ffd1421fb9e44a6253f1a79d94479df5",
+    "semantic_hash": "ffd1421fb9e44a6253f1a79d94479df5"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.HttpApi/RfidCodes/RfidCodesController.cs": {
+    "mtime": 1787549986.4600725,
+    "ast_hash": "0c5e9df378d9fba2d75fed2f91465714",
+    "semantic_hash": "0c5e9df378d9fba2d75fed2f91465714"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.HttpApi/StockTasks/StockTasksController.cs": {
+    "mtime": 1787549986.4610727,
+    "ast_hash": "0455a0b82404a97b3b03888c65f4fac7",
+    "semantic_hash": "0455a0b82404a97b3b03888c65f4fac7"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.HttpApi/TaskHiss/TaskHissController.cs": {
+    "mtime": 1787549986.4620728,
+    "ast_hash": "21b0c8cc5e9df62e921c4f293a30af61",
+    "semantic_hash": "21b0c8cc5e9df62e921c4f293a30af61"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.HttpApi/WarehouseManagement.HttpApi.abppkg.json": {
+    "mtime": 1787549986.4620728,
+    "ast_hash": "90e17a7ffff983f1f2794b05a037cf56",
+    "semantic_hash": "90e17a7ffff983f1f2794b05a037cf56"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.HttpApi/WarehouseManagement.HttpApi.csproj": {
+    "mtime": 1787549986.4630733,
+    "ast_hash": "5d923d9e1ba570a40e29d81dc6fcdf2b",
+    "semantic_hash": "5d923d9e1ba570a40e29d81dc6fcdf2b"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.HttpApi/WarehouseManagementController.cs": {
+    "mtime": 1787549986.4630733,
+    "ast_hash": "fd68e1fefb81b9ec7ccab0e598f5a77e",
+    "semantic_hash": "fd68e1fefb81b9ec7ccab0e598f5a77e"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.HttpApi/WarehouseManagementHttpApiModule.cs": {
+    "mtime": 1787549986.4641054,
+    "ast_hash": "8defee96e3b0cbecfe338f81438918d8",
+    "semantic_hash": "8defee96e3b0cbecfe338f81438918d8"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.HttpApi/Warehouses/WarehousesController.cs": {
+    "mtime": 1787549986.465371,
+    "ast_hash": "5d535ebf644198c791893314850a336b",
+    "semantic_hash": "5d535ebf644198c791893314850a336b"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.HttpApi/WcsTasks/WcsTasksController.cs": {
+    "mtime": 1787549986.4663682,
+    "ast_hash": "1727e1bcdbf6f00fdbcac609501b0344",
+    "semantic_hash": "1727e1bcdbf6f00fdbcac609501b0344"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Installer/WarehouseManagement.Installer.csproj": {
+    "mtime": 1787549986.4673684,
+    "ast_hash": "19d97f15b02f0422e004d736caae0df6",
+    "semantic_hash": "19d97f15b02f0422e004d736caae0df6"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Installer/WarehouseManagementInstallerModule.cs": {
+    "mtime": 1787549986.4685194,
+    "ast_hash": "0ced22f7419d0fc553c6a7cb82e900e4",
+    "semantic_hash": "0ced22f7419d0fc553c6a7cb82e900e4"
+  },
+  "modules/WarehouseManagement/src/WarehouseManagement.Installer/WarehouseManagementInstallerPipelineBuilder.cs": {
+    "mtime": 1787549986.4685194,
+    "ast_hash": "131121fad3ae2b49146f60a2aa951c58",
+    "semantic_hash": "131121fad3ae2b49146f60a2aa951c58"
+  },
+  "services/host/Lion.AbpPro.HttpApi.Host/AbpProHttpApiHostConsts.cs": {
+    "mtime": 1787549986.5001233,
+    "ast_hash": "58eba56a9a8098078ca9bb9e266fd977",
+    "semantic_hash": "58eba56a9a8098078ca9bb9e266fd977"
+  },
+  "services/host/Lion.AbpPro.HttpApi.Host/AbpProHttpApiHostModule.cs": {
+    "mtime": 1787549986.501232,
+    "ast_hash": "a2d9cd917d550106d403161c13fa1fae",
+    "semantic_hash": "a2d9cd917d550106d403161c13fa1fae"
+  },
+  "services/host/Lion.AbpPro.HttpApi.Host/Controllers/HomeController.cs": {
+    "mtime": 1787549986.502371,
+    "ast_hash": "63a43b535034946d52a1514019301fba",
+    "semantic_hash": "63a43b535034946d52a1514019301fba"
+  },
+  "services/host/Lion.AbpPro.HttpApi.Host/Extensions/Hangfire/AutoDeleteAfterSuccessAttributer.cs": {
+    "mtime": 1787549986.5043683,
+    "ast_hash": "441b44a0724005a27a1c1b45ad14eab5",
+    "semantic_hash": "441b44a0724005a27a1c1b45ad14eab5"
+  },
+  "services/host/Lion.AbpPro.HttpApi.Host/Extensions/Hangfire/CronType.cs": {
+    "mtime": 1787549986.5043683,
+    "ast_hash": "3157b882e8f19e8c0596844ae507682a",
+    "semantic_hash": "3157b882e8f19e8c0596844ae507682a"
+  },
+  "services/host/Lion.AbpPro.HttpApi.Host/Extensions/Hangfire/CustomHangfireAuthorizeFilter.cs": {
+    "mtime": 1787549986.5053685,
+    "ast_hash": "f8cc197f3dce813fb398c23b93f4f712",
+    "semantic_hash": "f8cc197f3dce813fb398c23b93f4f712"
+  },
+  "services/host/Lion.AbpPro.HttpApi.Host/Extensions/Hangfire/JobRetryLastFilter.cs": {
+    "mtime": 1787549986.506109,
+    "ast_hash": "b001d764ee950078097c442ba79fc183",
+    "semantic_hash": "b001d764ee950078097c442ba79fc183"
+  },
+  "services/host/Lion.AbpPro.HttpApi.Host/Extensions/RecurringJobsExtensions.cs": {
+    "mtime": 1787549986.506109,
+    "ast_hash": "a35b9f88dcac64ead5876b397be0709d",
+    "semantic_hash": "a35b9f88dcac64ead5876b397be0709d"
+  },
+  "services/host/Lion.AbpPro.HttpApi.Host/Extensions/SerilogToEsExtensions.cs": {
+    "mtime": 1787549986.5073297,
+    "ast_hash": "6acdf655acd0767c61467803f3c29e06",
+    "semantic_hash": "6acdf655acd0767c61467803f3c29e06"
+  },
+  "services/host/Lion.AbpPro.HttpApi.Host/Jobs/PlcJob.cs": {
+    "mtime": 1787549986.5083263,
+    "ast_hash": "7cb4f3abf04a22fbbf650ebb2082f336",
+    "semantic_hash": "7cb4f3abf04a22fbbf650ebb2082f336"
+  },
+  "services/host/Lion.AbpPro.HttpApi.Host/Lion.AbpPro.HttpApi.Host.csproj": {
+    "mtime": 1787549986.5083263,
+    "ast_hash": "9797b368beae835945064bc470e1cbba",
+    "semantic_hash": "9797b368beae835945064bc470e1cbba"
+  },
+  "services/host/Lion.AbpPro.HttpApi.Host/Pages/Login.cshtml": {
+    "mtime": 1787549986.5093265,
+    "ast_hash": "0aac654db59e528f55a9bb387e1ce503",
+    "semantic_hash": "0aac654db59e528f55a9bb387e1ce503"
+  },
+  "services/host/Lion.AbpPro.HttpApi.Host/Pages/Login.cshtml.cs": {
+    "mtime": 1787549986.5103269,
+    "ast_hash": "76e7b582ad6134ddff1978b01c3fd692",
+    "semantic_hash": "76e7b582ad6134ddff1978b01c3fd692"
+  },
+  "services/host/Lion.AbpPro.HttpApi.Host/Pages/Monitor.cshtml": {
+    "mtime": 1787549986.5103269,
+    "ast_hash": "d6f050b61e1eb870c71afab9fc224b7b",
+    "semantic_hash": "d6f050b61e1eb870c71afab9fc224b7b"
+  },
+  "services/host/Lion.AbpPro.HttpApi.Host/Pages/Monitor.cshtml.cs": {
+    "mtime": 1787549986.5113847,
+    "ast_hash": "3891777035420886f1906ad1efdd59b6",
+    "semantic_hash": "3891777035420886f1906ad1efdd59b6"
+  },
+  "services/host/Lion.AbpPro.HttpApi.Host/Program.cs": {
+    "mtime": 1787549986.5113847,
+    "ast_hash": "80fae30c5108b07934adb9292d5fb566",
+    "semantic_hash": "80fae30c5108b07934adb9292d5fb566"
+  },
+  "services/host/Lion.AbpPro.HttpApi.Host/Properties/launchSettings.json": {
+    "mtime": 1787549986.5123813,
+    "ast_hash": "11e473eca4403c1263549d21f996ad1e",
+    "semantic_hash": "11e473eca4403c1263549d21f996ad1e"
+  },
+  "services/host/Lion.AbpPro.HttpApi.Host/Startup.cs": {
+    "mtime": 1787549986.5133815,
+    "ast_hash": "a1d0f972df2d17751bf15543aac22275",
+    "semantic_hash": "a1d0f972df2d17751bf15543aac22275"
+  },
+  "services/host/Lion.AbpPro.HttpApi.Host/appsettings.json": {
+    "mtime": 1787549986.5133815,
+    "ast_hash": "a7b827c1865f01c4579e189c89a71932",
+    "semantic_hash": "a7b827c1865f01c4579e189c89a71932"
+  },
+  "services/host/Lion.AbpPro.HttpApi.Host/dotnet-tools.json": {
+    "mtime": 1787549986.514382,
+    "ast_hash": "841ac9416c094d24e8fa3dc79d5ed14c",
+    "semantic_hash": "841ac9416c094d24e8fa3dc79d5ed14c"
+  },
+  "services/host/Lion.AbpPro.IdentityServer/AbpProBrandingProvider.cs": {
+    "mtime": 1787549986.5236077,
+    "ast_hash": "1070a9dd9c53a424a5f652764b0a494a",
+    "semantic_hash": "1070a9dd9c53a424a5f652764b0a494a"
+  },
+  "services/host/Lion.AbpPro.IdentityServer/AbpProIdentityServerModule.cs": {
+    "mtime": 1787549986.5236077,
+    "ast_hash": "a1f1b49f9632a9fb97179b8307099999",
+    "semantic_hash": "a1f1b49f9632a9fb97179b8307099999"
+  },
+  "services/host/Lion.AbpPro.IdentityServer/Extensions/SameSiteCookiesServiceCollectionExtensions.cs": {
+    "mtime": 1787549986.5258617,
+    "ast_hash": "f1c9ffbc77148af0ed20e3e4783d285f",
+    "semantic_hash": "f1c9ffbc77148af0ed20e3e4783d285f"
+  },
+  "services/host/Lion.AbpPro.IdentityServer/Lion.AbpPro.IdentityServer.csproj": {
+    "mtime": 1787549986.5258617,
+    "ast_hash": "204fd15295c991eaf6022cba2f420dfa",
+    "semantic_hash": "204fd15295c991eaf6022cba2f420dfa"
+  },
+  "services/host/Lion.AbpPro.IdentityServer/Pages/Account/LoggedOut.cshtml": {
+    "mtime": 1787549986.527862,
+    "ast_hash": "4d17932b6056c7e222a23cacc735b138",
+    "semantic_hash": "4d17932b6056c7e222a23cacc735b138"
+  },
+  "services/host/Lion.AbpPro.IdentityServer/Pages/Account/Login.cshtml": {
+    "mtime": 1787549986.527862,
+    "ast_hash": "a3db57238aa8254f2f53ac59fe3549f4",
+    "semantic_hash": "a3db57238aa8254f2f53ac59fe3549f4"
+  },
+  "services/host/Lion.AbpPro.IdentityServer/Pages/Index.cshtml": {
+    "mtime": 1787549986.5288625,
+    "ast_hash": "6691a96c5edb04a8ead7bb5de21c1906",
+    "semantic_hash": "6691a96c5edb04a8ead7bb5de21c1906"
+  },
+  "services/host/Lion.AbpPro.IdentityServer/Pages/Index.cshtml.cs": {
+    "mtime": 1787549986.5288625,
+    "ast_hash": "ec8e05f372c60f8e124ecb1f47af0b5d",
+    "semantic_hash": "ec8e05f372c60f8e124ecb1f47af0b5d"
+  },
+  "services/host/Lion.AbpPro.IdentityServer/Pages/Welcome.cshtml": {
+    "mtime": 1787549986.5298626,
+    "ast_hash": "3740fe7728fcfa742abda45d4f2ea242",
+    "semantic_hash": "3740fe7728fcfa742abda45d4f2ea242"
+  },
+  "services/host/Lion.AbpPro.IdentityServer/Pages/Welcome.cshtml.cs": {
+    "mtime": 1787549986.5298626,
+    "ast_hash": "cfa015a7054678dc1abc4ebe90951e62",
+    "semantic_hash": "cfa015a7054678dc1abc4ebe90951e62"
+  },
+  "services/host/Lion.AbpPro.IdentityServer/Pages/_ViewImports.cshtml": {
+    "mtime": 1787549986.530975,
+    "ast_hash": "a89bd934ecb94cc7c719a12cbd1cc044",
+    "semantic_hash": "a89bd934ecb94cc7c719a12cbd1cc044"
+  },
+  "services/host/Lion.AbpPro.IdentityServer/Program.cs": {
+    "mtime": 1787549986.5319817,
+    "ast_hash": "130040cfa3689fe98e014b59733a9f56",
+    "semantic_hash": "130040cfa3689fe98e014b59733a9f56"
+  },
+  "services/host/Lion.AbpPro.IdentityServer/Properties/launchSettings.json": {
+    "mtime": 1787549986.532982,
+    "ast_hash": "931c41084c3df2baac38d5d6a7a6962b",
+    "semantic_hash": "931c41084c3df2baac38d5d6a7a6962b"
+  },
+  "services/host/Lion.AbpPro.IdentityServer/Startup.cs": {
+    "mtime": 1787549986.532982,
+    "ast_hash": "75a410887ff430bb996aeab225bcad4b",
+    "semantic_hash": "75a410887ff430bb996aeab225bcad4b"
+  },
+  "services/host/Lion.AbpPro.IdentityServer/abp.resourcemapping.js": {
+    "mtime": 1787549986.532982,
+    "ast_hash": "e25c1a48b5b0bd3718f830aee354697f",
+    "semantic_hash": "e25c1a48b5b0bd3718f830aee354697f"
+  },
+  "services/host/Lion.AbpPro.IdentityServer/appsettings.json": {
+    "mtime": 1787549986.5343678,
+    "ast_hash": "e485ea81c20d8b95cc847cc8411e6d23",
+    "semantic_hash": "e485ea81c20d8b95cc847cc8411e6d23"
+  },
+  "services/host/Lion.AbpPro.IdentityServer/package.json": {
+    "mtime": 1787549986.5343678,
+    "ast_hash": "b06f91df3fd78b21d5b21e19cf2910bf",
+    "semantic_hash": "b06f91df3fd78b21d5b21e19cf2910bf"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/AbpProApplicationContractsModule.cs": {
+    "mtime": 1787549986.858964,
+    "ast_hash": "f1c550e3d586d8e3017c2e8d9e871e79",
+    "semantic_hash": "f1c550e3d586d8e3017c2e8d9e871e79"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/AbpProDtoExtensions.cs": {
+    "mtime": 1787549986.8600154,
+    "ast_hash": "5369a69aaa530dcc75c691c6f7efa338",
+    "semantic_hash": "5369a69aaa530dcc75c691c6f7efa338"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/AuditLogs/GetAuditLogPageListOutput.cs": {
+    "mtime": 1787549986.8605106,
+    "ast_hash": "3088fe3eab8ff4aa3328703c67e21b52",
+    "semantic_hash": "3088fe3eab8ff4aa3328703c67e21b52"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/AuditLogs/IAuditLogAppService.cs": {
+    "mtime": 1787549986.8615081,
+    "ast_hash": "fd18089d5c94a2042416b8e1640f1e5d",
+    "semantic_hash": "fd18089d5c94a2042416b8e1640f1e5d"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/AuditLogs/PagingAuditLogListInput.cs": {
+    "mtime": 1787549986.8615081,
+    "ast_hash": "8fcb74c20d349b0a0e049ec62ff5a3cd",
+    "semantic_hash": "8fcb74c20d349b0a0e049ec62ff5a3cd"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/ConfigurationOptions/AGVOptions.cs": {
+    "mtime": 1787549986.8627672,
+    "ast_hash": "ff0e3489db231570e197bf2c2bb7bcde",
+    "semantic_hash": "ff0e3489db231570e197bf2c2bb7bcde"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/ConfigurationOptions/AllocationRulesOptions.cs": {
+    "mtime": 1787549986.8638685,
+    "ast_hash": "f21a9b9f574b410df81d710faa415112",
+    "semantic_hash": "f21a9b9f574b410df81d710faa415112"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/ConfigurationOptions/ERPOptions.cs": {
+    "mtime": 1787549986.8643246,
+    "ast_hash": "a5f97bc21deef7f4ef23c4df48dbc0c8",
+    "semantic_hash": "a5f97bc21deef7f4ef23c4df48dbc0c8"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/ConfigurationOptions/FbqOptions.cs": {
+    "mtime": 1787549986.8643246,
+    "ast_hash": "c48edc8ca940ea60a2909338a7f891d3",
+    "semantic_hash": "c48edc8ca940ea60a2909338a7f891d3"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/ConfigurationOptions/JwtOptions.cs": {
+    "mtime": 1787549986.8653212,
+    "ast_hash": "5d902149f58680a57d92ed1de0c5a96e",
+    "semantic_hash": "5d902149f58680a57d92ed1de0c5a96e"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/ConfigurationOptions/MesOptions.cs": {
+    "mtime": 1787549986.8653212,
+    "ast_hash": "7b6127a48ee121c45ba5986b57aebbff",
+    "semantic_hash": "7b6127a48ee121c45ba5986b57aebbff"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/ConfigurationOptions/WCSOptions.cs": {
+    "mtime": 1787549986.8663213,
+    "ast_hash": "213bbf1b07773a8f2ead8979faed5fe5",
+    "semantic_hash": "213bbf1b07773a8f2ead8979faed5fe5"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/ElasticSearchs/Dto/PagingElasticSearchLogInput.cs": {
+    "mtime": 1787549986.8673215,
+    "ast_hash": "3efc79edc41ff194fc513fcc937ffa83",
+    "semantic_hash": "3efc79edc41ff194fc513fcc937ffa83"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/ElasticSearchs/Dto/PagingElasticSearchLogOutput.cs": {
+    "mtime": 1787549986.868322,
+    "ast_hash": "df8607a80d2bd2d1a5c6ae37c159cb41",
+    "semantic_hash": "df8607a80d2bd2d1a5c6ae37c159cb41"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/ElasticSearchs/ILionAbpProLogAppService.cs": {
+    "mtime": 1787549986.868322,
+    "ast_hash": "ebe0601ec25ffd65d2584359c00b8da7",
+    "semantic_hash": "ebe0601ec25ffd65d2584359c00b8da7"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/IdentityServers/ApiResources/Dtos/ApiResourceOutput.cs": {
+    "mtime": 1787549986.8703222,
+    "ast_hash": "bb468e98521d80cf0ce3207da853c7e6",
+    "semantic_hash": "bb468e98521d80cf0ce3207da853c7e6"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/IdentityServers/ApiResources/Dtos/CreateApiResourceInput.cs": {
+    "mtime": 1787549986.8703222,
+    "ast_hash": "bb593d6a7ec1d36f62be572b904f3426",
+    "semantic_hash": "bb593d6a7ec1d36f62be572b904f3426"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/IdentityServers/ApiResources/Dtos/PagingApiRseourceListInput.cs": {
+    "mtime": 1787549986.8716142,
+    "ast_hash": "3f609cf43cf8afd51ad329834a1ce441",
+    "semantic_hash": "3f609cf43cf8afd51ad329834a1ce441"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/IdentityServers/ApiResources/Dtos/UpdateApiResourceInput.cs": {
+    "mtime": 1787549986.8716142,
+    "ast_hash": "30ed64af5b2c57bd447f60995f973945",
+    "semantic_hash": "30ed64af5b2c57bd447f60995f973945"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/IdentityServers/ApiResources/IApiResourceAppService.cs": {
+    "mtime": 1787549986.8726108,
+    "ast_hash": "ec2ac1601dddeac1d4815fb47a1f17b8",
+    "semantic_hash": "ec2ac1601dddeac1d4815fb47a1f17b8"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/IdentityServers/ApiScopes/Dtos/CreateApiScopeInput.cs": {
+    "mtime": 1787549986.8736112,
+    "ast_hash": "ea8cc9cf39d1c7fb527f4e312c869a43",
+    "semantic_hash": "ea8cc9cf39d1c7fb527f4e312c869a43"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/IdentityServers/ApiScopes/Dtos/PagingApiScopeListInput.cs": {
+    "mtime": 1787549986.8746114,
+    "ast_hash": "82ac916901fd74caa8143af8d48d1dad",
+    "semantic_hash": "82ac916901fd74caa8143af8d48d1dad"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/IdentityServers/ApiScopes/Dtos/PagingApiScopeListOutput.cs": {
+    "mtime": 1787549986.8746114,
+    "ast_hash": "e057a435dad3c2aca3761879fcb336de",
+    "semantic_hash": "e057a435dad3c2aca3761879fcb336de"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/IdentityServers/ApiScopes/Dtos/UpdateCreateApiScopeInput.cs": {
+    "mtime": 1787549986.875791,
+    "ast_hash": "506dcbcb941da8d314f03afc64060f79",
+    "semantic_hash": "506dcbcb941da8d314f03afc64060f79"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/IdentityServers/ApiScopes/IApiScopeAppService.cs": {
+    "mtime": 1787549986.875791,
+    "ast_hash": "2db9c74adf1c6be15480afceceeed2f8",
+    "semantic_hash": "2db9c74adf1c6be15480afceceeed2f8"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/Dtos/AddCorsInput.cs": {
+    "mtime": 1787549986.8777883,
+    "ast_hash": "79f05b58e54ed3d10352c046060e8a96",
+    "semantic_hash": "79f05b58e54ed3d10352c046060e8a96"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/Dtos/AddRedirectUriInput.cs": {
+    "mtime": 1787549986.8777883,
+    "ast_hash": "8f3cc221b5d4329c68f699f94ad3826e",
+    "semantic_hash": "8f3cc221b5d4329c68f699f94ad3826e"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/Dtos/ClientClaimOutput.cs": {
+    "mtime": 1787549986.8787887,
+    "ast_hash": "141f4c9891fac36f9037bc40f2e016e5",
+    "semantic_hash": "141f4c9891fac36f9037bc40f2e016e5"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/Dtos/ClientCorsOriginOutput.cs": {
+    "mtime": 1787549986.8787887,
+    "ast_hash": "e3c969bd02995432e53f5f8b68a5bf17",
+    "semantic_hash": "e3c969bd02995432e53f5f8b68a5bf17"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/Dtos/ClientGrantTypeOutput.cs": {
+    "mtime": 1787549986.8798356,
+    "ast_hash": "4964eddcdd516a32c27cf08bfd81c590",
+    "semantic_hash": "4964eddcdd516a32c27cf08bfd81c590"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/Dtos/ClientIdPRestrictionOutput.cs": {
+    "mtime": 1787549986.8798356,
+    "ast_hash": "9dec6010e3055b5cdbca6be60dfae8e2",
+    "semantic_hash": "9dec6010e3055b5cdbca6be60dfae8e2"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/Dtos/ClientPostLogoutRedirectUriOutput.cs": {
+    "mtime": 1787549986.8808327,
+    "ast_hash": "26ba64471ce9558f5097941eaa597afa",
+    "semantic_hash": "26ba64471ce9558f5097941eaa597afa"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/Dtos/ClientPropertyOutput.cs": {
+    "mtime": 1787549986.8808327,
+    "ast_hash": "85f254f0723d8b29f3976549b534ae98",
+    "semantic_hash": "85f254f0723d8b29f3976549b534ae98"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/Dtos/ClientRedirectUriOutput.cs": {
+    "mtime": 1787549986.8818328,
+    "ast_hash": "cea0a10d76304888b1f07a7f3f4bcf6b",
+    "semantic_hash": "cea0a10d76304888b1f07a7f3f4bcf6b"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/Dtos/ClientScopeOutput.cs": {
+    "mtime": 1787549986.8818328,
+    "ast_hash": "f87abcab28fd97cc2a82edd8041b9c03",
+    "semantic_hash": "f87abcab28fd97cc2a82edd8041b9c03"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/Dtos/ClientSecretOutput.cs": {
+    "mtime": 1787549986.882833,
+    "ast_hash": "5a04b6f2ed504f45d01beefca3321ae5",
+    "semantic_hash": "5a04b6f2ed504f45d01beefca3321ae5"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/Dtos/CreateClientInput.cs": {
+    "mtime": 1787549986.882833,
+    "ast_hash": "eedce6fb3deb67e75e067a6b7ef47928",
+    "semantic_hash": "eedce6fb3deb67e75e067a6b7ef47928"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/Dtos/EnabledInput.cs": {
+    "mtime": 1787549986.8838332,
+    "ast_hash": "44c12c69a4329874bdf35cc4814c7157",
+    "semantic_hash": "44c12c69a4329874bdf35cc4814c7157"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/Dtos/PagingClientListInput.cs": {
+    "mtime": 1787549986.8838332,
+    "ast_hash": "6f5fd45cc5821ee6040da2c8d6936f20",
+    "semantic_hash": "6f5fd45cc5821ee6040da2c8d6936f20"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/Dtos/PagingClientListOutput.cs": {
+    "mtime": 1787549986.8848336,
+    "ast_hash": "13d79fbfee6fdc9d3e2c7a444cd0d109",
+    "semantic_hash": "13d79fbfee6fdc9d3e2c7a444cd0d109"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/Dtos/RemoveCorsInput.cs": {
+    "mtime": 1787549986.8848336,
+    "ast_hash": "aa8aafbd67692669f40b0e6f45ca8506",
+    "semantic_hash": "aa8aafbd67692669f40b0e6f45ca8506"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/Dtos/RemoveRedirectUriInput.cs": {
+    "mtime": 1787549986.8858337,
+    "ast_hash": "ec4dbf33150d4b19011615d234e6ba25",
+    "semantic_hash": "ec4dbf33150d4b19011615d234e6ba25"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/Dtos/UpdataBasicDataInput.cs": {
+    "mtime": 1787549986.8858337,
+    "ast_hash": "23aa318533136bdb9f8bbfdf7b12e2f7",
+    "semantic_hash": "23aa318533136bdb9f8bbfdf7b12e2f7"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/Dtos/UpdateScopeInput.cs": {
+    "mtime": 1787549986.8871672,
+    "ast_hash": "091beb2ff538f6b107c03dbbe81c724f",
+    "semantic_hash": "091beb2ff538f6b107c03dbbe81c724f"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/IIdentityServerClientAppService.cs": {
+    "mtime": 1787549986.8871672,
+    "ast_hash": "a763bd30b8e203b1daf8db65641cd383",
+    "semantic_hash": "a763bd30b8e203b1daf8db65641cd383"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/IdentityServers/IdentityResources/Dtos/CreateIdentityResourceInput.cs": {
+    "mtime": 1787549986.889215,
+    "ast_hash": "1d88189ee7cb5d40bf135bd9da0f9291",
+    "semantic_hash": "1d88189ee7cb5d40bf135bd9da0f9291"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/IdentityServers/IdentityResources/Dtos/PagingIdentityResourceListInput.cs": {
+    "mtime": 1787549986.889215,
+    "ast_hash": "86ae389854aa996beb29b3e40cd232f4",
+    "semantic_hash": "86ae389854aa996beb29b3e40cd232f4"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/IdentityServers/IdentityResources/Dtos/PagingIdentityResourceListOutput.cs": {
+    "mtime": 1787549986.8902154,
+    "ast_hash": "4bf9f11dc0d93c615bd319a88f7a6c26",
+    "semantic_hash": "4bf9f11dc0d93c615bd319a88f7a6c26"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/IdentityServers/IdentityResources/Dtos/UpdateIdentityResourceInput.cs": {
+    "mtime": 1787549986.8902154,
+    "ast_hash": "efd04cdf09a5a19c89e2e12815c73789",
+    "semantic_hash": "efd04cdf09a5a19c89e2e12815c73789"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/IdentityServers/IdentityResources/IIdentityResourceAppService.cs": {
+    "mtime": 1787549986.8913434,
+    "ast_hash": "f9941803ed8f9c5de560bfc9c2b05ebb",
+    "semantic_hash": "f9941803ed8f9c5de560bfc9c2b05ebb"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/Jobs/IRecurringJob.cs": {
+    "mtime": 1787549986.8923435,
+    "ast_hash": "a8e60ed9cd118aa263786ee1bb7bcf08",
+    "semantic_hash": "a8e60ed9cd118aa263786ee1bb7bcf08"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/Lion.AbpPro.Application.Contracts.csproj": {
+    "mtime": 1787549986.8923435,
+    "ast_hash": "e50535b5da184176e18904874e0ec28a",
+    "semantic_hash": "e50535b5da184176e18904874e0ec28a"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/Permissions/AbpProPermissionDefinitionProvider.cs": {
+    "mtime": 1787549986.8933437,
+    "ast_hash": "9b991a5a83fcde7cab709abe34621f27",
+    "semantic_hash": "9b991a5a83fcde7cab709abe34621f27"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/Permissions/AbpProPermissions.cs": {
+    "mtime": 1787549986.894344,
+    "ast_hash": "5949d89107991ee1084bdb8761aa6155",
+    "semantic_hash": "5949d89107991ee1084bdb8761aa6155"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/Roles/Dtos/GetPermissionInput.cs": {
+    "mtime": 1787549986.8953443,
+    "ast_hash": "df21500d4857da19293b78ec345b3527",
+    "semantic_hash": "df21500d4857da19293b78ec345b3527"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/Roles/Dtos/PagingRoleListInput.cs": {
+    "mtime": 1787549986.8953443,
+    "ast_hash": "7aa9f7713efcb9ed9870f73c353ca312",
+    "semantic_hash": "7aa9f7713efcb9ed9870f73c353ca312"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/Roles/Dtos/PermissionOutput.cs": {
+    "mtime": 1787549986.896729,
+    "ast_hash": "cf82ea28cdc80cf71b6debe6f8db8f1a",
+    "semantic_hash": "cf82ea28cdc80cf71b6debe6f8db8f1a"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/Roles/Dtos/UpdateRoleInput.cs": {
+    "mtime": 1787549986.896729,
+    "ast_hash": "1a383b6a186c8e847c8824055ec7c6c8",
+    "semantic_hash": "1a383b6a186c8e847c8824055ec7c6c8"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/Roles/Dtos/UpdateRolePermissionsInput.cs": {
+    "mtime": 1787549986.8977256,
+    "ast_hash": "41bf6844ffe6f96614fc75dea6477f16",
+    "semantic_hash": "41bf6844ffe6f96614fc75dea6477f16"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/Roles/IRoleAppService.cs": {
+    "mtime": 1787549986.8977256,
+    "ast_hash": "2270192bdce0d0034c2c820da6e8588a",
+    "semantic_hash": "2270192bdce0d0034c2c820da6e8588a"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/Roles/IRolePermissionAppService.cs": {
+    "mtime": 1787549986.8987257,
+    "ast_hash": "a9e23093cd5b4f8c0c0285fba054d7f5",
+    "semantic_hash": "a9e23093cd5b4f8c0c0285fba054d7f5"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/Settings/Dtos/SettingOutput.cs": {
+    "mtime": 1787549986.8997262,
+    "ast_hash": "ca7ff1320e20ee319c7ead14f9d132b7",
+    "semantic_hash": "ca7ff1320e20ee319c7ead14f9d132b7"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/Settings/Dtos/UpdateSettingInput.cs": {
+    "mtime": 1787549986.8997262,
+    "ast_hash": "7688b2e4f8ffcb984800ba461ad4ea7b",
+    "semantic_hash": "7688b2e4f8ffcb984800ba461ad4ea7b"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/Settings/ISettingAppService.cs": {
+    "mtime": 1787549986.9007263,
+    "ast_hash": "d1b83fa4fe68321f24c7458744de8161",
+    "semantic_hash": "d1b83fa4fe68321f24c7458744de8161"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/Tenants/Dtos/FindTenantByNameInput.cs": {
+    "mtime": 1787549986.9017265,
+    "ast_hash": "14e9049ab3ba80a7d1929b32ac4c52fd",
+    "semantic_hash": "14e9049ab3ba80a7d1929b32ac4c52fd"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/Tenants/Dtos/PagingTenantInput.cs": {
+    "mtime": 1787549986.9027267,
+    "ast_hash": "d463c2b4aa91af01d16f97eac8f8d78c",
+    "semantic_hash": "d463c2b4aa91af01d16f97eac8f8d78c"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/Tenants/Dtos/UpdateDefaultConnectionStringInput.cs": {
+    "mtime": 1787549986.9027267,
+    "ast_hash": "26d0fdfc70f8e2c5a848b85aa0d8e938",
+    "semantic_hash": "26d0fdfc70f8e2c5a848b85aa0d8e938"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/Tenants/Dtos/UpdateTenantInput.cs": {
+    "mtime": 1787549986.9038367,
+    "ast_hash": "24c9d3fe8eff977126d021e2bba6a7f1",
+    "semantic_hash": "24c9d3fe8eff977126d021e2bba6a7f1"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/Tenants/IVoloTenantAppService.cs": {
+    "mtime": 1787549986.9038367,
+    "ast_hash": "878e9cebc1c7d5e5562d280b2efc7e02",
+    "semantic_hash": "878e9cebc1c7d5e5562d280b2efc7e02"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/Users/Dtos/LockUserInput.cs": {
+    "mtime": 1787549986.9058342,
+    "ast_hash": "799685bbd22fc940a14c22848320a409",
+    "semantic_hash": "799685bbd22fc940a14c22848320a409"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/Users/Dtos/LoginInput.cs": {
+    "mtime": 1787549986.9058342,
+    "ast_hash": "037480a5c40dbed220e782ff08b9243f",
+    "semantic_hash": "037480a5c40dbed220e782ff08b9243f"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/Users/Dtos/LoginOutput.cs": {
+    "mtime": 1787549986.9068346,
+    "ast_hash": "04233e106670b09266b7edc8a1ef5eeb",
+    "semantic_hash": "04233e106670b09266b7edc8a1ef5eeb"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/Users/Dtos/LoginStsOutput.cs": {
+    "mtime": 1787549986.9068346,
+    "ast_hash": "7ed4a6777f7ebbe089fda389189e20d0",
+    "semantic_hash": "7ed4a6777f7ebbe089fda389189e20d0"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/Users/Dtos/PagingUserListInput.cs": {
+    "mtime": 1787549986.9078887,
+    "ast_hash": "900fc848db8ff68d3aff7c48d4b30ecc",
+    "semantic_hash": "900fc848db8ff68d3aff7c48d4b30ecc"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/Users/Dtos/UpdateUserInput.cs": {
+    "mtime": 1787549986.9078887,
+    "ast_hash": "f406267dd91a12eb85cf2503117a5cc7",
+    "semantic_hash": "f406267dd91a12eb85cf2503117a5cc7"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/Users/IAccountAppService.cs": {
+    "mtime": 1787549986.908886,
+    "ast_hash": "1335d1de1cc0a74d97125bdbc8525b31",
+    "semantic_hash": "1335d1de1cc0a74d97125bdbc8525b31"
+  },
+  "services/src/Lion.AbpPro.Application.Contracts/Users/IUserAppService.cs": {
+    "mtime": 1787549986.908886,
+    "ast_hash": "148d66eb3a36830dbb87829419f71119",
+    "semantic_hash": "148d66eb3a36830dbb87829419f71119"
+  },
+  "services/src/Lion.AbpPro.Application/AbpProAppService.cs": {
+    "mtime": 1787549986.9098861,
+    "ast_hash": "c4139871e5553c8d1954ff501ca1afcf",
+    "semantic_hash": "c4139871e5553c8d1954ff501ca1afcf"
+  },
+  "services/src/Lion.AbpPro.Application/AbpProApplicationAutoMapperProfile.cs": {
+    "mtime": 1787549986.911074,
+    "ast_hash": "6f45d2303e5b93b5f136b54e442f1946",
+    "semantic_hash": "6f45d2303e5b93b5f136b54e442f1946"
+  },
+  "services/src/Lion.AbpPro.Application/AbpProApplicationModule.cs": {
+    "mtime": 1787549986.911074,
+    "ast_hash": "9d975a1eab9fa9b6364060c5e521d7e9",
+    "semantic_hash": "9d975a1eab9fa9b6364060c5e521d7e9"
+  },
+  "services/src/Lion.AbpPro.Application/AuditLogs/AuditLogAppService.cs": {
+    "mtime": 1787549986.912327,
+    "ast_hash": "8fb517f9b675cd616f9c5b8ce9c6628b",
+    "semantic_hash": "8fb517f9b675cd616f9c5b8ce9c6628b"
+  },
+  "services/src/Lion.AbpPro.Application/AuditLogs/Mappers/AuditLogApplicationAutoMapperProfile.cs": {
+    "mtime": 1787549986.913325,
+    "ast_hash": "2310e38f157fa47997ae9488b47e66b3",
+    "semantic_hash": "2310e38f157fa47997ae9488b47e66b3"
+  },
+  "services/src/Lion.AbpPro.Application/ElasticSearchs/Dto/PagingElasticSearchLogDto.cs": {
+    "mtime": 1787549986.9153254,
+    "ast_hash": "e4547a571b27f10346c91cf67d444df7",
+    "semantic_hash": "e4547a571b27f10346c91cf67d444df7"
+  },
+  "services/src/Lion.AbpPro.Application/ElasticSearchs/ElasticSearchApplicationAutoMapperProfile.cs": {
+    "mtime": 1787549986.9153254,
+    "ast_hash": "933058890c43a5f88b84037d4178ac60",
+    "semantic_hash": "933058890c43a5f88b84037d4178ac60"
+  },
+  "services/src/Lion.AbpPro.Application/ElasticSearchs/LionAbpProLogAppService.cs": {
+    "mtime": 1787549986.9153254,
+    "ast_hash": "837c72ffbd3360bdc93422965d7321fd",
+    "semantic_hash": "837c72ffbd3360bdc93422965d7321fd"
+  },
+  "services/src/Lion.AbpPro.Application/ElasticSearchs/Providers/ElasticsearchBasicService.cs": {
+    "mtime": 1787549986.9167616,
+    "ast_hash": "dd8d9fdb6fc4d83e6c3137e21c88928e",
+    "semantic_hash": "dd8d9fdb6fc4d83e6c3137e21c88928e"
+  },
+  "services/src/Lion.AbpPro.Application/ElasticSearchs/Providers/ElasticsearchProvider.cs": {
+    "mtime": 1787549986.917759,
+    "ast_hash": "3363959b865ad0f6940448592e2a72e1",
+    "semantic_hash": "3363959b865ad0f6940448592e2a72e1"
+  },
+  "services/src/Lion.AbpPro.Application/ElasticSearchs/Providers/IElasticsearchProvider.cs": {
+    "mtime": 1787549986.917759,
+    "ast_hash": "a8cf202f4c3bfe6bf61f488602bab9e8",
+    "semantic_hash": "a8cf202f4c3bfe6bf61f488602bab9e8"
+  },
+  "services/src/Lion.AbpPro.Application/HttpClientNameConsts.cs": {
+    "mtime": 1787549986.9188046,
+    "ast_hash": "61e8db66bb336f6966fb5e25906526d5",
+    "semantic_hash": "61e8db66bb336f6966fb5e25906526d5"
+  },
+  "services/src/Lion.AbpPro.Application/IdentityServers/ApiResources/ApiResourceAppService.cs": {
+    "mtime": 1787549986.9198017,
+    "ast_hash": "8d5c594faae867cb2a844ebede079113",
+    "semantic_hash": "8d5c594faae867cb2a844ebede079113"
+  },
+  "services/src/Lion.AbpPro.Application/IdentityServers/ApiScopes/ApiScopeAppService.cs": {
+    "mtime": 1787549986.9208019,
+    "ast_hash": "0d3dc014b80809f0893e2d99f6d0546d",
+    "semantic_hash": "0d3dc014b80809f0893e2d99f6d0546d"
+  },
+  "services/src/Lion.AbpPro.Application/IdentityServers/Clients/IdentityServerClientAppService.cs": {
+    "mtime": 1787549986.921802,
+    "ast_hash": "8d5ef77e38490691e5175d45fec190ba",
+    "semantic_hash": "8d5ef77e38490691e5175d45fec190ba"
+  },
+  "services/src/Lion.AbpPro.Application/IdentityServers/IdentityResources/IdentityResourceAppService.cs": {
+    "mtime": 1787549986.9229877,
+    "ast_hash": "7efc55040f42e5ef174b44e51af4c96e",
+    "semantic_hash": "7efc55040f42e5ef174b44e51af4c96e"
+  },
+  "services/src/Lion.AbpPro.Application/IdentityServers/IdentityServerApplicationAutoMapperProfile.cs": {
+    "mtime": 1787549986.9229877,
+    "ast_hash": "a7930bf739e9f89dd3c1d5b6e6d177e7",
+    "semantic_hash": "a7930bf739e9f89dd3c1d5b6e6d177e7"
+  },
+  "services/src/Lion.AbpPro.Application/Jobs/TestJob.cs": {
+    "mtime": 1787549986.9239843,
+    "ast_hash": "04330384aefc11b58baa35dc18c7ed3b",
+    "semantic_hash": "04330384aefc11b58baa35dc18c7ed3b"
+  },
+  "services/src/Lion.AbpPro.Application/Lion.AbpPro.Application.csproj": {
+    "mtime": 1787549986.9239843,
+    "ast_hash": "f099ca331e4f140a0a4876a3317be02c",
+    "semantic_hash": "f099ca331e4f140a0a4876a3317be02c"
+  },
+  "services/src/Lion.AbpPro.Application/Properties/AssemblyInfo.cs": {
+    "mtime": 1787549986.9249847,
+    "ast_hash": "83b96b277743a3d57c8bdc1ad58721d8",
+    "semantic_hash": "83b96b277743a3d57c8bdc1ad58721d8"
+  },
+  "services/src/Lion.AbpPro.Application/Roles/RoleAppService.cs": {
+    "mtime": 1787549986.9259846,
+    "ast_hash": "877d5c617ea2b9145f531b8df5f45e37",
+    "semantic_hash": "877d5c617ea2b9145f531b8df5f45e37"
+  },
+  "services/src/Lion.AbpPro.Application/Roles/RolePermissionAppService.cs": {
+    "mtime": 1787549986.926985,
+    "ast_hash": "32bab5d8ed93e8be6306df023ed913e3",
+    "semantic_hash": "32bab5d8ed93e8be6306df023ed913e3"
+  },
+  "services/src/Lion.AbpPro.Application/Settings/SettingAppService.cs": {
+    "mtime": 1787549986.9279852,
+    "ast_hash": "01f69d2fd999905da2cf70de5ade32b5",
+    "semantic_hash": "01f69d2fd999905da2cf70de5ade32b5"
+  },
+  "services/src/Lion.AbpPro.Application/Tenants/VoloTenantAppService.cs": {
+    "mtime": 1787549986.9279852,
+    "ast_hash": "d34fb8defaa0fb211b6ddf31ae1cceb9",
+    "semantic_hash": "d34fb8defaa0fb211b6ddf31ae1cceb9"
+  },
+  "services/src/Lion.AbpPro.Application/Users/AccountAppService.cs": {
+    "mtime": 1787549986.9289854,
+    "ast_hash": "96aba5fd822f77bffb4821aef7db903a",
+    "semantic_hash": "96aba5fd822f77bffb4821aef7db903a"
+  },
+  "services/src/Lion.AbpPro.Application/Users/Mappers/UserApplicationAutoMapperProfile.cs": {
+    "mtime": 1787549986.9299858,
+    "ast_hash": "f3b7d24ccb7ff1280d43477256ee2c20",
+    "semantic_hash": "f3b7d24ccb7ff1280d43477256ee2c20"
+  },
+  "services/src/Lion.AbpPro.Application/Users/UserAppService.cs": {
+    "mtime": 1787549986.930986,
+    "ast_hash": "0e96bbf9bb54411ea77f6f8b5df19005",
+    "semantic_hash": "0e96bbf9bb54411ea77f6f8b5df19005"
+  },
+  "services/src/Lion.AbpPro.DbMigrator/AbpProDbMigratorModule.cs": {
+    "mtime": 1787549986.9320786,
+    "ast_hash": "d0e0749f7d030ecc72ee13bcdaef0d4f",
+    "semantic_hash": "d0e0749f7d030ecc72ee13bcdaef0d4f"
+  },
+  "services/src/Lion.AbpPro.DbMigrator/DbMigratorHostedService.cs": {
+    "mtime": 1787549986.9320786,
+    "ast_hash": "00eef3442312a4749ec821031896712b",
+    "semantic_hash": "00eef3442312a4749ec821031896712b"
+  },
+  "services/src/Lion.AbpPro.DbMigrator/Lion.AbpPro.DbMigrator.csproj": {
+    "mtime": 1787549986.9330754,
+    "ast_hash": "e137547aa9a12a9717ab2abfa374c7c9",
+    "semantic_hash": "e137547aa9a12a9717ab2abfa374c7c9"
+  },
+  "services/src/Lion.AbpPro.DbMigrator/Program.cs": {
+    "mtime": 1787549986.9330754,
+    "ast_hash": "ff20295402d0b55338e7e05c4b4f872b",
+    "semantic_hash": "ff20295402d0b55338e7e05c4b4f872b"
+  },
+  "services/src/Lion.AbpPro.DbMigrator/appsettings.json": {
+    "mtime": 1787549986.934191,
+    "ast_hash": "cd1fd0941e9af4738ecc5049e6c42eb1",
+    "semantic_hash": "cd1fd0941e9af4738ecc5049e6c42eb1"
+  },
+  "services/src/Lion.AbpPro.Domain.Shared/AbpProDomainErrorCodes.cs": {
+    "mtime": 1787549986.9357688,
+    "ast_hash": "01d1e591ee18fea560da12a2524c0e8d",
+    "semantic_hash": "01d1e591ee18fea560da12a2524c0e8d"
+  },
+  "services/src/Lion.AbpPro.Domain.Shared/AbpProDomainSharedModule.cs": {
+    "mtime": 1787549986.9357688,
+    "ast_hash": "6db5c75b99578249828627256c189b40",
+    "semantic_hash": "6db5c75b99578249828627256c189b40"
+  },
+  "services/src/Lion.AbpPro.Domain.Shared/AbpProGlobalFeatureConfigurator.cs": {
+    "mtime": 1787549986.9367702,
+    "ast_hash": "17e711a5722e17c98c0b8b179ee4dba2",
+    "semantic_hash": "17e711a5722e17c98c0b8b179ee4dba2"
+  },
+  "services/src/Lion.AbpPro.Domain.Shared/AbpProModuleExtensionConfigurator.cs": {
+    "mtime": 1787549986.9367702,
+    "ast_hash": "6d55d1d6c2901b1fa79ed2e89ee58742",
+    "semantic_hash": "6d55d1d6c2901b1fa79ed2e89ee58742"
+  },
+  "services/src/Lion.AbpPro.Domain.Shared/IdentityServers/ApiResources/Dtos/ApiResourceClaimOutput.cs": {
+    "mtime": 1787549986.9388266,
+    "ast_hash": "19cb607180da8317954ed8ba8688c708",
+    "semantic_hash": "19cb607180da8317954ed8ba8688c708"
+  },
+  "services/src/Lion.AbpPro.Domain.Shared/IdentityServers/ApiResources/Dtos/ApiResourcePropertyOutput.cs": {
+    "mtime": 1787549986.939331,
+    "ast_hash": "96e21dbe78eb40a09c545154a46b0ab5",
+    "semantic_hash": "96e21dbe78eb40a09c545154a46b0ab5"
+  },
+  "services/src/Lion.AbpPro.Domain.Shared/IdentityServers/ApiResources/Dtos/ApiResourceScopeOutput.cs": {
+    "mtime": 1787549986.939331,
+    "ast_hash": "97de6d683633d705fb7a81fbfe149d51",
+    "semantic_hash": "97de6d683633d705fb7a81fbfe149d51"
+  },
+  "services/src/Lion.AbpPro.Domain.Shared/IdentityServers/ApiResources/Dtos/ApiResourceSecretOutput.cs": {
+    "mtime": 1787549986.940673,
+    "ast_hash": "5f683fbde6feeb10c59ef55d69c1c1a3",
+    "semantic_hash": "5f683fbde6feeb10c59ef55d69c1c1a3"
+  },
+  "services/src/Lion.AbpPro.Domain.Shared/Lion.AbpPro.Domain.Shared.csproj": {
+    "mtime": 1787549986.940673,
+    "ast_hash": "98562b0e8e1c710ff2bcbd8282ef4293",
+    "semantic_hash": "98562b0e8e1c710ff2bcbd8282ef4293"
+  },
+  "services/src/Lion.AbpPro.Domain.Shared/Localization/AbpProResource.cs": {
+    "mtime": 1787549986.9510303,
+    "ast_hash": "f5f4b18677140c2b4ab95afe9a1c06f0",
+    "semantic_hash": "f5f4b18677140c2b4ab95afe9a1c06f0"
+  },
+  "services/src/Lion.AbpPro.Domain.Shared/Localization/AbpPro/ar.json": {
+    "mtime": 1787549986.9416702,
+    "ast_hash": "9ceb0a5d0e86ac6bca7d97347facbee8",
+    "semantic_hash": "9ceb0a5d0e86ac6bca7d97347facbee8"
+  },
+  "services/src/Lion.AbpPro.Domain.Shared/Localization/AbpPro/cs.json": {
+    "mtime": 1787549986.9426703,
+    "ast_hash": "77f61f15dba5bc8bd01af7d959629bbf",
+    "semantic_hash": "77f61f15dba5bc8bd01af7d959629bbf"
+  },
+  "services/src/Lion.AbpPro.Domain.Shared/Localization/AbpPro/de-DE.json": {
+    "mtime": 1787549986.9426703,
+    "ast_hash": "05f19d83f46482732267ee7e3a3227ec",
+    "semantic_hash": "05f19d83f46482732267ee7e3a3227ec"
+  },
+  "services/src/Lion.AbpPro.Domain.Shared/Localization/AbpPro/en-GB.json": {
+    "mtime": 1787549986.9436707,
+    "ast_hash": "f96ca605e4916ed74b6410075e9306c6",
+    "semantic_hash": "f96ca605e4916ed74b6410075e9306c6"
+  },
+  "services/src/Lion.AbpPro.Domain.Shared/Localization/AbpPro/en.json": {
+    "mtime": 1787549986.9436707,
+    "ast_hash": "66cb7101dcf4596b6419bc10a9d3ecf9",
+    "semantic_hash": "66cb7101dcf4596b6419bc10a9d3ecf9"
+  },
+  "services/src/Lion.AbpPro.Domain.Shared/Localization/AbpPro/es.json": {
+    "mtime": 1787549986.9450288,
+    "ast_hash": "a95e049316c13af2be2a9de0f379d282",
+    "semantic_hash": "a95e049316c13af2be2a9de0f379d282"
+  },
+  "services/src/Lion.AbpPro.Domain.Shared/Localization/AbpPro/fr.json": {
+    "mtime": 1787549986.9450288,
+    "ast_hash": "f2af2a0ad54019872a2ac4d2679a2327",
+    "semantic_hash": "f2af2a0ad54019872a2ac4d2679a2327"
+  },
+  "services/src/Lion.AbpPro.Domain.Shared/Localization/AbpPro/hu.json": {
+    "mtime": 1787549986.946029,
+    "ast_hash": "e69073cbb2c6e9974e04b525b07b27d2",
+    "semantic_hash": "e69073cbb2c6e9974e04b525b07b27d2"
+  },
+  "services/src/Lion.AbpPro.Domain.Shared/Localization/AbpPro/nl.json": {
+    "mtime": 1787549986.946029,
+    "ast_hash": "c679d43e296b0a73dd2b74b27b2ef546",
+    "semantic_hash": "c679d43e296b0a73dd2b74b27b2ef546"
+  },
+  "services/src/Lion.AbpPro.Domain.Shared/Localization/AbpPro/pl-PL.json": {
+    "mtime": 1787549986.9470294,
+    "ast_hash": "b76375ee759f55ae1951405435951460",
+    "semantic_hash": "b76375ee759f55ae1951405435951460"
+  },
+  "services/src/Lion.AbpPro.Domain.Shared/Localization/AbpPro/pt-BR.json": {
+    "mtime": 1787549986.9470294,
+    "ast_hash": "a706c6a0fbe48f2f8138e6ad5968ae98",
+    "semantic_hash": "a706c6a0fbe48f2f8138e6ad5968ae98"
+  },
+  "services/src/Lion.AbpPro.Domain.Shared/Localization/AbpPro/ru.json": {
+    "mtime": 1787549986.9480298,
+    "ast_hash": "68a6d1759bf39e6a0484f865f2f403b7",
+    "semantic_hash": "68a6d1759bf39e6a0484f865f2f403b7"
+  },
+  "services/src/Lion.AbpPro.Domain.Shared/Localization/AbpPro/sl.json": {
+    "mtime": 1787549986.9480298,
+    "ast_hash": "5b711fe7e7f3e166e06c01c0de0ee0d4",
+    "semantic_hash": "5b711fe7e7f3e166e06c01c0de0ee0d4"
+  },
+  "services/src/Lion.AbpPro.Domain.Shared/Localization/AbpPro/tr.json": {
+    "mtime": 1787549986.9490297,
+    "ast_hash": "b0297228e71722a9118816cd31346de1",
+    "semantic_hash": "b0297228e71722a9118816cd31346de1"
+  },
+  "services/src/Lion.AbpPro.Domain.Shared/Localization/AbpPro/vi.json": {
+    "mtime": 1787549986.9490297,
+    "ast_hash": "c60b6d05396c3f1881c4c1426a49809e",
+    "semantic_hash": "c60b6d05396c3f1881c4c1426a49809e"
+  },
+  "services/src/Lion.AbpPro.Domain.Shared/Localization/AbpPro/zh-Hans.json": {
+    "mtime": 1787549986.95003,
+    "ast_hash": "8aed5acd5cb6d1d0e90acda142a6fddd",
+    "semantic_hash": "8aed5acd5cb6d1d0e90acda142a6fddd"
+  },
+  "services/src/Lion.AbpPro.Domain.Shared/Localization/AbpPro/zh-Hant.json": {
+    "mtime": 1787549986.95003,
+    "ast_hash": "af652b20fd5c6e66cb23ca96a16990fd",
+    "semantic_hash": "af652b20fd5c6e66cb23ca96a16990fd"
+  },
+  "services/src/Lion.AbpPro.Domain.Shared/Localization/Extensions/EnumLocalicationExtension.cs": {
+    "mtime": 1787549986.9510303,
+    "ast_hash": "ab23edf84daf12cde6abcf35b5db5b06",
+    "semantic_hash": "ab23edf84daf12cde6abcf35b5db5b06"
+  },
+  "services/src/Lion.AbpPro.Domain.Shared/Localization/LocalizationHelper.cs": {
+    "mtime": 1787549986.9520304,
+    "ast_hash": "0fb753c68f1497cc70487ec1baa8a385",
+    "semantic_hash": "0fb753c68f1497cc70487ec1baa8a385"
+  },
+  "services/src/Lion.AbpPro.Domain.Shared/MultiTenancy/MultiTenancyConsts.cs": {
+    "mtime": 1787549986.953429,
+    "ast_hash": "a986bf8b4d5e919e2511e226662f1fe6",
+    "semantic_hash": "a986bf8b4d5e919e2511e226662f1fe6"
+  },
+  "services/src/Lion.AbpPro.Domain/AbpProConsts.cs": {
+    "mtime": 1787549986.953429,
+    "ast_hash": "6c1f6fb9e500f68d4ef02c60e8124000",
+    "semantic_hash": "6c1f6fb9e500f68d4ef02c60e8124000"
+  },
+  "services/src/Lion.AbpPro.Domain/AbpProDomainModule.cs": {
+    "mtime": 1787549986.953429,
+    "ast_hash": "bd9a96e70d4504c9f59a6025719f5d51",
+    "semantic_hash": "bd9a96e70d4504c9f59a6025719f5d51"
+  },
+  "services/src/Lion.AbpPro.Domain/AbpProDomainService.cs": {
+    "mtime": 1787549986.954888,
+    "ast_hash": "0472c200f84478e9663c8dbd25e338eb",
+    "semantic_hash": "0472c200f84478e9663c8dbd25e338eb"
+  },
+  "services/src/Lion.AbpPro.Domain/Data/AbpProDbMigrationService.cs": {
+    "mtime": 1787549986.956287,
+    "ast_hash": "25b5cc1d56f37d1d0c940b0b513a84c5",
+    "semantic_hash": "25b5cc1d56f37d1d0c940b0b513a84c5"
+  },
+  "services/src/Lion.AbpPro.Domain/Data/IAbpProDbSchemaMigrator.cs": {
+    "mtime": 1787549986.956287,
+    "ast_hash": "a85db6f68129a983ea733569afb9a29c",
+    "semantic_hash": "a85db6f68129a983ea733569afb9a29c"
+  },
+  "services/src/Lion.AbpPro.Domain/Data/NullAbpProDbSchemaMigrator.cs": {
+    "mtime": 1787549986.9572873,
+    "ast_hash": "97454c947dbec59caab53450e4af5be3",
+    "semantic_hash": "97454c947dbec59caab53450e4af5be3"
+  },
+  "services/src/Lion.AbpPro.Domain/Data/Seeds/AbpSettingDataSeedContributor.cs": {
+    "mtime": 1787549986.9572873,
+    "ast_hash": "96b415991f74d7f037862c313b6cafc9",
+    "semantic_hash": "96b415991f74d7f037862c313b6cafc9"
+  },
+  "services/src/Lion.AbpPro.Domain/Data/Seeds/IdentityServerDataSeedContributor.cs": {
+    "mtime": 1787549986.958336,
+    "ast_hash": "b88eee4e9d257a0a08ced34f2e6151e5",
+    "semantic_hash": "b88eee4e9d257a0a08ced34f2e6151e5"
+  },
+  "services/src/Lion.AbpPro.Domain/Data/Seeds/UserDataSeedContributor.cs": {
+    "mtime": 1787549986.9593365,
+    "ast_hash": "aadd95a66ad8ff27a3f0e954baaaf4df",
+    "semantic_hash": "aadd95a66ad8ff27a3f0e954baaaf4df"
+  },
+  "services/src/Lion.AbpPro.Domain/IdentityServer/IdenityServerApiResourceManager.cs": {
+    "mtime": 1787549986.9603956,
+    "ast_hash": "08c49754e5976d641af8615cffa9aa5e",
+    "semantic_hash": "08c49754e5976d641af8615cffa9aa5e"
+  },
+  "services/src/Lion.AbpPro.Domain/IdentityServer/IdenityServerApiScopeManager.cs": {
+    "mtime": 1787549986.9603956,
+    "ast_hash": "ea4d1ae2a484e029cc96e8c824681fb4",
+    "semantic_hash": "ea4d1ae2a484e029cc96e8c824681fb4"
+  },
+  "services/src/Lion.AbpPro.Domain/IdentityServer/IdenityServerClientManager.cs": {
+    "mtime": 1787549986.9613955,
+    "ast_hash": "2f4b551e2a098f05939d326c7eda1a5a",
+    "semantic_hash": "2f4b551e2a098f05939d326c7eda1a5a"
+  },
+  "services/src/Lion.AbpPro.Domain/IdentityServer/IdentityResourceManager.cs": {
+    "mtime": 1787549986.9613955,
+    "ast_hash": "c9e4783785b7e4662f8f006bd27dc3fb",
+    "semantic_hash": "c9e4783785b7e4662f8f006bd27dc3fb"
+  },
+  "services/src/Lion.AbpPro.Domain/Lion.AbpPro.Domain.csproj": {
+    "mtime": 1787549986.9624996,
+    "ast_hash": "8473b149203eed10f54db27b23c37296",
+    "semantic_hash": "8473b149203eed10f54db27b23c37296"
+  },
+  "services/src/Lion.AbpPro.Domain/Properties/AssemblyInfo.cs": {
+    "mtime": 1787549986.9634998,
+    "ast_hash": "25b9d8cccabe1d2c94a358218ebb6af2",
+    "semantic_hash": "25b9d8cccabe1d2c94a358218ebb6af2"
+  },
+  "services/src/Lion.AbpPro.Domain/Settings/AbpProSettingDefinitionProvider.cs": {
+    "mtime": 1787549986.9634998,
+    "ast_hash": "fc9252a5b831ce5a575d37b95b434cac",
+    "semantic_hash": "fc9252a5b831ce5a575d37b95b434cac"
+  },
+  "services/src/Lion.AbpPro.Domain/Settings/AbpProSettings.cs": {
+    "mtime": 1787549986.9645002,
+    "ast_hash": "cd818e4a61b3b5bb0594ebda298ce9c7",
+    "semantic_hash": "cd818e4a61b3b5bb0594ebda298ce9c7"
+  },
+  "services/src/Lion.AbpPro.EntityFrameworkCore/EntityFrameworkCore/AbpProDbContext.cs": {
+    "mtime": 1787549986.9655004,
+    "ast_hash": "ff47e91841b4d7470a48187bb392e14f",
+    "semantic_hash": "ff47e91841b4d7470a48187bb392e14f"
+  },
+  "services/src/Lion.AbpPro.EntityFrameworkCore/EntityFrameworkCore/AbpProDbContextModelCreatingExtensions.cs": {
+    "mtime": 1787549986.9665399,
+    "ast_hash": "df8a4b7b2e5b7c3033d057ec666bf1fa",
+    "semantic_hash": "df8a4b7b2e5b7c3033d057ec666bf1fa"
+  },
+  "services/src/Lion.AbpPro.EntityFrameworkCore/EntityFrameworkCore/AbpProEfCoreEntityExtensionMappings.cs": {
+    "mtime": 1787549986.9675403,
+    "ast_hash": "3a2f8d6c0b88b4e3543ba383f459e4d2",
+    "semantic_hash": "3a2f8d6c0b88b4e3543ba383f459e4d2"
+  },
+  "services/src/Lion.AbpPro.EntityFrameworkCore/EntityFrameworkCore/AbpProEntityFrameworkCoreModule.cs": {
+    "mtime": 1787549986.9675403,
+    "ast_hash": "bd1332ba5083354b2afbcaeb57ec6aa2",
+    "semantic_hash": "bd1332ba5083354b2afbcaeb57ec6aa2"
+  },
+  "services/src/Lion.AbpPro.EntityFrameworkCore/EntityFrameworkCore/AbpProMigrationsDbContextFactory.cs": {
+    "mtime": 1787549986.9686449,
+    "ast_hash": "cc1b132f7c5aefbd5a03991d590df5de",
+    "semantic_hash": "cc1b132f7c5aefbd5a03991d590df5de"
+  },
+  "services/src/Lion.AbpPro.EntityFrameworkCore/EntityFrameworkCore/EntityFrameworkCoreAbpProDbSchemaMigrator.cs": {
+    "mtime": 1787549986.9686449,
+    "ast_hash": "87f3b71fbb7aa06fd19ca1fb65ea3302",
+    "semantic_hash": "87f3b71fbb7aa06fd19ca1fb65ea3302"
+  },
+  "services/src/Lion.AbpPro.EntityFrameworkCore/EntityFrameworkCore/IAbpProDbContext.cs": {
+    "mtime": 1787549986.9696453,
+    "ast_hash": "04a338594bf339639231896c75f92af2",
+    "semantic_hash": "04a338594bf339639231896c75f92af2"
+  },
+  "services/src/Lion.AbpPro.EntityFrameworkCore/Lion.AbpPro.EntityFrameworkCore.csproj": {
+    "mtime": 1787549986.9696453,
+    "ast_hash": "bfdf59aeb335b5b8fc099c9510cf2b70",
+    "semantic_hash": "bfdf59aeb335b5b8fc099c9510cf2b70"
+  },
+  "services/src/Lion.AbpPro.EntityFrameworkCore/Properties/AssemblyInfo.cs": {
+    "mtime": 1787549986.974285,
+    "ast_hash": "01e231d8d6eda7f99966386d292b58f6",
+    "semantic_hash": "01e231d8d6eda7f99966386d292b58f6"
+  },
+  "services/src/Lion.AbpPro.HttpApi.Client/AbpProHttpApiClientModule.cs": {
+    "mtime": 1787549986.9757848,
+    "ast_hash": "7c32b7a8c5cf612eab34f41dde3248f8",
+    "semantic_hash": "7c32b7a8c5cf612eab34f41dde3248f8"
+  },
+  "services/src/Lion.AbpPro.HttpApi.Client/Lion.AbpPro.HttpApi.Client.csproj": {
+    "mtime": 1787549986.9757848,
+    "ast_hash": "9e89fe98c2f47a242ad9eb9c396b1353",
+    "semantic_hash": "9e89fe98c2f47a242ad9eb9c396b1353"
+  },
+  "services/src/Lion.AbpPro.HttpApi/AbpApplicationConfigurationController.cs": {
+    "mtime": 1787549986.9767902,
+    "ast_hash": "1cf489fb80ef52ac4049f06c00c0de1e",
+    "semantic_hash": "1cf489fb80ef52ac4049f06c00c0de1e"
+  },
+  "services/src/Lion.AbpPro.HttpApi/AbpProHttpApiModule.cs": {
+    "mtime": 1787549986.9780517,
+    "ast_hash": "af13de54a8e268648e7ed2ce445a6966",
+    "semantic_hash": "af13de54a8e268648e7ed2ce445a6966"
+  },
+  "services/src/Lion.AbpPro.HttpApi/Controllers/AbpProController.cs": {
+    "mtime": 1787549986.9780517,
+    "ast_hash": "1a01953bfdd94637617d52b93c083478",
+    "semantic_hash": "1a01953bfdd94637617d52b93c083478"
+  },
+  "services/src/Lion.AbpPro.HttpApi/Controllers/IdentityServers/ApiResourceController.cs": {
+    "mtime": 1787549986.9795165,
+    "ast_hash": "1084b32365c363c7acd35bc40c4336cf",
+    "semantic_hash": "1084b32365c363c7acd35bc40c4336cf"
+  },
+  "services/src/Lion.AbpPro.HttpApi/Controllers/IdentityServers/ApiScopeController.cs": {
+    "mtime": 1787549986.9805167,
+    "ast_hash": "549886306fad93aeeff3835cf2fda4fe",
+    "semantic_hash": "549886306fad93aeeff3835cf2fda4fe"
+  },
+  "services/src/Lion.AbpPro.HttpApi/Controllers/IdentityServers/ClientController.cs": {
+    "mtime": 1787549986.9805167,
+    "ast_hash": "6e88bc74db469c1030b8bfcbc4c4b68a",
+    "semantic_hash": "6e88bc74db469c1030b8bfcbc4c4b68a"
+  },
+  "services/src/Lion.AbpPro.HttpApi/Controllers/IdentityServers/IdentityResourceController.cs": {
+    "mtime": 1787549986.9816146,
+    "ast_hash": "d9e398d45f906e1920bbbc10e5a12861",
+    "semantic_hash": "d9e398d45f906e1920bbbc10e5a12861"
+  },
+  "services/src/Lion.AbpPro.HttpApi/Controllers/Systems/AccountController.cs": {
+    "mtime": 1787549986.9826117,
+    "ast_hash": "4fa8035362c5a6f04d9dd61d15f3b69f",
+    "semantic_hash": "4fa8035362c5a6f04d9dd61d15f3b69f"
+  },
+  "services/src/Lion.AbpPro.HttpApi/Controllers/Systems/AuditLogController.cs": {
+    "mtime": 1787549986.9826117,
+    "ast_hash": "1c5683e588b91d1108a8988ea1babb63",
+    "semantic_hash": "1c5683e588b91d1108a8988ea1babb63"
+  },
+  "services/src/Lion.AbpPro.HttpApi/Controllers/Systems/LionAbpProLogController.cs": {
+    "mtime": 1787549986.9838357,
+    "ast_hash": "d5a47d6479a3b19688419f3890a5a55b",
+    "semantic_hash": "d5a47d6479a3b19688419f3890a5a55b"
+  },
+  "services/src/Lion.AbpPro.HttpApi/Controllers/Systems/PermissionController.cs": {
+    "mtime": 1787549986.9838357,
+    "ast_hash": "f87663007bfe0c125a0d7a04827dcc84",
+    "semantic_hash": "f87663007bfe0c125a0d7a04827dcc84"
+  },
+  "services/src/Lion.AbpPro.HttpApi/Controllers/Systems/RoleController.cs": {
+    "mtime": 1787549986.9848323,
+    "ast_hash": "c0a63f9eb11d956a465f588cb693d69e",
+    "semantic_hash": "c0a63f9eb11d956a465f588cb693d69e"
+  },
+  "services/src/Lion.AbpPro.HttpApi/Controllers/Systems/SettingController.cs": {
+    "mtime": 1787549986.9848323,
+    "ast_hash": "46c7d68bd7ed31a950eed95bd7dd03c9",
+    "semantic_hash": "46c7d68bd7ed31a950eed95bd7dd03c9"
+  },
+  "services/src/Lion.AbpPro.HttpApi/Controllers/Systems/UserController.cs": {
+    "mtime": 1787549986.9858327,
+    "ast_hash": "6c36c64ce3dca7e09e693eb2756dfab5",
+    "semantic_hash": "6c36c64ce3dca7e09e693eb2756dfab5"
+  },
+  "services/src/Lion.AbpPro.HttpApi/Controllers/Tenants/AbpTenantController.cs": {
+    "mtime": 1787549986.9869416,
+    "ast_hash": "f06d3d3035764e9a83c3073af81e7be3",
+    "semantic_hash": "f06d3d3035764e9a83c3073af81e7be3"
+  },
+  "services/src/Lion.AbpPro.HttpApi/Controllers/Tenants/TenantController.cs": {
+    "mtime": 1787549986.9869416,
+    "ast_hash": "8b7385efad601fdbc0288724e77ac451",
+    "semantic_hash": "8b7385efad601fdbc0288724e77ac451"
+  },
+  "services/src/Lion.AbpPro.HttpApi/Lion.AbpPro.HttpApi.csproj": {
+    "mtime": 1787549986.987939,
+    "ast_hash": "3985e0fa742714705c241d7cdc5c0908",
+    "semantic_hash": "3985e0fa742714705c241d7cdc5c0908"
+  },
+  "shared/Lion.AbpPro.Shared.Hosting.Gateways/Lion.AbpPro.Shared.Hosting.Gateways.csproj": {
+    "mtime": 1787549987.0116959,
+    "ast_hash": "ef44c522d502f8962a0c99e4ae1c1ed4",
+    "semantic_hash": "ef44c522d502f8962a0c99e4ae1c1ed4"
+  },
+  "shared/Lion.AbpPro.Shared.Hosting.Gateways/SharedHostingGatewayModule.cs": {
+    "mtime": 1787549987.0124419,
+    "ast_hash": "98c6d985a17086b19181a060c620e036",
+    "semantic_hash": "98c6d985a17086b19181a060c620e036"
+  },
+  "shared/Lion.AbpPro.Shared.Hosting.Microservices/Lion.AbpPro.Shared.Hosting.Microservices.csproj": {
+    "mtime": 1787549987.0134482,
+    "ast_hash": "b548c092d8c597758d5aebdb1c6bdc71",
+    "semantic_hash": "b548c092d8c597758d5aebdb1c6bdc71"
+  },
+  "shared/Lion.AbpPro.Shared.Hosting.Microservices/Microsoft/AspNetCore/Builder/ApplicationBuilderExtensions.cs": {
+    "mtime": 1787549987.0144846,
+    "ast_hash": "736384d18aefa1306b492a157144a1e6",
+    "semantic_hash": "736384d18aefa1306b492a157144a1e6"
+  },
+  "shared/Lion.AbpPro.Shared.Hosting.Microservices/Microsoft/AspNetCore/MVC/Filters/ResultExceptionFilter.cs": {
+    "mtime": 1787549987.0155458,
+    "ast_hash": "acb73e27747156facfbe23a21c70176e",
+    "semantic_hash": "acb73e27747156facfbe23a21c70176e"
+  },
+  "shared/Lion.AbpPro.Shared.Hosting.Microservices/Microsoft/Extensions/DependencyInjection/ServiceCollectionExtensions.cs": {
+    "mtime": 1787549987.0179007,
+    "ast_hash": "8461fc44be72373ab0b19a85615d21de",
+    "semantic_hash": "8461fc44be72373ab0b19a85615d21de"
+  },
+  "shared/Lion.AbpPro.Shared.Hosting.Microservices/SharedHostingMicroserviceModule.cs": {
+    "mtime": 1787549987.0179007,
+    "ast_hash": "c1995d155609eb459555a33eb193b75c",
+    "semantic_hash": "c1995d155609eb459555a33eb193b75c"
+  },
+  "shared/Lion.AbpPro.Shared.Hosting.Microservices/Swaggers/EnumSchemaFilter.cs": {
+    "mtime": 1787549987.018899,
+    "ast_hash": "e8fc43f8780c01a2718b90dfd217328b",
+    "semantic_hash": "e8fc43f8780c01a2718b90dfd217328b"
+  },
+  "shared/Lion.AbpPro.Shared.Hosting.Microservices/Swaggers/HiddenAbpDefaultApiFilter.cs": {
+    "mtime": 1787549987.0198972,
+    "ast_hash": "50c02090fd5f1946b444f1011c158b8b",
+    "semantic_hash": "50c02090fd5f1946b444f1011c158b8b"
+  },
+  "shared/Lion.AbpPro.Shared.Hosting.Microservices/System/WrapResultAttribute.cs": {
+    "mtime": 1787549987.0198972,
+    "ast_hash": "4d8a68bc9a85f34b90e9d2cc38ad614d",
+    "semantic_hash": "4d8a68bc9a85f34b90e9d2cc38ad614d"
+  },
+  "shared/Lion.AbpPro.Shared.Hosting.Microservices/Volo/Abp/DefaultHttpExceptionStatusCodeFinder.cs": {
+    "mtime": 1787549987.0210516,
+    "ast_hash": "79e4227526fb383fc46a6bea92013fa2",
+    "semantic_hash": "79e4227526fb383fc46a6bea92013fa2"
+  }
+}

@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="StackExchange.Redis" Version="2.6.122" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PlcServer.Cache\PlcServer.Cache.csproj" />
+    <ProjectReference Include="..\PlcServer.Defines\PlcServer.Defines.csproj" />
+    <ProjectReference Include="..\PlcServer.Devices\PlcServer.Devices.csproj" />
+    <ProjectReference Include="..\PlcServer.Driver.Base\PlcServer.Driver.Base.csproj" />
+    <ProjectReference Include="..\Shared\Shared.csproj" />
+  </ItemGroup>
+
+</Project>

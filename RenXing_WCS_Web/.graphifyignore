@@ -1,0 +1,45 @@
+# Graphify indexes production architecture only.
+graphify-out/
+
+# Dependencies, build output, caches, and IDE metadata.
+node_modules/
+dist/
+build/
+coverage/
+.cache/
+.idea/
+.vscode/
+
+# Tests, mocks, fixtures, samples, demos, and examples.
+test/
+tests/
+__tests__/
+__mocks__/
+mock/
+mocks/
+fixtures/
+**/test/
+**/tests/
+**/__tests__/
+**/__mocks__/
+**/mock/
+**/mocks/
+**/fixtures/
+**/demo/
+**/demos/
+**/example/
+**/examples/
+**/*.test.*
+**/*.spec.*
+
+# Static assets do not contribute callable business relationships.
+public/
+**/*.map
+**/*.md
+**/*.txt
+**/*.png
+**/*.jpg
+**/*.jpeg
+**/*.gif
+**/*.svg
+README*.md
