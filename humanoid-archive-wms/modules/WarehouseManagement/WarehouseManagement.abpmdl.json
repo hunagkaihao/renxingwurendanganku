@@ -1,0 +1,111 @@
+{
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {},
+      "host": {}
+    }
+  },
+  "packages": {
+    "WarehouseManagement.Domain.Shared": {
+      "path": "src/WarehouseManagement.Domain.Shared/WarehouseManagement.Domain.Shared.abppkg.json",
+      "folder": "src"
+    },
+    "WarehouseManagement.Domain": {
+      "path": "src/WarehouseManagement.Domain/WarehouseManagement.Domain.abppkg.json",
+      "folder": "src"
+    },
+    "WarehouseManagement.Application.Contracts": {
+      "path": "src/WarehouseManagement.Application.Contracts/WarehouseManagement.Application.Contracts.abppkg.json",
+      "folder": "src"
+    },
+    "WarehouseManagement.Application": {
+      "path": "src/WarehouseManagement.Application/WarehouseManagement.Application.abppkg.json",
+      "folder": "src"
+    },
+    "WarehouseManagement.EntityFrameworkCore": {
+      "path": "src/WarehouseManagement.EntityFrameworkCore/WarehouseManagement.EntityFrameworkCore.abppkg.json",
+      "folder": "src"
+    },
+    "WarehouseManagement.MongoDB": {
+      "path": "src/WarehouseManagement.MongoDB/WarehouseManagement.MongoDB.abppkg.json",
+      "folder": "src"
+    },
+    "WarehouseManagement.HttpApi": {
+      "path": "src/WarehouseManagement.HttpApi/WarehouseManagement.HttpApi.abppkg.json",
+      "folder": "src"
+    },
+    "WarehouseManagement.HttpApi.Client": {
+      "path": "src/WarehouseManagement.HttpApi.Client/WarehouseManagement.HttpApi.Client.abppkg.json",
+      "folder": "src"
+    },
+    "WarehouseManagement.TestBase": {
+      "path": "test/WarehouseManagement.TestBase/WarehouseManagement.TestBase.abppkg.json",
+      "folder": "test"
+    },
+    "WarehouseManagement.EntityFrameworkCore.Tests": {
+      "path": "test/WarehouseManagement.EntityFrameworkCore.Tests/WarehouseManagement.EntityFrameworkCore.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "WarehouseManagement.MongoDB.Tests": {
+      "path": "test/WarehouseManagement.MongoDB.Tests/WarehouseManagement.MongoDB.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "WarehouseManagement.Domain.Tests": {
+      "path": "test/WarehouseManagement.Domain.Tests/WarehouseManagement.Domain.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "WarehouseManagement.Application.Tests": {
+      "path": "test/WarehouseManagement.Application.Tests/WarehouseManagement.Application.Tests.abppkg.json",
+      "folder": "test"
+    },
+    "WarehouseManagement.HttpApi.Host": {
+      "path": "host/WarehouseManagement.HttpApi.Host/WarehouseManagement.HttpApi.Host.abppkg.json",
+      "folder": "host"
+    },
+    "WarehouseManagement.Web": {
+      "path": "src/WarehouseManagement.Web/WarehouseManagement.Web.abppkg.json",
+      "folder": "src"
+    },
+    "WarehouseManagement.HttpApi.Client.ConsoleTestApp": {
+      "path": "test/WarehouseManagement.HttpApi.Client.ConsoleTestApp/WarehouseManagement.HttpApi.Client.ConsoleTestApp.abppkg.json",
+      "folder": "test"
+    },
+    "WarehouseManagement.Web.Host": {
+      "path": "host/WarehouseManagement.Web.Host/WarehouseManagement.Web.Host.abppkg.json",
+      "folder": "host"
+    },
+    "WarehouseManagement.IdentityServer": {
+      "path": "host/WarehouseManagement.IdentityServer/WarehouseManagement.IdentityServer.abppkg.json",
+      "folder": "host"
+    },
+    "WarehouseManagement.Host.Shared": {
+      "path": "host/WarehouseManagement.Host.Shared/WarehouseManagement.Host.Shared.abppkg.json",
+      "folder": "host"
+    },
+    "WarehouseManagement.Web.Unified": {
+      "path": "host/WarehouseManagement.Web.Unified/WarehouseManagement.Web.Unified.abppkg.json",
+      "folder": "host"
+    },
+    "WarehouseManagement.Blazor": {
+      "path": "src/WarehouseManagement.Blazor/WarehouseManagement.Blazor.abppkg.json",
+      "folder": "src"
+    },
+    "WarehouseManagement.Blazor.Host": {
+      "path": "host/WarehouseManagement.Blazor.Host/WarehouseManagement.Blazor.Host.abppkg.json",
+      "folder": "host"
+    },
+    "WarehouseManagement.Blazor.Server": {
+      "path": "src/WarehouseManagement.Blazor.Server/WarehouseManagement.Blazor.Server.abppkg.json",
+      "folder": "src"
+    },
+    "WarehouseManagement.Blazor.WebAssembly": {
+      "path": "src/WarehouseManagement.Blazor.WebAssembly/WarehouseManagement.Blazor.WebAssembly.abppkg.json",
+      "folder": "src"
+    },
+    "WarehouseManagement.Blazor.Server.Host": {
+      "path": "host/WarehouseManagement.Blazor.Server.Host/WarehouseManagement.Blazor.Server.Host.abppkg.json",
+      "folder": "host"
+    }
+  }
+}

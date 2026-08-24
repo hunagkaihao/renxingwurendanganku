@@ -1,0 +1,15 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace WarehouseManagement.WcsTasks.Dto
+{
+    public class OpenDoorDto
+    {
+        //柜门号
+        public string OrderCode { get; set; }
+
+    }
+}

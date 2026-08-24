@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "Lion.AbpPro.HttpApi.Host": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "applicationUrl": "http://localhost:44315",
+      //"applicationUrl": "http://192.168.3.224:44315",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

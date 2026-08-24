@@ -1,0 +1,7 @@
+{
+  "modules": {
+    "WarehouseManagement": {
+      "path": "WarehouseManagement.abpmdl.json"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using Volo.Abp.Application.Dtos;
+
+namespace WarehouseManagement.Cells.Dto
+{
+    public class CellDto : AuditedEntityDto<int>
+    {
+        public string CellCode { get; set; }
+        public string CellName { get; set; }
+        public string CellType { get; set; }
+        public string DeviceCode { get; set; }
+        public int Cell_z { get; set; }
+        public int Cell_x { get; set; }
+        public int Cell_y { get; set; }
+        public string CellStatus { get; set; }
+        public string RunStatus { get; set; }
+
+    }
+}

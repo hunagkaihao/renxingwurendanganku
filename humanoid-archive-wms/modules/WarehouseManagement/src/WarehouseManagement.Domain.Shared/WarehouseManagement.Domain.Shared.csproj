@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>WarehouseManagement</RootNamespace>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.Validation" Version="5.1.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Localization\WarehouseManagement\*.json" />
+    <Compile Remove="AllocWall\**" />
+    <Content Remove="Localization\WarehouseManagement\*.json" />
+    <EmbeddedResource Remove="AllocWall\**" />
+    <None Remove="AllocWall\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ArchiveBox\" />
+    <Folder Include="Archives\" />
+    <Folder Include="Faces\" />
+    <Folder Include="Fingers\" />
+  </ItemGroup>
+
+  <ProjectExtensions><VisualStudio><UserProperties warehousemanagement_1domain_1shared_1abppkg_1json__JsonSchema="https://cdn.jsdelivr.net/npm/liblab@latest/liblab.config.schema.json" /></VisualStudio></ProjectExtensions>
+
+</Project>
