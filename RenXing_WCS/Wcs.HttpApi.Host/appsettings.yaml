@@ -1,0 +1,344 @@
+# 修改配置后重启 WCS 生效；此文件包含本地配置，请勿提交。
+
+# 应用 URL 配置（WcsHttpApiHostModule）；实际监听地址见 Wcs.BaseUrl。
+App:
+  # ABP MVC 应用根地址，不用于绑定 HTTP 监听端口。
+  SelfUrl: "http://127.0.0.1:5200"
+
+  # 预留的跨域来源列表，多个地址以逗号分隔。
+  # 当前 ConfigureCors 调用已注释，实际中间件允许任意来源；修改此值不会收紧跨域策略。
+  CorsOrigins: "http://*.Wcs.com"
+  # ABP 允许的重定向地址列表；保持逗号分隔的字符串，不改成 YAML 数组。
+  RedirectAllowedUrls: "http://127.0.0.1:4200,https://127.0.0.1:44337"
+
+# 业务数据库连接配置；连接信息包含凭据，请勿提交或公开。
+ConnectionStrings:
+  # 默认 MySQL 连接字符串，供 ABP/EF Core 及 EF 设计时工厂使用。
+  Default: "Server=127.0.0.1;Port=3306;Database=WcsGDDb;Uid=root;Pwd=__SET_LOCALLY__;SslMode=None;AllowPublicKeyRetrieval=True;"
+
+# 认证服务相关配置；当前 Host 显式读取 Authority 和 SwaggerClientId 用于 Swagger OAuth。
+AuthServer:
+  # Swagger OAuth 使用的认证服务地址。
+  Authority: "http://127.0.0.1:44348"
+  # HTTPS 元数据要求的预留配置；当前 WCS 业务源码未显式读取此项，不应视为已启用 HTTPS 强制校验。
+  RequireHttpsMetadata: "false"
+  # Swagger UI 发起 OAuth 登录时使用的客户端标识。
+  SwaggerClientId: "Wcs_Swagger"
+
+# ABP 字符串加密选项；当前 WCS 业务源码未找到显式调用字符串加密服务的位置。
+StringEncryption:
+  # 默认加密口令属于敏感信息；不要随意更换，以免影响依赖该口令的既有密文。
+  DefaultPassPhrase: "aoQpKIhv7hTCdECY"
+
+# WCS 业务配置（ConfigOptions）。下列字段名保持与代码一致。
+# WcsToolsModule 与 Settings 仍只读取基础 appsettings.yaml，不读取环境 YAML。
+# 本文件不支持热重载；修改后必须重启 WCS。
+Wcs:
+  # WCS HTTP 监听地址；多个地址以英文逗号分隔，Program 使用 Split 后传入 UseUrls。
+  BaseUrl: "http://127.0.0.1:5200"
+  # WCS 调用 WMS 登录接口 /wms/account/newlogin 时使用的账号，不是 WCS 前端登录账号。
+  User:
+    # WMS 接口登录用户名。
+    Name: "admin"
+    # WMS 接口登录密码；请勿提交或公开。
+    Password: "__SET_LOCALLY__"
+  # 盘点后台 ChkBgJob 循环的休眠时间，单位：毫秒（Thread.Sleep）。
+  ChkTime: 25
+  # WMS API 根地址；WMSService 会在后面拼接 /wms/... 接口路径。
+  WMSUrl: "http://127.0.0.1:5100"
+  # SignalR 客户端接收密集架状态更新的方法名，须与前端监听名称一致。
+  HubCliMethod_UpdateMjjStatus: "UpdateMjjStatus"
+  # SignalR 客户端接收 PLC 监控变量及心跳状态更新的方法名。
+  HubCliMethod_UpdatePlcTags: "UpdatePlcTags"
+  # SignalR 客户端接收未完成订单列表的方法名。
+  HubCliMethod_UpdateUndoneOrders: "UpdateUndoneOrders"
+  # SignalR 客户端接收 WCS 调度状态的方法名。
+  HubCliMethod_UpdateWcsStatus: "UpdateWcsStatus"
+  # SQLite 日志数据库连接字符串，供 SqliteLogHelper 使用。
+  SqliteLogConnString: "Data Source=D:\\Log\\wcs\\wcslog.db"
+  # 日志清理任务的再次执行间隔，单位：毫秒；服务启动后首次约 5 秒执行。
+  LogClearInterval: 86400000
+
+  # 日志保留数量，单位：条，不是文件大小或天数。
+  # 按日志 Id 阈值删除旧记录；负数跳过清理，0 会清除截至本次检查的日志。
+  LogMaxVolume: 50000
+  # Redis 连接字符串；WCS 数据和 PLC 数据共用连接地址，通过数据库编号区分。
+  RedisConnStr: "127.0.0.1:6379,password=__SET_LOCALLY__"
+  # WCS 业务数据使用的 Redis 逻辑数据库编号。
+  DefaultRedisNo: 0
+  # PLC 标签数据使用的 Redis 逻辑数据库编号，需与 PLCServer 的配置一致。
+  PlcRedisNo: 1
+
+  # true：PlcHelper 初始化时清除 WCS Redis 中 Plc.TriggerTemp 哈希的全部缓存字段。
+  # false：保留原缓存；这不是清空整个 Redis 数据库的开关。
+  RemovePlcTagTempValueOnStart: true
+
+  # PLC -> WCS 心跳监控示例，保持注释即不启用。
+  # 按 CycleTime（毫秒）读取标签，通过值是否变化判断心跳状态。
+  # PlcName 为 PLC 名称，HeartTagName 为对应标签名；启用前须核对 PLCServer 点位。
+  # HeartBeatsFromPlc:
+  #   -
+  #     PlcName: "Plc1"
+  #     HeartTagName: "HeartBeatFromPlc"
+  #     CycleTime: 1500
+
+  # WCS -> PLC 心跳写入示例，保持注释即不启用。
+  # 按 CycleTime（毫秒）交替写入 true/false；标签类型须能接受该写入。
+  # PlcName 为 PLC 名称，HeartTagName 为对应标签名；启用前须核对 PLCServer 点位。
+  # HeartBeatsToPlc:
+  #   -
+  #     PlcName: "Plc1"
+  #     HeartTagName: "HeartBeatToPlc"
+  #     CycleTime: 1000
+
+  # PLC 监控变量列表（PlcMonitorJob）。每项格式：PLC名称.变量名称。
+  # 代码按点分隔后要求恰好两段；格式不符或标签不存在的项会被跳过。
+  PlcTagMonitors:
+    - "Plc1.Lm_Cmd"
+    - "Plc1.Lm_Response"
+    - "Plc1.Door1_Cmd"
+    - "Plc1.Door1_Response"
+    - "Plc1.Door2_Cmd"
+    - "Plc1.Door2_Response"
+    - "Plc1.Door3_Cmd"
+    - "Plc1.Door3_Response"
+    - "Plc1.Door4_Cmd"
+    - "Plc1.Door4_Response"
+    - "Plc1.Door5_Cmd"
+    - "Plc1.Door5_Response"
+    - "Plc1.Door6_Cmd"
+    - "Plc1.Door6_Response"
+    - "Plc1.Door7_Cmd"
+    - "Plc1.Door8_Response"
+    - "Plc1.Door8_Cmd"
+    - "Plc1.Door8_Response"
+    - "Plc1.Lm_State"
+    - "Plc1.Lm_Zero"
+    - "Plc1.Lm_SafePos"
+    - "Plc1.Mjj_SafePos"
+    - "Plc1.EmergencyStop"
+    - "Plc1_HeartBeatToPlc"
+    - "Plc1_HeartBeatFromPlc"
+    - "Plc1.CellChkFinished"
+    - "Plc1.SectionNoChked"
+    - "Plc1.ColNoChked"
+    - "Plc1.BarcodeChked"
+    - "Plc1.WcsReceived"
+    - "Plc1.AllCheckFinished"
+
+  # 调度与设备编号说明（原现场约定，不作为配置项读取）：
+  # 取档口：12001~12999
+  # 密集架：15001
+  # 龙门机械手：13001
+  # 档案移栽机：16001
+  # 虚拟设备：18001~18999
+
+  # 订单转任务策略（DispatchCoreJob）：Mix = 混合处理各类订单；Apart = 按任务类型分批处理。
+  # 仅接受大小写完全一致的 Mix / Apart；DiaptchStrategy 为代码现有拼写，请勿改名。
+  DiaptchStrategy: "Apart"
+
+  # 调度服务名称，赋给 DispatchCoreJob.DispatchServerName。
+  # 当前 WCS 源码未找到用此值生成 Redis 通道的读取逻辑，不应将其视为通道前缀开关。
+  DispatchServerName: "DispatchSvr"
+
+  # 预留的条件通道配置，当前仅在 ConfigOptions 中声明，未被业务代码读取。
+  # 条件读写实际使用 WcsConsts.DispatchConditionChannel 常量：DispatchSvr.Condition。
+  DispatchConditionChannelName: "DispatchSvr.Condition"
+
+  # 每轮调度处理任务序列时选取的最多任务数；代码对队列长度与该值取较小值。
+  # 这是调度处理数量上限，不是线程池大小。
+  DispatchTaskMaxHandlingNum: 5
+
+  # 历史订单保留时间，单位：天（DateTime.Now.AddDays）。
+  # 清理任务跳过 Created、Doing 状态的订单，并清理被删订单关联的盘点结果。
+  DispatchOrderRecordHoldTime: 7
+  # 历史订单清理的再次执行间隔，单位：毫秒；服务启动后首次约 5 秒执行。
+  DispatchOrderCntMngInterval: 3600000
+
+  # true：开门命令要求订单 CanOpenDoorImmediate 为 true，否则等待 WMS 允许开门。
+  # false：不执行这项 WMS 许可检查；其他开门流程保持不变。
+  OpenDoorAfterWmsAllowed: false
+
+  # WMS 排号与密集架位置映射（MjjManager）
+
+  # WMS 第一排的方向：Left / Right（代码比较时转为小写）。
+  # 按现场约定，面对密集架屏幕区分左右；参与 WMS 排号到密集架列号、左右面的换算。
+  WmsFirstRowPos: "Right"
+
+  # WMS 排号映射的起始偏移标识，仅支持 0 或 1；不是允许访问第 0 排。
+  # 原现场约定：第一排属于固定列且固定列外侧不可取放时为 0，否则为 1。
+  WmsFirstRowNo: 1
+  # 预留：WMS 与 PLC 的排定义是否一致。当前仅声明，未找到业务读取；不会自动切换坐标映射。
+  WmsPlcRowConsistence: true
+  # 预留：WMS 与 PLC 的列定义是否一致。当前仅声明，未找到业务读取；不会自动切换坐标映射。
+  WmsPlcColConsistence: true
+
+  # WMS 定义的排数；坐标换算只接受 1 到该值的排号。
+  # 原现场约定：固定列在边侧且外侧不可取放时为 MjjColCnt * 2 - 1，否则为 MjjColCnt * 2。
+  WmsRowCnt: 6
+
+  # 密集架布局、操作超时与避让参数
+
+  # 密集架总列数，含固定列，需大于 1。
+  # MjjManager 校验：总列数 = 固定列左侧列数 + 固定列右侧列数 + 1。
+  MjjColCnt: 3
+  # 固定列位置：Left / Right / Middle（代码比较时转为小写）；按面对屏幕的方向区分左右。
+  MjjFixColPos: "Right"
+
+  # 固定列左右两面是否均可取放；固定列在边侧时表示其外侧是否可用。
+  # 原现场约定：固定列在中间时应为 true；须与实际可达位置一致。
+  MjjFixColAvailable: true
+  # 固定列左侧的活动列数量，不含固定列；左固定时必须为 0。
+  MjjColCntLeftOfFixCol: 2
+  # 固定列右侧的活动列数量，不含固定列；右固定时必须为 0。
+  MjjColCntRightOfFixCol: 0
+  # 密集架操作等待超时，单位：毫秒（MjjManager 与 TotalMilliseconds 比较）。
+  MjjOperateTimeout: 8000
+
+  # 预留：密集架是否需要避让龙门。当前仅声明，未找到业务读取。
+  # 设置 false 不等于关闭避让；实际避让命令仍按 MjjAvoidLmPos 查找目标位置。
+  MjjNeedAvoidLm: false
+
+  # 龙门到指定取档口取放档案时的密集架避让位置表（JobCmdHelper）。
+  # LmTarget：取档口节点编码，按字符串精确匹配；保留引号，避免丢失前导零。
+  # MjjAvoidCol：避让目标列号，范围 1..MjjColCnt；还需满足固定列可达性约束。
+  # MjjAvoidZY：目标面的左右编码，1 = 左，2 = 右。
+  MjjAvoidLmPos:
+    -
+      LmTarget: "12001"
+      MjjAvoidCol: 3
+      MjjAvoidZY: 2
+    -
+      LmTarget: "12002"
+      MjjAvoidCol: 3
+      MjjAvoidZY: 2
+    -
+      LmTarget: "12003"
+      MjjAvoidCol: 3
+      MjjAvoidZY: 2
+    -
+      LmTarget: "12004"
+      MjjAvoidCol: 3
+      MjjAvoidZY: 2
+    -
+      LmTarget: "12005"
+      MjjAvoidCol: 3
+      MjjAvoidZY: 2
+    -
+      LmTarget: "12006"
+      MjjAvoidCol: 3
+      MjjAvoidZY: 2
+    -
+      LmTarget: "12007"
+      MjjAvoidCol: 3
+      MjjAvoidZY: 2
+    -
+      LmTarget: "12008"
+      MjjAvoidCol: 3
+      MjjAvoidZY: 2
+
+  # 现场出入库循环测试范围，供 TestJob 收到 Start / Restart 消息后使用。
+  # 此处不是自动化测试配置；触发后会针对库位生成真实出入库订单，请谨慎操作。
+  # RowNo：WMS 排号，必须大于 0。
+  # StartColNo / EndColNo：WMS 起止列号，均大于 0，起始不大于结束，包含两端。
+  # StartLayerNo / EndLayerNo：WMS 起止层号，均大于 0，起始不大于结束，包含两端。
+  # Specs：档案规格编码，须同时匹配库位 CellSpecs 与取档口 DASpecs。
+  Test:
+    -
+      RowNo: 1
+      StartColNo: 2
+      EndColNo: 13
+      StartLayerNo: 1
+      EndLayerNo: 3
+      Specs: "_5cm"
+    -
+      RowNo: 1
+      StartColNo: 15
+      EndColNo: 26
+      StartLayerNo: 1
+      EndLayerNo: 3
+      Specs: "_5cm"
+    -
+      RowNo: 2
+      StartColNo: 2
+      EndColNo: 13
+      StartLayerNo: 1
+      EndLayerNo: 3
+      Specs: "_5cm"
+    -
+      RowNo: 2
+      StartColNo: 15
+      EndColNo: 26
+      StartLayerNo: 1
+      EndLayerNo: 3
+      Specs: "_5cm"
+    -
+      RowNo: 3
+      StartColNo: 2
+      EndColNo: 13
+      StartLayerNo: 1
+      EndLayerNo: 3
+      Specs: "_5cm"
+    -
+      RowNo: 3
+      StartColNo: 15
+      EndColNo: 26
+      StartLayerNo: 1
+      EndLayerNo: 3
+      Specs: "_5cm"
+    -
+      RowNo: 4
+      StartColNo: 2
+      EndColNo: 18
+      StartLayerNo: 1
+      EndLayerNo: 3
+      Specs: "_3cm"
+    -
+      RowNo: 4
+      StartColNo: 20
+      EndColNo: 36
+      StartLayerNo: 1
+      EndLayerNo: 3
+      Specs: "_3cm"
+    -
+      RowNo: 5
+      StartColNo: 2
+      EndColNo: 18
+      StartLayerNo: 1
+      EndLayerNo: 3
+      Specs: "_3cm"
+    -
+      RowNo: 5
+      StartColNo: 20
+      EndColNo: 36
+      StartLayerNo: 1
+      EndLayerNo: 3
+      Specs: "_3cm"
+    -
+      RowNo: 6
+      StartColNo: 2
+      EndColNo: 35
+      StartLayerNo: 1
+      EndLayerNo: 2
+      Specs: "_1cm"
+    -
+      RowNo: 6
+      StartColNo: 37
+      EndColNo: 70
+      StartLayerNo: 1
+      EndLayerNo: 2
+      Specs: "_1cm"
+    -
+      RowNo: 6
+      StartColNo: 2
+      EndColNo: 25
+      StartLayerNo: 3
+      EndLayerNo: 3
+      Specs: "_2cm"
+    -
+      RowNo: 6
+      StartColNo: 27
+      EndColNo: 50
+      StartLayerNo: 3
+      EndLayerNo: 3
+      Specs: "_2cm"

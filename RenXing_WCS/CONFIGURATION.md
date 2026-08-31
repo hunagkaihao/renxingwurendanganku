@@ -31,10 +31,12 @@ WCS 使用 `Wcs.HttpApi.Host/appsettings.yaml`，主程序还会按当前环境�
 - `appsettings*.yaml` 已设置为复制到构建输出和发布目录。
 - `appsettings*.json` 不再复制到构建输出或发布目录。更新已有部署时，
   应先备份并移走旧的 appsettings JSON 文件，避免框架创建主程序时预读取旧文件。
-- `appsettings.yaml` 含本地连接信息，受 `.gitignore` 保护，不提交到仓库。
-  部署时需单独提供该文件；新增含敏感信息的环境 YAML 时，也应先配置忽略规则。
+- `appsettings.yaml` 纳入版本控制，保留配置项和中文注释，口令使用
+  `__SET_LOCALLY__` 占位符，部署前必须填写实际值并核对环境参数。
+  本机原有完整配置保留在工作区，另有被忽略的 `appsettings.yaml.local.bak` 备份；
+  工作区实际口令与仓库占位符不同属于预期差异，后续提交前必须排除这些口令变更。
 - 本次本地转换保留原 JSON 为 `appsettings.json.bak`，仅供人工回退参考。
   程序不自动回退读取 JSON；恢复旧版本时再配合恢复旧配置文件名。
 - 原 `appsettings.json` 曾被 Git 跟踪，即使已有忽略规则仍在版本记录中。
-  本次变更删除该跟踪路径；新 YAML 仅保留在本地，不会通过提交自动分发。
+  本次变更删除该跟踪路径；新 YAML 随源码提交和分发。
 - 提交前已通过解决方案编译和 YAML 解析检查，未执行设备联调或发布。

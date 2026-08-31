@@ -37,7 +37,6 @@
 # Local runtime configuration currently contains non-empty database credentials.
 # Keep the working copies for local execution, but never publish them.
 /RenXing_WCS/Wcs.HttpApi.Host/appsettings.json
-/RenXing_WCS/Wcs.HttpApi.Host/appsettings.yaml
 /RenXing_PLCServer/Shared/ConfigFiles/globalsettings.json
 /RenXing_PLCServer/Shared/ConfigFiles/log4net.config
 /RenXing_PLCServer/PlcServer.Server/App.config
