@@ -1,0 +1,7 @@
+# 仅在 Development 环境加载；覆盖主程序的同名配置，修改后需重启服务。
+Logging:
+  LogLevel:
+    # 默认日志级别。
+    Default: "Information"
+    # ASP.NET Core 分类日志级别；Host 中另有 Serilog 控制台分类过滤规则。
+    Microsoft.AspNetCore: "Warning"

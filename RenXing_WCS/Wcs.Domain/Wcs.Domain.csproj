@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	  <TargetFramework>net6.0</TargetFramework>
+	  <RootNamespace>Wcs</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Conditions\ConditionMonitorJob.cs" />
+    <Compile Remove="Orders\OrderCntManageJob.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.Ddd.Domain" Version="6.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Wcs.Domain.Shared\Wcs.Domain.Shared.csproj" />
+    <ProjectReference Include="..\Wcs.Tools\Wcs.Tools.csproj" />
+  </ItemGroup>
+
+</Project>

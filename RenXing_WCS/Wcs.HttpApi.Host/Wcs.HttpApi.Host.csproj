@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+	  <TargetFramework>net6.0</TargetFramework>
+	  <RootNamespace>Wcs</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Serilog" Version="2.12.0" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="3.1.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
+    <PackageReference Include="Volo.Abp.Autofac" Version="6.0.3" />
+    <PackageReference Include="Volo.Abp.Swashbuckle" Version="6.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Wcs.Application\Wcs.Application.csproj" />
+    <ProjectReference Include="..\Wcs.BackgroundJob\Wcs.BackGroundJob.csproj" />
+    <ProjectReference Include="..\Wcs.EntityFrameworkCore\Wcs.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\Wcs.HttpApi\Wcs.HttpApi.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="appsettings*.yaml" />
+    <Content Include="appsettings*.yaml" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Update="appsettings*.json" CopyToOutputDirectory="Never" CopyToPublishDirectory="Never" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="publish\appsettings.Development.json" />
+    <_ContentIncludedByDefault Remove="publish\appsettings.json" />
+  </ItemGroup>
+
+</Project>
