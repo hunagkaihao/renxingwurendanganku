@@ -40,7 +40,7 @@ namespace WarehouseManagement.WcsTasks
             StockOrderCreateDto stockOrderCreate = new StockOrderCreateDto(orderCode, plateCode, startNode, endNode, priority);
             var response =
   await _httpClientFactory.PostAsync<StockOrderCreateDto, ResultWcsTaskDto>("TTWCS",
-  $"{WCSServer}/ecs/dispatch/order/stockOrderCreate", stockOrderCreate);
+  $"{WCSServer}/wcs/dispatch/order/stockOrderCreate", stockOrderCreate);
 
             return response;
 
@@ -59,7 +59,7 @@ namespace WarehouseManagement.WcsTasks
             Log.Information("WCS创建盘点订单");
             var response =
   await _httpClientFactory.PostAsync<CheckOrderCreateDto, ResultWcsTaskDto>("TTWCS",
-  $"{WCSServer}/ecs/dispatch/order/checkOrderCreate", checkOrderCreate);
+  $"{WCSServer}/wcs/dispatch/order/checkOrderCreate", checkOrderCreate);
 
             return response;
 
@@ -78,7 +78,7 @@ namespace WarehouseManagement.WcsTasks
             Log.Information("WCS查询盘点结果");
             var response =
   await _httpClientFactory.GetAsync<ResultCheckDto>("TTWCS",
-  $"{WCSServer}/ecs/dispatch/order/checkOrderResult?queryCode={checkOrderCreate.QueryCode}");
+  $"{WCSServer}/wcs/dispatch/order/checkOrderResultsGetByQueryCode?queryCode={Uri.EscapeDataString(checkOrderCreate.QueryCode)}");
 
             return response;
 
@@ -96,8 +96,8 @@ namespace WarehouseManagement.WcsTasks
             }
             Log.Information("WCS查询单个订单的执行状态");
             var response =
-  await _httpClientFactory.PostAsync<StockOrderCreateDto, ResultStatesDto>("TTWCS",
-  $"{WCSServer}/ecs/dispatch/order/state", stockOrderCreate);
+  await _httpClientFactory.GetAsync<ResultStatesDto>("TTWCS",
+  $"{WCSServer}/wcs/dispatch/order/state?orderCode={Uri.EscapeDataString(stockOrderCreate.OrderCode)}");
 
             return response;
 
@@ -116,7 +116,7 @@ namespace WarehouseManagement.WcsTasks
             Log.Information("WCS查询所有订单的执行状态");
             var response =
   await _httpClientFactory.GetAsync<ListResultSstatesDto>("TTWCS",
-  $"{WCSServer}/ecs/dispatch/order/states");
+  $"{WCSServer}/wcs/dispatch/order/states");
 
             return response;
 
@@ -136,7 +136,7 @@ namespace WarehouseManagement.WcsTasks
             var stockOrderCreate = new StockOrderCreateDto();
             var response =
   await _httpClientFactory.PostAsync<StockOrderCreateDto, ResultWcsTaskDto>("TTWCS",
-  $"{WCSServer}/ecs/dispatch/order/pause",null);
+  $"{WCSServer}/wcs/dispatch/core/pause",null);
 
             return response;
 
@@ -156,7 +156,7 @@ namespace WarehouseManagement.WcsTasks
             var stockOrderCreate = new StockOrderCreateDto();
             var response =
   await _httpClientFactory.PostAsync<StockOrderCreateDto, ResultWcsTaskDto>("TTWCS",
-  $"{WCSServer}/ecs/dispatch/order/restart", null);
+  $"{WCSServer}/wcs/dispatch/core/restart", null);
 
             return response;
 
@@ -177,7 +177,7 @@ namespace WarehouseManagement.WcsTasks
             orderCode.OrderCode = taskId.ToString();
             var response =
   await _httpClientFactory.PostAsync<OrderCodeDto, ResultWcsTaskDto>("TTWCS",
-  $"{WCSServer}/ecs/dispatch/order/forceDone", orderCode);
+  $"{WCSServer}/wcs/dispatch/order/forceDone", orderCode);
 
             return response;
 
@@ -198,7 +198,7 @@ namespace WarehouseManagement.WcsTasks
             orderCode.OrderCode = taskId.ToString();
             var response =
   await _httpClientFactory.PostAsync<OrderCodeDto, ResultWcsTaskDto>("TTWCS",
-  $"{WCSServer}/ecs/dispatch/order/cancelOrder", orderCode);
+  $"{WCSServer}/wcs/dispatch/order/cancelOrder", orderCode);
 
             return response;
 
@@ -217,7 +217,7 @@ namespace WarehouseManagement.WcsTasks
             Log.Information("WCS打开取档口");
             var response =
   await _httpClientFactory.PostAsync<OpenDoorDto, ResultWcsTaskDto>("TTWCS",
-  $"{WCSServer}/ecs/dispatch/order/doorCanOpenByOrder", openDoor);
+  $"{WCSServer}/wcs/dispatch/order/doorCanOpenByOrder", openDoor);
 
             return response;
 
@@ -239,7 +239,7 @@ namespace WarehouseManagement.WcsTasks
             Log.Information("WCS打开取档口");
             var response =
   await _httpClientFactory.PostAsync<OpenDoorDto, OpenDoorForOrderDto>("TTWCS",
-  $"{WCSServer}/ecs/dispatch/order/doorCanOpenByOrder", orderCode);
+  $"{WCSServer}/wcs/dispatch/order/doorCanOpenByOrder", orderCode);
 
             return response;
 
@@ -265,7 +265,7 @@ namespace WarehouseManagement.WcsTasks
             Log.Information("WCS龙门机械手回原点");
             var response =
   await _httpClientFactory.PostAsync<OpenDoorDto, ResultWcsTaskDto>("TTWCS",
-  $"{WCSServer}/ecs/dispatch/device/armHome", null);
+  $"{WCSServer}/wcs/dispatch/device/armHome", null);
 
             return response;
 
@@ -284,7 +284,7 @@ namespace WarehouseManagement.WcsTasks
             Log.Information("WCSPLC、密集架控制器通讯状态查询");
             var response =
   await _httpClientFactory.GetAsync<ResultCommuStatesDto>("TTWCS",
-  $"{WCSServer}/ecs/dispatch/device/commuState", null);
+  $"{WCSServer}/wcs/dispatch/device/commuState", null);
 
             return response;
 
@@ -303,7 +303,7 @@ namespace WarehouseManagement.WcsTasks
             Log.Information("WCSPLC点位查询");
             var response =
   await _httpClientFactory.GetAsync<ResultPlcNodeDto>("TTWCS",
-  $"{WCSServer}/ecs/dispatch/device/plcNode"+plcNode);
+  $"{WCSServer}/wcs/dispatch/device/plcNode"+plcNode);
 
             return response;
 

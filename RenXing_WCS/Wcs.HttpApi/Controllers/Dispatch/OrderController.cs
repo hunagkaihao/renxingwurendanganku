@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Wcs.Dispatch;
 
-[Route("ecs/dispatch")]
+[Route("wcs/dispatch")]
 [ApiController]
 public class OrderController : WcsController
 {

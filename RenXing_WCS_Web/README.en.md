@@ -1,4 +1,4 @@
-# Ecs.Warehouse.Terminal
+# Wcs.Warehouse.Terminal
 
 #### Description
 档案库调度终端界面

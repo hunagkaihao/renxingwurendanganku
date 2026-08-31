@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Wcs.Dispatch;
 
-[Route("ecs/dahSpec")]
+[Route("wcs/dahSpec")]
 [ApiController]
 public class DahSpecController : WcsController, IDahSpecService
 {

@@ -132,7 +132,7 @@
                 }
 
                 this.$axios({
-                    url:'ecs/log/query',
+                    url:'wcs/log/query',
                     // url:'logquery/INFO/%/100',
                     method:'get',
                     params:{
@@ -174,4 +174,3 @@
     margin-bottom: 0px;
 }
 </style>
-  

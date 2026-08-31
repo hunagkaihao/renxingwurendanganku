@@ -66,7 +66,7 @@ export default {
     {
         this.$axios({
             method:'post',
-            url:'ecs/dispatch/core/pause'
+            url:'wcs/dispatch/core/pause'
         }).then(res => {
             if(res.data)
             {
@@ -82,7 +82,7 @@ export default {
     {
         this.$axios({
             method:'post',
-            url:'ecs/dispatch/core/restart'
+            url:'wcs/dispatch/core/restart'
         }).then(res => {
             if(res.data)
             {
@@ -97,7 +97,7 @@ export default {
         let t = this;
         this.$axios({
             method:'get',
-            url:'ecs/dispatch/core/wcsStatus'
+            url:'wcs/dispatch/core/wcsStatus'
         }).then(function(res){
             let jsonStr = JSON.stringify(res.data);
             t.wcsState = JSON.parse(jsonStr);
@@ -108,7 +108,7 @@ export default {
     startTest(){
         this.$axios({
             method:'post',
-            url:'ecs/test/start'
+            url:'wcs/test/start'
         }).then(function(res){
             if(res.data.success == true)
                 alert("服务器已接收启动测试指令");
@@ -121,7 +121,7 @@ export default {
     restartTest(){
         this.$axios({
             method:'post',
-            url:'ecs/test/restart'
+            url:'wcs/test/restart'
         }).then(function(res){
             if(res.data.success == true)
                 alert("服务器已接收重启测试指令");
@@ -134,7 +134,7 @@ export default {
     stopTest(){
         this.$axios({
             method:'post',
-            url:'ecs/test/stop'
+            url:'wcs/test/stop'
         }).then(function(res){
             if(res.data.success == true)
                 alert("服务器已接收停止测试指令");

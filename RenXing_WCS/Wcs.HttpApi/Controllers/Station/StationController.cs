@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Wcs.Station;
 
-[Route("ecs/station")]
+[Route("wcs/station")]
 [ApiController]
 public class StationController : WcsController, IStationService
 {

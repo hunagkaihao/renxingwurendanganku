@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration;
 using Wcs.ConfigTool;
 using System.Collections.Generic;
 using Volo.Abp.Domain.Repositories;
@@ -24,6 +25,7 @@ public class TestJob : IHostedService, IDisposable
     private readonly IRepository<DispatchNode, int> _nodeRepository;
     private readonly IRepository<DispatchOrder, int> _orderRepository;
     private readonly ILogger<TestJob> _logger;
+    private readonly string _selfCallUrl;
 
 
 
@@ -33,13 +35,15 @@ public class TestJob : IHostedService, IDisposable
         ICellRepository cellRepository,
         IRepository<DispatchNode, int> nodeRepository,
         IRepository<DispatchOrder, int> orderRepository,
-        ILogger<TestJob> logger)
+        ILogger<TestJob> logger,
+        IConfiguration configuration)
     {
         _testMsgHelper = testMsgHelper;
         _cellRepository = cellRepository;
         _nodeRepository = nodeRepository;
         _orderRepository = orderRepository;
         _logger = logger;
+        _selfCallUrl = SelfCallEndpoint.Resolve(configuration["Wcs:BaseUrl"]);
     }
 
     public void Dispose()
@@ -106,8 +110,8 @@ public class TestJob : IHostedService, IDisposable
                                     };
 
                                     var response = await HttpApiHelper.PostAsync<ResponseDto>(
-                                        "http://localhost:3270", 
-                                        "ecs/dispatch/order/stockOrderCreate", 
+                                        _selfCallUrl,
+                                        "wcs/dispatch/order/stockOrderCreate",
                                         orderDto)
                                         .ConfigureAwait(false);
                                     
@@ -175,8 +179,8 @@ public class TestJob : IHostedService, IDisposable
                                     };
 
                                     response = await HttpApiHelper.PostAsync<ResponseDto>(
-                                        "http://localhost:3270", 
-                                        "ecs/dispatch/order/stockOrderCreate", 
+                                        _selfCallUrl,
+                                        "wcs/dispatch/order/stockOrderCreate",
                                         orderDto)
                                         .ConfigureAwait(false);
                                     

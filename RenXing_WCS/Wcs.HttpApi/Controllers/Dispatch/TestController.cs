@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Wcs.Dispatch;
 
-[Route("ecs/test")]
+[Route("wcs/test")]
 [ApiController]
 public class TestController : WcsController, ITestService
 {

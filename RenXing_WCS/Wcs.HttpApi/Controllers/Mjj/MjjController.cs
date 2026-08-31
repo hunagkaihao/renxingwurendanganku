@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Wcs.Mjj;
 
-[Route("ecs/mjj")]
+[Route("wcs/mjj")]
 [ApiController]
 public class MjjController : WcsController, IMjjService
 {

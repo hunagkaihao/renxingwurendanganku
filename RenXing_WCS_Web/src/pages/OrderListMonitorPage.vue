@@ -80,7 +80,7 @@
             let t = this;
             this.$axios({
                 method:'get',
-                url:'ecs/dispatch/order/unDoneOrders'
+                url:'wcs/dispatch/order/unDoneOrders'
             }).then(function(res){
                 let jsonStr = JSON.stringify(res.data);
                 t.orderData = JSON.parse(jsonStr);
@@ -95,7 +95,7 @@
         cancelOrder(row){
             this.$axios({
                 method:'post',
-                url:'ecs/dispatch/order/cancelOrder',
+                url:'wcs/dispatch/order/cancelOrder',
                 data:{
                     orderCode: row.orderCode
                 }
@@ -114,7 +114,7 @@
         forceDoneOrder(row){
             this.$axios({
                 method:'post',
-                url:'ecs/dispatch/order/forceDone',
+                url:'wcs/dispatch/order/forceDone',
                 data:{
                     orderCode: row.orderCode
                 }

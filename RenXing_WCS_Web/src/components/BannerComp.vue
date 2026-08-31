@@ -50,7 +50,7 @@ export default {
     {
         this.$axios({
             method:'post',
-            url:'ecs/dispatch/order/pause'
+            url:'wcs/dispatch/core/pause'
         }).then(res => {
             if(res.data)
             {
@@ -66,7 +66,7 @@ export default {
     {
         this.$axios({
             method:'post',
-            url:'ecs/dispatch/order/restart'
+            url:'wcs/dispatch/core/restart'
         }).then(res => {
             if(res.data)
             {
@@ -81,7 +81,7 @@ export default {
         let t = this;
         this.$axios({
             method:'get',
-            url:'ecs/dispatch/device/status'
+            url:'wcs/dispatch/core/wcsStatus'
         }).then(function(res){
             let jsonStr = JSON.stringify(res.data);
             t.wcsState = JSON.parse(jsonStr);

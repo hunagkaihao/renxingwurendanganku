@@ -67,7 +67,7 @@
                 var t = this;
                 this.$axios({
                     method: 'get',
-                    url: 'ecs/dispatch/order/oneOrder',
+                    url: 'wcs/dispatch/order/oneOrder',
                     params:
                     {
                         orderCode: this.$route.query.orderCode
@@ -142,4 +142,3 @@
 }
 
 </style>
-  

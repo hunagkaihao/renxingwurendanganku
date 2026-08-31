@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Wcs.Log;
 
-[Route("ecs/log")]
+[Route("wcs/log")]
 [ApiController]
 public class LogController : WcsController, ILogService
 {

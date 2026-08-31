@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Wcs.PlcMonitor;
 
-[Route("ecs/plc")]
+[Route("wcs/plc")]
 [ApiController]
 public class PlcMonitorController : WcsController, IPlcMonitorService
 {

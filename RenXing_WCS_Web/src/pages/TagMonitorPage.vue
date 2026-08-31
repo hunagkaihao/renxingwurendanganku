@@ -65,7 +65,7 @@
             let t = this;
             this.$axios({
                 method:'get',
-                url:'ecs/plc/plcMonitor'
+                url:'wcs/plc/plcMonitor'
             }).then(function(res){
                 let jsonStr = JSON.stringify(res.data);                
                 t.plcTagData = JSON.parse(jsonStr);
@@ -81,7 +81,7 @@
             let t = this;
             this.$axios({
                 method:'get',
-                url:'ecs/mjj/mjjStatusOfNmValMapList'
+                url:'wcs/mjj/mjjStatusOfNmValMapList'
             }).then(function(res){
                 let jsonStr = JSON.stringify(res.data);       
                 t.mjjData = JSON.parse(jsonStr);     
