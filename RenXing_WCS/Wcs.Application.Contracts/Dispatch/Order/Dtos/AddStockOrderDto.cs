@@ -15,5 +15,10 @@ public class AddStockOrderDto : EntityDto
 
     public string endNode { get; set; } = string.Empty;     //物流终点
 
+    /// <summary>
+    /// WMS 传入的任务类型。当前 WCS 仅接收该字段，实际任务类型仍按起点和终点推导。
+    /// </summary>
+    public string taskType { get; set; } = string.Empty;
+
     public int priority { get; set; }
 }

@@ -26,13 +26,14 @@ public class OrderController : WcsController
     public async Task<ResponseDto> CreateStockOrder(AddStockOrderDto para)
     {
         ResponseDto responseDto = await _orderService.CreateStockOrder(para).ConfigureAwait(false);
-        //Í¨Öªwms×´Ì¬·¢Éú¸Ä±ä£¨WCS½ÓÊÕµ½ÈÎÎñ)
+        //é€šçŸ¥wmsçŠ¶æ€å‘ç”Ÿæ”¹å˜ï¼ˆWCSæ¥æ”¶åˆ°ä»»åŠ¡)
         if (responseDto.success == true)
         {
             TaskStatusDto statusDto = new()
             {
                 OrderCode =para.orderCode,
-                ExecState = "WcsCatched",
+                Status = WcsTaskStatus.Accepted,
+                ExecutionStep = "ç­‰å¾…æ‰§è¡Œ",
             };
             await _wmsService.SendTaskStatus(statusDto);
         }

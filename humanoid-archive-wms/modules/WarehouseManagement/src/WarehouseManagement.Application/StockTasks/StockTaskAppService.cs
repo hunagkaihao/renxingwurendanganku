@@ -586,6 +586,14 @@ namespace WarehouseManagement.StockTasks
             await _wcsApiManager.Restart();
         }
 
+        /// <summary>
+        /// 接收 WCS 主动推送的任务生命周期状态。
+        /// </summary>
+        public async Task<ResultWcsTaskDto> WcsSetStockTaskStatus(WcsCallBackRequest input)
+        {
+            return await _stockTaskManagement.WcsCallBack(input);
+        }
+
 
 
 

@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using WarehouseManagement.StockTasks.Dto;
+using WarehouseManagement.WcsTasks.Dto;
 
 namespace WarehouseManagement.StockTasks
 {
@@ -137,6 +138,15 @@ namespace WarehouseManagement.StockTasks
         {
             await _stockTaskAppService.CreateBatTest();
         }
-        
+
+        [HttpPost("~/wms/stockTask/wcsSetStockTaskStatus")]
+        [SwaggerOperation(summary: "接收WCS任务状态", Tags = new[] { "StockTasks" })]
+        public async Task<ResultWcsTaskDto> WcsSetStockTaskStatus(WcsCallBackRequest input)
+        {
+            return await _stockTaskAppService.WcsSetStockTaskStatus(input);
+        }
+
+
+
     }
 }

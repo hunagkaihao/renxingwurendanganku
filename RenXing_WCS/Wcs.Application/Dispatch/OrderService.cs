@@ -33,6 +33,25 @@ public class OrderService : WcsAppService, IOrderService
     private readonly ILogger<OrderService> _logger;
     private readonly IWMSService _wmsService;
 
+    /// <summary>
+    /// 将 WCS 内部订单状态转换为 WMS 使用的任务生命周期状态。
+    /// </summary>
+    private static WcsTaskStatus ToWmsTaskStatus(string orderState)
+    {
+        if (!Enum.TryParse<EnumDispatchOrderState>(orderState, true, out var state))
+            return WcsTaskStatus.Unknown;
+
+        return state switch
+        {
+            EnumDispatchOrderState.Created => WcsTaskStatus.Accepted,
+            EnumDispatchOrderState.Doing => WcsTaskStatus.Executing,
+            EnumDispatchOrderState.Done => WcsTaskStatus.Completed,
+            EnumDispatchOrderState.Canceled => WcsTaskStatus.Canceled,
+            EnumDispatchOrderState.ForceDone => WcsTaskStatus.ForceCompleted,
+            _ => WcsTaskStatus.Unknown
+        };
+    }
+
     public OrderService(
         ILogger<OrderService> logger,
         OrderManager orderManager,
@@ -437,6 +456,7 @@ public class OrderService : WcsAppService, IOrderService
                 return new OrderStateDto()
                 {
                     orderCode = orderCode,
+                    status = WcsTaskStatus.Unknown,
                     execState = "未知订单",
                     errorInfo = "没有此订单或查询失败",
                     happenTime = ""
@@ -446,6 +466,7 @@ public class OrderService : WcsAppService, IOrderService
             return new OrderStateDto()
             {
                 orderCode = result.orderCode,
+                status = ToWmsTaskStatus(result.orderState),
                 execState = result.execStep,
                 errorInfo = result.hasError ? result.execInfo : string.Empty,
                 happenTime = result.execUpdateTime
@@ -457,6 +478,7 @@ public class OrderService : WcsAppService, IOrderService
             return new OrderStateDto()
             {
                 orderCode = orderCode,
+                status = WcsTaskStatus.Unknown,
                 execState = "未知订单",
                 errorInfo = ex.Message,
                 happenTime = ""
@@ -479,6 +501,7 @@ public class OrderService : WcsAppService, IOrderService
                 OrderStateDto stateDto = new OrderStateDto()
                 {
                     orderCode = o.orderCode,
+                    status = ToWmsTaskStatus(o.orderState),
                     execState = o.execStep,
                     errorInfo = o.hasError ? o.execInfo : string.Empty,
                     happenTime = o.execUpdateTime

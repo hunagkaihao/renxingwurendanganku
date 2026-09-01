@@ -8,7 +8,8 @@ namespace WarehouseManagement.WcsTasks.Dto
 {
     public class StockOrderCreateDto
     {
-        public StockOrderCreateDto(string orderCode, string plateCode, string startNode, string endNode, int taskType, int priority)
+        public StockOrderCreateDto(string orderCode, string plateCode, string startNode, string endNode,
+            string taskType, int priority)
         {
             OrderCode = orderCode;
             PlateCode = plateCode;
@@ -37,9 +38,9 @@ namespace WarehouseManagement.WcsTasks.Dto
         /// </summary>
         public string EndNode { get; set; }
         /// <summary>
-        /// 1:入库    2：出库    3:盘库
+        /// WMS 传给 WCS 的任务类型。当前 WCS 接收但仍按起点和终点推导实际类型。
         /// </summary>
-        public int TaskType { get; set; }
+        public string TaskType { get; set; }
         /// <summary>
         /// 执行优先级，值越大，优先级越高
         /// </summary>

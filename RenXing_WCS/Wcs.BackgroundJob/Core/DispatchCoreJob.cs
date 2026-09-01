@@ -739,7 +739,8 @@ public class DispatchCoreJob : IHostedService, IDisposable
             {
                 TaskStatusDto taskStatusDto = new TaskStatusDto()
                 {
-                    ExecState = "Executing",
+                    Status = WcsTaskStatus.Executing,
+                    ExecutionStep = currentWorker.MyJobCmd?.JobCmdNameCHS ?? string.Empty,
                     OrderCode = jobInWorker.OrderCode,
                 };
                 bool flag = await _wmsService.SendTaskStatus(taskStatusDto);
@@ -818,7 +819,8 @@ public class DispatchCoreJob : IHostedService, IDisposable
                 TaskStatusDto taskStatusDto = new TaskStatusDto()
                 {
                     OrderCode = orderCode,
-                    ExecState = "Completed",
+                    Status = WcsTaskStatus.Completed,
+                    ExecutionStep = "已完成",
                 };
                 bool flag = await _wmsService.SendTaskStatus(taskStatusDto);
 
@@ -852,6 +854,17 @@ public class DispatchCoreJob : IHostedService, IDisposable
 
                 string info = $"调度任务{taskId}（对应订单{orderCode}）已全部完成，删除该任务成功";
                 _logger.Info(info);
+
+                if (finishedTask.ProcessId != 17)
+                {
+                    // 普通搬运任务完成，使用协议枚举通知 WMS；中文仅作为展示工步。
+                    await _wmsService.SendTaskStatus(new TaskStatusDto
+                    {
+                        OrderCode = orderCode,
+                        Status = WcsTaskStatus.Completed,
+                        ExecutionStep = "已完成"
+                    });
+                }
                 return string.Empty;
             }
 
@@ -1364,6 +1377,17 @@ public class DispatchCoreJob : IHostedService, IDisposable
 
         _notifierManager.NotifyDispatchSvrWithPara(WcsConsts.DispatchOrderForceDoneRespNotifierName, string.Empty);
         _logger.Info($"收到强制完成调度订单请求，订单码为{orderCode}，强制完成成功");
+
+        if (order.OrderType != EnumDispatchOrderType.CheckDown)
+        {
+            // 普通搬运任务被强制结束，WMS 不应按正常完成提交库存。
+            await _wmsService.SendTaskStatus(new TaskStatusDto
+            {
+                OrderCode = orderCode,
+                Status = WcsTaskStatus.ForceCompleted,
+                ExecutionStep = "已强制完成"
+            });
+        }
     }
 
     public async Task ListenToCancelTaskRequest()
@@ -1416,6 +1440,17 @@ public class DispatchCoreJob : IHostedService, IDisposable
 
         _notifierManager.NotifyDispatchSvrWithPara(WcsConsts.DispatchOrderCancelRespNotifierName, string.Empty);
         _logger.Info($"收到取消调度订单请求，订单码为{orderCode}，取消成功");
+
+        if (order.OrderType != EnumDispatchOrderType.CheckDown)
+        {
+            // 普通搬运任务已取消，通知 WMS 进入取消状态。
+            await _wmsService.SendTaskStatus(new TaskStatusDto
+            {
+                OrderCode = orderCode,
+                Status = WcsTaskStatus.Canceled,
+                ExecutionStep = "已取消"
+            });
+        }
     }
 
     public void UpdateDispatchSvrState(string state)

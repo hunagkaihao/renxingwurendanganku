@@ -192,7 +192,7 @@ namespace Lion.AbpPro.Jobs
                                     var state = states.orderStates.Find(f => f.OrderCode == Convert.ToString(stocks[i].Id));
                                     if (state != null)
                                     {
-                                        await _stockTaskManager.UpdateStatusAsync(stocks[i].Id, state.ExecState);
+                                        await _stockTaskManager.UpdateStatusAsync(stocks[i].Id, state.Status);
                                     }
                                 }
                             }
@@ -209,3 +209,4 @@ namespace Lion.AbpPro.Jobs
         }
     }
 }
+

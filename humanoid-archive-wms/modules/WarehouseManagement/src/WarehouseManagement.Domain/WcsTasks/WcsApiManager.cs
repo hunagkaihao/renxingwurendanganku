@@ -33,7 +33,7 @@ namespace WarehouseManagement.WcsTasks
         /// 创建出入库订单
         /// </summary>
         /// <returns></returns>
-        public async Task<ResultWcsTaskDto> StockOrderCreate(string orderCode, string plateCode, string startNode, string endNode, int taskType, int priority)
+        public async Task<ResultWcsTaskDto> StockOrderCreate(string orderCode, string plateCode, string startNode, string endNode, string taskType, int priority)
         {
             if (WCSSimulation)
             {
@@ -336,3 +336,4 @@ namespace WarehouseManagement.WcsTasks
 
     }
 }
+

@@ -6,6 +6,7 @@ using Volo.Abp.Application.Services;
 using Volo.Abp.Application.Dtos;
 using Lion.AbpPro.Extension.Customs.Dtos;
 using WarehouseManagement.StockTasks.Dto;
+using WarehouseManagement.WcsTasks.Dto;
 
 namespace WarehouseManagement.StockTasks
 {
@@ -108,6 +109,11 @@ namespace WarehouseManagement.StockTasks
 
         //强制完成任务
         Task ForceComplete(int stockId);
+
+        /// <summary>
+        /// 接收 WCS 主动推送的任务生命周期状态。
+        /// </summary>
+        Task<ResultWcsTaskDto> WcsSetStockTaskStatus(WcsCallBackRequest input);
 
 
 

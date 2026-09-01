@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using System.Net.Http.Headers;
 
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 
@@ -50,6 +51,7 @@ namespace Wcs.WMS
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
+            _jsonSettings.Converters.Add(new StringEnumConverter());
         }
 
         private async Task<string> LoginAsync()
@@ -177,8 +179,8 @@ namespace Wcs.WMS
 
         public async Task<bool> SendTaskStatus(TaskStatusDto taskStatusDto)
         {
-            _logger.LogInformation("开始推送WMS任务状态，订单号:{OrderCode}，执行状态:{ExecState}", 
-                taskStatusDto.OrderCode, taskStatusDto.ExecState);
+            _logger.LogInformation("开始推送WMS任务状态，订单号:{OrderCode}，任务状态:{Status}",
+                taskStatusDto.OrderCode, taskStatusDto.Status);
             
             try
             {

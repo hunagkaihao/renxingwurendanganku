@@ -38,6 +38,36 @@ namespace WarehouseManagement.StockTasks
 {
     public class StockTaskManager : StockTaskDomainService
     {
+        /// <summary>
+        /// 将 WMS 业务任务类型转换为发送给 WCS 的粗粒度任务类型。
+        /// WCS 当前只接收该值，实际类型仍由起点和终点推导。
+        /// </summary>
+        private static string ToWcsTaskType(ManageType manageType)
+        {
+            return manageType switch
+            {
+                ManageType.NPFullStockIn or
+                ManageType.HPFullStockIn or
+                ManageType.NPSupllyStockIn or
+                ManageType.HPSupplyStockIn or
+                ManageType.FullSotckUp or
+                ManageType.EmptyStockIn or
+                ManageType.HPBatchStockIn or
+                ManageType.SurplusIn => "StockIn",
+
+                ManageType.NPSortStockOut or
+                ManageType.HPSortStockOut or
+                ManageType.FullStockDown or
+                ManageType.EmptyStockOut or
+                ManageType.SealedGoodsDown or
+                ManageType.NpFullStockOut or
+                ManageType.LossOut => "StockOut",
+
+                ManageType.HpAnnualCheckDown => "CheckDown",
+                _ => manageType.ToString()
+            };
+        }
+
         private readonly IStockTaskRepository _stockTaskRepository;
         private readonly IStockTaskDetailRepository _stockTaskDetailRepository;
         private readonly ICellRepository _cellRepository;
@@ -444,7 +474,13 @@ namespace WarehouseManagement.StockTasks
                     await _stockTaskRepository.UpdateAsync(stockTask, true);
                     var reqCode = StockTaskId.ToString();
                     //创建WCS任务
-                    var result = await _wcsApiManager.StockOrderCreate(reqCode, box.ArchiveBoxRfid, stockTask.StartCellCode, stockTask.EndCellCode, (int)stockTask.ManageTypeCode,1);
+                    var result = await _wcsApiManager.StockOrderCreate(
+                        reqCode,
+                        box.ArchiveBoxRfid,
+                        stockTask.StartCellCode,
+                        stockTask.EndCellCode,
+                        ToWcsTaskType(stockTask.ManageTypeCode),
+                        1);
                     //Log.Debug("请求结果：" + result.Success + result.Message);
                     if(result == null)
                     {
@@ -491,7 +527,11 @@ namespace WarehouseManagement.StockTasks
         //获取未完成任务
         public async Task<List<StockTask>> GetNoCompleteAsync()
         {
-            return await _stockTaskRepository.GetListAsync(f=>f.ManageStatus != ManageStatus.Cancel && f.ManageStatus != ManageStatus.Complete && f.ManageStatus != ManageStatus.WaitingExecute); 
+            return await _stockTaskRepository.GetListAsync(f =>
+                f.ManageStatus != ManageStatus.Cancel &&
+                f.ManageStatus != ManageStatus.Complete &&
+                f.ManageStatus != ManageStatus.ExceptionComplete &&
+                f.ManageStatus != ManageStatus.WaitingExecute);
         }
 
         public async Task<StockTask> CreateWCSOut(string manageTypeCode, ArchiveBox archiveBox)
@@ -529,85 +569,72 @@ namespace WarehouseManagement.StockTasks
         }
         //从WCS返回更新状态
         [UnitOfWork]
-        public async Task<StockTask> UpdateStatusAsync(int stockTaskId,string execState)
+        public async Task<StockTask> UpdateStatusAsync(int stockTaskId, WcsTaskStatus status)
         {
             try
             {
-                Log.Debug($"Task:{stockTaskId.ToString()} 更新任务状态。");
+                Log.Debug($"Task:{stockTaskId} 更新任务状态为 {status}。");
                 var entity = await _stockTaskRepository.FindByIdAsync(stockTaskId);
                 if (entity == null)
                     throw new UserFriendlyException(message: "出入库任务不存在或已完成");
 
-                if(execState == "已完成")
+                switch (status)
                 {
-                    if (entity.ManageTypeCode == ManageType.NPSortStockOut)
-                    {
-                        //设置库位状态
-                        var endCell = await _cellManager.SetAsStockOutAsync((int)entity.EndCellId);
-                        var startCell = await _cellManager.SetAsStockOutAsync((int)entity.StartCellId);
-                        //更新档案盒的库位
-                        var box = await _archiveBoxManager.UpdateStockOutCellAsync(entity.ArchiveBoxRfid);
-                        //合并料箱，更新物料组盘状态
-                        //box = await _storageBoxManager.MergeDetail(box.Id);
-                        entity.SetAsCompleted();
-                    }
-                    else if(entity.ManageTypeCode == ManageType.NPFullStockIn)
-                    {
-                        //设置库位状态
-                        var endCell = await _cellManager.SetAsStockInAsync((int)entity.EndCellId);
-                        var startCell = await _cellManager.SetAsStockOutAsync((int)entity.StartCellId);
-                        //更新档案盒的库位
-                        var box = await _archiveBoxManager.UpdateStockCellAsync(entity.ArchiveBoxRfid, endCell.Id);
-                        //合并料箱，更新物料组盘状态
-                        //box = await _storageBoxManager.MergeDetail(box.Id);
-                        entity.SetAsCompleted();
-                    }
-                }
-                else if(execState == "已强制完成" || execState == "已取消")
-                {
+                    case WcsTaskStatus.Unknown:
+                        // 未知状态不改变库存和任务状态。
+                        Log.Warning($"Task:{stockTaskId} 收到未知的 WCS 任务状态。");
+                        return entity;
 
+                    case WcsTaskStatus.Accepted:
+                        // WCS 已受理，任务可能正在排队或等待资源。
+                        entity.SetManageStatus(ManageStatus.OrderCatched);
+                        break;
+
+                    case WcsTaskStatus.Executing:
+                        // WCS 已获得资源并开始执行设备动作。
+                        entity.SetManageStatus(ManageStatus.Executing);
+                        break;
+
+                    case WcsTaskStatus.Completed:
+                        // WCS 正常完成，按 WMS 任务类型提交库存变化。
+                        if (entity.ManageTypeCode == ManageType.NPSortStockOut)
+                        {
+                            // 出库完成：释放起终点库位并将档案盒标记为出库。
+                            await _cellManager.SetAsStockOutAsync((int)entity.EndCellId);
+                            await _cellManager.SetAsStockOutAsync((int)entity.StartCellId);
+                            await _archiveBoxManager.UpdateStockOutCellAsync(entity.ArchiveBoxRfid);
+                            entity.SetAsCompleted();
+                        }
+                        else if (entity.ManageTypeCode == ManageType.NPFullStockIn)
+                        {
+                            // 入库完成：目标库位入库、起点释放并绑定档案盒新库位。
+                            var endCell = await _cellManager.SetAsStockInAsync((int)entity.EndCellId);
+                            await _cellManager.SetAsStockOutAsync((int)entity.StartCellId);
+                            await _archiveBoxManager.UpdateStockCellAsync(entity.ArchiveBoxRfid, endCell.Id);
+                            entity.SetAsCompleted();
+                        }
+                        else
+                        {
+                            // 尚未定义库存收尾的任务类型只记录告警，不擅自修改库存。
+                            Log.Warning($"Task:{stockTaskId} 类型 {entity.ManageTypeCode} 尚未实现完成库存处理。");
+                        }
+                        break;
+
+                    case WcsTaskStatus.Canceled:
+                        // WCS 已取消任务，WMS 标记取消；资源释放逻辑后续按业务补充。
+                        entity.SetAsCancel();
+                        break;
+
+                    case WcsTaskStatus.ForceCompleted:
+                        // WCS 强制结束，实际库存位置需人工核对，不按正常完成提交库存。
+                        entity.SetManageStatus(ManageStatus.ExceptionComplete);
+                        break;
+
+                    default:
+                        Log.Warning($"Task:{stockTaskId} 收到未支持的 WCS 任务状态 {status}。");
+                        return entity;
                 }
-                else
-                {
-                    if (execState == "等待执行" )
-                    {
-                        return null;
-                    }
-                    if (execState == "龙门入库取货" || execState == "龙门出库取货" )
-                    {
-                        entity.SetManageStatus(ManageStatus.RobotPick);
-                    }
-                    if ( execState == "龙门入库放货" || execState == "龙门出库放货")
-                    {
-                        entity.SetManageStatus(ManageStatus.RobotPlace);
-                    }
-                    if (execState == "龙门读库存信息" || execState == "龙门回原点" || execState == "龙门在原点判断")
-                    {
-                        //entity.SetManageStatus(ManageStatus.CabinetWait);
-                        //return null;
-                    }
-                    if(execState == "密集架闭合" || execState == "密集架是否闭合判断" || execState == "密集架是否在目标位判断")
-                    {
-                        entity.SetManageStatus(ManageStatus.CabinetWait);
-                    }
-                    if (execState == "密集架入库打开" || execState == "密集架出库打开" )
-                    {
-                        entity.SetManageStatus(ManageStatus.CabinetComplete);
-                    }
-                    if(execState == "取档口打开")
-                    {
-                        //entity.SetManageStatus(ManageStatus.CabinetWait);
-                        entity.SetManageStatus(ManageStatus.StationOpen);
-                        return null;
-                    }
-                    if(execState == "最后一个盘点订单判断")
-                    {
-                        //entity.SetManageStatus(ManageStatus.CabinetWait);
-                        return null;
-                    }
-                    
-                }
-                
+
                 StockTask stockTaskRtn = await _stockTaskRepository.UpdateAsync(entity, true);
                 return stockTaskRtn;
             }
@@ -631,25 +658,22 @@ namespace WarehouseManagement.StockTasks
         //WCS回调接口
         public async Task<ResultWcsTaskDto> WcsCallBack(WcsCallBackRequest input)
         {
-            if(input.ExecState == "已完成")
+            if (!int.TryParse(input.OrderCode, out var stockTaskId))
+                return new ResultWcsTaskDto(false, "订单号格式不正确");
+
+            var stockTask = await FindByIdAsync(stockTaskId);
+            if (stockTask == null)
+                return new ResultWcsTaskDto(false, "任务不存在或已完成");
+
+            if (stockTask.ManageTypeCode == ManageType.HpAnnualCheckDown)
             {
-                var st = await FindByIdAsync(Convert.ToInt32(input.OrderCode));
-                if(st != null)
-                {
-                    //盘点任务
-                    if(st.ManageTypeCode == ManageType.HpAnnualCheckDown)
-                    {
-
-                    }
-                    //出入库任务
-                    if(st.ManageTypeCode == ManageType.NpFullStockOut)
-                    {
-
-                    }
-                }
+                // 盘点任务使用独立的盘点结果确认流程，不在普通库存状态处理器中提交库存。
+                return new ResultWcsTaskDto(true, "盘点任务状态已接收");
             }
-            return new ResultWcsTaskDto(true, "任务完成"); 
-                 
+
+            await UpdateStatusAsync(stockTaskId, input.Status);
+            return new ResultWcsTaskDto(true, "任务状态已更新");
+
         }
 
         //盘点任务结果处理
