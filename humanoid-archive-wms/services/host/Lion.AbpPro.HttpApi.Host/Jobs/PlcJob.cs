@@ -132,12 +132,10 @@ namespace Lion.AbpPro.Jobs
                                             flag = 2;
                                         }
                                         //盘点任务完成
-                                        await _checkAppService.CompleteOne(Convert.ToInt32(res.Cells[i].OrderCode), res.Cells[i].PlateCode, flag, res.Cells[i].PlateCode);
+                                        await _checkAppService.Complete(Convert.ToInt32(res.Cells[i].OrderCode), flag, res.Cells[i].PlateCode);
                                     }
-                                
                                 }
                             }
-
                         }
                     }
 

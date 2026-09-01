@@ -21,6 +21,7 @@ namespace WarehouseManagement.WcsTasks
         public bool WCSSimulation { get; set; }
         
         private static string OrderCode { get; set; }
+        private static string CellCode { get; set; }
 
         public WcsApiManager(IHttpClientFactory httpClientFactory, IOptionsSnapshot<WCSOptions> wCSOptions)
         {
@@ -61,6 +62,15 @@ namespace WarehouseManagement.WcsTasks
         /// <returns></returns>
         public async Task<ResultWcsTaskDto> CheckOrderCreate(CheckOrderCreateDto checkOrderCreate)
         {
+            if (WCSSimulation)
+            {
+                Log.Information("WCS模拟创建盘点订单");
+                var responseTest = new ResultWcsTaskDto(true, "虚拟创建盘点订单");
+                responseTest.QueryCode = "模拟测试";
+                OrderCode = checkOrderCreate.Orders[0].OrderCode;
+                CellCode = checkOrderCreate.Orders[0].CellCode;
+                return responseTest;
+            }
             if (!WCSEnable)
             {
                 Log.Information("WCS服务配置为不可用");
@@ -77,18 +87,32 @@ namespace WarehouseManagement.WcsTasks
         /// <returns></returns>
         public async Task<ResultCheckDto> CheckOrderResult(CheckOrderResultDto checkOrderCreate)
         {
+            if (WCSSimulation)
+            {
+                Log.Information("WCS模拟查询盘点结果");
+                var responseTest = new ResultCheckDto
+                {
+                    Cells = new List<Dto.Cells>
+                    {
+                       new Dto.Cells
+                       {
+                           OrderCode = OrderCode,
+                           CellCode = CellCode,
+                           PlateCode = "empty"
+                       }
+                    }
+                };
+                return responseTest;
+            }
             if (!WCSEnable)
             {
                 Log.Information("WCS服务配置为不可用");
                 return null;
             }
             Log.Information("WCS查询盘点结果");
-            var response =
-  await _httpClientFactory.GetAsync<ResultCheckDto>("TTWCS",
-  $"{WCSServer}/wcs/dispatch/order/checkOrderResultsGetByQueryCode?queryCode={Uri.EscapeDataString(checkOrderCreate.QueryCode)}");
-
+            var response = await _httpClientFactory.GetAsync<ResultCheckDto>("TTWCS",
+                                $"{WCSServer}/wcs/dispatch/order/checkOrderResultsGetByQueryCode?queryCode={Uri.EscapeDataString(checkOrderCreate.QueryCode)}");
             return response;
-
         }
         /// <summary>
         /// 查询单个订单的执行状态
@@ -125,7 +149,7 @@ namespace WarehouseManagement.WcsTasks
                         new ResultStatesDto 
                         { 
                             OrderCode = OrderCode, 
-                            ExecState = "已完成" 
+                            Status = WcsTaskStatus.Completed
                         }
                     }
                 };

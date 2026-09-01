@@ -117,7 +117,6 @@ namespace WarehouseManagement.Checks
                 }
                 else if (mCheckMain.CheckType == CheckType.AreaCodeAuto)
                 {
-
                     //获取区域所在的库位列表
                     List<Cell> cells = await _cellManager.GetCellsByAreaCode(mCheckMain.AreaCode);
                     //创建盘点清单
@@ -134,12 +133,12 @@ namespace WarehouseManagement.Checks
                         //foreach (int cId in cellids)
                         for (int i = 0; i < cells.Count; i++)
                         {
-                                //下达盘点任务
-                                var stock = await ManageCreateCheckByCell(cells[i].Id, mCheckMain.Id, cells[i].CellCode);
-                                OrderDto order = new();
-                                order.OrderCode = stock.Id.ToString();
-                                order.CellCode = stock.EndCellCode;
-                                checkOrderCreate.Orders.Add(order);
+                            //下达盘点任务
+                            var stock = await ManageCreateCheckByCell(cells[i].Id, mCheckMain.Id, cells[i].CellCode);
+                            OrderDto order = new();
+                            order.OrderCode = stock.Id.ToString();
+                            order.CellCode = stock.EndCellCode;
+                            checkOrderCreate.Orders.Add(order);
                         }
                     }
                     var req = await _wcsApiManager.CheckOrderCreate(checkOrderCreate);
@@ -147,8 +146,6 @@ namespace WarehouseManagement.Checks
                     mCheckMain.BeginTime = DateTime.Now.ToString();
                     mCheckMain.CheckStatus = CheckStatus.Executing;
                     await _checkManagement.UpdateAsync(mCheckMain, true);
-
-                    
                 }
                 return bResult;
             }
@@ -331,12 +328,9 @@ namespace WarehouseManagement.Checks
                 throw new UserFriendlyException("创建WCS任务出错.");
             }
         }
-
         
-
-
         //完成盘点任务
-        public async Task<bool> CompleteOne(int stockId, string rfid, int flag, string remark)
+        public async Task<bool> Complete(int stockId, int flag, string remark)
         {
             bool bResult = true;
             try
@@ -380,14 +374,18 @@ namespace WarehouseManagement.Checks
                     List<CheckDetail> checkDetails = await _checkDetailManager.GetCheckDetail(check.Id);
                     if(checkDetails.Count == 0)
                     {
+                        check.CheckStatus = CheckStatus.Complete;
+                        check.IsDeleted = true;
+                        await _checkManagement.UpdateAsync(check, true);
+                        
                         CheckHis ckhis =await _checkHisManager.GetHisByIdAsync(checkHisId);
                         ckhis.FinishTime = DateTime.Now.ToString();
                         ckhis.CheckStatus = CheckStatus.Complete.ToString();
                         await _checkHisManager.UpdateAsync(ckhis);
-                        //删除对应的年度任务盘点
-                        await _checkManagement.DeleteAsync(ckhis.CheckCode);
+                        
+                        /*//删除对应的年度任务盘点
+                        await _checkManagement.DeleteAsync(ckhis.CheckCode);*/
                     }
-
                 }
                 return bResult;
             }
