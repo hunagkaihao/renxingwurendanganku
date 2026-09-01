@@ -18,32 +18,42 @@ namespace WarehouseManagement.WcsTasks
         private readonly IHttpClientFactory _httpClientFactory;
         public string WCSServer { get; set; }
         public bool WCSEnable { get; set; }
+        public bool WCSSimulation { get; set; }
+        
+        private static string OrderCode { get; set; }
 
         public WcsApiManager(IHttpClientFactory httpClientFactory, IOptionsSnapshot<WCSOptions> wCSOptions)
         {
             _httpClientFactory = httpClientFactory;
             WCSServer = wCSOptions.Value.Server;
             WCSEnable = wCSOptions.Value.Enable;
+            WCSSimulation = wCSOptions.Value.Simulation;
         }
         /// <summary>
         /// 创建出入库订单
         /// </summary>
         /// <returns></returns>
-        public async Task<ResultWcsTaskDto> StockOrderCreate(string orderCode, string plateCode, string startNode, string endNode, int priority)
+        public async Task<ResultWcsTaskDto> StockOrderCreate(string orderCode, string plateCode, string startNode, string endNode, int taskType, int priority)
         {
+            if (WCSSimulation)
+            {
+                Log.Information("WCS 模拟创建出入库任务");
+                var responsetest = new ResultWcsTaskDto(true, "模拟测试");
+                OrderCode = orderCode;
+                return responsetest;
+            }
+            
             if (!WCSEnable)
             {
                 Log.Information("WCS服务配置为不可用");
                 return null;
             }
-            Log.Information("WCS创建出入库订单号："+orderCode+"档案盒号"+plateCode+"开始位置："+startNode+"终点位置："+endNode);
-            StockOrderCreateDto stockOrderCreate = new StockOrderCreateDto(orderCode, plateCode, startNode, endNode, priority);
-            var response =
-  await _httpClientFactory.PostAsync<StockOrderCreateDto, ResultWcsTaskDto>("TTWCS",
-  $"{WCSServer}/wcs/dispatch/order/stockOrderCreate", stockOrderCreate);
+            Log.Information($"WCS创建出入库 => 订单号:[{orderCode}] 档案盒号:[{plateCode}] 开始位置:[{startNode}] 终点位置:[{endNode}]");
+            StockOrderCreateDto stockOrderCreate = new StockOrderCreateDto(orderCode, plateCode, startNode, endNode, taskType, priority);
+            var response = await _httpClientFactory.PostAsync<StockOrderCreateDto, ResultWcsTaskDto>("TTWCS",
+                  $"{WCSServer}/wcs/dispatch/order/stockOrderCreate", stockOrderCreate);
 
             return response;
-
         }
         /// <summary>
         /// 创建盘点订单
@@ -57,12 +67,9 @@ namespace WarehouseManagement.WcsTasks
                 return null;
             }
             Log.Information("WCS创建盘点订单");
-            var response =
-  await _httpClientFactory.PostAsync<CheckOrderCreateDto, ResultWcsTaskDto>("TTWCS",
-  $"{WCSServer}/wcs/dispatch/order/checkOrderCreate", checkOrderCreate);
-
+            var response = await _httpClientFactory.PostAsync<CheckOrderCreateDto, ResultWcsTaskDto>("TTWCS",
+                                            $"{WCSServer}/wcs/dispatch/order/checkOrderCreate", checkOrderCreate);
             return response;
-
         }
         /// <summary>
         /// 查询盘点结果
@@ -108,18 +115,33 @@ namespace WarehouseManagement.WcsTasks
         /// <returns></returns>
         public async Task<ListResultSstatesDto> States()
         {
+            if (WCSSimulation)
+            {
+                Log.Information("WCS 模拟查询状态");
+                var responsetest = new ListResultSstatesDto
+                {
+                    orderStates = new List<ResultStatesDto>
+                    {
+                        new ResultStatesDto 
+                        { 
+                            OrderCode = OrderCode, 
+                            ExecState = "已完成" 
+                        }
+                    }
+                };
+                return responsetest;
+            }
+            
             if (!WCSEnable)
             {
                 Log.Information("WCS服务配置为不可用");
                 return null;
             }
             Log.Information("WCS查询所有订单的执行状态");
-            var response =
-  await _httpClientFactory.GetAsync<ListResultSstatesDto>("TTWCS",
-  $"{WCSServer}/wcs/dispatch/order/states");
+            var response = await _httpClientFactory.GetAsync<ListResultSstatesDto>("TTWCS",
+                            $"{WCSServer}/wcs/dispatch/order/states");
 
             return response;
-
         }
         /// <summary>
         /// 无人库暂停执行所有订单，若当前设备正在进行动作，则该动作会继续执行，直到完成，但下一步动作不会启动。在暂停期间，请勿改变设备状态，否则恢复执行后会出现难以预料的问题
@@ -231,25 +253,27 @@ namespace WarehouseManagement.WcsTasks
         /// <returns></returns>
         public async Task<OpenDoorForOrderDto> OpenDoorForOrder(OpenDoorDto orderCode)
         {
+            if (WCSSimulation)
+            {
+                Log.Information("WCS 模拟打开取档口");
+                var responsetest = new OpenDoorForOrderDto
+                {
+                    success = true,
+                    message = "模拟测试"
+                };
+                return responsetest;
+            }
             if (!WCSEnable)
             { 
                 Log.Information("WCS服务配置为不可用");
                 return null;
             }
             Log.Information("WCS打开取档口");
-            var response =
-  await _httpClientFactory.PostAsync<OpenDoorDto, OpenDoorForOrderDto>("TTWCS",
-  $"{WCSServer}/wcs/dispatch/order/doorCanOpenByOrder", orderCode);
+            var response = await _httpClientFactory.PostAsync<OpenDoorDto, OpenDoorForOrderDto>("TTWCS",
+                                                $"{WCSServer}/wcs/dispatch/order/doorCanOpenByOrder", orderCode);
 
             return response;
-
         }
-
-
-
-
-
-
 
         /// <summary>
         /// 龙门机械手回原点

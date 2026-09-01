@@ -35,15 +35,13 @@ namespace WarehouseManagement.StockTasks
         }
         [HttpPost("pageDetail")]
         [SwaggerOperation(summary: "获取任务清单明细", Tags = new[] { "StockTasks" })]
-        public async Task<PagedResultDto<StockTaskDetailDto>> GetPagingDetailListAsync(
-    PagingStockTaskDetailInput input)
+        public async Task<PagedResultDto<StockTaskDetailDto>> GetPagingDetailListAsync(PagingStockTaskDetailInput input)
         {
             return await _stockTaskAppService.GetPagingDetailListAsync(input);
         }
         [HttpPost("pageDetailByArchiveId")]
         [SwaggerOperation(summary: "获取档案出入库任务清单明细", Tags = new[] { "StockTasks" })]
-        public async Task<PagedResultDto<StockTaskDetailDto>> GetPagingDetailListByArchiveIdAsync(
-    PagingStockTaskDetailInput input)
+        public async Task<PagedResultDto<StockTaskDetailDto>> GetPagingDetailListByArchiveIdAsync(PagingStockTaskDetailInput input)
         {
             return await _stockTaskAppService.GetPagingDetailListByArchiveIdAsync(input);
         }
@@ -139,8 +137,6 @@ namespace WarehouseManagement.StockTasks
         {
             await _stockTaskAppService.CreateBatTest();
         }
-
-
-
+        
     }
 }

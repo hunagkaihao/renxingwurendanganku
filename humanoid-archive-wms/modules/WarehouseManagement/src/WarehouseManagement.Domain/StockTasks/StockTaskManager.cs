@@ -444,7 +444,7 @@ namespace WarehouseManagement.StockTasks
                     await _stockTaskRepository.UpdateAsync(stockTask, true);
                     var reqCode = StockTaskId.ToString();
                     //创建WCS任务
-                    var result = await _wcsApiManager.StockOrderCreate(reqCode, box.ArchiveBoxRfid, stockTask.StartCellCode, stockTask.EndCellCode, 1);
+                    var result = await _wcsApiManager.StockOrderCreate(reqCode, box.ArchiveBoxRfid, stockTask.StartCellCode, stockTask.EndCellCode, (int)stockTask.ManageTypeCode,1);
                     //Log.Debug("请求结果：" + result.Success + result.Message);
                     if(result == null)
                     {
@@ -459,7 +459,7 @@ namespace WarehouseManagement.StockTasks
                     //记录日志
                     try
                     {
-                        Log.Warning("用户" + "  下达了入库任务" + stockTask.Id + "  方法名:" + System.Reflection.MethodBase.GetCurrentMethod().Name);
+                        Log.Warning($"用户 下达了入库任务:[{stockTask.Id}] 方法名:[{System.Reflection.MethodBase.GetCurrentMethod().Name}]");
                         return true;
                     }
                     catch (Exception)
@@ -607,8 +607,6 @@ namespace WarehouseManagement.StockTasks
                     }
                     
                 }
-                    
-          
                 
                 StockTask stockTaskRtn = await _stockTaskRepository.UpdateAsync(entity, true);
                 return stockTaskRtn;

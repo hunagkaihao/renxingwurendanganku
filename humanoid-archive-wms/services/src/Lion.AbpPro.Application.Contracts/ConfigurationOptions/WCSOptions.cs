@@ -16,5 +16,9 @@ namespace Lion.AbpPro.ConfigurationOptions
         /// 是否可用
         /// </summary>
         public bool Enable { get; set; }
+        /// <summary>
+        /// 是否模拟运行
+        /// </summary>
+        public bool Simulation { get; set; }
     }
 }
