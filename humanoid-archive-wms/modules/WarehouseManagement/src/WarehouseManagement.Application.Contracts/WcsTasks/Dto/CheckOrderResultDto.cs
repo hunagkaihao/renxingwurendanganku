@@ -9,5 +9,7 @@ namespace WarehouseManagement.WcsTasks.Dto
     public class CheckOrderResultDto
     {
         public string QueryCode { get; set; }
+        public string OrderCode { get; set; }
+        public string CellCode { get; set; }
     }
 }
