@@ -63,7 +63,14 @@ namespace WarehouseManagement.Cells
                     {
                         CreateCellDto cell = new CreateCellDto();
                         cell.CellType = "Cell";
-                        cell.CellCode = z.ToString().PadLeft(2, '0') + '-' + x.ToString().PadLeft(2, '0') + '-' + y.ToString().PadLeft(2, '0');
+
+                        // WMS 与 WCS 统一使用“排D2-列D3-层D2”的库位码协议。
+                        // 坐标字段含义保持为 z=排、x=列、y=层，例如第1排、第1列、第1层生成 01-001-01。
+                        // 列号必须补齐三位，否则 WCS 按自身标准生成盘点结果时会返回 01-001-01，
+                        // 而 WMS 若保存成 01-01-01，将无法按 CellCode 匹配出入库库位和盘点冻结快照。
+                        cell.CellCode = z.ToString().PadLeft(2, '0') + '-' +
+                                        x.ToString().PadLeft(3, '0') + '-' +
+                                        y.ToString().PadLeft(2, '0');
                         cell.CellName = cell.CellCode;
                         cell.WarehouseId = 1;
                         await _cellManagement.CreateAsync(cell.CellCode, cell.CellType, cell.CellName, cell.WarehouseId);
