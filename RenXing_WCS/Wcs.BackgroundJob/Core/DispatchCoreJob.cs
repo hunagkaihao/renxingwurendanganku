@@ -802,7 +802,13 @@ public class DispatchCoreJob : IHostedService, IDisposable
                 ResultsDto ret = new ResultsDto();
                 foreach (var res in results)
                 {
-                    ret.cells.Add(new Cell() { cellCode = res.CellCode, orderCode = res.OrderCode, plateCode = res.PlateCode });
+                    ret.cells.Add(new Cell()
+                    {
+                        cellCode = res.CellCode,
+                        orderCode = res.OrderCode,
+                        status = ToCheckCellStatus(res.PlateCode),
+                        plateCode = res.PlateCode
+                    });
                 }
 
                 ChkStatusDto chkStatusDto = new ChkStatusDto()
@@ -1053,6 +1059,21 @@ public class DispatchCoreJob : IHostedService, IDisposable
     {
         public bool handleResult;
         public string handleInfo;
+    }
+
+    /// <summary>
+    /// 将盘点结果中保存的现场值转换为明确的扫描状态，供 WMS 区分等待、空库位和扫码异常。
+    /// </summary>
+    private static WcsCheckCellStatus ToCheckCellStatus(string plateCode)
+    {
+        return plateCode switch
+        {
+            "waiting" => WcsCheckCellStatus.Waiting,
+            "empty" => WcsCheckCellStatus.Empty,
+            "error" => WcsCheckCellStatus.ScanError,
+            _ when !string.IsNullOrWhiteSpace(plateCode) => WcsCheckCellStatus.Scanned,
+            _ => WcsCheckCellStatus.Unknown
+        };
     }
     /// <summary>
     /// 处理已完成的调度任务

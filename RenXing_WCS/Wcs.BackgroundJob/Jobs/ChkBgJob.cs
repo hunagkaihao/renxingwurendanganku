@@ -108,16 +108,22 @@ public class ChkBgJob : IHostedService, IDisposable
                             continue;
                         }
 
-                        //更新库位的盘点结果
+                        // PLC 使用 0 表示当前库位没有扫描到档案盒。
+                        // WCS 在此把设备层数值转换成明确的业务事实 empty，
+                        // 避免 WMS 把字符串 "0" 误认为一个真实档案盒条码。
+                        string actualPlateCode = barcode == 0 ? "empty" : barcode.ToString();
+
+                        // 更新的是现场实际扫描结果，不读取也不复制 WMS 账面绑定关系。
+                        // 账面值由 WMS 在盘点计划下发时冻结，最终账实比较也必须由 WMS 完成。
                         bool ret = _orderManager.UpdatePlateCodeOfChkOrderRsltAsync(
-                            msg.OrderCode, cell.CellCode, barcode.ToString()).Result;
+                            msg.OrderCode, cell.CellCode, actualPlateCode).Result;
                         if (!ret)
                         {
-                            _logger.Error($"收到PLC的单库位盘点完成信号，但更新OrderCode为{msg.OrderCode}，CellCode为{cell.CellCode}的盘点结果为{barcode}失败");
+                            _logger.Error($"收到PLC的单库位盘点完成信号，但更新OrderCode为{msg.OrderCode}，CellCode为{cell.CellCode}的盘点结果为{actualPlateCode}失败");
                             continue;
                         }
 
-                        _logger.Info($"收到PLC的单库位盘点完成信号，成功更新OrderCode为{msg.OrderCode}，CellCode为{cell.CellCode}的盘点结果为{barcode}");
+                        _logger.Info($"收到PLC的单库位盘点完成信号，成功更新OrderCode为{msg.OrderCode}，CellCode为{cell.CellCode}的现场条码为{actualPlateCode}");
                     }
 
                     if (_plcHelper.IsPlcTagValueChange("Plc1", "AllCheckFinished"))

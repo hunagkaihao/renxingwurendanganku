@@ -206,11 +206,13 @@ public class OrderManager : ISingletonDependency
                 throw new Exception(failedReason);
 
             await _orderRepository.InsertAsync(chkOrder).ConfigureAwait(false);
-            //将盘点结果预先写入数据库，等待更新
+            // 将盘点结果预先写入数据库，初始状态必须是 waiting。
+            // 不能初始化为 empty：empty 表示 PLC 已实际扫描并确认库位为空；
+            // 如果初始化为 empty，WMS 会在机械手尚未扫描时误判为盘点完成并生成盘盈盘亏结果。
             List<string> cellsToChk = chkOrder.OutputCellCodesToChk();
             foreach (string cellCode in cellsToChk)
             {
-                DispatchChkOrderRslt rslt = new DispatchChkOrderRslt(chkOrder.OrderCode, cellCode, "empty", queryCode);
+                DispatchChkOrderRslt rslt = new DispatchChkOrderRslt(chkOrder.OrderCode, cellCode, "waiting", queryCode);
                 await AddChkOrderResultAsync(rslt).ConfigureAwait(false);
             }
 

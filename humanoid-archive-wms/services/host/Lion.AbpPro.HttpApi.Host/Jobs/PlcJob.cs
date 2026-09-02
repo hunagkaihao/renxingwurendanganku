@@ -26,6 +26,53 @@ namespace Lion.AbpPro.Jobs
         private readonly CheckManager _checkManager;
         private readonly PlanManager _planManager;
 
+        /// <summary>
+        /// 将 WCS 现场扫描事实与 WMS 下发时冻结的账面条码做精确比较。
+        /// Flag 沿用现有盘点历史逻辑：2=一致、3=盘亏、4=盘盈、5=错位、6=扫描异常。
+        /// WCS 只提供实际扫描事实，盘盈盘亏等业务结论必须由 WMS 在这里生成。
+        /// </summary>
+        private static (bool CanComplete, int Flag, string Remark) CompareCheckResult(
+            string expectedPlateCode,
+            Cells actualResult)
+        {
+            string expected = expectedPlateCode?.Trim() ?? string.Empty;
+            string actual = actualResult.PlateCode?.Trim() ?? string.Empty;
+
+            switch (actualResult.Status)
+            {
+                case WcsCheckCellStatus.Waiting:
+                case WcsCheckCellStatus.Scanning:
+                    // 尚未形成最终现场事实，继续等待下一次轮询或回调。
+                    return (false, 0, "等待现场扫描完成");
+
+                case WcsCheckCellStatus.Empty:
+                    return string.IsNullOrEmpty(expected)
+                        ? (true, 2, "盘点一致：账面为空，现场扫描也为空")
+                        : (true, 3, $"盘亏：账面档案盒为{expected}，现场扫描为空");
+
+                case WcsCheckCellStatus.Scanned:
+                    if (string.IsNullOrEmpty(actual))
+                        return (true, 6, "扫描异常：WCS标记扫描成功但未返回实际条码");
+
+                    if (string.IsNullOrEmpty(expected))
+                        return (true, 4, $"盘盈：账面为空，现场扫描到档案盒{actual}");
+
+                    if (string.Equals(expected, actual, StringComparison.Ordinal))
+                        return (true, 2, $"盘点一致：账面与现场均为档案盒{actual}");
+
+                    return (true, 5, $"错位：账面档案盒为{expected}，现场扫描为{actual}");
+
+                case WcsCheckCellStatus.ScanError:
+                    return (true, 6, "扫码异常：二维码未能识别");
+
+                case WcsCheckCellStatus.DeviceError:
+                    return (true, 6, "设备异常：机械定位、通讯或扫码设备执行失败");
+
+                default:
+                    return (true, 6, $"扫描异常：无法识别的现场状态{actualResult.Status}");
+            }
+        }
+
         public ScheduledDemoJob(StockTaskManager stockTaskManager,WcsApiManager wcsApiManager, CheckAppService checkAppService, CheckManager checkManager, PlanManager planManager)
         {
             mTimer = new Timer(DoWork, null, Timeout.Infinite, Timeout.Infinite);
@@ -107,34 +154,36 @@ namespace Lion.AbpPro.Jobs
                         {
                             for (var i = 0; i < res.Cells.Count; i++)
                             {
-                                if (res.Cells[i].PlateCode != "waiting")
+                                Cells actualResult = res.Cells[i];
+
+                                // WCS 的扫描段 OrderCode 不再等于单个 StockTask.Id，
+                                // 因此使用“当前盘点计划 + 实际库位码”定位 WMS 冻结的单库位快照任务。
+                                // PlanId 条件用于隔离不同批次，避免历史未清理任务中存在相同库位码时串单。
+                                var stock = stocks.Find(f =>
+                                    f.ManageTypeCode == ManageType.HpAnnualCheckDown &&
+                                    f.PlanId == check[0].Id &&
+                                    string.Equals(f.EndCellCode, actualResult.CellCode, StringComparison.Ordinal));
+                                if (stock == null)
                                 {
-                                    //处理盘点结果
-                                    await _stockTaskManager.CheckResults(Convert.ToInt32(res.Cells[i].OrderCode), res.Cells[i].PlateCode);
-                                    var stock = stocks.Find(f => f.Id == Convert.ToInt32(res.Cells[i].OrderCode));
-                                    if (stock != null)
-                                    {
-                                        var flag = 1;
-                                        if (res.Cells[i].PlateCode == "empty" && stock.ArchiveBoxRfid == "")
-                                        {
-                                            flag = 2;
-                                        }
-                                        else if (res.Cells[i].PlateCode == "empty" && stock.ArchiveBoxRfid != "")
-                                        {
-                                            flag = 3;
-                                        }
-                                        else if (res.Cells[i].PlateCode != "empty" && stock.ArchiveBoxRfid == "")
-                                        {
-                                            flag = 4;
-                                        }
-                                        else if (res.Cells[i].PlateCode != "empty" && stock.ArchiveBoxRfid != "")
-                                        {
-                                            flag = 2;
-                                        }
-                                        //盘点任务完成
-                                        await _checkAppService.Complete(Convert.ToInt32(res.Cells[i].OrderCode), flag, res.Cells[i].PlateCode);
-                                    }
+                                    Log.Warning("收到WCS盘点结果但未找到库位快照任务：CellCode={CellCode}, OrderCode={OrderCode}",
+                                        actualResult.CellCode, actualResult.OrderCode);
+                                    continue;
                                 }
+
+                                var comparison = CompareCheckResult(stock.ArchiveBoxRfid, actualResult);
+                                if (!comparison.CanComplete)
+                                    continue;
+
+                                // 盘点结果只写入盘点历史，不直接修改档案盒正式库位或库存。
+                                // 差异必须在 WMS 审核确认后再执行库存调整。
+                                await _checkAppService.Complete(
+                                    stock.Id,
+                                    comparison.Flag,
+                                    comparison.Remark,
+                                    actualResult.Status == WcsCheckCellStatus.Scanned
+                                        ? actualResult.PlateCode
+                                        : string.Empty);
+                                await _stockTaskManager.CompleteCheckTaskAsync(stock.Id);
                             }
                         }
                     }

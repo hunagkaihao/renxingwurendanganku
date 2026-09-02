@@ -655,6 +655,23 @@ namespace WarehouseManagement.StockTasks
         {
             return await _stockTaskRepository.GetListAsync(x => x.ManageTypeCode == ManageType.HpAnnualCheckDown);
         }
+
+        /// <summary>
+        /// 标记单库位盘点执行任务完成。
+        /// 此方法只结束任务生命周期，不修改档案盒绑定和库位库存状态；
+        /// 盘盈、盘亏、错位等差异必须由 WMS 审核后通过独立业务流程处理。
+        /// </summary>
+        public async Task<StockTask> CompleteCheckTaskAsync(int stockTaskId)
+        {
+            StockTask entity = await _stockTaskRepository.FindByIdAsync(stockTaskId);
+            if (entity == null)
+                throw new UserFriendlyException("盘点任务不存在或已完成");
+
+            entity.ManageEndTime = DateTime.Now.ToString();
+            entity.SetAsCompleted();
+            return await _stockTaskRepository.UpdateAsync(entity, true);
+        }
+
         //WCS回调接口
         public async Task<ResultWcsTaskDto> WcsCallBack(WcsCallBackRequest input)
         {
@@ -674,35 +691,6 @@ namespace WarehouseManagement.StockTasks
             await UpdateStatusAsync(stockTaskId, input.Status);
             return new ResultWcsTaskDto(true, "任务状态已更新");
 
-        }
-
-        //盘点任务结果处理
-        public async Task CheckResults(int stockId,string plateCode)
-        {
-            try
-            {
-                //WCS盘点执行完成
-                if (plateCode != "waiting")
-                {
-                    var entity = await _stockTaskRepository.FindByIdAsync(stockId);
-                    if (entity == null)
-                        throw new UserFriendlyException(message: "出入库任务不存在或已完成");
-                    //设置库位状态
-                    var endCell = await _cellManager.SetAsStockInAsync((int)entity.EndCellId);
-                    //var startCell = await _cellManager.SetAsStockOutAsync((int)entity.StartCellId);
-                    entity.SetAsCompleted();
-                    StockTask stockTaskRtn = await _stockTaskRepository.UpdateAsync(entity, true);
-                    
-                }
-                else
-                {
-                    return;
-                }
-            }
-            catch
-            {
-
-            }
         }
 
         //计划任务结果处理

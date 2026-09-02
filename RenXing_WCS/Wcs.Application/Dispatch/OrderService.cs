@@ -52,6 +52,22 @@ public class OrderService : WcsAppService, IOrderService
         };
     }
 
+    /// <summary>
+    /// 根据 WCS 保存的现场盘点值生成明确的采集状态。
+    /// PlateCode 只保存现场事实：waiting、empty、error 或扫码得到的数字条码。
+    /// </summary>
+    private static WcsCheckCellStatus ToCheckCellStatus(string plateCode)
+    {
+        return plateCode switch
+        {
+            "waiting" => WcsCheckCellStatus.Waiting,
+            "empty" => WcsCheckCellStatus.Empty,
+            "error" => WcsCheckCellStatus.ScanError,
+            _ when !string.IsNullOrWhiteSpace(plateCode) => WcsCheckCellStatus.Scanned,
+            _ => WcsCheckCellStatus.Unknown
+        };
+    }
+
     public OrderService(
         ILogger<OrderService> logger,
         OrderManager orderManager,
@@ -313,9 +329,10 @@ public class OrderService : WcsAppService, IOrderService
             DispatchOrder chkOrder = new DispatchOrder(para.orderCode, EnumDispatchOrderType.CheckDown,
                 para.startCellCode, para.endCellCode, para.priority);
 
-            bool ret = await _orderManager.AddCheckDownOrderAsync(chkOrder, para.orderCode);
+            string queryCode = string.IsNullOrWhiteSpace(para.queryCode) ? para.orderCode : para.queryCode;
+            bool ret = await _orderManager.AddCheckDownOrderAsync(chkOrder, queryCode);
             if (ret)
-                return new AddChkOrderResultDto() { success = true, message = "添加成功", queryCode = para.orderCode };
+                return new AddChkOrderResultDto() { success = true, message = "添加成功", queryCode = queryCode };
             else
                 return new AddChkOrderResultDto() { success = false, message = "添加失败", queryCode = "" };
         }
@@ -342,7 +359,8 @@ public class OrderService : WcsAppService, IOrderService
             DispatchOrder chkOrder = new DispatchOrder(para.orderCode, EnumDispatchOrderType.CheckDown,
                 para.startCellCode, para.endCellCode, para.priority);
 
-            bool ret = await _orderManager.AddCheckDownOrderAsync(chkOrder, para.orderCode);
+            string queryCode = string.IsNullOrWhiteSpace(para.queryCode) ? para.orderCode : para.queryCode;
+            bool ret = await _orderManager.AddCheckDownOrderAsync(chkOrder, queryCode);
             if (ret)
             {
                 ChkStatusDto chkStatusDto = new ChkStatusDto()
@@ -352,7 +370,7 @@ public class OrderService : WcsAppService, IOrderService
                 };
                 bool flag = await _wmsService.SendChkStatus(chkStatusDto);
                 _logger.Info($"订单号：{para.orderCode}推送盘点状态：{flag}");
-                return new AddChkOrderResultDto() { success = true, message = "添加成功", queryCode = para.orderCode };
+                return new AddChkOrderResultDto() { success = true, message = "添加成功", queryCode = queryCode };
             }
             else
                 return new AddChkOrderResultDto() { success = false, message = "添加失败", queryCode = "" };
@@ -377,7 +395,13 @@ public class OrderService : WcsAppService, IOrderService
             CheckOrderResultsDto ret = new CheckOrderResultsDto();
             foreach (var r in results)
             {
-                ret.cells.Add(new CheckOrderResultDto() { cellCode = r.CellCode, orderCode = r.OrderCode, plateCode = r.PlateCode });
+                ret.cells.Add(new CheckOrderResultDto()
+                {
+                    cellCode = r.CellCode,
+                    orderCode = r.OrderCode,
+                    status = ToCheckCellStatus(r.PlateCode),
+                    plateCode = r.PlateCode
+                });
             }
             return ret;
         }
@@ -402,7 +426,13 @@ public class OrderService : WcsAppService, IOrderService
             CheckOrderResultsDto ret = new CheckOrderResultsDto();
             foreach (var r in results)
             {
-                ret.cells.Add(new CheckOrderResultDto() { cellCode = r.CellCode, orderCode = r.OrderCode, plateCode = r.PlateCode });
+                ret.cells.Add(new CheckOrderResultDto()
+                {
+                    cellCode = r.CellCode,
+                    orderCode = r.OrderCode,
+                    status = ToCheckCellStatus(r.PlateCode),
+                    plateCode = r.PlateCode
+                });
             }
             return ret;
         }

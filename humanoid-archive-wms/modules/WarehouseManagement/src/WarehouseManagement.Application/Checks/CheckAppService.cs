@@ -53,6 +53,65 @@ namespace WarehouseManagement.Checks
         private readonly CheckDetailHisManager _checkDetailHisManager;
         private readonly ICurrentUser _currentUser;
         private readonly TaskHisManager _taskHisManager;
+
+        /// <summary>
+        /// 将 WMS 选中的库位规划为 WCS 可执行的连续扫描段。
+        /// WCS/PLC 的单条盘点命令要求起点和终点位于同一排、同一层，
+        /// 因此先按排和层分组，再按列号拆分连续区间；相邻扫描段交替方向，
+        /// 形成蛇形路线，减少龙门每段结束后回到同一侧造成的无效移动。
+        /// </summary>
+        private static List<OrderDto> BuildCheckSegments(int checkId, IReadOnlyCollection<Cell> cells)
+        {
+            List<OrderDto> segments = new();
+            int sequence = 1;
+            bool reverseDirection = false;
+
+            var groups = cells
+                .Where(x => x.CellType == CellType.Cell)
+                .GroupBy(x => new { Row = x.Cell_z, Layer = x.Cell_y })
+                .OrderBy(x => x.Key.Row)
+                .ThenBy(x => x.Key.Layer);
+
+            foreach (var group in groups)
+            {
+                List<Cell> orderedCells = group.OrderBy(x => x.Cell_x).ToList();
+                List<Cell> continuousCells = new();
+
+                void AddSegment()
+                {
+                    if (continuousCells.Count == 0)
+                        return;
+
+                    Cell start = reverseDirection ? continuousCells[^1] : continuousCells[0];
+                    Cell end = reverseDirection ? continuousCells[0] : continuousCells[^1];
+
+                    segments.Add(new OrderDto
+                    {
+                        OrderCode = $"{checkId}-{sequence:D4}",
+                        StartCellCode = start.CellCode,
+                        EndCellCode = end.CellCode,
+                        Sequence = sequence
+                    });
+
+                    sequence++;
+                    reverseDirection = !reverseDirection;
+                    continuousCells.Clear();
+                }
+
+                foreach (Cell cell in orderedCells)
+                {
+                    if (continuousCells.Count > 0 && cell.Cell_x != continuousCells[^1].Cell_x + 1)
+                        AddSegment();
+
+                    continuousCells.Add(cell);
+                }
+
+                AddSegment();
+            }
+
+            return segments;
+        }
+
         public CheckAppService(ICheckRepository checkRepository, CheckManager checkManagement
             , IGoodsRepository goodsRepository, ICheckDetailRepository checkDetailRepository
             , ICurrentUser currentUser, CellManager cellManager, StockTaskManager stockTaskManager,
@@ -96,8 +155,8 @@ namespace WarehouseManagement.Checks
         [AllowAnonymous]
         public async Task<bool> SetAsExecutingAsync(IdIntInput input)
         {
-            bool bResult = true;
-            //?判断是否存在出入库任务
+            // 盘点期间不允许出入库任务改变现场档案盒位置，
+            // 否则 WMS 冻结的账面快照会与扫描过程发生并发漂移。
             if (await _stockTaskManager.ExistInOutManage())
             {
                 throw new UserFriendlyException("盘点计划下达过程中不允许有档案盒的出入库任务!");
@@ -110,44 +169,47 @@ namespace WarehouseManagement.Checks
                 {
                     throw new UserFriendlyException("计划不能重复下达!");
                 }
-                if (mCheckMain.CheckType == CheckType.AnnualCheck)
+                List<Cell> cells = mCheckMain.CheckType switch
                 {
-                    //创建年度盘点明细
+                    // 年度盘点加载全库；0-0-0 是现有区域编码约定中的全库标识。
+                    CheckType.AnnualCheck => await _cellManager.GetCellsByAreaCode("0-0-0"),
 
-                }
-                else if (mCheckMain.CheckType == CheckType.AreaCodeAuto)
+                    // 分区盘点只加载人工选择区域内的库位。
+                    CheckType.AreaCodeAuto => await _cellManager.GetCellsByAreaCode(mCheckMain.AreaCode),
+
+                    _ => throw new UserFriendlyException($"盘点类型 {mCheckMain.CheckType} 暂未实现自动下发")
+                };
+
+                if (cells == null || cells.Count == 0)
+                    throw new UserFriendlyException("盘点范围内没有可执行的库位");
+
+                // 在向 WCS 下发前逐库位创建 StockTask 和 CheckDetail。
+                // StockTask.ArchiveBoxRfid 与 CheckDetail.StockBarcode 保存此刻的账面绑定，
+                // 这就是本次盘点冻结快照；后续必须与 WCS 回传的现场条码精确比较。
+                foreach (Cell cell in cells)
+                    await ManageCreateCheckByCell(cell.Id, mCheckMain.Id, cell.CellCode);
+
+                List<OrderDto> segments = BuildCheckSegments(mCheckMain.Id, cells);
+                if (segments.Count == 0)
+                    throw new UserFriendlyException("盘点范围无法生成有效的连续扫描段");
+
+                CheckOrderCreateDto checkOrderCreate = new()
                 {
-                    //获取区域所在的库位列表
-                    List<Cell> cells = await _cellManager.GetCellsByAreaCode(mCheckMain.AreaCode);
-                    //创建盘点清单
-                    //List<CheckDetail> checkDetails = new List<CheckDetail>();
-                    Cell endCell = await _cellManager.GetByCodeAsync("12002");
-                    CheckOrderCreateDto checkOrderCreate = new()
-                    {
-                        Priority = 1,
-                        Orders = new(),
-                    };
-                    
-                    if (cells.Count > 0)
-                    {
-                        //foreach (int cId in cellids)
-                        for (int i = 0; i < cells.Count; i++)
-                        {
-                            //下达盘点任务
-                            var stock = await ManageCreateCheckByCell(cells[i].Id, mCheckMain.Id, cells[i].CellCode);
-                            OrderDto order = new();
-                            order.OrderCode = stock.Id.ToString();
-                            order.CellCode = stock.EndCellCode;
-                            checkOrderCreate.Orders.Add(order);
-                        }
-                    }
-                    var req = await _wcsApiManager.CheckOrderCreate(checkOrderCreate);
-                    mCheckMain.BatchNo = req.QueryCode;
-                    mCheckMain.BeginTime = DateTime.Now.ToString();
-                    mCheckMain.CheckStatus = CheckStatus.Executing;
-                    await _checkManagement.UpdateAsync(mCheckMain, true);
-                }
-                return bResult;
+                    QueryCode = mCheckMain.CheckCode,
+                    Priority = 1,
+                    Orders = segments
+                };
+
+                ResultWcsTaskDto req = await _wcsApiManager.CheckOrderCreate(checkOrderCreate);
+                if (req == null || !req.Success)
+                    throw new UserFriendlyException(req?.Message ?? "WCS盘点任务下发失败");
+
+                mCheckMain.BatchNo = req.QueryCode;
+                mCheckMain.BeginTime = DateTime.Now.ToString();
+                mCheckMain.CheckStatus = CheckStatus.Executing;
+                await _checkManagement.UpdateAsync(mCheckMain, true);
+
+                return true;
             }
             catch (Exception ex)
             {
@@ -330,7 +392,7 @@ namespace WarehouseManagement.Checks
         }
         
         //完成盘点任务
-        public async Task<bool> Complete(int stockId, int flag, string remark)
+        public async Task<bool> Complete(int stockId, int flag, string remark, string actualPlateCode)
         {
             bool bResult = true;
             try
@@ -362,7 +424,7 @@ namespace WarehouseManagement.Checks
                     foreach(CheckDetail ck in checkDetail)
                     {
                         //盘点子表加入历史表
-                        bResult = await CreateCheckDetailHis(checkHisId, ck, flag, remark);
+                        bResult = await CreateCheckDetailHis(checkHisId, ck, flag, remark, actualPlateCode);
                         if (!bResult)
                         {
                             return bResult;
@@ -422,7 +484,12 @@ namespace WarehouseManagement.Checks
         }
 
         //创建盘点明细历史记录
-        public async Task<bool> CreateCheckDetailHis(int checkHisId, CheckDetail checkDetail, int flag, string remark)
+        public async Task<bool> CreateCheckDetailHis(
+            int checkHisId,
+            CheckDetail checkDetail,
+            int flag,
+            string remark,
+            string actualPlateCode)
         {
             bool bResult = true;
             try
@@ -443,7 +510,9 @@ namespace WarehouseManagement.Checks
                     Checker = checkDetail.Checker,
                     BeginTime = checkDetail.BeginTime,
                     FinishTime = DateTime.Now.ToString(),
-                    BoxBarcode = checkDetail.BoxBarcode
+                    // StockBarcode 保存 WMS 冻结的账面条码，BoxBarcode 保存 WCS/PLC 现场实扫条码。
+                    // 两个值必须同时保留，后续审核才能重现盘点时的账实差异。
+                    BoxBarcode = actualPlateCode ?? string.Empty
                 };
                 checkDetailHisDto.Remark = remark;
                 checkDetailHisDto.Checker = "system";
@@ -464,6 +533,20 @@ namespace WarehouseManagement.Checks
                 {
                     checkDetailHisDto.RealAmount_1 = 1;
                     checkDetailHisDto.ProfitLossAmount = -1;
+                }
+                //错位：账面和现场都有档案盒，但实际条码与账面条码不一致。
+                else if (flag == 5)
+                {
+                    checkDetailHisDto.RealAmount_1 = 1;
+                    checkDetailHisDto.ProfitLossAmount = 0;
+                    checkDetailHisDto.Remark = remark;
+                }
+                //扫描或设备异常：保留账面快照，不自动形成库存调整数量。
+                else if (flag == 6)
+                {
+                    checkDetailHisDto.RealAmount_1 = 0;
+                    checkDetailHisDto.ProfitLossAmount = 0;
+                    checkDetailHisDto.Remark = remark;
                 }
                 else
                 {

@@ -336,19 +336,15 @@ namespace WarehouseManagement.Cells
             List<Cell> iLists = null;
             if (areaCode == "0-0-0")
             {
-                //iLists = _cellRepository.GetAll().Where(x => x.CellType == "Cell").Select(x => x.Id).ToList();
+                // 0-0-0 表示全库盘点。这里只返回稳定的物理顺序，
+                // 真正的蛇形路线和连续扫描段由 CheckAppService 统一规划，
+                // 避免“查询库位”和“决定设备执行路线”两个职责混在一起。
                 List<Cell> cellsAll = await _cellRepository.GetListAsync(x => x.CellType == CellType.Cell);
-                iLists = new List<Cell>();
-                for (int ii = 0; ii < cellsAll.Max(x => x.Cell_z); ii++)
-                {
-                    for (int i = 1; i < cellsAll.Max(x => x.Cell_y) + 1; i++)
-                    {
-
-                        iLists.AddRange(cellsAll.Where(x => x.Cell_y == i & x.Cell_z == ii).OrderBy(y => y.Cell_x));
-
-                    }
-                }
-                return iLists;
+                return cellsAll
+                    .OrderBy(x => x.Cell_z)
+                    .ThenBy(x => x.Cell_y)
+                    .ThenBy(x => x.Cell_x)
+                    .ToList();
             }
             try
             {

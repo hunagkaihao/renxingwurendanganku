@@ -62,13 +62,22 @@ namespace WarehouseManagement.WcsTasks
         /// <returns></returns>
         public async Task<ResultWcsTaskDto> CheckOrderCreate(CheckOrderCreateDto checkOrderCreate)
         {
+            if (checkOrderCreate?.Orders == null || checkOrderCreate.Orders.Count == 0)
+                return new ResultWcsTaskDto(false, "盘点计划没有可下发的扫描段");
+
+            string queryCode = string.IsNullOrWhiteSpace(checkOrderCreate.QueryCode)
+                ? $"CHECK-{DateTime.Now:yyyyMMddHHmmssfff}"
+                : checkOrderCreate.QueryCode;
+
             if (WCSSimulation)
             {
                 Log.Information("WCS模拟创建盘点订单");
                 var responseTest = new ResultWcsTaskDto(true, "虚拟创建盘点订单");
-                responseTest.QueryCode = "模拟测试";
+                responseTest.QueryCode = queryCode;
                 OrderCode = checkOrderCreate.Orders[0].OrderCode;
-                CellCode = checkOrderCreate.Orders[0].CellCode;
+                CellCode = string.IsNullOrWhiteSpace(checkOrderCreate.Orders[0].StartCellCode)
+                    ? checkOrderCreate.Orders[0].CellCode
+                    : checkOrderCreate.Orders[0].StartCellCode;
                 return responseTest;
             }
             if (!WCSEnable)
@@ -76,10 +85,42 @@ namespace WarehouseManagement.WcsTasks
                 Log.Information("WCS服务配置为不可用");
                 return null;
             }
-            Log.Information("WCS创建盘点订单");
-            var response = await _httpClientFactory.PostAsync<CheckOrderCreateDto, ResultWcsTaskDto>("TTWCS",
-                                            $"{WCSServer}/wcs/dispatch/order/checkOrderCreate", checkOrderCreate);
-            return response;
+            ResultWcsTaskDto lastResponse = null;
+            foreach (OrderDto segment in checkOrderCreate.Orders.OrderBy(x => x.Sequence))
+            {
+                // 兼容旧的单库位请求：未提供起终点时，将 CellCode 同时作为起点和终点。
+                string startCellCode = string.IsNullOrWhiteSpace(segment.StartCellCode)
+                    ? segment.CellCode
+                    : segment.StartCellCode;
+                string endCellCode = string.IsNullOrWhiteSpace(segment.EndCellCode)
+                    ? startCellCode
+                    : segment.EndCellCode;
+
+                WcsCheckOrderRequestDto request = new()
+                {
+                    OrderCode = segment.OrderCode,
+                    QueryCode = queryCode,
+                    StartCellCode = startCellCode,
+                    EndCellCode = endCellCode,
+                    Priority = checkOrderCreate.Priority
+                };
+
+                Log.Information(
+                    "向WCS下发盘点扫描段：QueryCode={QueryCode}, OrderCode={OrderCode}, Start={Start}, End={End}, Sequence={Sequence}",
+                    queryCode, segment.OrderCode, startCellCode, endCellCode, segment.Sequence);
+
+                lastResponse = await _httpClientFactory.PostAsync<WcsCheckOrderRequestDto, ResultWcsTaskDto>(
+                    "TTWCS",
+                    $"{WCSServer}/wcs/dispatch/order/checkOrderCreate",
+                    request);
+
+                if (lastResponse == null || !lastResponse.Success)
+                    return lastResponse ?? new ResultWcsTaskDto(false, $"盘点扫描段{segment.OrderCode}下发失败");
+            }
+
+            // 所有扫描段使用同一个查询码，WMS 后续只需按该查询码获取整批实际扫描结果。
+            lastResponse.QueryCode = queryCode;
+            return lastResponse;
         }
         /// <summary>
         /// 查询盘点结果
@@ -98,6 +139,7 @@ namespace WarehouseManagement.WcsTasks
                        {
                            OrderCode = OrderCode,
                            CellCode = CellCode,
+                           Status = WcsCheckCellStatus.Empty,
                            PlateCode = "empty"
                        }
                     }
