@@ -391,6 +391,63 @@ namespace WarehouseManagement.Checks
             }
         }
         
+        /// <summary>
+        /// 原子确认一个库位的最终盘点结果。
+        /// 该方法把写盘点历史、释放库位运行锁和完成单库位任务放在同一个工作单元中，
+        /// 避免出现“历史已经写入，但库位仍为 Selected 或 StockTask 未完成”的半完成状态。
+        /// </summary>
+        /// <remarks>
+        /// 这里只把 Cell.RunStatus 从 Selected 恢复为 Enable，不修改 CellStatus 和档案盒正式绑定；
+        /// 盘盈、盘亏、错位必须经过后续审核流程，不能在盘点回调阶段直接调整正式库存。
+        /// </remarks>
+        [UnitOfWork]
+        public virtual async Task<bool> CompleteCheckCellAsync(
+            int stockId,
+            int flag,
+            string remark,
+            string actualPlateCode)
+        {
+            StockTask stockTask = await _stockTaskManager.FindByIdAsync(stockId);
+            bool historyExists = await _checkDetailHisManager.ExistsByManageIdAsync(stockId);
+
+            // StockTask 已被完成事件转入历史并删除时，历史记录就是本次结果已经成功处理的证据。
+            // WCS 的查询接口每次返回整批结果，因此同一库位被重复轮询属于正常情况，应幂等成功。
+            if (stockTask == null)
+            {
+                if (historyExists)
+                    return true;
+
+                throw new UserFriendlyException($"盘点任务{stockId}不存在，且未找到对应盘点历史");
+            }
+
+            List<CheckDetail> activeDetails = await _checkDetailManager.GetCheckDetailByStockId(stockId);
+            if (activeDetails.Count == 0)
+            {
+                if (!historyExists)
+                    throw new UserFriendlyException($"盘点任务{stockId}没有执行明细，也没有对应盘点历史");
+
+                // 兼容修复历史半完成数据：盘点历史已存在但任务尚未结束时，
+                // 不重复写历史，只补做库位解锁和任务完成。
+                if (stockTask.EndCellId == null || stockTask.EndCellId == 0)
+                    throw new UserFriendlyException($"盘点任务{stockId}没有有效的目标库位，无法释放库位运行锁");
+
+                await _cellManager.SetAsEnableAsync((int)stockTask.EndCellId);
+                await _stockTaskManager.CompleteCheckTaskAsync(stockId);
+                return true;
+            }
+
+            // 先保存账面快照与现场实扫值的比较结果；后续任一步失败时由工作单元统一回滚。
+            await Complete(stockId, flag, remark, actualPlateCode);
+
+            if (stockTask.EndCellId == null || stockTask.EndCellId == 0)
+                throw new UserFriendlyException($"盘点任务{stockId}没有有效的目标库位，无法释放库位运行锁");
+
+            // 盘点只占用库位执行权，完成后仅释放运行锁，不能改变原来的 Have/Nohave 账面状态。
+            await _cellManager.SetAsEnableAsync((int)stockTask.EndCellId);
+            await _stockTaskManager.CompleteCheckTaskAsync(stockId);
+            return true;
+        }
+
         //完成盘点任务
         public async Task<bool> Complete(int stockId, int flag, string remark, string actualPlateCode)
         {

@@ -4,8 +4,6 @@ using Wcs.PlcTool;
 using Wcs.LogTool;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.DependencyInjection;
-using Microsoft.Extensions.Options;
-using Wcs.ConfigTool;
 using System.Threading;
 using System.Xml.Linq;
 using Wcs.Nodes;
@@ -25,7 +23,6 @@ namespace Wcs.Jobs.JobCmds
         public string JobCmdNameCHS { get; set; } = string.Empty;
 
         private readonly ILogger<OpenDoorCmd> _logger;
-        private readonly IOptions<ConfigOptions> _options;
         private readonly PlcHelper _plcHelper;
         private readonly JobManager _jobManager;
         private readonly OrderManager _orderManager;
@@ -36,7 +33,6 @@ namespace Wcs.Jobs.JobCmds
 
         public OpenDoorCmd(
             ILogger<OpenDoorCmd> logger,
-            IOptions<ConfigOptions> options,
             PlcHelper plcHelper,
             JobManager jobManager,
             OrderManager orderManager,
@@ -44,7 +40,6 @@ namespace Wcs.Jobs.JobCmds
             JobCmdHelper jobCmdHelper)
         {
             _logger = logger;
-            _options = options;
             _plcHelper = plcHelper;
             _jobManager = jobManager;
             _orderManager = orderManager;
@@ -101,14 +96,29 @@ namespace Wcs.Jobs.JobCmds
                 if (Owner.MyJob == null)
                     return new OpResultInDispatchSvc() { IsOK = false, Message = $"当前命令所属Job为空" };
 
-                if (_options.Value.OpenDoorAfterWmsAllowed)
-                {
-                    var order = _orderManager.GetDispatchOrderByOrderCodeAsync(Owner.MyJob.OrderCode).Result;
-                    if (order == null)
-                        return new OpResultInDispatchSvc() { IsOK = false, Message = $"当前命令对应订单{Owner.MyJob.OrderCode}不存在" };
+                var order = _orderManager.GetDispatchOrderByOrderCodeAsync(Owner.MyJob.OrderCode).Result;
+                if (order == null)
+                    return new OpResultInDispatchSvc() { IsOK = false, Message = $"当前命令对应订单{Owner.MyJob.OrderCode}不存在" };
 
+                // 开门职责按业务任务类型确定，不能再由一个全局开关同时控制入库和出库：
+                // 1. 入库时，人员需要先在 WMS 完成档案盒扫码和操作确认，WMS 再通过
+                //    doorCanOpenByOrder 授权；未授权时 WCS 保持当前开门工步并继续等待。
+                // 2. 出库时，机械手已经按调度流程把档案盒送到取档口，由 WCS 直接下发开门命令，
+                //    不再等待 WMS 重复授权，避免任务到达取档口后长期卡住。
+                // 3. 移库和盘点不应进入普通人工取档口开门工步；若路径配置错误进入此处，
+                //    必须拒绝执行，而不是误开取档口。
+                if (order.OrderType == EnumDispatchOrderType.StockIn)
+                {
                     if (!order.CanOpenDoorImmediate)
-                        return new OpResultInDispatchSvc() { IsOK = false, Message = $"等待Wms下发允许开门指令" };
+                        return new OpResultInDispatchSvc() { IsOK = false, Message = "等待WMS下发入库允许开门指令" };
+                }
+                else if (order.OrderType != EnumDispatchOrderType.StockOut)
+                {
+                    return new OpResultInDispatchSvc()
+                    {
+                        IsOK = false,
+                        Message = $"订单类型{order.OrderType}不允许执行普通取档口开门命令"
+                    };
                 }
 
                 DispatchJob job = Owner.MyJob;

@@ -460,6 +460,12 @@ public class OrderService : WcsAppService, IOrderService
             if (result.State != EnumDispatchOrderState.Created && result.State != EnumDispatchOrderState.Doing)
                 throw new Exception($"订单号为{para.orderCode}的订单已完成");
 
+            // WMS 的允许开门接口只服务于入库人工放货场景。
+            // 出库由 WCS 在档案盒到达取档口后自动开门；移库和盘点不经过普通取档口开门流程。
+            // 在接口边界直接拒绝非入库订单，避免调用方收到“授权成功”但该授权实际上不会生效。
+            if (result.OrderType != EnumDispatchOrderType.StockIn)
+                throw new Exception($"订单号为{para.orderCode}的任务类型为{result.OrderType}，仅入库任务允许由WMS授权开门");
+
             await _orderManager.AllowDispatchOrderToOpenDoorAsync(para.orderCode).ConfigureAwait(false);
             return new ResponseDto() { success = true, message = "" };
         }

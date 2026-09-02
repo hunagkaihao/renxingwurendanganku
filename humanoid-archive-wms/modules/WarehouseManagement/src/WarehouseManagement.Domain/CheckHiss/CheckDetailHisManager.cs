@@ -34,5 +34,15 @@ namespace WarehouseManagement.CheckHiss
         {
             return await _repository.GetListAsync(x => x.VerifyFlag == verifyFlag & x.CheckId == checkHisId);
         }
+
+        /// <summary>
+        /// 判断指定单库位盘点任务是否已经生成过盘点历史。
+        /// ManageId 对应盘点时创建的 StockTask.Id，可作为轮询重复回传时的幂等依据。
+        /// </summary>
+        public async Task<bool> ExistsByManageIdAsync(int manageId)
+        {
+            List<CheckDetailHis> histories = await _repository.GetListAsync(x => x.ManageId == manageId);
+            return histories.Count > 0;
+        }
     }
 }

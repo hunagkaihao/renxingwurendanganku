@@ -40,10 +40,12 @@ namespace Lion.AbpPro.Jobs
 
             switch (actualResult.Status)
             {
+                case WcsCheckCellStatus.Unknown:
                 case WcsCheckCellStatus.Waiting:
                 case WcsCheckCellStatus.Scanning:
-                    // 尚未形成最终现场事实，继续等待下一次轮询或回调。
-                    return (false, 0, "等待现场扫描完成");
+                    // Unknown 可能来自旧版响应、字段缺失或短暂序列化异常，不能第一次出现就结束盘点。
+                    // 与 Waiting、Scanning 一样保留执行明细，等待下一轮查询或超时告警处理。
+                    return (false, 0, $"等待现场扫描形成最终结果，当前状态：{actualResult.Status}");
 
                 case WcsCheckCellStatus.Empty:
                     return string.IsNullOrEmpty(expected)
@@ -154,36 +156,51 @@ namespace Lion.AbpPro.Jobs
                         {
                             for (var i = 0; i < res.Cells.Count; i++)
                             {
-                                Cells actualResult = res.Cells[i];
-
-                                // WCS 的扫描段 OrderCode 不再等于单个 StockTask.Id，
-                                // 因此使用“当前盘点计划 + 实际库位码”定位 WMS 冻结的单库位快照任务。
-                                // PlanId 条件用于隔离不同批次，避免历史未清理任务中存在相同库位码时串单。
-                                var stock = stocks.Find(f =>
-                                    f.ManageTypeCode == ManageType.HpAnnualCheckDown &&
-                                    f.PlanId == check[0].Id &&
-                                    string.Equals(f.EndCellCode, actualResult.CellCode, StringComparison.Ordinal));
-                                if (stock == null)
+                                try
                                 {
-                                    Log.Warning("收到WCS盘点结果但未找到库位快照任务：CellCode={CellCode}, OrderCode={OrderCode}",
-                                        actualResult.CellCode, actualResult.OrderCode);
-                                    continue;
+                                    Cells actualResult = res.Cells[i];
+
+                                    // WCS 的扫描段 OrderCode 不再等于单个 StockTask.Id，
+                                    // 因此使用“当前盘点计划 + 实际库位码”定位 WMS 冻结的单库位快照任务。
+                                    // PlanId 条件用于隔离不同批次，避免历史未清理任务中存在相同库位码时串单。
+                                    var stock = stocks.Find(f =>
+                                        f.ManageTypeCode == ManageType.HpAnnualCheckDown &&
+                                        f.PlanId == check[0].Id &&
+                                        string.Equals(f.EndCellCode, actualResult.CellCode, StringComparison.Ordinal));
+                                    if (stock == null)
+                                    {
+                                        // 查询接口会重复返回本批次已经完成的库位，下一轮 stocks 中已没有对应任务；
+                                        // 这种情况属于正常幂等跳过，不应每两秒产生一条告警。
+                                        Log.Debug("跳过已处理或不存在的WCS盘点结果：CellCode={CellCode}, OrderCode={OrderCode}",
+                                            actualResult.CellCode, actualResult.OrderCode);
+                                        continue;
+                                    }
+
+                                    var comparison = CompareCheckResult(stock.ArchiveBoxRfid, actualResult);
+                                    if (!comparison.CanComplete)
+                                        continue;
+
+                                    // WMS 在一个工作单元内完成历史落地、库位解锁和任务结束；
+                                    // 盘点结果不会在此直接修改档案盒正式库位或库存。
+                                    await _checkAppService.CompleteCheckCellAsync(
+                                        stock.Id,
+                                        comparison.Flag,
+                                        comparison.Remark,
+                                        actualResult.Status == WcsCheckCellStatus.Scanned
+                                            ? actualResult.PlateCode
+                                            : string.Empty);
                                 }
-
-                                var comparison = CompareCheckResult(stock.ArchiveBoxRfid, actualResult);
-                                if (!comparison.CanComplete)
-                                    continue;
-
-                                // 盘点结果只写入盘点历史，不直接修改档案盒正式库位或库存。
-                                // 差异必须在 WMS 审核确认后再执行库存调整。
-                                await _checkAppService.Complete(
-                                    stock.Id,
-                                    comparison.Flag,
-                                    comparison.Remark,
-                                    actualResult.Status == WcsCheckCellStatus.Scanned
-                                        ? actualResult.PlateCode
-                                        : string.Empty);
-                                await _stockTaskManager.CompleteCheckTaskAsync(stock.Id);
+                                catch (Exception ex)
+                                {
+                                    // 单个异常库位不能阻断同一批次其他库位的盘点结果落地。
+                                    Cells failedResult = res.Cells[i];
+                                    Log.Error(ex,
+                                        "处理WCS盘点结果失败：CheckId={CheckId}, QueryCode={QueryCode}, OrderCode={OrderCode}, CellCode={CellCode}",
+                                        check[0].Id,
+                                        checkOrderResultDto.QueryCode,
+                                        failedResult?.OrderCode,
+                                        failedResult?.CellCode);
+                                }
                             }
                         }
                     }
