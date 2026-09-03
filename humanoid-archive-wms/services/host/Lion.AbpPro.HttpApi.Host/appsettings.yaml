@@ -1,0 +1,122 @@
+# WMS 主服务配置文件；配置节和字段名称保持与原 JSON 文件一致。
+AllowedHosts: '*'
+urls: http://127.0.0.1:5000
+
+# Serilog 日志配置。
+Serilog:
+  Using:
+    - Serilog.Sinks.Console
+    - Serilog.Sinks.File
+    - Serilog.Sinks.MySQL
+  MinimumLevel:
+    Default: Debug
+    Override:
+      Microsoft: Information
+      Volo.Abp: Information
+      Hangfire: Information
+      DotNetCore.CAP: Information
+      Serilog.AspNetCore: Information
+      Microsoft.EntityFrameworkCore: Error
+  WriteTo:
+    - Name: Console
+    - Name: File
+      Args:
+        path: logs/wmslog.log
+        rollingInterval: Day
+        retainedFileCountLimit: 100
+
+# 应用地址及跨域来源。
+App:
+  SelfUrl: http://127.0.0.1:5000
+  CorsOrigins: 'https://*.AbpPro.com,http://127.0.0.1:4200,http://localhost:4200,http://192.168.0.129:4200,http://127.0.0.1:3100,http://localhost:3100,http://127.0.0.1:8080,http://localhost:8080'
+
+# 数据库连接字符串。
+ConnectionStrings:
+  Default: 'Data Source=127.0.0.1;port=3306;Database=daktutatest;uid=root;pwd=root;charset=utf8mb4;Allow User Variables=true;AllowLoadLocalInfile=true;SslMode=None;AllowPublicKeyRetrieval=true'
+
+# Redis 缓存及数据保护密钥配置。
+Redis:
+  Configuration: '127.0.0.1,password=mypassword,defaultdatabase=2'
+
+# JWT 认证配置。
+Jwt:
+  Audience: LionAbpPro
+  SecurityKey: 'dzehzRz9a8asdfasfdadfasdfasdfafsdadfasbasdf='
+  Issuer: LionAbpPro
+  ExpirationTime: 24
+
+# CAP 消息总线配置；Enabled 为 false 时使用内存实现。
+Cap:
+  Enabled: 'false'
+  RabbitMq:
+    HostName: 127.0.0.1
+    UserName: admin
+    Password: admin
+
+# Elasticsearch 日志检索配置。
+ElasticSearch:
+  Enabled: 'false'
+  Url: http://es.cn
+  IndexFormat: 'Lion.AbpPro.development.{0:yyyy.MM.dd}'
+  UserName: elastic
+  Password: aVVhjQ95RP7nbwNy
+  SearchIndexFormat: 'Lion.AbpPro.development*'
+
+# STS 服务 HTTP 客户端配置。
+HttpClient:
+  Sts:
+    Name: Sts
+    Url: http://127.0.0.1:44354
+
+# Consul 服务注册配置。
+Consul:
+  Enabled: false
+  Host: http://127.0.0.1:8500
+  Service: Project-Service
+
+# 阿里云 OSS 文件存储配置。
+AliYun:
+  OSS:
+    AccessKeyId: LTAI5tLkt3vvScGPVZ5qKJDc1S
+    AccessKeySecret: BixV8vP5uPrbsdwjYzzsEXOPjkxPST2S
+    Endpoint: oss-cn-shenzhen.aliyuncs.com
+    ContainerName: lion-abp-pro
+    RegionId: oss-cn-shenzhen
+    RoleArn: 'acs:ram::1846393972471789:role/ramosstestst'
+
+# LIMS/MES 接口配置。
+Fbq:
+  Enable: 'true'
+  Server: http://127.0.0.1:5500
+Mes:
+  Server: https://lims.nbjlw.com:8091
+  Enable: 'true'
+
+# ERP 接口配置。
+ERP:
+  Server: http://127.0.0.1:5000/
+  Enable: 'true'
+
+# WCS 接口及仿真配置。
+WCS:
+  Server: http://127.0.0.1:5200
+  Enable: 'true'
+  WCSSimulation: 'false'
+
+# AGV 任务类型配置。
+AGV:
+  Server: https://lims.nbjlw.com:8091
+  Enable: 'false'
+  LiftTaskType: TT01       # 提升机入库任务类型
+  LiftEmptyTaskType: TF08  # 提升机空载任务类型
+  FloorTaskType: TT01      # 平面输送任务类型
+  FloorEmptyTaskType: TT03 # 平面空载任务类型
+  CTUInTaskType: CTUStockIn   # CTU 入库任务类型
+  CTUOutTaskType: CTUStockOut # CTU 出库任务类型
+
+# 库位分配规则配置；当前 Enable 为 false，表示不使用该配置。
+AllocationRules:
+  Enable: 'false'
+  ZBigToSmall: 'true'
+  XBigToSmall: 'true'
+  YBigToSmall: 'true'

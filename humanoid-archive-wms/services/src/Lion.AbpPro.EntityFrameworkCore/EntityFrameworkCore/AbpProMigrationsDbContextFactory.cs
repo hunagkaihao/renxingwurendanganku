@@ -2,6 +2,7 @@ using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
+using NetEscapades.Configuration.Yaml;
 
 namespace Lion.AbpPro.EntityFrameworkCore
 {
@@ -24,8 +25,9 @@ namespace Lion.AbpPro.EntityFrameworkCore
         private static IConfigurationRoot BuildConfiguration()
         {
             var builder = new ConfigurationBuilder()
-                .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../Lion.AbpPro.DbMigrator/"))
-                .AddJsonFile("appsettings.json", optional: false);
+                // 设计时配置统一读取主 HTTP Host 的普通 YAML 配置文件。
+                .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../../host/Lion.AbpPro.HttpApi.Host/"))
+                .AddYamlFile("appsettings.yaml", optional: false, reloadOnChange: false);
 
             return builder.Build();
         }

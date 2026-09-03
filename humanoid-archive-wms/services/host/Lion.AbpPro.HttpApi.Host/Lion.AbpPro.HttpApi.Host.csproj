@@ -38,6 +38,7 @@
     <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic" Version="$(AbpPackageVersion)" />
     <PackageReference Include="MiniProfiler.AspNetCore.Mvc" Version="$(MiniProfilerVersion)" />
     <PackageReference Include="MiniProfiler.EntityFrameworkCore" Version="$(MiniProfilerVersion)" />
+    <PackageReference Include="NetEscapades.Configuration.Yaml" Version="3.1.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -47,6 +48,12 @@
     <ProjectReference Include="..\..\src\Lion.AbpPro.Application\Lion.AbpPro.Application.csproj" />
     <ProjectReference Include="..\..\src\Lion.AbpPro.EntityFrameworkCore\Lion.AbpPro.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\src\Lion.AbpPro.HttpApi\Lion.AbpPro.HttpApi.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="appsettings*.yaml" />
+    <Content Include="appsettings*.yaml" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Update="appsettings*.json" CopyToOutputDirectory="Never" CopyToPublishDirectory="Never" />
   </ItemGroup>
 
   <ItemGroup>
