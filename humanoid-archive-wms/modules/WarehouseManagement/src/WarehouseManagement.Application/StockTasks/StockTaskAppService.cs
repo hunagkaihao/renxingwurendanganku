@@ -298,6 +298,7 @@ namespace WarehouseManagement.StockTasks
         //扫码打开柜门,创建任务
         public async Task<StockTaskDto> OpenDoorAndWCSInExcute(int input)
         {
+
             var stockTask = await _stockTaskManagement.StockDownloadIn(input);
             return base.ObjectMapper.Map<StockTask, StockTaskDto>(stockTask);
         }
@@ -326,7 +327,8 @@ namespace WarehouseManagement.StockTasks
             }
             //分配库位
             await WCSSetCell(stock.Id);
-            
+
+
             //开柜门
             openDoorDto.OrderCode = stock.Id.ToString();
             await _wcsApiManager.OpenDoorForOrder(openDoorDto);
@@ -337,6 +339,7 @@ namespace WarehouseManagement.StockTasks
         [UnitOfWork]
         public async Task<bool> ClientOutCell(string rfid)
         {
+
             CreateStockTaskDto stockTaskDto = new();
             //找到档案盒
             var box = await _archiveBoxRepository.FindByRfidCodeAsync(rfid);
@@ -356,8 +359,10 @@ namespace WarehouseManagement.StockTasks
             }
             //分配库位
             await WCSSetCell(stock.Id);
-            
+
+
             return true;
+
         }
         //创建档案出库任务
         public async Task<StockTaskDto> CreateWCSOut(CreateStockTaskDto input)

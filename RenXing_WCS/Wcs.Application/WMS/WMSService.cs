@@ -63,17 +63,28 @@ namespace Wcs.WMS
                 string jsonContent = JsonConvert.SerializeObject(_user, _jsonSettings);
                 using var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
-                var response = await client.PostAsync($"{_wmsUrl}/wms/account/newlogin", content);
+                using var response = await client.PostAsync($"{_wmsUrl.TrimEnd('/')}/api/app/account/login", content);
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogWarning("登录WMS失败，HTTP状态码：{StatusCode}", (int)response.StatusCode);
+                    return null;
+                }
+
                 string responseStr = await response.Content.ReadAsStringAsync();
 
                 JObject obj = JObject.Parse(responseStr);
                 string token = obj["token"]?.ToString();
                 
-                if (!string.IsNullOrEmpty(token))
+                if (!string.IsNullOrWhiteSpace(token))
                 {
                     // 缓存token，设置过期时间为15分钟
                     _cachedToken = token;
                     _tokenExpiryTime = DateTime.Now.AddMinutes(15);
+                }
+                else
+                {
+                    _logger.LogWarning("登录WMS失败，响应中未返回有效Token");
+                    return null;
                 }
                 
                 return token;
@@ -261,7 +272,7 @@ namespace Wcs.WMS
                 return false;
             }
 
-            try
+             try
             {
                 JObject obj = JObject.Parse(responseStr);
                 return obj["success"]?.Value<bool>() ?? false;

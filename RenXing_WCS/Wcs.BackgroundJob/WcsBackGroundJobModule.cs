@@ -26,6 +26,7 @@ public class WcsBackGroundJobModule : AbpModule
         context.Services.AddHostedService<OrderCntManageJob>();
         context.Services.AddHostedService<LogCntManageJob>();
         context.Services.AddHostedService<ChkBgJob>();
-        context.Services.AddHostedService<ChkTaskJob>();
+        // 当前 WMS 主动下发盘点任务，由 ChkBgJob 执行。
+        // 不注册遗留 ChkTaskJob：其拉取接口 /wms/checkTask/checkTaskPagedGet 在当前 WMS 中不存在。
     }
 }

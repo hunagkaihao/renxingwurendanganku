@@ -33,5 +33,4 @@ public interface IOrderService : IApplicationService
     public Task<ResponseDto> ForceDoneDispatchOrderAsync(ForceDoneDto para);
 
     public Task<ResponseDto> CancelDispatchOrderAsync(CancelOrderDto para);
-
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.AccessControl;
 using System.Threading.Tasks;
-
 using Wcs.Backups;
 using Wcs.Cells;
 using Wcs.Cells.Models;
@@ -15,9 +14,7 @@ using Wcs.Notifiers;
 using Wcs.Orders;
 using Wcs.Orders.Models;
 using Wcs.WMS;
-
 using Microsoft.Extensions.Logging;
-
 using Volo.Abp;
 
 namespace Wcs.Dispatch;
@@ -161,7 +158,8 @@ public class OrderService : WcsAppService, IOrderService
             }
 
             if (cellSpecs != nodeSpecs)
-                return new ResponseDto() { success = false, message = $"起点和终点的档案盒规格不一致，一个为{cellSpecs}，另一个为{nodeSpecs}" };
+                return new ResponseDto()
+                    { success = false, message = $"起点和终点的档案盒规格不一致，一个为{cellSpecs}，另一个为{nodeSpecs}" };
 
             var spec = await _dahSpecsRepository.FindBySpecsCodeAsync(cellSpecs).ConfigureAwait(false);
             if (spec == null)
@@ -181,7 +179,8 @@ public class OrderService : WcsAppService, IOrderService
                 orderType = EnumDispatchOrderType.Move;
             }
 
-            DispatchOrder order = new DispatchOrder(para.orderCode, orderType, para.startNode, para.endNode, para.priority);
+            DispatchOrder order =
+                new DispatchOrder(para.orderCode, orderType, para.startNode, para.endNode, para.priority);
 
             order.SetPlate(para.plateCode, cellSpecs);
 
@@ -272,7 +271,8 @@ public class OrderService : WcsAppService, IOrderService
             }
 
             if (cellSpecs != nodeSpecs)
-                return new ResponseDto() { success = false, message = $"起点和终点的档案盒规格不一致，一个为{cellSpecs}，另一个为{nodeSpecs}" };
+                return new ResponseDto()
+                    { success = false, message = $"起点和终点的档案盒规格不一致，一个为{cellSpecs}，另一个为{nodeSpecs}" };
 
             var spec = await _dahSpecsRepository.FindBySpecsCodeAsync(cellSpecs).ConfigureAwait(false);
             if (spec == null)
@@ -314,17 +314,20 @@ public class OrderService : WcsAppService, IOrderService
         public int Col { get; set; }
         public int Layer { get; set; }
     }
+
     public async Task<AddChkOrderResultDto> CreateCheckDownOrders(AddCheckOrderDto para)
     {
         try
         {
             DispatchCell cell = await _cellRepository.FindByCellCodeAsync(para.startCellCode).ConfigureAwait(false);
             if (cell == null)
-                return new AddChkOrderResultDto() { success = false, message = $"盘点起始库位{para.startCellCode}不存在", queryCode = string.Empty };
+                return new AddChkOrderResultDto()
+                    { success = false, message = $"盘点起始库位{para.startCellCode}不存在", queryCode = string.Empty };
 
             cell = await _cellRepository.FindByCellCodeAsync(para.endCellCode).ConfigureAwait(false);
             if (cell == null)
-                return new AddChkOrderResultDto() { success = false, message = $"盘点终止库位{para.endCellCode}不存在", queryCode = string.Empty };
+                return new AddChkOrderResultDto()
+                    { success = false, message = $"盘点终止库位{para.endCellCode}不存在", queryCode = string.Empty };
 
             DispatchOrder chkOrder = new DispatchOrder(para.orderCode, EnumDispatchOrderType.CheckDown,
                 para.startCellCode, para.endCellCode, para.priority);
@@ -350,11 +353,13 @@ public class OrderService : WcsAppService, IOrderService
         {
             DispatchCell cell = await _cellRepository.FindByCellCodeAsync(para.startCellCode).ConfigureAwait(false);
             if (cell == null)
-                return new AddChkOrderResultDto() { success = false, message = $"盘点起始库位{para.startCellCode}不存在", queryCode = string.Empty };
+                return new AddChkOrderResultDto()
+                    { success = false, message = $"盘点起始库位{para.startCellCode}不存在", queryCode = string.Empty };
 
             cell = await _cellRepository.FindByCellCodeAsync(para.endCellCode).ConfigureAwait(false);
             if (cell == null)
-                return new AddChkOrderResultDto() { success = false, message = $"盘点终止库位{para.endCellCode}不存在", queryCode = string.Empty };
+                return new AddChkOrderResultDto()
+                    { success = false, message = $"盘点终止库位{para.endCellCode}不存在", queryCode = string.Empty };
 
             DispatchOrder chkOrder = new DispatchOrder(para.orderCode, EnumDispatchOrderType.CheckDown,
                 para.startCellCode, para.endCellCode, para.priority);
@@ -381,6 +386,7 @@ public class OrderService : WcsAppService, IOrderService
             return new AddChkOrderResultDto() { success = false, message = ex.Message, queryCode = string.Empty };
         }
     }
+
     /// <summary>
     /// 根据查询码查询盘点结果
     /// </summary>
@@ -403,6 +409,7 @@ public class OrderService : WcsAppService, IOrderService
                     plateCode = r.PlateCode
                 });
             }
+
             return ret;
         }
         catch (Exception ex)
@@ -434,6 +441,7 @@ public class OrderService : WcsAppService, IOrderService
                     plateCode = r.PlateCode
                 });
             }
+
             return ret;
         }
         catch (Exception ex)
@@ -544,6 +552,7 @@ public class OrderService : WcsAppService, IOrderService
                 };
                 stateDtos.Add(stateDto);
             }
+
             OrderStatesDto result = new OrderStatesDto()
             {
                 orderStates = stateDtos
@@ -611,8 +620,10 @@ public class OrderService : WcsAppService, IOrderService
                     };
                     orderInfo.jobs.Add(jobInfo);
                 }
+
                 ret.Add(orderInfo);
             }
+
             return ret;
         }
         catch (Exception ex)
@@ -676,8 +687,10 @@ public class OrderService : WcsAppService, IOrderService
                     };
                     orderInfo.jobs.Add(jobInfo);
                 }
+
                 ret.Add(orderInfo);
             }
+
             return ret;
         }
         catch (Exception ex)
@@ -758,7 +771,8 @@ public class OrderService : WcsAppService, IOrderService
     {
         try
         {
-            _notifierManager.IsNotifierValWithParaChanged(WcsConsts.DispatchOrderForceDoneRespNotifierName, out string msg);//先判断一次，进行复位
+            _notifierManager.IsNotifierValWithParaChanged(WcsConsts.DispatchOrderForceDoneRespNotifierName,
+                out string msg); //先判断一次，进行复位
             _notifierManager.NotifyDispatchSvrWithPara(WcsConsts.DispatchOrderForceDoneNotifierName, para.orderCode);
             long firstPoint = DateTime.Now.Ticks;
             while (true)
@@ -767,7 +781,8 @@ public class OrderService : WcsAppService, IOrderService
 
                 long thisPoint = DateTime.Now.Ticks;
                 TimeSpan ts = new TimeSpan(thisPoint - firstPoint);
-                if (true == _notifierManager.IsNotifierValWithParaChanged(WcsConsts.DispatchOrderForceDoneRespNotifierName, out msg))
+                if (true == _notifierManager.IsNotifierValWithParaChanged(
+                        WcsConsts.DispatchOrderForceDoneRespNotifierName, out msg))
                     return new ResponseDto() { success = msg == string.Empty, message = msg };
 
                 if (ts.TotalSeconds > 5)
@@ -785,7 +800,8 @@ public class OrderService : WcsAppService, IOrderService
     {
         try
         {
-            _notifierManager.IsNotifierValWithParaChanged(WcsConsts.DispatchOrderCancelRespNotifierName, out string msg);//先判断一次，进行复位
+            _notifierManager.IsNotifierValWithParaChanged(WcsConsts.DispatchOrderCancelRespNotifierName,
+                out string msg); //先判断一次，进行复位
             _notifierManager.NotifyDispatchSvrWithPara(WcsConsts.DispatchOrderCancelNotifierName, para.orderCode);
             long firstPoint = DateTime.Now.Ticks;
             while (true)
@@ -794,7 +810,8 @@ public class OrderService : WcsAppService, IOrderService
 
                 long thisPoint = DateTime.Now.Ticks;
                 TimeSpan ts = new TimeSpan(thisPoint - firstPoint);
-                if (true == _notifierManager.IsNotifierValWithParaChanged(WcsConsts.DispatchOrderCancelRespNotifierName, out msg))
+                if (true == _notifierManager.IsNotifierValWithParaChanged(WcsConsts.DispatchOrderCancelRespNotifierName,
+                        out msg))
                     return new ResponseDto() { success = msg == string.Empty, message = msg };
 
                 if (ts.TotalSeconds > 5)
@@ -807,6 +824,4 @@ public class OrderService : WcsAppService, IOrderService
             return new ResponseDto() { success = false, message = ex.Message };
         }
     }
-
-
 }

@@ -14,7 +14,7 @@ App:
 # 业务数据库连接配置；连接信息包含凭据，请勿提交或公开。
 ConnectionStrings:
   # 默认 MySQL 连接字符串，供 ABP/EF Core 及 EF 设计时工厂使用。
-  Default: "Server=127.0.0.1;Port=3306;Database=WcsGDDb;Uid=root;Pwd=__SET_LOCALLY__;SslMode=None;AllowPublicKeyRetrieval=True;"
+  Default: "Server=127.0.0.1;Port=3306;Database=WcsGDDb;Uid=root;Pwd=root;SslMode=None;AllowPublicKeyRetrieval=True;"
 
 # 认证服务相关配置；当前 Host 显式读取 Authority 和 SwaggerClientId 用于 Swagger OAuth。
 AuthServer:
@@ -36,15 +36,15 @@ StringEncryption:
 Wcs:
   # WCS HTTP 监听地址；多个地址以英文逗号分隔，Program 使用 Split 后传入 UseUrls。
   BaseUrl: "http://127.0.0.1:5200"
-  # WCS 调用 WMS 登录接口 /wms/account/newlogin 时使用的账号，不是 WCS 前端登录账号。
+  # WCS 调用 WMS 登录接口 /api/app/account/login 时使用的账号，不是 WCS 前端登录账号。
   User:
     # WMS 接口登录用户名。
     Name: "admin"
     # WMS 接口登录密码；请勿提交或公开。
-    Password: "__SET_LOCALLY__"
+    Password: "FrDDHQx4qJmOZml4nf8+FA=="
   # 盘点后台 ChkBgJob 循环的休眠时间，单位：毫秒（Thread.Sleep）。
   ChkTime: 25
-  # WMS API 根地址；WMSService 会在后面拼接 /wms/... 接口路径。
+  # WMS API 根地址；登录使用 /api/app/account/login，其余业务路径由 WMSService 拼接。
   WMSUrl: "http://127.0.0.1:5100"
   # SignalR 客户端接收密集架状态更新的方法名，须与前端监听名称一致。
   HubCliMethod_UpdateMjjStatus: "UpdateMjjStatus"
@@ -63,7 +63,7 @@ Wcs:
   # 按日志 Id 阈值删除旧记录；负数跳过清理，0 会清除截至本次检查的日志。
   LogMaxVolume: 50000
   # Redis 连接字符串；WCS 数据和 PLC 数据共用连接地址，通过数据库编号区分。
-  RedisConnStr: "127.0.0.1:6379,password=__SET_LOCALLY__"
+  RedisConnStr: "127.0.0.1:6379,password=mypassword"
   # WCS 业务数据使用的 Redis 逻辑数据库编号。
   DefaultRedisNo: 0
   # PLC 标签数据使用的 Redis 逻辑数据库编号，需与 PLCServer 的配置一致。
@@ -204,36 +204,28 @@ Wcs:
   # MjjAvoidCol：避让目标列号，范围 1..MjjColCnt；还需满足固定列可达性约束。
   # MjjAvoidZY：目标面的左右编码，1 = 左，2 = 右。
   MjjAvoidLmPos:
-    -
-      LmTarget: "12001"
+    - LmTarget: "12001"
       MjjAvoidCol: 3
       MjjAvoidZY: 2
-    -
-      LmTarget: "12002"
+    - LmTarget: "12002"
       MjjAvoidCol: 3
       MjjAvoidZY: 2
-    -
-      LmTarget: "12003"
+    - LmTarget: "12003"
       MjjAvoidCol: 3
       MjjAvoidZY: 2
-    -
-      LmTarget: "12004"
+    - LmTarget: "12004"
       MjjAvoidCol: 3
       MjjAvoidZY: 2
-    -
-      LmTarget: "12005"
+    - LmTarget: "12005"
       MjjAvoidCol: 3
       MjjAvoidZY: 2
-    -
-      LmTarget: "12006"
+    - LmTarget: "12006"
       MjjAvoidCol: 3
       MjjAvoidZY: 2
-    -
-      LmTarget: "12007"
+    - LmTarget: "12007"
       MjjAvoidCol: 3
       MjjAvoidZY: 2
-    -
-      LmTarget: "12008"
+    - LmTarget: "12008"
       MjjAvoidCol: 3
       MjjAvoidZY: 2
 
@@ -244,99 +236,85 @@ Wcs:
   # StartLayerNo / EndLayerNo：WMS 起止层号，均大于 0，起始不大于结束，包含两端。
   # Specs：档案规格编码，须同时匹配库位 CellSpecs 与取档口 DASpecs。
   Test:
-    -
-      RowNo: 1
+    - RowNo: 1
       StartColNo: 2
       EndColNo: 13
       StartLayerNo: 1
       EndLayerNo: 3
       Specs: "_5cm"
-    -
-      RowNo: 1
+    - RowNo: 1
       StartColNo: 15
       EndColNo: 26
       StartLayerNo: 1
       EndLayerNo: 3
       Specs: "_5cm"
-    -
-      RowNo: 2
+    - RowNo: 2
       StartColNo: 2
       EndColNo: 13
       StartLayerNo: 1
       EndLayerNo: 3
       Specs: "_5cm"
-    -
-      RowNo: 2
+    - RowNo: 2
       StartColNo: 15
       EndColNo: 26
       StartLayerNo: 1
       EndLayerNo: 3
       Specs: "_5cm"
-    -
-      RowNo: 3
+    - RowNo: 3
       StartColNo: 2
       EndColNo: 13
       StartLayerNo: 1
       EndLayerNo: 3
       Specs: "_5cm"
-    -
-      RowNo: 3
+    - RowNo: 3
       StartColNo: 15
       EndColNo: 26
       StartLayerNo: 1
       EndLayerNo: 3
       Specs: "_5cm"
-    -
-      RowNo: 4
+    - RowNo: 4
       StartColNo: 2
       EndColNo: 18
       StartLayerNo: 1
       EndLayerNo: 3
       Specs: "_3cm"
-    -
-      RowNo: 4
+    - RowNo: 4
       StartColNo: 20
       EndColNo: 36
       StartLayerNo: 1
       EndLayerNo: 3
       Specs: "_3cm"
-    -
-      RowNo: 5
+    - RowNo: 5
       StartColNo: 2
       EndColNo: 18
       StartLayerNo: 1
       EndLayerNo: 3
       Specs: "_3cm"
-    -
-      RowNo: 5
+    - RowNo: 5
       StartColNo: 20
       EndColNo: 36
       StartLayerNo: 1
       EndLayerNo: 3
       Specs: "_3cm"
-    -
-      RowNo: 6
+    - RowNo: 6
       StartColNo: 2
       EndColNo: 35
       StartLayerNo: 1
       EndLayerNo: 2
       Specs: "_1cm"
-    -
-      RowNo: 6
+    - RowNo: 6
       StartColNo: 37
       EndColNo: 70
       StartLayerNo: 1
       EndLayerNo: 2
       Specs: "_1cm"
-    -
-      RowNo: 6
+    - RowNo: 6
       StartColNo: 2
       EndColNo: 25
       StartLayerNo: 3
       EndLayerNo: 3
       Specs: "_2cm"
-    -
-      RowNo: 6
+    - RowNo: 6
       StartColNo: 27
       EndColNo: 50
       StartLayerNo: 3

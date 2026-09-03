@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Wcs.Controllers;
 using Wcs.WMS;
-
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,7 +14,7 @@ public class OrderController : WcsController
     private readonly IOrderService _orderService;
     private readonly IWMSService _wmsService;
 
-    public OrderController(IOrderService orderService,IWMSService wmsService)
+    public OrderController(IOrderService orderService, IWMSService wmsService)
     {
         _orderService = orderService;
         _wmsService = wmsService;
@@ -31,12 +30,13 @@ public class OrderController : WcsController
         {
             TaskStatusDto statusDto = new()
             {
-                OrderCode =para.orderCode,
+                OrderCode = para.orderCode,
                 Status = WcsTaskStatus.Accepted,
                 ExecutionStep = "等待执行",
             };
             await _wmsService.SendTaskStatus(statusDto);
         }
+
         return responseDto;
     }
 
@@ -73,7 +73,7 @@ public class OrderController : WcsController
         return await _orderService.AllowOrderToOpenDoor(para).ConfigureAwait(false);
     }
 
-    [HttpGet("order/state")]    
+    [HttpGet("order/state")]
     [MiddlewareFilter(typeof(ApiLogPipeline))]
     public async Task<OrderStateDto> GetDispatchOrderState(string orderCode)
     {
@@ -117,5 +117,4 @@ public class OrderController : WcsController
     {
         return await _orderService.CancelDispatchOrderAsync(para);
     }
-
 }

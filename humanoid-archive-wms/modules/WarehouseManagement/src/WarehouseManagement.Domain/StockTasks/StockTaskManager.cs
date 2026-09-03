@@ -495,7 +495,7 @@ namespace WarehouseManagement.StockTasks
                     //记录日志
                     try
                     {
-                        Log.Warning($"用户 下达了入库任务:[{stockTask.Id}] 方法名:[{System.Reflection.MethodBase.GetCurrentMethod().Name}]");
+                        Log.Warning("用户" + "  下达了入库任务" + stockTask.Id + "  方法名:" + System.Reflection.MethodBase.GetCurrentMethod().Name);
                         return true;
                     }
                     catch (Exception)

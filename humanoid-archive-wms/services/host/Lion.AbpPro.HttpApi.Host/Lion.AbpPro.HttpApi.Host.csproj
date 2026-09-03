@@ -5,6 +5,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>Lion.AbpPro</RootNamespace>
     <PreserveCompilationReferences>true</PreserveCompilationReferences>
+    <!-- Razor 运行时编译需要通过 NuGet 探测路径解析依赖；.NET 6 起不再默认生成此文件。 -->
+    <GenerateRuntimeConfigDevFile>true</GenerateRuntimeConfigDevFile>
     <UserSecretsId>Lion.AbpPro-4681b4fd-151f-4221-84a4-929d86723e4c</UserSecretsId>
   </PropertyGroup>
 

@@ -10,6 +10,7 @@ using Lion.AbpPro.Extension.Customs.Http;
 using Microsoft.Extensions.Options;
 using Serilog;
 using WarehouseManagement.WcsTasks.Dto;
+using WcsCheckCell = WarehouseManagement.WcsTasks.Dto.Cells;
 
 namespace WarehouseManagement.WcsTasks
 {
@@ -127,7 +128,7 @@ namespace WarehouseManagement.WcsTasks
                 {
                     Log.Information("WCS模拟查询盘点结果但未传入对应库存信息：QueryCode={QueryCode}, OrderCode={OrderCode}, CellCode={CellCode}",
                         checkOrderCreate?.QueryCode, checkOrderCreate?.OrderCode, checkOrderCreate?.CellCode);
-                    return new ResultCheckDto { Cells = new List<Cells>() };
+                    return new ResultCheckDto { Cells = new List<WcsCheckCell>() };
                 }
 
                 Log.Information("WCS模拟查询盘点结果：QueryCode={QueryCode}, OrderCode={OrderCode}, CellCode={CellCode}",
@@ -135,9 +136,9 @@ namespace WarehouseManagement.WcsTasks
 
                 return new ResultCheckDto
                 {
-                    Cells = new List<Cells>
+                    Cells = new List<WcsCheckCell>
                     {
-                        new Cells
+                        new WcsCheckCell
                         {
                             OrderCode = checkOrderCreate.OrderCode,
                             CellCode = checkOrderCreate.CellCode,
