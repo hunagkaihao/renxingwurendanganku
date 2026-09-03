@@ -1,0 +1,6 @@
+<script setup lang="ts">
+import { onMounted, ref } from 'vue'; import { ElMessage } from 'element-plus'; import { useRoute, useRouter } from 'vue-router'; import { getOrder } from '../api/wcs'; import type { OrderInfo, OrderJob } from '../types/wcs';
+const route = useRoute(); const router = useRouter(); const order = ref<OrderInfo | null>(null); const jobs = ref<OrderJob[]>([]);
+onMounted(async () => { try { order.value = await getOrder(String(route.params.orderCode)); jobs.value = order.value.jobs || []; } catch { ElMessage.error('订单详情加载失败'); } });
+</script>
+<template><section><el-button @click="router.back()">返回</el-button><h2>订单详情：{{ order?.orderCode }}</h2><el-descriptions v-if="order" border><el-descriptions-item label="类型">{{ order.orderType }}</el-descriptions-item><el-descriptions-item label="起点">{{ order.startNode }}</el-descriptions-item><el-descriptions-item label="终点">{{ order.endNode }}</el-descriptions-item></el-descriptions><el-table :data="jobs" border><el-table-column prop="id" label="步骤"/><el-table-column prop="nodeName" label="执行节点"/><el-table-column prop="cmdName" label="命令"/><el-table-column prop="state" label="状态"/><el-table-column prop="execInfo" label="执行信息"/></el-table></section></template>
