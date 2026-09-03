@@ -130,7 +130,10 @@
 
         async function GetDetailHis(params){
             if (selectedBoxIdRef.value == "") {
-            return [];
+            return {
+              items: [],
+              totalCount: 0,
+            };
           }
           params.checkId = selectedBoxIdRef.value;
           return await GetTableDetailHis(params);

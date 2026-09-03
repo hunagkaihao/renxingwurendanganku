@@ -110,7 +110,10 @@
 
         async function getPageDetaiTableListAsync(params) {
         if (selectedBoxIdRef.value == 0) {
-          return [];
+          return {
+            items: [],
+            totalCount: 0,
+          };
         }
         params.checkId = selectedBoxIdRef.value;
         return await getTableDetailListAsync(params);

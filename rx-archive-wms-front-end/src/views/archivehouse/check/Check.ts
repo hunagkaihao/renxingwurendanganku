@@ -388,6 +388,19 @@ export const createFormSchema: FormSchema[] = [
     
 ];
 
+function normalizePagingParams(params: { pageIndex?: number; pageSize?: number; skipCount?: number }) {
+  if (!params || !params.pageIndex || !params.pageSize) {
+    return;
+  }
+  const pageIndex = Number(params.pageIndex);
+  const pageSize = Number(params.pageSize);
+  if (!Number.isFinite(pageIndex) || !Number.isFinite(pageSize) || pageIndex <= 0 || pageSize <= 0) {
+    return;
+  }
+  (params as any).skipCount = (pageIndex - 1) * pageSize;
+  (params as any).maxResultCount = pageSize;
+}
+
 export const editFormSchema: FormSchema[] = [
   {
     field: 'goodsCode',
@@ -659,24 +672,28 @@ export async function Create(
 export async function getTableListAsync(
   params: PagingCheckListInput
 ): Promise<CheckDtoPagedResultDto> {
+  normalizePagingParams(params);
   return _checksServiceProxy.page(params);
 }
 //获取盘点计划明细
 export async function getTableDetailListAsync(
   params: PagingCheckDetailInput
 ): Promise<CheckDetailDtoPagedResultDto> {
+  normalizePagingParams(params);
   return _checksServiceProxy.pageDetail(params);
 }
 //盘点历史
 export async function GetTableHis(
   params: PagingCheckHisDto
 ): Promise<CheckHisDtoPagedResultDto> {
+  normalizePagingParams(params);
   return _checkHissServiceProxy.page(params);
 }
 //盘点历史结果
 export async function GetTableDetailHis(
   params: PagingCheckDetailHisDto
 ): Promise<CheckDetailHisDtoPagedResultDto> {
+  normalizePagingParams(params);
   return _checkHissServiceProxy.pageDetail(params);
 }
 //执行盘点计划
