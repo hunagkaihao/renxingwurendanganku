@@ -35,7 +35,8 @@ StringEncryption:
 # 本文件不支持热重载；修改后必须重启 WCS。
 Wcs:
   # WCS HTTP 监听地址；多个地址以英文逗号分隔，Program 使用 Split 后传入 UseUrls。
-  BaseUrl: "http://127.0.0.1:5200"
+  # 使用 + 监听所有网卡，供局域网中的 WCS Web 客户端访问；内部自调用会自动转换为回环地址。
+  BaseUrl: "http://+:5200"
   # WCS 调用 WMS 登录接口 /api/app/account/login 时使用的账号，不是 WCS 前端登录账号。
   User:
     # WMS 接口登录用户名。

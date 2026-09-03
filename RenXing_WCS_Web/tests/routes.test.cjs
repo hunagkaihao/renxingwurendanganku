@@ -90,6 +90,21 @@ test('deployment can override the WCS API origin without editing pages', () => {
   }
 });
 
+test('browser clients use the Web UI host for the default WCS origin', () => {
+  const previousOrigin = process.env.VUE_APP_WCS_API_URL;
+  const previousWindow = global.window;
+  delete process.env.VUE_APP_WCS_API_URL;
+  global.window = { location: { protocol: 'http:', hostname: '192.168.0.129' } };
+  try {
+    assert.equal(loadSource('src/axios.js').default.getUri({ url: 'wcs/dispatch/order/states' }),
+      'http://192.168.0.129:5200/wcs/dispatch/order/states');
+  } finally {
+    if (previousOrigin === undefined) delete process.env.VUE_APP_WCS_API_URL;
+    else process.env.VUE_APP_WCS_API_URL = previousOrigin;
+    global.window = previousWindow;
+  }
+});
+
 for (const origin of [undefined, 'http://127.0.0.1:6200/']) {
   test(`SignalR uses the same origin as HTTP (${origin || 'default'}) and keeps /hub`, () => {
     const signalR = require('@microsoft/signalr');
