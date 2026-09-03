@@ -29,8 +29,7 @@ namespace WarehouseManagement.TaskHiss
         }
         [HttpPost("pageDetail")]
         [SwaggerOperation(summary: "获取出入库明细", Tags = new[] { "TaskHiss" })]
-        public async Task<PagedResultDto<TaskHisDetailDto>> GetPagingDetailListAsync(
-    PagingTaskHisDetailInput input)
+        public async Task<PagedResultDto<TaskHisDetailDto>> GetPagingDetailListAsync(PagingTaskHisDetailInput input)
         {
             return await _taskHisAppService.GetPagingDetailListAsync(input);
         }
