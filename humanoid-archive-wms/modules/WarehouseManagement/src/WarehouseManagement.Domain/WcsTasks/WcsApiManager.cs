@@ -183,6 +183,23 @@ namespace WarehouseManagement.WcsTasks
         /// <returns></returns>
         public async Task<ListResultSstatesDto> States()
         {
+            if (WCSSimulation)
+            {
+                Log.Information("WCS 模拟查询状态");
+                var responsetest = new ListResultSstatesDto
+                {
+                    orderStates = new List<ResultStatesDto>
+                    {
+                        new ResultStatesDto 
+                        { 
+                            OrderCode = "OrderCode", 
+                            ExecState = "已完成" 
+                        }
+                    }
+                };
+                return responsetest;
+            }
+
             if (!WCSEnable)
             {
                 Log.Information("WCS服务配置为不可用");
