@@ -1,9 +1,10 @@
 <template>
   <BasicModal
-    :title="t('编辑档案盒')"
     :width="600"
+    :title="t('创建物品类型')"
     :canFullscreen="false"
     @ok="submit"
+    @cancel="cancel"
     @register="registerModal"
     @visible-change="visibleChange"
     :destroyOnClose="true"
@@ -14,55 +15,47 @@
 </template>
 
 <script lang="ts">
+  //import moment from 'moment'; //leixd
   import { defineComponent } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';
-  import { editFormSchema, updateStorageBoxAsync } from './ArchiveBox';
-  import { CreateArchiveBoxDto } from '/@/services/ServiceProxies';
+  import { createFormSchema, CreateArchiveAsync } from './MaterialType';
+  import { CreateArchiveDto } from '/@/services/ServiceProxies';
   import { useI18n } from '/@/hooks/web/useI18n';
   export default defineComponent({
-    name: 'EditArchive',
+    name: 'CreateArchive',
     components: {
       BasicModal,
       BasicForm,
     },
     emits: ['reload'],
     setup(_, { emit }) {
-      const [registerGoodsForm, { getFieldsValue, validate, setFieldsValue, resetFields }] =
-        useForm({
-          labelWidth: 120,
-          schemas: editFormSchema,
-          showActionButtonGroup: false,
-        });
+      // 加载父组件方法
+      // defineEmits(['reload']);
+      // const ctx = useContexts();
+
       const { t } = useI18n();
-      let currentGoodsInfo = new CreateArchiveBoxDto();
-      const [registerModal, { changeOkLoading, closeModal }] = useModalInner((data) => {
-        currentGoodsInfo = data.record;
-        setFieldsValue({
-          archiveBoxRfid: data.record.archiveBoxRfid,
-          archiveBoxName: data.record.archiveBoxName,
-          stockBarcode: data.record.stockBarcode,
-          cellModel: data.record.cellModel,
-          year: data.record.year,
-          // secretLevel: [data.record.secretLevel],
-          secretLevel: data.record.secretLevel === null ? null : data.record.secretLevel,
-          retentionPeriod: data.record.retentionPeriod,
-          catalogNo: data.record.catalogNo,
-        });
+      const [registerModal, { changeOkLoading, closeModal }] = useModalInner();
+      const [registerGoodsForm, { getFieldsValue, validate, resetFields }] = useForm({
+        labelWidth: 120,
+        schemas: createFormSchema,
+        showActionButtonGroup: false,
       });
 
       const visibleChange = async (visible: boolean) => {
         if (visible) {
         } else {
+          await resetFields();
         }
       };
 
+      // 保存用户
       const submit = async () => {
         try {
-          let request = getFieldsValue() as CreateArchiveBoxDto;
-          request.id = currentGoodsInfo.id;
-          await updateStorageBoxAsync({
-            request: request,
+          let request = getFieldsValue() as CreateArchiveDto;
+          // request.testdate = moment(request.testdate).format();
+          await CreateArchiveAsync({
+            request,
             changeOkLoading,
             validate,
             closeModal,
@@ -77,20 +70,19 @@
         resetFields();
         closeModal();
       };
-
       return {
+        t,
+        cancel,
         registerModal,
         registerGoodsForm,
         submit,
         visibleChange,
-        cancel,
-        t,
       };
     },
   });
 </script>
 <style lang="less" scoped>
   .ant-checkbox-wrapper + .ant-checkbox-wrapper {
-    margin-left: 0;
+    margin-left: 0px;
   }
 </style>

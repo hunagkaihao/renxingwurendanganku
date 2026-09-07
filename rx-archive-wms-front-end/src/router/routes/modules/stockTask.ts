@@ -107,7 +107,7 @@ const stockTask: AppRouteModule = {
     {
       path: 'stockTask',
       name: 'StockTask',
-      component: () => import('/@/views/archivehouse/stock/StockTask.vue'),
+      component: () => import('/@/views/materialhouse/stock/StockTask.vue'),
       meta: {
         title: t('物料出入库管理'),
         policy: 'WarehouseManagement.StockTaskManagement',
@@ -118,7 +118,7 @@ const stockTask: AppRouteModule = {
     {
       path: 'taskHis',
       name: 'TaskHis',
-      component: () => import('/@/views/archivehouse/stock/StockTaskHis.vue'),
+      component: () => import('/@/views/materialhouse/stock/StockTaskHis.vue'),
       meta: {
         title: t('出入库记录查询'),
         policy: 'WarehouseManagement.StockTaskManagement',

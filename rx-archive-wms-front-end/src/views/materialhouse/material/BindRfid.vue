@@ -1,6 +1,6 @@
 <template>
   <BasicModal
-    :title="t('绑定档案')"
+    :title="t('绑定标签')"
     :width="600"
     :canFullscreen="false"
     @ok="submit"
@@ -18,7 +18,7 @@
   import { defineComponent } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';
-  import { bindArchiveFormSchema, blindBoxAsync } from './ArchiveBox';
+  import { blindBoxFormSchema, blindBoxAsync } from './Material';
   import { GoodsDto, CreateArchiveBoxDto } from '/@/services/ServiceProxies';
   import { useI18n } from '/@/hooks/web/useI18n';
   export default defineComponent({
@@ -32,13 +32,16 @@
       const [registerGoodsForm, { getFieldsValue, validate, setFieldsValue, resetFields }] =
         useForm({
           labelWidth: 120,
-          schemas: bindArchiveFormSchema,
+          schemas: blindBoxFormSchema,
           showActionButtonGroup: false,
         });
       const { t } = useI18n();
+      let currentGoodsInfo = new GoodsDto();
       const [registerModal, { changeOkLoading, closeModal }] = useModalInner((data) => {
+        currentGoodsInfo = data.record;
         setFieldsValue({
           archiveBoxRfid: data.record.archiveBoxRfid,
+          archiveBoxName: data.record.archiveBoxName,
         });
       });
 
@@ -51,9 +54,9 @@
       const submit = async () => {
         try {
           let request = getFieldsValue() as CreateArchiveBoxDto;
-          console.log(request)
+          request.id = currentGoodsInfo.id;
           await blindBoxAsync({
-            request,
+            request: request,
             changeOkLoading,
             validate,
             closeModal,

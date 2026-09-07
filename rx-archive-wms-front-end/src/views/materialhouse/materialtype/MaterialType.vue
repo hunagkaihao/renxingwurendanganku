@@ -55,10 +55,10 @@
     import { defineComponent } from 'vue';
     import { useMessage } from '/@/hooks/web/useMessage';
     import { BasicTable, useTable, TableAction } from '/@/components/Table';
-    import { tableColumns, searchFormSchema, getTableListAsync, deleteGoodsAsync } from './Archivetype';
+    import { tableColumns, searchFormSchema, getTableListAsync, deleteGoodsAsync } from './MaterialType';
     import { useModal } from '/@/components/Modal';
-    import CreateArchive from './CreateArchive.vue';
-    import EditArchive from './EditArchive.vue';
+    import CreateArchive from './CreateMaterial.vue';
+    import EditArchive from './EditMaterial.vue';
     import { message } from 'ant-design-vue';
     import { useI18n } from '/@/hooks/web/useI18n';
     import { Tag } from 'ant-design-vue';

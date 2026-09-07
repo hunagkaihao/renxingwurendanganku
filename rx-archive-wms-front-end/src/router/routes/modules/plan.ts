@@ -16,7 +16,7 @@ const plan: AppRouteModule = {
     {
       path: 'plan',
       name: 'plan',
-      component: () => import('/@/views/archivehouse/plan/plan.vue'),
+      component: () => import('/@/views/materialhouse/plan/plan.vue'),
       meta: {
         title: t('批量计划管理'),
         policy: 'WarehouseManagement.StorageBoxManagement',

@@ -18,7 +18,7 @@
   import { defineComponent } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';
-  import { blindBoxFormSchema, blindBoxAsync } from './Archive';
+  import { blindBoxFormSchema, blindBoxAsync } from './Material';
   import { CreateStorageDetailByBarcodeInput, GoodsDto } from '/@/services/ServiceProxies';
   import { useI18n } from '/@/hooks/web/useI18n';
   export default defineComponent({

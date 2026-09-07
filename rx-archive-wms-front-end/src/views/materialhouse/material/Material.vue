@@ -16,14 +16,33 @@
           {{ t('common.createText') }}
         </a-button>
         <a-button
-          preIcon="ant-design:plus-circle-outlined"
+          type="primary"
+          @click="pickOut"
+          v-auth="'WarehouseManagement.GoodsManagement.Create'"
+        >
+          {{ t('借阅出库') }}
+        </a-button>
+        <a-button
+          type="primary"
+          @click="pickOut"
+          v-auth="'WarehouseManagement.GoodsManagement.Create'"
+        >
+          {{ t('档案归还') }}
+        </a-button>
+        <a-button
           type="primary"
           @click="openImportGoodssModal"
           v-auth="'WarehouseManagement.GoodsManagement.Create'"
         >
           {{ t('EXCEL导入') }}
         </a-button>
-        <a-button type="primary" @click="jsonPrint">打印</a-button>
+        <a-button
+          type="primary"
+          @click="openImportGoodssModal"
+          v-auth="'WarehouseManagement.GoodsManagement.Create'"
+        >
+          {{ t('EXCEL导出') }}
+        </a-button>
       </template>
       <template #isActive="{ record }">
         <Tag :color="record.isActive ? 'green' : 'red'">
@@ -34,17 +53,56 @@
         <TableAction
           :actions="[
             {
+              icon: 'ant-design:edit-outlined',
+              auth: 'WarehouseManagement.GoodsManagement.Update',
+              label: t('common.editText'),
+              onClick: handleEdit.bind(null, record),
+            },
+          ]"
+          :dropDownActions="[
+            {
               auth: 'WarehouseManagement.GoodsManagement.Delete',
               label: t('common.delText'),
               onClick: handleDelete.bind(null, record),
             },
+            {
+              icon: 'eos-icons:cluster-role-binding',
+              label: t('绑标签'),
+              auth: 'WarehouseManagement.GoodsManagement.Update',
+              onClick: handleBind.bind(null, record),
+            },
           ]"
-          :dropDownActions="[]"
         />
       </template>
     </BasicTable>
+    <a-row style="height: 50%; margin-left: 15px; margin-right: 15px">
+      <BasicTable @register="registerDetailTable" size="small">
+        <template #action="{ record }">
+          <TableAction
+            :actions="[
+              {
+                icon: 'ant-design:edit-outlined',
+                auth: 'WarehouseManagement.GoodsManagement.Update',
+                onClick: handleEdit.bind(null, record),
+              },
+            ]"
+          />
+        </template>
+      </BasicTable>
+    </a-row>
     <CreateArchive
       @register="registerCreateArchiveModal"
+      @reload="reload"
+      :bodyStyle="{ 'padding-top': '0' }"
+    />
+    <EditArchive
+      @register="registerEditArchiveModal"
+      @reload="reload"
+      :bodyStyle="{ 'padding-top': '0' }"
+    />
+    <BindRfid @register="registerBindModal" @reload="reload" :bodyStyle="{ 'padding-top': '0' }" />
+    <BlindBox
+      @register="registerBlindBoxModal"
       @reload="reload"
       :bodyStyle="{ 'padding-top': '0' }"
     />
@@ -57,24 +115,37 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, h, ref } from 'vue';
+  import { defineComponent, ref } from 'vue';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
-  import { tableColumns, searchFormSchema, getTableListAsync, deleteGoodsAsync } from './rfid';
+  import {
+    tableColumns,
+    searchFormSchema,
+    getTableListAsync,
+    getDetaiTableListAsync,
+    tableDetailColumns,
+    deleteGoodsAsync,
+    PickOut,
+  } from './Material';
   import { useModal } from '/@/components/Modal';
-  import CreateArchive from './CreateArchive.vue';
+  import CreateArchive from './CreateMaterial.vue';
+  import EditArchive from './EditMaterial.vue';
+  import BindRfid from './BindRfid.vue';
+  import BlindBox from './BlindBox.vue';
   import ImportGoodss from './ExcelImport.vue';
-  import { message, Modal } from 'ant-design-vue';
-  import QRCode from 'qrcode';
+  import { message } from 'ant-design-vue';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { Tag } from 'ant-design-vue';
-  import printJS from 'print-js';
+  import { PickOutDto } from '/@/services/ServiceProxies';
   export default defineComponent({
     name: 'Archive',
     components: {
       BasicTable,
       TableAction,
       CreateArchive,
+      EditArchive,
+      BlindBox,
+      BindRfid,
       Tag,
       ImportGoodss,
     },
@@ -84,12 +155,11 @@
       const [registerCreateArchiveModal, { openModal: openCreateArchiveModal }] = useModal();
 
       const [registerEditArchiveModal, { openModal: openEditArchiveModal }] = useModal();
-
+      const [registerBindModal, { openModal: openBindModal }] = useModal();
       const [registerBlindBoxModal, { openModal: openBlindBoxModal }] = useModal();
 
       const [registerImportGoodssModal, { openModal: openImportGoodssModal }] = useModal();
       let selectedBoxIdRef = ref();
-
       // table配置
       const [registerTable, { reload }] = useTable({
         columns: tableColumns,
@@ -104,6 +174,7 @@
         canResize: true,
         showIndexColumn: true,
         rowSelection: { type: 'radio' },
+        rowKey: 'id',
         actionColumn: {
           width: 150,
           title: t('common.action'),
@@ -114,6 +185,25 @@
           fixed: 'right',
         },
       });
+
+      const [registerDetailTable, { reload: reloadDetail }] = useTable({
+        columns: tableDetailColumns,
+        api: getPageDetaiTableListAsync,
+        showTableSetting: false,
+        showIndexColumn: true,
+        bordered: true,
+        canResize: false,
+        maxHeight: 300,
+      });
+
+      async function getPageDetaiTableListAsync(params) {
+        if (selectedBoxIdRef.value == '') {
+          return [];
+        }
+        params.archiveId = selectedBoxIdRef.value;
+        return await getDetaiTableListAsync(params);
+      }
+
       // 编辑用户
       const handleEdit = (record: Recordable) => {
         openEditArchiveModal(true, {
@@ -127,6 +217,12 @@
           record: record,
         });
       };
+      // 绑定标签
+      const handleBind = (record: Recordable) => {
+        openBindModal(true, {
+          record: record,
+        });
+      };
 
       // 删除用户
       const handleDelete = async (record: Recordable) => {
@@ -135,7 +231,6 @@
           return;
         } else {
           let msg = t('common.askDelete');
-          console.log(record);
           createConfirm({
             iconType: 'warning',
             title: t('common.tip'),
@@ -147,125 +242,29 @@
         }
       };
 
-      function jsonPrint() {
-        const boxId = selectedBoxIdRef.value;
-        // 验证是否有值
-        if (!boxId) {
-          Modal.warning({
-            title: '提示',
-            content: '请先选择盒子',
-          });
-          return;
-        }
-
-
-        QRCode.toString(boxId.toString(), {
-          type: 'svg',
-          width: 280,
-          margin: 2,
-          errorCorrectionLevel: 'H',
-        })
-          .then((svgString) => {
-
-            const printHtml = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="utf-8">
-        <title>二维码 - ${boxId}</title>
-        <style>
-          body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-            font-family: Arial, sans-serif;
-          }
-          .qr-container {
-            text-align: center;
-            padding: 30px;
-          }
-          svg {
-            width: 240px;
-            height: 240px;
-            margin: 20px auto;
-            display: block;
-          }
-          .box-id {
-            margin-top: 20px;
-            font-size: 16px;
-            color: #333;
-          }
-          @media print {
-            body {
-              margin: 0;
-              padding: 0;
-            }
-          }
-        </style>
-      </head>
-      <body>
-        <div class="qr-container">
-          <h3>档案盒标签</h3>
-          ${svgString}
-          <div class="box-id">编号: ${boxId}</div>
-        </div>
-      </body>
-      </html>
-    `;
-
-            // 预览弹窗
-            Modal.confirm({
-              title: `盒子二维码 - ${boxId}`,
-              width: 450,
-              centered: true,
-              content: h('div', { style: 'text-align: center; padding: 16px 0;' }, [
-                h('div', {
-                  style: 'width: 240px; height: 240px; margin: 0 auto;',
-                  innerHTML: svgString,
-                }),
-                h(
-                  'p',
-                  { style: 'margin-top: 16px; font-size: 14px; color: #666;' },
-                  `盒子编号: ${boxId}`
-                ),
-              ]),
-              okText: '打印',
-              cancelText: '取消',
-              onOk: () => {
-                // 方法1：使用 window.print 打印新窗口
-                const printWindow = window.open('', '_blank');
-                printWindow.document.write(printHtml);
-                printWindow.document.close();
-                printWindow.print();
-              },
-            });
-          })
-          .catch((error) => {
-            console.error('生成二维码失败:', error);
-            Modal.error({
-              title: '生成失败',
-              content: '二维码生成失败，请重试',
-            });
-          });
+      async function pickOut() {
+        var params = new Array<PickOutDto>();
+        var p = new PickOutDto();
+        p.archiveId = selectedBoxIdRef.value;
+        params.push(p);
+        await PickOut(params);
       }
 
       //勾选事件
       const onSelectChange = async ({ rows }) => {
         if (rows.length > 0) {
-          selectedBoxIdRef.value = rows[0].rfidCode;
+          selectedBoxIdRef.value = rows[0].id;
         } else {
           selectedBoxIdRef.value = '';
         }
-        console.log(selectedBoxIdRef.value);
+        reloadDetail();
       };
 
       return {
         onSelectChange,
-        jsonPrint,
         registerTable,
+        registerDetailTable,
+        reloadDetail,
         handleEdit,
         handleDelete,
         registerCreateArchiveModal,
@@ -277,6 +276,9 @@
         handleBlindBox,
         t,
         reload,
+        handleBind,
+        registerBindModal,
+        pickOut,
       };
     },
   });

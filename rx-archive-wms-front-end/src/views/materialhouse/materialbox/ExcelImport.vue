@@ -37,7 +37,7 @@
   import { ImpExcel, ExcelData } from '/@/components/Excel';
   import { BasicTable, BasicColumn } from '/@/components/Table';
   import { useI18n } from '/@/hooks/web/useI18n';
-  import { createManyGoodsAsync } from './Archive';
+  import { createManyGoodsAsync } from './MaterialBox';
   export default defineComponent({
     name: 'ImportGoodss',
     components: { BasicTable, ImpExcel, BasicModal },
@@ -74,7 +74,7 @@
       const tableListRef = ref<
         {
           title: string;
-          columns?: string[];//any=>string 接口只能接收字符串
+          columns?: any[];//any=>string 接口只能接收字符串
           dataSource?: any[];
         }[]
       >([]);

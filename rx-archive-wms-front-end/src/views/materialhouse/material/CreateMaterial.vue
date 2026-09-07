@@ -1,7 +1,7 @@
 <template>
   <BasicModal
-    :title="t('绑定标签')"
     :width="600"
+    :title="t('创建档案')"
     :canFullscreen="false"
     @ok="submit"
     @cancel="cancel"
@@ -18,45 +18,43 @@
   import { defineComponent } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';
-  import { blindBoxFormSchema, blindRfidAsync } from './ArchiveBox';
-  import {  CreateArchiveBoxDto } from '/@/services/ServiceProxies';
+  import { createFormSchema, CreateArchiveAsync } from './Material';
+  import { CreateArchiveDto } from '/@/services/ServiceProxies';
   import { useI18n } from '/@/hooks/web/useI18n';
   export default defineComponent({
-    name: 'BlindBox',
+    name: 'CreateArchive',
     components: {
       BasicModal,
       BasicForm,
     },
     emits: ['reload'],
     setup(_, { emit }) {
-      const [registerGoodsForm, { getFieldsValue, validate, setFieldsValue, resetFields }] =
-        useForm({
-          labelWidth: 120,
-          schemas: blindBoxFormSchema,
-          showActionButtonGroup: false,
-        });
+      // 加载父组件方法
+      // defineEmits(['reload']);
+      // const ctx = useContexts();
+
       const { t } = useI18n();
-      let currentGoodsInfo = new CreateArchiveBoxDto();
-      const [registerModal, { changeOkLoading, closeModal }] = useModalInner((data) => {
-        currentGoodsInfo = data.record;
-        setFieldsValue({
-          archiveBoxRfid: data.record.archiveBoxRfid,
-          archiveBoxName: data.record.archiveBoxName,
-        });
+      const [registerModal, { changeOkLoading, closeModal }] = useModalInner();
+      const [registerGoodsForm, { getFieldsValue, validate, resetFields }] = useForm({
+        labelWidth: 120,
+        schemas: createFormSchema,
+        showActionButtonGroup: false,
       });
 
       const visibleChange = async (visible: boolean) => {
         if (visible) {
         } else {
+          resetFields();
         }
       };
 
+      // 保存用户
       const submit = async () => {
         try {
-          let request = getFieldsValue() as CreateArchiveBoxDto;
-          request.id = currentGoodsInfo.id;
-          await blindRfidAsync({
-            request: request,
+          let request = getFieldsValue() as CreateArchiveDto;
+          request.rfidId = request.archivesRfid;
+          await CreateArchiveAsync({
+            request,
             changeOkLoading,
             validate,
             closeModal,
@@ -71,14 +69,13 @@
         resetFields();
         closeModal();
       };
-
       return {
+        t,
+        cancel,
         registerModal,
         registerGoodsForm,
         submit,
         visibleChange,
-        cancel,
-        t,
       };
     },
   });

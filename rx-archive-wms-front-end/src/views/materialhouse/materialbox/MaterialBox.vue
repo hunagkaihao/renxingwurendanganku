@@ -138,11 +138,11 @@
     deleteStorageBoxAsync,
     createWCSIn,
     createWCSOut,
-  } from './ArchiveBox';
+  } from './MaterialBox';
   import { useModal } from '/@/components/Modal';
-  import CreateArchive from './CreateArchiveBox.vue';
-  import EditArchive from './EditArchiveBox.vue';
-  import BindArchive from './BindArchive.vue';
+  import CreateArchive from './CreateMaterialBox.vue';
+  import EditArchive from './EditMaterialBox.vue';
+  import BindArchive from './BindMaterial.vue';
   import BindRfid from './BindRfid.vue';
   import ImportGoodss from './ExcelImport.vue';
   import { message } from 'ant-design-vue';

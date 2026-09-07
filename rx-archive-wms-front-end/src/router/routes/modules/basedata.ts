@@ -14,9 +14,9 @@ const basedata: AppRouteModule = {
   },
   children: [
     {
-      path: 'archive',
-      name: 'Archive',
-      component: () => import('/@/views/archivehouse/archive/Archive.vue'),
+      path: 'material',
+      name: 'Material',
+      component: () => import('/@/views/materialhouse/material/Material.vue'),
       meta: {
         title: t('routes.basedata.archiveManagement'),
         policy: 'WarehouseManagement.StorageBoxManagement',
@@ -24,9 +24,9 @@ const basedata: AppRouteModule = {
       },
     },
     {
-        path: 'archivebox',
-        name: 'Archivebox',
-        component: () => import('/@/views/archivehouse/archivebox/ArchiveBox.vue'),
+        path: 'materialbox',
+        name: 'Materialbox',
+        component: () => import('/@/views/materialhouse/materialbox/MaterialBox.vue'),
         meta: {
           title: t('routes.basedata.archiveboxManagement'),
           policy: 'WarehouseManagement.StorageBoxManagement',

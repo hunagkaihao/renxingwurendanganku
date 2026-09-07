@@ -1,26 +1,24 @@
 <template>
   <BasicModal
-    :title="t('routes.material.archiveManagement_edit_archives')"
+    :title="t('编辑档案盒')"
     :width="600"
     :canFullscreen="false"
     @ok="submit"
-    @cancel="cancel"
     @register="registerModal"
     @visible-change="visibleChange"
     :destroyOnClose="true"
     :maskClosable="false"
   >
-    <BasicForm @register="registerArchivesForm" />
+    <BasicForm @register="registerGoodsForm" />
   </BasicModal>
 </template>
 
 <script lang="ts">
-  import moment from 'moment'; //leixd
   import { defineComponent } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';
-  import { editFormSchema, updateArchivesAsync } from './Archive';
-  import { CreateArchiveDto, ArchiveDto } from '/@/services/ServiceProxies';
+  import { editFormSchema, updateStorageBoxAsync } from './MaterialBox';
+  import { CreateArchiveBoxDto } from '/@/services/ServiceProxies';
   import { useI18n } from '/@/hooks/web/useI18n';
   export default defineComponent({
     name: 'EditArchive',
@@ -30,24 +28,26 @@
     },
     emits: ['reload'],
     setup(_, { emit }) {
-      const [registerArchivesForm, { getFieldsValue, validate, setFieldsValue, resetFields }] =
+      const [registerGoodsForm, { getFieldsValue, validate, setFieldsValue, resetFields }] =
         useForm({
           labelWidth: 120,
           schemas: editFormSchema,
           showActionButtonGroup: false,
         });
       const { t } = useI18n();
-      let currentArchivesInfo = new ArchiveDto();
+      let currentGoodsInfo = new CreateArchiveBoxDto();
       const [registerModal, { changeOkLoading, closeModal }] = useModalInner((data) => {
-        currentArchivesInfo = data.record;
+        currentGoodsInfo = data.record;
         setFieldsValue({
-          archivesRfid: data.record.rfidId,
-          archivesCode: data.record.archivesCode,
-          archivesName: data.record.archivesName,
+          archiveBoxRfid: data.record.archiveBoxRfid,
+          archiveBoxName: data.record.archiveBoxName,
+          stockBarcode: data.record.stockBarcode,
+          cellModel: data.record.cellModel,
           year: data.record.year,
-          secretLevel: data.record.secretLevel,
-          classType: data.record.classType,
+          // secretLevel: [data.record.secretLevel],
+          secretLevel: data.record.secretLevel === null ? null : data.record.secretLevel,
           retentionPeriod: data.record.retentionPeriod,
+          catalogNo: data.record.catalogNo,
         });
       });
 
@@ -59,10 +59,9 @@
 
       const submit = async () => {
         try {
-          let request = getFieldsValue() as CreateArchiveDto;
-          request.id = currentArchivesInfo.id;
-          request.rfidId = request.archivesRfid;
-          await updateArchivesAsync({
+          let request = getFieldsValue() as CreateArchiveBoxDto;
+          request.id = currentGoodsInfo.id;
+          await updateStorageBoxAsync({
             request: request,
             changeOkLoading,
             validate,
@@ -81,7 +80,7 @@
 
       return {
         registerModal,
-        registerArchivesForm,
+        registerGoodsForm,
         submit,
         visibleChange,
         cancel,
@@ -92,6 +91,6 @@
 </script>
 <style lang="less" scoped>
   .ant-checkbox-wrapper + .ant-checkbox-wrapper {
-    margin-left: 0px;
+    margin-left: 0;
   }
 </style>

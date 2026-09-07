@@ -16,7 +16,7 @@ const basedata: AppRouteModule = {
     {
       path: 'cell',
       name: 'Cell',
-      component: () => import('/@/views/archivehouse/cell/Cell.vue'),
+      component: () => import('/@/views/materialhouse/cell/Cell.vue'),
       meta: {
         title: t('库位管理'),
         policy: 'WarehouseManagement.StorageBoxManagement',
@@ -36,7 +36,7 @@ const basedata: AppRouteModule = {
     {
       path: 'archiveType',
       name: 'ArchiveType',
-      component: () => import('/@/views/archivehouse/archivetype/ArchiveType.vue'),
+      component: () => import('/@/views/materialhouse/materialtype/MaterialType.vue'),
       meta: {
         title: t('物品类型'),
         policy: 'WarehouseManagement.StorageBoxManagement',
@@ -46,7 +46,7 @@ const basedata: AppRouteModule = {
     {
       path: 'rfid',
       name: 'Rfid',
-      component: () => import('/@/views/archivehouse/rfid/Rfid.vue'),
+      component: () => import('/@/views/materialhouse/rfid/Rfid.vue'),
       meta: {
         title: t('标签管理'),
         policy: 'WarehouseManagement.StorageBoxManagement',

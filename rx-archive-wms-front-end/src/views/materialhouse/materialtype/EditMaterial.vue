@@ -19,7 +19,7 @@
     import { defineComponent } from 'vue';
     import { BasicModal, useModalInner } from '/@/components/Modal';
     import { BasicForm, useForm } from '/@/components/Form/index';
-    import { editFormSchema, updateGoodsAsync } from './Archivetype';
+    import { editFormSchema, updateGoodsAsync } from './MaterialType';
     import { UpdateGoodsDto, GoodsDto } from '/@/services/ServiceProxies';
     import { useI18n } from '/@/hooks/web/useI18n';
     export default defineComponent({

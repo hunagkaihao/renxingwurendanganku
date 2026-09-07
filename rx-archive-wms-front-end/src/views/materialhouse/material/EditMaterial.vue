@@ -1,7 +1,7 @@
 <template>
   <BasicModal
+    :title="t('routes.material.archiveManagement_edit_archives')"
     :width="600"
-    :title="t('创建物品类型')"
     :canFullscreen="false"
     @ok="submit"
     @cancel="cancel"
@@ -10,52 +10,60 @@
     :destroyOnClose="true"
     :maskClosable="false"
   >
-    <BasicForm @register="registerGoodsForm" />
+    <BasicForm @register="registerArchivesForm" />
   </BasicModal>
 </template>
 
 <script lang="ts">
-  //import moment from 'moment'; //leixd
+  import moment from 'moment'; //leixd
   import { defineComponent } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';
-  import { createFormSchema, CreateArchiveAsync } from './Archivetype';
-  import { CreateArchiveDto } from '/@/services/ServiceProxies';
+  import { editFormSchema, updateArchivesAsync } from './Material';
+  import { CreateArchiveDto, ArchiveDto } from '/@/services/ServiceProxies';
   import { useI18n } from '/@/hooks/web/useI18n';
   export default defineComponent({
-    name: 'CreateArchive',
+    name: 'EditArchive',
     components: {
       BasicModal,
       BasicForm,
     },
     emits: ['reload'],
     setup(_, { emit }) {
-      // 加载父组件方法
-      // defineEmits(['reload']);
-      // const ctx = useContexts();
-
+      const [registerArchivesForm, { getFieldsValue, validate, setFieldsValue, resetFields }] =
+        useForm({
+          labelWidth: 120,
+          schemas: editFormSchema,
+          showActionButtonGroup: false,
+        });
       const { t } = useI18n();
-      const [registerModal, { changeOkLoading, closeModal }] = useModalInner();
-      const [registerGoodsForm, { getFieldsValue, validate, resetFields }] = useForm({
-        labelWidth: 120,
-        schemas: createFormSchema,
-        showActionButtonGroup: false,
+      let currentArchivesInfo = new ArchiveDto();
+      const [registerModal, { changeOkLoading, closeModal }] = useModalInner((data) => {
+        currentArchivesInfo = data.record;
+        setFieldsValue({
+          archivesRfid: data.record.rfidId,
+          archivesCode: data.record.archivesCode,
+          archivesName: data.record.archivesName,
+          year: data.record.year,
+          secretLevel: data.record.secretLevel,
+          classType: data.record.classType,
+          retentionPeriod: data.record.retentionPeriod,
+        });
       });
 
       const visibleChange = async (visible: boolean) => {
         if (visible) {
         } else {
-          await resetFields();
         }
       };
 
-      // 保存用户
       const submit = async () => {
         try {
           let request = getFieldsValue() as CreateArchiveDto;
-          // request.testdate = moment(request.testdate).format();
-          await CreateArchiveAsync({
-            request,
+          request.id = currentArchivesInfo.id;
+          request.rfidId = request.archivesRfid;
+          await updateArchivesAsync({
+            request: request,
             changeOkLoading,
             validate,
             closeModal,
@@ -70,13 +78,14 @@
         resetFields();
         closeModal();
       };
+
       return {
-        t,
-        cancel,
         registerModal,
-        registerGoodsForm,
+        registerArchivesForm,
         submit,
         visibleChange,
+        cancel,
+        t,
       };
     },
   });

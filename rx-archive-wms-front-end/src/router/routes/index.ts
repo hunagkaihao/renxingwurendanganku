@@ -58,7 +58,7 @@ export const MobileHomeRoute: AppRouteRecordRaw = {
 export const Board: AppRouteRecordRaw = {
   path: '/board',
   name: 'Board',
-  component: () => import('/@/views/archivehouse/board/Board.vue'),
+  component: () => import('/@/views/materialhouse/board/Board.vue'),
   meta: {
     title: t('看板'),
   },
@@ -67,7 +67,7 @@ export const Board: AppRouteRecordRaw = {
 export const Screen: AppRouteRecordRaw = {
   path: '/screen',
   name: 'Screen',
-  component: () => import('/@/views/archivehouse/board/Index.vue'),
+  component: () => import('/@/views/materialhouse/board/Index.vue'),
   meta: {
     title: t('看板1'),
   },

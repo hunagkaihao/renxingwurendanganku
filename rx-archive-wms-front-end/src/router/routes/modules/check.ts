@@ -16,7 +16,7 @@ const check: AppRouteModule = {
     {
       path: 'check',
       name: 'Check',
-      component: () => import('/@/views/archivehouse/check/Check.vue'),
+      component: () => import('/@/views/materialhouse/check/Check.vue'),
       meta: {
         title: t('盘点计划管理'),
         policy: 'WarehouseManagement.StorageBoxManagement',
@@ -26,7 +26,7 @@ const check: AppRouteModule = {
     {
       path: 'checktask',
       name: 'Checktask',
-      component: () => import('/@/views/archivehouse/check/Checktask.vue'),
+      component: () => import('/@/views/materialhouse/check/Checktask.vue'),
       meta: {
         title: t('盘点任务管理'),
         policy: 'WarehouseManagement.StorageBoxManagement',
@@ -36,7 +36,7 @@ const check: AppRouteModule = {
     {
       path: 'checkHis',
       name: 'CheckHis',
-      component: () => import('/@/views/archivehouse/check/CheckHis.vue'),
+      component: () => import('/@/views/materialhouse/check/CheckHis.vue'),
       meta: {
         title: t('盘点结果管理'),
         policy: 'WarehouseManagement.StorageBoxManagement',
