@@ -1,226 +1,33 @@
-<template>
-  <div id="app"> 
-    <el-row :gutter="20">
-        <el-col :span="6">
-            <div class="grid-content bg-purple">
-                <el-dropdown trigger="click" @command="handleMenu">
-                    <el-button type="primary" size="small" style="margin-right: 10px;">
-                        <i class="el-icon-menu el-icon--right"></i>
-                        Menu
-                        <i class="el-icon-arrow-down el-icon--right"></i>
-                    </el-button>
-                    <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item command="订单监控">订单监控</el-dropdown-item>
-                        <el-dropdown-item command="点位监控">点位监控</el-dropdown-item>
-                        <el-dropdown-item command="日志查询">日志查询</el-dropdown-item>
-                    </el-dropdown-menu>
-                </el-dropdown>
-                <el-button v-if="wcsState === 'Running'" type="success" size="small" @click="pauseWcsServer">{{ wcsStateInChinese }}</el-button>
-                <el-button v-else-if="wcsState === 'Pause'" type="warning" size="small" @click="restartWcsServer">{{ wcsStateInChinese }}</el-button>
-                <el-button v-else size="small" type="info">{{ wcsStateInChinese }}</el-button>
-            </div>
-        </el-col>
-        <el-col :span="12"><div class="grid-content bg-purple"></div></el-col>
-        <el-col :span="6">
-            <div class="grid-content bg-purple">
-                <el-button type="info" size="small" @click="startTest">启动测试</el-button>
-                <el-button type="info" size="small" @click="stopTest">停止测试</el-button>
-                <el-button type="info" size="small" @click="restartTest">重启测试</el-button>
-            </div>
-        </el-col>
-    </el-row>
-    <router-view></router-view>
-  </div>
-</template>
+<script setup lang="ts">
+import { computed, onMounted, ref } from 'vue';
+import { ElMessage } from 'element-plus';
+import { CircleCheck, CircleClose, Loading, Menu, Monitor, Operation, Refresh, Tickets, VideoPause, VideoPlay } from '@element-plus/icons-vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute, useRouter } from 'vue-router';
+import { changeWcsState, runTest } from './api/wcs';
+import { useWcsStore } from './stores/wcs';
 
-<script>
-import { Button, Row, Col, Dropdown, DropdownMenu, DropdownItem } from 'element-ui'    
-import 'element-ui/lib/theme-chalk/index.css'
-export default {
-  name: 'App',
-  data(){
-    return {
-        connection: null,
-        wcsState: 'unknown',
-        currentPage: ''
-    }
-  },
-  computed: {
-    wcsStateInChinese() {
-        let _stateName = "";
-        switch (this.wcsState) {
-            case "Running":
-                _stateName = "Wcs服务执行中";
-                break;
-            case "Pause":
-                _stateName = "Wcs服务暂停中";
-                break;
-            default:
-                _stateName = "Wcs服务状态未知";
-        }
-        return _stateName;
-    }
-  },
-  methods:{
-    pauseWcsServer()
-    {
-        this.$axios({
-            method:'post',
-            url:'wcs/dispatch/core/pause'
-        }).then(res => {
-            if(res.data)
-            {
-                if(res.data.success !== true)
-                    alert('暂停wcs服务失败' + res.data.message);
-            }
-        }).catch(err => {
-            alert(err);
-        });
-    
-    },
-    restartWcsServer()
-    {
-        this.$axios({
-            method:'post',
-            url:'wcs/dispatch/core/restart'
-        }).then(res => {
-            if(res.data)
-            {
-                if(res.data.success !== true)
-                    alert('暂停wcs服务失败' + res.data.message);
-            }
-        }).catch(err => {
-            alert(err);
-        });
-    },
-    getWcsState(){
-        let t = this;
-        this.$axios({
-            method:'get',
-            url:'wcs/dispatch/core/wcsStatus'
-        }).then(function(res){
-            let jsonStr = JSON.stringify(res.data);
-            t.wcsState = JSON.parse(jsonStr);
-        }).catch(function(error){
-            alert(error)
-        });
-    },
-    startTest(){
-        this.$axios({
-            method:'post',
-            url:'wcs/test/start'
-        }).then(function(res){
-            if(res.data.success == true)
-                alert("服务器已接收启动测试指令");
-            else
-                alert("服务器接收启动测试失败");
-        }).catch(function(error){
-            alert(error)
-        });
-    },
-    restartTest(){
-        this.$axios({
-            method:'post',
-            url:'wcs/test/restart'
-        }).then(function(res){
-            if(res.data.success == true)
-                alert("服务器已接收重启测试指令");
-            else
-                alert("服务器接收重启测试指令失败");
-        }).catch(function(error){
-            alert(error)
-        });
-    },
-    stopTest(){
-        this.$axios({
-            method:'post',
-            url:'wcs/test/stop'
-        }).then(function(res){
-            if(res.data.success == true)
-                alert("服务器已接收停止测试指令");
-            else
-                alert("服务器接收停止测试指令失败");
-        }).catch(function(error){
-            alert(error)
-        });
-    },
-    handleMenu(cmd){
-        if(cmd === '订单监控')
-        {
-            this.currentPage = '订单监控';
-            if(this.$route.path !== '/orderListMonitor')
-            {
-                this.$router.push({
-                    path:'/orderListMonitor'
-                });
-            }
-        }
-        else if(cmd === '点位监控')
-        {
-            this.currentPage = '点位监控';
-            if(this.$route.path !== '/tagMonitor')
-            {
-                this.$router.push({
-                    path:'/tagMonitor'
-                })
-            }
-        }
-        else if(cmd === '日志查询')
-        {
-            this.currentPage = '日志查询';
-            if(this.$route.path !== '/log')
-            {
-                this.$router.push({
-                    path:'/log'
-                });
-            }
-        }
-    },
-    updateWcsState(status)
-    {
-        this.wcsState = status;
-        console.log(this.wcsState);
-    }
-  },
-  mounted() {
-    this.orderData = [];
-    this.currentPage = '订单监控';
-    this.getWcsState();
-    this.$HubConn.on("UpdateWcsStatus", this.updateWcsState);
-    if(this.$route.path !== '/orderListMonitor')
-    {
-      this.$router.push({
-        path:'/orderListMonitor'
-      });
-    }
-  },
-  components: {
-    'el-button': Button,
-    'el-row': Row,
-    'el-col': Col,
-    'el-dropdown':Dropdown,
-    'el-dropdown-menu':DropdownMenu,
-    'el-dropdown-item':DropdownItem
-  }
-}
+const { t } = useI18n(); const router = useRouter(); const route = useRoute(); const wcs = useWcsStore(); const drawerOpen = ref(false); const actionLoading = ref<string | null>(null); const actionResult = ref<Record<string, 'success' | 'error'>>({});
+const stateText = computed(() => t(`state.${wcs.state}`));
+const connectionText = computed(() => ({ connected: '实时连接已连接', reconnecting: '实时连接重连中', disconnected: '实时连接已断开', failed: '实时连接失败' }[wcs.connectionStatus] || '实时连接状态未知'));
+const connectionTagType = computed(() => ({ connected: 'success', reconnecting: 'warning', disconnected: 'info', failed: 'danger' }[wcs.connectionStatus] || 'info'));
+const navItems = computed(() => [{ path:'/orders', label:t('menu.orders'), icon:Tickets }, { path:'/tags', label:t('menu.tags'), icon:Monitor }, { path:'/logs', label:t('menu.logs'), icon:Operation }]);
+function navigate(path:string) { drawerOpen.value = false; router.push(path); }
+function clearActionResult(action: string) { window.setTimeout(() => { delete actionResult.value[action]; }, 1800); }
+function actionIcon(action: string) { if (actionLoading.value === action) return Loading; if (actionResult.value[action] === 'success') return CircleCheck; if (actionResult.value[action] === 'error') return CircleClose; return action === 'state' ? (wcs.state === 'Running' ? VideoPause : VideoPlay) : action === 'restart' ? Refresh : action === 'stop' ? VideoPause : VideoPlay; }
+async function stateAction() { const action = 'state'; actionLoading.value = action; delete actionResult.value[action]; try { const result = await changeWcsState(wcs.state === 'Running' ? 'pause' : 'restart'); if (!result.success) { actionResult.value[action] = 'error'; ElMessage.error(result.message); } else { actionResult.value[action] = 'success'; wcs.state = wcs.state === 'Running' ? 'Pause' : 'Running'; } } finally { actionLoading.value = null; clearActionResult(action); } }
+async function testAction(action:'start'|'stop'|'restart') { actionLoading.value = action; delete actionResult.value[action]; try { const result = await runTest(action); if (result.success) { actionResult.value[action] = 'success'; ElMessage.success(result.message || '操作已提交'); } else { actionResult.value[action] = 'error'; ElMessage.error(result.message); } } finally { actionLoading.value = null; clearActionResult(action); } }
+onMounted(() => wcs.initialize().catch(() => ElMessage.error('WCS 服务连接失败')));
 </script>
-
-<style>
-#app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-    margin-top: 20px;
-    margin-left: 10px;
-    margin-right: 10px;
-}
-.bg-purple {
-    background: transparent;
-}
-.grid-content {
-    border-radius: 4px;
-    min-height: 36px;
-}
+<template>
+  <el-container class="app-shell">
+    <el-aside class="desktop-aside" width="236px"><div class="brand"><div class="brand-mark"><el-icon><VideoPlay /></el-icon></div><div><strong>RenXing WCS</strong><span>档案库调度监控</span></div></div><nav class="side-nav"><button v-for="item in navItems" :key="item.path" class="nav-item" :class="{active:route.path.startsWith(item.path)}" @click="navigate(item.path)"><el-icon><component :is="item.icon" /></el-icon><span>{{ item.label }}</span></button></nav></el-aside>
+    <el-container><el-header class="topbar"><div class="topbar-left"><el-button class="menu-button" circle @click="drawerOpen=true"><el-icon><Menu /></el-icon></el-button><div><div class="eyebrow">WAREHOUSE CONTROL SYSTEM</div><h1>{{ navItems.find(item => route.path.startsWith(item.path))?.label || 'WCS Monitor' }}</h1></div></div><div class="topbar-actions"><el-tag class="connection-tag" :type="connectionTagType" effect="light">{{ connectionText }}</el-tag><el-tag class="state-pill" :type="wcs.state==='Running'?'success':wcs.state==='Pause'?'warning':'info'" effect="light">{{ stateText }}</el-tag><el-button class="state-button" :icon="actionIcon('state')" :loading="actionLoading==='state'" :type="wcs.state==='Running'?'warning':'success'" @click="stateAction">{{ wcs.state==='Running'?'暂停服务':'恢复服务' }}</el-button></div></el-header>
+      <el-main class="main-content"><div class="quick-actions content-card"><div><span class="eyebrow">CONTROL CENTER</span><strong>调度控制</strong></div><el-space wrap><el-button :icon="actionIcon('start')" :loading="actionLoading==='start'" @click="testAction('start')">启动测试</el-button><el-button :icon="actionIcon('stop')" :loading="actionLoading==='stop'" @click="testAction('stop')">停止测试</el-button><el-button :icon="actionIcon('restart')" :loading="actionLoading==='restart'" @click="testAction('restart')">重启测试</el-button></el-space></div><Transition name="page" mode="out-in"><router-view /></Transition></el-main></el-container>
+    <el-drawer v-model="drawerOpen" title="RenXing WCS" direction="ltr" size="82%"><nav class="mobile-nav"><button v-for="item in navItems" :key="item.path" class="nav-item" :class="{active:route.path.startsWith(item.path)}" @click="navigate(item.path)"><el-icon><component :is="item.icon" /></el-icon>{{ item.label }}</button></nav></el-drawer>
+  </el-container>
+</template>
+<style scoped>
+.app-shell{min-height:100vh;background:var(--wcs-page)} .desktop-aside{position:relative;display:flex;flex-direction:column;padding:28px 16px 20px;background:#14213d;color:#fff}.brand{display:flex;align-items:center;gap:11px;padding:0 10px 34px}.brand-mark{display:grid;width:38px;height:38px;place-items:center;border-radius:12px;background:linear-gradient(135deg,#60a5fa,#2563eb);font-size:21px}.brand strong,.brand span{display:block}.brand strong{font-size:15px}.brand span{margin-top:4px;color:#9fb1d2;font-size:11px}.side-nav,.mobile-nav{display:grid;gap:7px}.nav-item{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;border:0;border-radius:11px;background:transparent;color:#aebbd3;cursor:pointer;font-weight:600;text-align:left;transition:all .2s ease}.nav-item:hover,.nav-item.active{background:rgba(96,165,250,.16);color:#fff}.nav-item.active{box-shadow:inset 3px 0 #60a5fa}.aside-footer{display:flex;align-items:center;gap:8px;margin-top:auto;padding:14px 10px 0;border-top:1px solid rgba(255,255,255,.1);color:#9fb1d2;font-size:12px}.connection-dot{width:8px;height:8px;border-radius:50%;background:#f87171}.connection-dot.online{background:#34d399;box-shadow:0 0 0 4px rgba(52,211,153,.15)}.topbar{display:flex;align-items:center;justify-content:space-between;height:82px;padding:0 32px;background:rgba(255,255,255,.86);border-bottom:1px solid var(--wcs-border);backdrop-filter:blur(14px)}.topbar-left,.topbar-actions{display:flex;align-items:center;gap:14px}.topbar h1{margin:3px 0 0;font-size:20px}.eyebrow{color:var(--wcs-muted);font-size:10px;font-weight:800;letter-spacing:.12em}.menu-button{display:none}.state-pill{padding:0 11px;border-radius:999px}.state-button{min-width:102px}.main-content{max-width:1500px;width:100%;margin:0 auto;padding:26px 32px 40px}.quick-actions{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:26px;padding:16px 20px}.quick-actions strong{display:block;margin-top:4px;font-size:15px}.page-enter-active,.page-leave-active{transition:opacity .18s ease,transform .18s ease}.page-enter-from{opacity:0;transform:translateY(8px)}.page-leave-to{opacity:0;transform:translateY(-4px)}
+@media(max-width:768px){.desktop-aside{display:none}.topbar{height:auto;min-height:72px;padding:14px 16px}.menu-button{display:inline-flex}.topbar-actions{gap:8px}.state-pill{display:none}.state-button{min-width:0;padding:8px 11px}.main-content{padding:16px 14px 28px}.quick-actions{align-items:flex-start;flex-direction:column;margin-bottom:18px;padding:15px}.quick-actions .el-space{width:100%}.quick-actions .el-button{flex:1;min-width:100px}}
 </style>

@@ -2,6 +2,7 @@ using Wcs.ConfigTool;
 using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Wcs.LogTool;
 
@@ -11,14 +12,40 @@ public static class SqliteLogHelper
 
     private static SqliteConnection connection = new SqliteConnection(Settings.Options.SqliteLogConnString);
 
+    private static void OpenConnection()
+    {
+        if (connection.State != System.Data.ConnectionState.Closed)
+            return;
+
+        var connectionOptions = new SqliteConnectionStringBuilder(Settings.Options.SqliteLogConnString);
+        if (!string.IsNullOrWhiteSpace(connectionOptions.DataSource)
+            && !string.Equals(connectionOptions.DataSource, ":memory:", StringComparison.OrdinalIgnoreCase))
+        {
+            var directory = Path.GetDirectoryName(Path.GetFullPath(connectionOptions.DataSource));
+            if (!string.IsNullOrWhiteSpace(directory))
+                Directory.CreateDirectory(directory);
+        }
+
+        connection.Open();
+        using var schemaCommand = connection.CreateCommand();
+        schemaCommand.CommandText = @"
+            CREATE TABLE IF NOT EXISTS logitems (
+                Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                Date TEXT NOT NULL,
+                Grade TEXT NOT NULL,
+                Message TEXT NOT NULL,
+                Source TEXT NOT NULL
+            );";
+        schemaCommand.ExecuteNonQuery();
+    }
+
     public static void WriteLog(SqliteLogItem logItem)
     {
         lock (locker)
         {
             try
             {
-                if(connection.State == System.Data.ConnectionState.Closed)
-                    connection.Open();
+                OpenConnection();
 
                 using (var command = connection.CreateCommand())
                 {
@@ -44,8 +71,7 @@ public static class SqliteLogHelper
         {
             try
             {
-                if(connection.State == System.Data.ConnectionState.Closed)
-                    connection.Open();
+                OpenConnection();
 
                 using (var command = connection.CreateCommand())
                 {
@@ -71,8 +97,7 @@ public static class SqliteLogHelper
         {
             try
             {
-                if(connection.State == System.Data.ConnectionState.Closed)
-                    connection.Open();
+                OpenConnection();
 
                 using (var command = connection.CreateCommand())
                 {
@@ -178,8 +203,7 @@ public static class SqliteLogHelper
         {
             try
             {
-                if(connection.State == System.Data.ConnectionState.Closed)
-                    connection.Open();
+                OpenConnection();
                     
                 using (var command = connection.CreateCommand())
                 {
@@ -226,8 +250,7 @@ public static class SqliteLogHelper
                 if(lastItem == null)
                     return;
 
-                if(connection.State == System.Data.ConnectionState.Closed)
-                    connection.Open();
+                OpenConnection();
 
                 using (var command = connection.CreateCommand())
                 {

@@ -1,54 +1,38 @@
 {
-  "name": "wcsmonitor",
-  "version": "0.1.0",
+  "name": "wcsmonitor-vue3",
   "private": true,
+  "version": "0.1.0",
+  "type": "module",
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "test:routes": "node --test tests/routes.test.cjs"
+    "dev": "vite",
+    "build": "vue-tsc --noEmit && vite build",
+    "type-check": "vue-tsc --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run"
   },
   "dependencies": {
-    "@microsoft/signalr": "^8.0.0",
-    "axios": "^1.6.1",
-    "core-js": "^3.8.3",
-    "element-ui": "^2.15.14",
-    "vue": "^2.6.14",
-    "vue-router": "^3.6.5"
+    "@formkit/auto-animate": "latest",
+    "@element-plus/icons-vue": "latest",
+    "@microsoft/signalr": "latest",
+    "@vueuse/core": "latest",
+    "axios": "latest",
+    "element-plus": "latest",
+    "pinia": "latest",
+    "vue": "latest",
+    "vue-i18n": "latest",
+    "vue-router": "latest"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.16",
-    "@babel/eslint-parser": "^7.12.16",
-    "@vue/cli-plugin-babel": "~5.0.0",
-    "@vue/cli-plugin-eslint": "~5.0.0",
-    "@vue/cli-service": "~5.0.0",
-    "babel-plugin-component": "^1.1.1",
-    "eslint": "^7.32.0",
-    "eslint-plugin-vue": "^8.0.3",
-    "vue-template-compiler": "^2.6.14"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/essential",
-      "eslint:recommended"
-    ],
-    "parserOptions": {
-      "parser": "@babel/eslint-parser"
-    },
-    "rules": {}
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not dead"
-  ],
-  "description": "档案库调度终端界面",
-  "main": "babel.config.js",
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+    "@eslint/js": "latest",
+    "@types/node": "latest",
+    "@vitejs/plugin-vue": "latest",
+    "eslint": "latest",
+    "eslint-plugin-vue": "latest",
+    "jsdom": "latest",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "latest",
+    "vite": "latest",
+    "vitest": "latest",
+    "vue-tsc": "latest"
+  }
 }
