@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
-using WarehouseManagement.ArchiveBoxs.Aggregates;
-using WarehouseManagement.Archives.Aggregates;
+using WarehouseManagement.MaterialBoxs.Aggregates;
+using WarehouseManagement.Material.Aggregates;
 
 namespace WarehouseManagement.Faces.Aggregates
 {

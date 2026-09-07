@@ -1,4 +1,4 @@
-﻿using Abp.Domain.Entities;
+using Abp.Domain.Entities;
 using Lion.AbpPro.ConfigurationOptions;
 using Lion.AbpPro.Extension.Customs.Dtos;
 using Microsoft.AspNetCore.Http;
@@ -16,10 +16,9 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.Identity;
 using Volo.Abp.Uow;
 using Volo.Abp.Users;
-using WarehouseManagement.ArchiveBoxs;
-using WarehouseManagement.ArchiveBoxs.Aggregates;
-using WarehouseManagement.Archives;
-using WarehouseManagement.Archives.Aggregates;
+using WarehouseManagement.MaterialBoxs;
+using WarehouseManagement.MaterialBoxs.Aggregates;
+using WarehouseManagement.Material;
 using WarehouseManagement.Cells;
 using WarehouseManagement.Checks;
 using WarehouseManagement.Goodss;
@@ -74,8 +73,8 @@ namespace WarehouseManagement.StockTasks
         private readonly ICurrentUser _currentUser;
         private readonly GoodsManager _goodsManager;
         private readonly CellManager _cellManager;
-        private readonly ArchiveBoxManager _archiveBoxManager;
-        private readonly ArchiveManager _archiveManager;
+        private readonly MaterialBoxManager _materialBoxManager;
+        private readonly MaterialManager _archiveManager;
         private readonly FbqOptions _fbqOptions;
         private readonly WcsApiManager _wcsApiManager;
         private readonly CheckManager _checkManager;
@@ -102,10 +101,10 @@ namespace WarehouseManagement.StockTasks
             , IStockTaskDetailRepository stockTaskDetailRepository
             , IOptionsSnapshot<FbqOptions> fbqOptions
             , WcsApiManager wcsApiManager
-            , ArchiveBoxManager archiveBoxManager
+            , MaterialBoxManager materialBoxManager
             , CheckManager checkManager
             , PlanManager planManager
-            , ArchiveManager archiveManager
+            , MaterialManager materialManager
             )
         {
             _stockTaskRepository = stockTaskRepository;
@@ -116,10 +115,10 @@ namespace WarehouseManagement.StockTasks
             _stockTaskDetailRepository = stockTaskDetailRepository;
             FbqEnable = fbqOptions.Value.Enable;
             _wcsApiManager = wcsApiManager;
-            _archiveBoxManager = archiveBoxManager;
+            _materialBoxManager = materialBoxManager;
             _checkManager = checkManager;
             _planManager = planManager;
-            _archiveManager = archiveManager;
+            _archiveManager = materialManager;
         }
         //public async Task<StockTask> CreateAsync(StockTask stockTask, List<StockTaskDetail> stockTaskDetails)
         //{
@@ -248,8 +247,10 @@ namespace WarehouseManagement.StockTasks
             if (goods == null)
                 throw new UserFriendlyException(message: "物料不存在");
             //在任务表中查找物料
-            return await _stockTaskDetailRepository.GetListAsync(f => f.GoodsId == goods.Id
-            & f.GoodsBatchNo == goodsBatchNo & (f.StorageListStatus != ManageStatus.Complete & f.StorageListStatus != ManageStatus.Cancel));
+            return await _stockTaskDetailRepository.GetListAsync(f => f.GoodsId == goods.Id & 
+                                                                                   f.GoodsBatchNo == goodsBatchNo & 
+                                                                                  (f.StorageListStatus != ManageStatus.Complete & 
+                                                                                   f.StorageListStatus != ManageStatus.Cancel));
         }
 
         public async Task<StockTask> UpdateDetailQuantityAsync(int stockTaskDetailId, int stockTaskId, decimal manageListQuantity)
@@ -273,38 +274,38 @@ namespace WarehouseManagement.StockTasks
         {
             //查询档案盒ID
             StockTaskDto stockTask = new();
-            ArchiveBox archiveBox;
+            MaterialBox materialBox;
             string exMessage = null;
             try
             {
                 exMessage = "未查询到档案盒";
-                archiveBox = await _archiveBoxManager.GetArchiveBoxById(archiveBoxId);
-                if (archiveBox.ArchiveBoxRfid.IsNullOrEmpty())
+                materialBox = await _materialBoxManager.GetArchiveBoxById(archiveBoxId);
+                if (materialBox.MaterialBoxRfid.IsNullOrEmpty())
                 {
                     exMessage = "档案盒未绑定标签";
                     throw new UserFriendlyException("档案盒未绑定标签");
                 }
-                stockTask.ArchiveBoxRfid = archiveBox.ArchiveBoxRfid;
+                stockTask.ArchiveBoxRfid = materialBox.MaterialBoxRfid;
 
-                if (archiveBox.CellId == 0)
+                if (materialBox.CellId == 0)
                 {
                     exMessage = "档案盒不在库位中，无法出库";
                     throw new UserFriendlyException("档案盒不在库位中，无法出库");
                 }
                 stockTask.ManageTypeCode = ManageType.HPSortStockOut;
                 stockTask.ManageStatus = ManageStatus.WaitingExecute;
-                stockTask.StartCellId = archiveBox.CellId;
+                stockTask.StartCellId = materialBox.CellId;
             }
             catch
             {
                 throw new UserFriendlyException(exMessage);
             }
             //step1 该档案盒是否存在任务
-            if (await ValidateStockManageExist(archiveBox.ArchiveBoxRfid))
+            if (await ValidateStockManageExist(materialBox.MaterialBoxRfid))
             {
                 throw new UserFriendlyException("档案盒已存在任务");
             }
-            var startCell = await _cellManager.GetByIdAsync(archiveBox.CellId);
+            var startCell = await _cellManager.GetByIdAsync(materialBox.CellId);
             //try
             //{
             //    var user = _userManager.GetUserById(userid);
@@ -322,17 +323,17 @@ namespace WarehouseManagement.StockTasks
             //会出现部分ID丢失的情况
             //if (s != null)
             //{
-                if (archiveBox != null)
+                if (materialBox != null)
                 {
                     //查询档案盒所包含的档案文件
-                    List<ArchiveBoxDetail> archiveBoxDetails = archiveBox.Details;
+                    List<MaterialBoxDetail> archiveBoxDetails = materialBox.Details;
                     Boolean flag = false;
                     for (int i = 0; i < archiveBoxDetails.Count; i++)
                     {
                         //商品ID是否存在
                         try
                         {
-                            Archive archive = await _archiveManager.GetArchiveById(archiveBoxDetails[i].ArchiveId);
+                            await _archiveManager.GetArchiveById(archiveBoxDetails[i].MaterialId);
                         }
                         catch
                         {
@@ -341,9 +342,9 @@ namespace WarehouseManagement.StockTasks
 
                         foreach (var stockTaskDetail in stockTaskDetails)
                         {
-                            if (stockTaskDetail.GoodsId == archiveBoxDetails[i].ArchiveId)
+                            if (stockTaskDetail.GoodsId == archiveBoxDetails[i].MaterialId)
                             {
-                                s.AddDetail(archiveBoxDetails[i].Id, archiveBoxDetails[i].ArchiveId, _currentUser.Name);
+                                s.AddDetail(archiveBoxDetails[i].Id, archiveBoxDetails[i].MaterialId, _currentUser.Name);
                                 await _stockTaskRepository.InsertAsync(s,true);
                                 flag = true;
                             }
@@ -375,24 +376,24 @@ namespace WarehouseManagement.StockTasks
             Log.Debug("用户:" + "创建了出库任务，任务ID：" + "  方法名:" + System.Reflection.MethodBase.GetCurrentMethod().Name);
             return true;
         }
-        public async Task<StockTask> CreateWCSIn(string manageTypeCode, ArchiveBox archiveBox)
+        public async Task<StockTask> CreateWCSIn(string manageTypeCode, MaterialBox materialBox)
         {
             //判断档案盒状态
-            if (archiveBox.CellId != 0)
+            if (materialBox.CellId != 0)
             {
                 throw new UserFriendlyException(message: "档案盒已在库位");
             }
             //判断档案盒是否存在库位任务
-            if (await ValidateStockManageExist(archiveBox.ArchiveBoxRfid))
+            if (await ValidateStockManageExist(materialBox.MaterialBoxRfid))
             {
                 throw new UserFriendlyException(message: "档案盒已存在出入库任务");
             }
             StockTask entity = null;
             try
             {
-                entity = new StockTask(manageTypeCode, archiveBox.ArchiveBoxRfid);
+                entity = new StockTask(manageTypeCode, materialBox.MaterialBoxRfid);
                 entity = await _stockTaskRepository.InsertAsync(entity, true);
-                Log.Debug($"Task:{entity.Id} Box:{archiveBox.ArchiveBoxRfid} CreateStockIn Inserted StockTaskData: {JsonConvert.SerializeObject(entity)}");
+                Log.Debug($"Task:{entity.Id} Box:{materialBox.MaterialBoxRfid} CreateStockIn Inserted StockTaskData: {JsonConvert.SerializeObject(entity)}");
                 //entity.SetAsWaitingExecuted();
 
                 //await SetAsExecutingAsync(entity.Id);
@@ -401,7 +402,7 @@ namespace WarehouseManagement.StockTasks
             }
             catch (Exception ex)
             {
-                Log.Error($"Box:{archiveBox.ArchiveBoxRfid} CreateStockIn is fail ErrorMsg: {ex.Message}");
+                Log.Error($"Box:{materialBox.MaterialBoxRfid} CreateStockIn is fail ErrorMsg: {ex.Message}");
                 throw new UserFriendlyException(message: "创建入库任务失败");
             }
 
@@ -413,7 +414,7 @@ namespace WarehouseManagement.StockTasks
             var stockTask = await _stockTaskRepository.FindByIdAsync(StockTaskId);
             if (stockTask != null)
             {
-                var box = await _archiveBoxManager.GetArchiveBoxByRfidCode(stockTask.ArchiveBoxRfid);
+                var box = await _materialBoxManager.GetArchiveBoxByRfidCode(stockTask.ArchiveBoxRfid);
                 if (stockTask.ManageStatus == ManageStatus.WaitingExecute)
                 {
                     Cell startCell ;
@@ -476,7 +477,7 @@ namespace WarehouseManagement.StockTasks
                     //创建WCS任务
                     var result = await _wcsApiManager.StockOrderCreate(
                         reqCode,
-                        box.ArchiveBoxRfid,
+                        box.MaterialBoxRfid,
                         stockTask.StartCellCode,
                         stockTask.EndCellCode,
                         ToWcsTaskType(stockTask.ManageTypeCode),
@@ -534,26 +535,26 @@ namespace WarehouseManagement.StockTasks
                 f.ManageStatus != ManageStatus.WaitingExecute);
         }
 
-        public async Task<StockTask> CreateWCSOut(string manageTypeCode, ArchiveBox archiveBox)
+        public async Task<StockTask> CreateWCSOut(string manageTypeCode, MaterialBox materialBox)
         {
             //判断档案盒状态
-            if (archiveBox.CellId == 0)
+            if (materialBox.CellId == 0)
             {
                 throw new UserFriendlyException(message: "档案盒不在库位");
             }
             //
-            var startCell = await _cellManager.GetByIdAsync(archiveBox.CellId);
+            var startCell = await _cellManager.GetByIdAsync(materialBox.CellId);
             //判断档案盒是否存在库位任务
-            if (await ValidateStockManageExist(archiveBox.ArchiveBoxRfid))
+            if (await ValidateStockManageExist(materialBox.MaterialBoxRfid))
             {
                 throw new UserFriendlyException(message: "档案盒已存在出入库任务");
             }
             StockTask entity = null;
             try
             {
-                entity = new StockTask(manageTypeCode, archiveBox.ArchiveBoxRfid, startCell.CellCode, startCell.Id);
+                entity = new StockTask(manageTypeCode, materialBox.MaterialBoxRfid, startCell.CellCode, startCell.Id);
                 return await _stockTaskRepository.InsertAsync(entity, true);
-                Log.Debug($"Task:{entity.Id} Box:{archiveBox.ArchiveBoxRfid} CreateStockIn Inserted StockTaskData: {JsonConvert.SerializeObject(entity)}");
+                Log.Debug($"Task:{entity.Id} Box:{materialBox.MaterialBoxRfid} CreateStockIn Inserted StockTaskData: {JsonConvert.SerializeObject(entity)}");
                 //entity.SetAsWaitingExecuted();
 
                 //await SetAsExecutingAsync(entity.Id);
@@ -562,7 +563,7 @@ namespace WarehouseManagement.StockTasks
             }
             catch (Exception ex)
             {
-                Log.Error($"Box:{archiveBox.ArchiveBoxRfid} CreateStockIn is fail ErrorMsg: {ex.Message}");
+                Log.Error($"Box:{materialBox.MaterialBoxRfid} CreateStockIn is fail ErrorMsg: {ex.Message}");
                 throw new UserFriendlyException(message: "创建出库任务失败");
             }
 
@@ -602,7 +603,7 @@ namespace WarehouseManagement.StockTasks
                             // 出库完成：释放起终点库位并将档案盒标记为出库。
                             await _cellManager.SetAsStockOutAsync((int)entity.EndCellId);
                             await _cellManager.SetAsStockOutAsync((int)entity.StartCellId);
-                            await _archiveBoxManager.UpdateStockOutCellAsync(entity.ArchiveBoxRfid);
+                            await _materialBoxManager.UpdateStockOutCellAsync(entity.ArchiveBoxRfid);
                             entity.SetAsCompleted();
                         }
                         else if (entity.ManageTypeCode == ManageType.NPFullStockIn)
@@ -610,7 +611,7 @@ namespace WarehouseManagement.StockTasks
                             // 入库完成：目标库位入库、起点释放并绑定档案盒新库位。
                             var endCell = await _cellManager.SetAsStockInAsync((int)entity.EndCellId);
                             await _cellManager.SetAsStockOutAsync((int)entity.StartCellId);
-                            await _archiveBoxManager.UpdateStockCellAsync(entity.ArchiveBoxRfid, endCell.Id);
+                            await _materialBoxManager.UpdateStockCellAsync(entity.ArchiveBoxRfid, endCell.Id);
                             entity.SetAsCompleted();
                         }
                         else
@@ -704,7 +705,7 @@ namespace WarehouseManagement.StockTasks
             {
                  //设置库位状态
                  var endCell = await _cellManager.SetAsStockInAsync((int)entity.EndCellId);
-                 await _archiveBoxManager.UpdateStockCellAsync(plateCode, endCell.Id);
+                 await _materialBoxManager.UpdateStockCellAsync(plateCode, endCell.Id);
                  entity.ArchiveBoxRfid = plateCode;
 
             }
@@ -778,10 +779,10 @@ namespace WarehouseManagement.StockTasks
             StockTaskDto stockTask = new();
             try
             {
-                var archiveBox = await _archiveBoxManager.GetArchiveBoxByCellId(cellId);
+                var archiveBox = await _materialBoxManager.GetArchiveBoxByCellId(cellId);
                 if (archiveBox != null)
                 {
-                    stockTask.ArchiveBoxRfid = archiveBox.ArchiveBoxRfid;
+                    stockTask.ArchiveBoxRfid = archiveBox.MaterialBoxRfid;
                 }
                 else
                 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WarehouseManagement.ArchiveBoxs.Aggregates;
+using WarehouseManagement.MaterialBoxs.Aggregates;
 using WarehouseManagement.Faces.Aggregates;
 
 namespace WarehouseManagement.EntityFrameworkCore.Faces

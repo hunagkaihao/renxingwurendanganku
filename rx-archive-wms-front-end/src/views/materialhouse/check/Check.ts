@@ -265,20 +265,20 @@ export const checkHistableColumns: BasicColumn[] = [
       title: t('库位'),
       dataIndex: 'cellName',
     },
-    {
+  /*  {
       title: t('案卷号'),
       dataIndex: 'goodsAJCode',
-    },
+    },*/
     {
       title: t('保管期限'),
       dataIndex: 'retentionPeriod',
     },
     {
-      title: t('所属档案盒'),
+      title: t('所属档物料盒'),
       dataIndex: 'archiveBoxName',
     },
     {
-      title: t('档案盒条码'),
+      title: t('物料盒条码'),
       dataIndex: 'archiveBoxRfid',
     },
     {

@@ -17,7 +17,7 @@ namespace WarehouseManagement.StockTasks
 
         Task<PagedResultDto<StockTaskDetailDto>> GetPagingDetailListAsync(PagingStockTaskDetailInput input);
 
-        Task<PagedResultDto<StockTaskDetailDto>> GetPagingDetailListByArchiveIdAsync(PagingStockTaskDetailInput input);
+        Task<PagedResultDto<StockTaskDetailDto>> GetPagingDetailListByMaterialIdAsync(PagingStockTaskDetailInput input);
 
         /// <summary>
         /// 更新书籍

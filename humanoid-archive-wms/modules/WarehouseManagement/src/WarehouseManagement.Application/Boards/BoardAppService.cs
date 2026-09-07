@@ -5,8 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp;
-using WarehouseManagement.ArchiveBoxs;
-using WarehouseManagement.Archives;
+using WarehouseManagement.MaterialBoxs;
+using WarehouseManagement.Material;
 using WarehouseManagement.Boards.Dto;
 using WarehouseManagement.Cells;
 using WarehouseManagement.StockTasks;
@@ -17,25 +17,25 @@ namespace WarehouseManagement.Boards
     public class BoardAppService : WarehouseManagementAppService, IBoardAppService
     {
         public readonly TaskHisManager _taskHisManager;
-        public readonly ArchiveBoxManager _archiveBoxManager;
-        public readonly ArchiveManager _archiveManager;
-        public readonly ArchiveBoxDetailManager _archiveBoxDetailManager;
+        public readonly MaterialBoxManager MaterialBoxManager;
+        public readonly MaterialManager _archiveManager;
+        public readonly MaterialBoxDetailManager MaterialBoxDetailManager;
         public readonly CellManager _cellManager;
 
 
         public BoardAppService(
             TaskHisManager taskHisManager,
-            ArchiveBoxManager archiveBoxManager,
-            ArchiveManager archiveManager,
-            ArchiveBoxDetailManager archiveBoxDetailManager,
+            MaterialBoxManager materialBoxManager,
+            MaterialManager materialManager,
+            MaterialBoxDetailManager materialBoxDetailManager,
             CellManager cellManager
             )
         {
             _taskHisManager = taskHisManager;
-            _archiveBoxManager = archiveBoxManager;
-            _archiveBoxDetailManager = archiveBoxDetailManager;
+            MaterialBoxManager = materialBoxManager;
+            MaterialBoxDetailManager = materialBoxDetailManager;
             _cellManager = cellManager;
-            _archiveManager = archiveManager;
+            _archiveManager = materialManager;
         }
 
         public async Task<SevenDayTasksDto> GetSevenDayTasks()
@@ -66,8 +66,8 @@ namespace WarehouseManagement.Boards
             try
             {
                 StockInfoDto stockInfoDto = new();
-                var archiveBoxs = await _archiveBoxManager.GetAll();
-                var archiveBoxDetails = await _archiveBoxDetailManager.GetAll();
+                var archiveBoxs = await MaterialBoxManager.GetAll();
+                var archiveBoxDetails = await MaterialBoxDetailManager.GetAll();
                 var archives = await _archiveManager.GetAll();
                 var iLists =await _cellManager.GetByCellTypeAsync(CellType.Station);
                 List<int> cellIds = new();

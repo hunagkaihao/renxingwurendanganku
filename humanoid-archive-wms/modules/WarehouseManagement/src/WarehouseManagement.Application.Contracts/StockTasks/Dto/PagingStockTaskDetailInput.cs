@@ -12,7 +12,7 @@ namespace WarehouseManagement.StockTasks.Dto
     {
         public int StockTaskId { get; set; }
 
-        public int ArchiveId { get; set; }
+        public int MaterialId { get; set; }
         public string Filter { get; set; }
     }
 }

@@ -15,7 +15,7 @@ using System.Linq;
 using WarehouseManagement.Goodss;
 using WarehouseManagement.Cells;
 using WarehouseManagement.StockTasks;
-using WarehouseManagement.Archives;
+using WarehouseManagement.Material;
 
 namespace WarehouseManagement.TaskHiss
 {
@@ -35,10 +35,10 @@ namespace WarehouseManagement.TaskHiss
         private readonly IGoodsRepository _goodsRepository;
         private readonly IStockTaskRepository _stockTaskRepository;
         private readonly ICellRepository _cellRepository;
-        private readonly IArchiveRepository _archiveRepository;
+        private readonly IMaterialRepository _archiveRepository;
         public TaskHisAppService(ITaskHisRepository taskHisRepository, TaskHisManager taskHisManagement,
             ITaskHisDetailRepository taskHisDetailRepository, IGoodsRepository goodsRepository,
-            IStockTaskRepository stockTaskRepository, ICellRepository cellRepository, IArchiveRepository archiveRepository)
+            IStockTaskRepository stockTaskRepository, ICellRepository cellRepository, IMaterialRepository archiveRepository)
         {
             _taskHisRepository = taskHisRepository;
             _taskHisManagement = taskHisManagement;
@@ -114,10 +114,10 @@ namespace WarehouseManagement.TaskHiss
 
             //Prepare a query to join books and authors
             var query = from taskHisDetail in queryable
-                        join archive in await _archiveRepository.GetQueryableAsync() on taskHisDetail.GoodsId equals archive.Id
+                        join material in await _archiveRepository.GetQueryableAsync() on taskHisDetail.GoodsId equals material.Id
                         join taskHis in await _taskHisRepository.GetQueryableAsync() on taskHisDetail.TaskHisId equals taskHis.Id
                         where taskHisDetail.TaskHisId == input.TaskHisId
-                        select new { taskHisDetail, archive, taskHis };
+                        select new { taskHisDetail, material, taskHis };
 
             //Paging
             query = query
@@ -135,9 +135,9 @@ namespace WarehouseManagement.TaskHiss
             {
                 var taskHisDetailDtos = ObjectMapper.Map<TaskHisDetail, TaskHisDetailDto>(x.taskHisDetail);
                 taskHisDetailDtos.StockBarcode = x.taskHis.StockBarcode;
-                taskHisDetailDtos.GoodsCode = x.archive.ArchivesCode;
-                taskHisDetailDtos.GoodsName = x.archive.ArchivesName;
-                taskHisDetailDtos.GoodsSpec = x.archive.GoodsSpec;
+                taskHisDetailDtos.GoodsCode = x.material.MaterialCode;
+                taskHisDetailDtos.GoodsName = x.material.MaterialName;
+                taskHisDetailDtos.GoodsSpec = x.material.GoodsSpec;
                 taskHisDetailDtos.Quantity = x.taskHisDetail.TaskHisDetailQuantity;                
                 return taskHisDetailDtos;
             }).ToList();

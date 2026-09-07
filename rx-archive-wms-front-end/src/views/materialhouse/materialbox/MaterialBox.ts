@@ -204,7 +204,7 @@ export const createFormSchema: FormSchema[] = [
       autocomplete: 'off',
     },
   },
-  {
+  /*{
     field: 'catalogNo',
     component: 'Input',
     label: t('目录号'),
@@ -215,7 +215,7 @@ export const createFormSchema: FormSchema[] = [
     componentProps: {
       autocomplete: 'off',
     },
-  },
+  },*/
 ];
 
 export const editFormSchema: FormSchema[] = [

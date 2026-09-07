@@ -1,6 +1,6 @@
 <template>
   <BasicModal
-    :title="t('编辑档案盒')"
+    :title="t('编辑物料盒')"
     :width="600"
     :canFullscreen="false"
     @ok="submit"

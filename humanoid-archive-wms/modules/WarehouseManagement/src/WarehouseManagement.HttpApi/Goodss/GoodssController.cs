@@ -63,5 +63,12 @@ namespace WarehouseManagement.Goodss
         {
             return await _goodsAppService.GetSelectOptionsByNameAsync(input);
         }
+
+        [HttpPost("rfid-type-options")]
+        [SwaggerOperation(summary: "获取Rfid类型选项", Tags = new[] { "Goodss" })]
+        public async Task<List<GoodsTypeSelectDto>> GetRfidTypeOptionsAsync()
+        {
+            return await _goodsAppService.GetRfidTypeOptionsAsync();
+        }
     }
 }

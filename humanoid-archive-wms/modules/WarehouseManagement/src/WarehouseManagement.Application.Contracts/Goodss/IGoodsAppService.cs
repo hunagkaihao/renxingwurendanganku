@@ -55,6 +55,11 @@ namespace WarehouseManagement.Goodss
         /// <returns></returns>
         Task<List<GoodsSelectDto>> GetSelectOptionsByNameAsync(PagingGoodsListInput input);
 
+        /// <summary>
+        /// 获取所有启用的物品类型作为RFID标签类型选项
+        /// </summary>
+        /// <returns>物品类型选项列表</returns>
+        Task<List<GoodsTypeSelectDto>> GetRfidTypeOptionsAsync();
 
     }
 }

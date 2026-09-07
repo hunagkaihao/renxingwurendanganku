@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.EventBus.Distributed;
@@ -7,7 +11,7 @@ using Volo.Abp.Uow;
 
 namespace WarehouseManagement
 {
-    public abstract class ArchiveBoxDomainService : DomainService
+    public abstract class MaterialBoxDetailDomainService : DomainService
     {
         protected Type ObjectMapperContext { get; set; }
 
@@ -33,6 +37,4 @@ namespace WarehouseManagement
                     : (IObjectMapper)provider.GetRequiredService(
                         typeof(IObjectMapper<>).MakeGenericType(ObjectMapperContext)));
     }
-    
-    
 }

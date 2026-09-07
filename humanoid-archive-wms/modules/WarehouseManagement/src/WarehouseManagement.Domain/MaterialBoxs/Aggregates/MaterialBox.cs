@@ -8,41 +8,41 @@ using Serilog;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
 
-namespace WarehouseManagement.ArchiveBoxs.Aggregates
+namespace WarehouseManagement.MaterialBoxs.Aggregates
 {
-    public class ArchiveBox : FullAuditedAggregateRoot<int>, IMultiTenant
+    public class MaterialBox : FullAuditedAggregateRoot<int>, IMultiTenant
     {
-        private ArchiveBox()
+        private MaterialBox()
         {
-            Details = new List<ArchiveBoxDetail>();
+            Details = new List<MaterialBoxDetail>();
         }
-        public void Update(string archiveBoxName, string stockBarcode)
+        public void Update(string materialBoxName, string stockBarcode)
         {
-            ArchiveBoxName = archiveBoxName;
+            MaterialBoxName = materialBoxName;
             StockBarcode = stockBarcode;
         }
 
-        public ArchiveBox(string archiveBoxName, string stockBarcode)
+        public MaterialBox(string materialBoxName, string stockBarcode)
         {
             //Id = id;
-            ArchiveBoxName = archiveBoxName;
+            MaterialBoxName = materialBoxName;
             StockBarcode = stockBarcode;
-            Details = new List<ArchiveBoxDetail>();
+            Details = new List<MaterialBoxDetail>();
         }
         public void SetCell(int cellId)
         {
             CellId = cellId;
-            Log.Warning($"Box:{this.ArchiveBoxRfid} is SetCell Cell:{cellId}。Method：{System.Reflection.MethodBase.GetCurrentMethod().Name}");
+            Log.Warning($"Box:{this.MaterialBoxRfid} is SetCell Cell:{cellId}。Method：{System.Reflection.MethodBase.GetCurrentMethod().Name}");
         }
-        //档案盒名称
+        //物料盒名称
         [Required]
-        public string ArchiveBoxName { get; set; }
-        public string ArchiveBoxRfid { get; set; }
-        //档案盒编码
+        public string MaterialBoxName { get; set; }
+        public string MaterialBoxRfid { get; set; }
+        //物料盒编码
         public string StockBarcode { get; set; }
         //库存状态 0，空，1满
         public string FullFlag { get; set; }
-        //档案盒备注
+        //物料盒备注
         public string StorageRemark { get; set; }
         //库位Id
         public int CellId { get; set; }
@@ -81,15 +81,15 @@ namespace WarehouseManagement.ArchiveBoxs.Aggregates
         /// <summary>
         /// 归档日期
         /// </summary>
-        public string AchieveInDate { get; set; }
+        public string MaterialInDate { get; set; }
         /// <summary>
         /// 归档部门
         /// </summary>
-        public string AchieveInDept { get; set; }
+        public string MaterialInDept { get; set; }
         /// <summary>
         /// 移交人 归档人
         /// </summary>
-        public string Achiever { get; set; }
+        public string Material { get; set; }
         /// <summary>
         /// 责任人
         /// </summary>
@@ -113,13 +113,13 @@ namespace WarehouseManagement.ArchiveBoxs.Aggregates
         /// <summary>
         /// 档案盒存储明细
         /// </summary>
-        public List<ArchiveBoxDetail> Details { get; private set; }
+        public List<MaterialBoxDetail> Details { get; private set; }
 
         public Guid? TenantId { get; set; }
 
         public void AddDetail(int boxId,int archiveId)
         {
-            Details.Add(new ArchiveBoxDetail(boxId, archiveId));
+            Details.Add(new MaterialBoxDetail(boxId, archiveId));
         }
         public void RemoveDetail(int storageBoxDetailId)
         {

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WarehouseManagement.ArchiveBoxs.Dto
+namespace WarehouseManagement.MaterialBoxs.Dto
 {
-    public class ArchiveBoxDetailDto
+    public class MaterialBoxDetailDto
     {
         public int ArchiveBoxId { get; set; }
 

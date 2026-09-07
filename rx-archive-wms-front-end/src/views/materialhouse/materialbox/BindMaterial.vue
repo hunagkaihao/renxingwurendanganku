@@ -1,6 +1,6 @@
 <template>
   <BasicModal
-    :title="t('绑定档案')"
+    :title="t('绑定物料')"
     :width="600"
     :canFullscreen="false"
     @ok="submit"

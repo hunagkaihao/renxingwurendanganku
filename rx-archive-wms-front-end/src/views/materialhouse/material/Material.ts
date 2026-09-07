@@ -85,11 +85,11 @@ export const tableDetailColumns: BasicColumn[] = [
     dataIndex: 'goodsSpe',
   },
   {
-    title: t('借阅者'),
+    title: t('借用者'),
     dataIndex: 'goodsSpec',
   },
   {
-    title: t('借阅日期'),
+    title: t('借用日期'),
     dataIndex: 'cretionTime',
     customRender: ({ text }) => {
       return moment(text).format('YYYY-MM-DD HH:mm:ss');
@@ -128,7 +128,7 @@ export const createFormSchema: FormSchema[] = [
   {
     field: 'archivesRfid',
     component: 'Input',
-    label: t('档案标签'),
+    label: t('物料标签'),
     labelWidth: 85,
     required: true,
     colProps: {
@@ -141,7 +141,7 @@ export const createFormSchema: FormSchema[] = [
   {
     field: 'archivesCode',
     component: 'Input',
-    label: t('档号'),
+    label: t('物料号'),
     labelWidth: 85,
     required: true,
     colProps: {
@@ -154,7 +154,7 @@ export const createFormSchema: FormSchema[] = [
   {
     field: 'archivesName',
     component: 'Input',
-    label: t('题名'),
+    label: t('物料名'),
     labelWidth: 85,
     required: true,
     colProps: {
@@ -212,7 +212,7 @@ export const createFormSchema: FormSchema[] = [
       autocomplete: 'off',
     },
   },
-  {
+/*  {
     field: 'goodsAJCode',
     component: 'Input',
     label: t('案卷号'),
@@ -223,14 +223,14 @@ export const createFormSchema: FormSchema[] = [
     componentProps: {
       autocomplete: 'off',
     },
-  },
+  },*/
 ];
 
 export const editFormSchema: FormSchema[] = [
   {
     field: 'archivesRfid',
     component: 'Input',
-    label: t('档案标签'),
+    label: t('物料标签'),
     labelWidth: 85,
     required: true,
     colProps: {
@@ -244,7 +244,7 @@ export const editFormSchema: FormSchema[] = [
   {
     field: 'archivesCode',
     component: 'Input',
-    label: t('档号'),
+    label: t('物料号'),
     labelWidth: 85,
     required: true,
     colProps: {
@@ -257,7 +257,7 @@ export const editFormSchema: FormSchema[] = [
   {
     field: 'archivesName',
     component: 'Input',
-    label: t('题名'),
+    label: t('物料名'),
     labelWidth: 85,
     required: true,
     colProps: {
@@ -333,7 +333,7 @@ export const blindBoxFormSchema: FormSchema[] = [
   {
     field: 'archiveName',
     component: 'Input',
-    label: t('档案名称'),
+    label: t('物料名称'),
     labelWidth: 85,
     colProps: {
       span: 24,

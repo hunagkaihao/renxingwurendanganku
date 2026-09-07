@@ -8,9 +8,9 @@ using Serilog;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Uow;
-using WarehouseManagement.ArchiveBoxs;
-using WarehouseManagement.ArchiveBoxs.Aggregates;
-using WarehouseManagement.Archives;
+using WarehouseManagement.MaterialBoxs;
+using WarehouseManagement.MaterialBoxs.Aggregates;
+using WarehouseManagement.Material;
 using WarehouseManagement.Cells;
 using WarehouseManagement.Goodss;
 using WarehouseManagement.Plans;
@@ -40,19 +40,19 @@ namespace WarehouseManagement.StockTasks
         private readonly PlanManager _planManager;
         private readonly CellManager _cellManager;
         private readonly WcsApiManager _wcsApiManager;
-        private readonly ArchiveBoxManager _archiveBoxManager;
+        private readonly MaterialBoxManager _materialBoxManager;
         private readonly IStockTaskDetailRepository _stockTaskDetailRepository;
         private readonly IGoodsRepository _goodsRepository;
         private readonly ICellRepository _cellRepository;
-        private readonly IArchiveBoxRepository _archiveBoxRepository;
+        private readonly IMaterialBoxRepository _materialBoxRepository;
         private readonly IPlanRepository _planRepository;
-        private readonly IArchiveRepository _archiveRepository;
+        private readonly IMaterialRepository _materialRepository;
 
         public StockTaskAppService(IStockTaskRepository stockTaskRepository, StockTaskManager stockTaskManagement, 
             PlanManager planManager,
         IStockTaskDetailRepository stockTaskDetailRepository, IGoodsRepository goodsRepository, ICellRepository cellRepository,
-            IArchiveBoxRepository archiveBoxRepository, CellManager cellManager, IPlanRepository planRepository,
-            WcsApiManager wcsApiManager, ArchiveBoxManager archiveBoxManager,IArchiveRepository archiveRepository, UnitOfWorkManager unitOfWorkManager)
+            IMaterialBoxRepository materialBoxRepository, CellManager cellManager, IPlanRepository planRepository,
+            WcsApiManager wcsApiManager, MaterialBoxManager materialBoxManager,IMaterialRepository materialRepository, UnitOfWorkManager unitOfWorkManager)
         {
             _stockTaskRepository = stockTaskRepository;
             _stockTaskManagement = stockTaskManagement;
@@ -60,12 +60,12 @@ namespace WarehouseManagement.StockTasks
             _stockTaskDetailRepository = stockTaskDetailRepository;
             _goodsRepository = goodsRepository;
             _cellRepository = cellRepository;
-            _archiveBoxRepository = archiveBoxRepository;
+            _materialBoxRepository = materialBoxRepository;
             _cellManager = cellManager;
             _planRepository = planRepository;
             _wcsApiManager = wcsApiManager;
-            _archiveBoxManager = archiveBoxManager;
-            _archiveRepository = archiveRepository;
+            _materialBoxManager = materialBoxManager;
+            _materialRepository = materialRepository;
         }
 
 
@@ -164,17 +164,16 @@ namespace WarehouseManagement.StockTasks
             );
         }
 
-        public async Task<PagedResultDto<StockTaskDetailDto>> GetPagingDetailListByArchiveIdAsync(
-    PagingStockTaskDetailInput input)
+        public async Task<PagedResultDto<StockTaskDetailDto>> GetPagingDetailListByMaterialIdAsync(PagingStockTaskDetailInput input)
         {
             //Get the IQueryable<Book> from the repository
             var queryable = await _stockTaskDetailRepository.GetQueryableAsync();
 
             //Prepare a query to join books and authors
             var query = from stockTaskDetail in queryable
-                        join archive in await _archiveRepository.GetQueryableAsync() on input.ArchiveId equals archive.Id
-                        where stockTaskDetail.GoodsId == input.ArchiveId
-                        select new { stockTaskDetail, archive };
+                        join Material in await _materialRepository.GetQueryableAsync() on input.MaterialId equals Material.Id
+                        where stockTaskDetail.GoodsId == input.MaterialId
+                        select new { stockTaskDetail, Material };
 
             //Paging
             query = query
@@ -191,8 +190,8 @@ namespace WarehouseManagement.StockTasks
             var stockTaskDetailDtos = queryResult.Select(x =>
             {
                 var stockTaskDetailDtos = ObjectMapper.Map<StockTaskDetail, StockTaskDetailDto>(x.stockTaskDetail);
-                stockTaskDetailDtos.GoodsCode = x.archive.ArchivesCode;
-                stockTaskDetailDtos.GoodsName = x.archive.ArchivesName;
+                stockTaskDetailDtos.GoodsCode = x.Material.MaterialCode;
+                stockTaskDetailDtos.GoodsName = x.Material.MaterialName;
                 stockTaskDetailDtos.GoodsSpec = x.stockTaskDetail.Borrower;
 
                 return stockTaskDetailDtos;
@@ -267,26 +266,26 @@ namespace WarehouseManagement.StockTasks
         //创建档案入库任务
         public async Task<StockTaskDto> CreateWCSIn(CreateStockTaskDto input)
         {
-            ArchiveBox archiveBoxObj;
+            MaterialBox materialBoxObj;
             if (input.ArchiveBoxId != 0)
             {
-                archiveBoxObj = await _archiveBoxRepository.FindByIdAsync(input.ArchiveBoxId);
+                materialBoxObj = await _materialBoxRepository.FindByIdAsync(input.ArchiveBoxId);
             }
             else
             {
-                archiveBoxObj = await _archiveBoxRepository.FindByArchiveBoxcodeAsync(input.ArchiveCode);
+                materialBoxObj = await _materialBoxRepository.FindByArchiveBoxcodeAsync(input.ArchiveCode);
             }
-            if (archiveBoxObj.CellModel == null)
+            if (materialBoxObj.CellModel == null)
             {
                 throw new UserFriendlyException("档案盒未设置尺寸");
             }
-            if (archiveBoxObj.ArchiveBoxRfid == null)
+            if (materialBoxObj.MaterialBoxRfid == null)
             {
                 throw new UserFriendlyException("档案盒未绑定标签");
             }
             input.ManageTypeCode = ManageType.NPFullStockIn.ToString();
             // var stockTask = await _stockTaskManagement.CreateStockInAsync(input.ManageTypeCode, storageBoxObj, storageBoxObj.Details, input.StartCellCode, input.EndCellId);
-            var stockTask = await _stockTaskManagement.CreateWCSIn(input.ManageTypeCode, archiveBoxObj);
+            var stockTask = await _stockTaskManagement.CreateWCSIn(input.ManageTypeCode, materialBoxObj);
             return base.ObjectMapper.Map<StockTask, StockTaskDto>(stockTask);
         }
         //下达档案任务分配库位
@@ -309,7 +308,7 @@ namespace WarehouseManagement.StockTasks
             CreateStockTaskDto stockTaskDto = new();
             OpenDoorDto openDoorDto = new();
             //找到档案盒
-            var box = await _archiveBoxRepository.FindByRfidCodeAsync(rfid);
+            var box = await _materialBoxRepository.FindByRfidCodeAsync(rfid);
             if (box == null)
             {
                 throw new UserFriendlyException("档案盒不存在!!");
@@ -342,7 +341,7 @@ namespace WarehouseManagement.StockTasks
 
             CreateStockTaskDto stockTaskDto = new();
             //找到档案盒
-            var box = await _archiveBoxRepository.FindByRfidCodeAsync(rfid);
+            var box = await _materialBoxRepository.FindByRfidCodeAsync(rfid);
             if (box == null)
             {
                 throw new UserFriendlyException(message: "档案盒不存在!");
@@ -367,18 +366,18 @@ namespace WarehouseManagement.StockTasks
         //创建档案出库任务
         public async Task<StockTaskDto> CreateWCSOut(CreateStockTaskDto input)
         {
-            ArchiveBox archiveBoxObj;
+            MaterialBox materialBoxObj;
             if (input.ArchiveBoxId != 0)
             {
-                archiveBoxObj = await _archiveBoxRepository.FindByIdAsync(input.ArchiveBoxId);
+                materialBoxObj = await _materialBoxRepository.FindByIdAsync(input.ArchiveBoxId);
             }
             else
             {
-                archiveBoxObj = await _archiveBoxRepository.FindByArchiveBoxcodeAsync(input.ArchiveCode);
+                materialBoxObj = await _materialBoxRepository.FindByArchiveBoxcodeAsync(input.ArchiveCode);
             }
             input.ManageTypeCode = ManageType.NPSortStockOut.ToString();
             // var stockTask = await _stockTaskManagement.CreateStockInAsync(input.ManageTypeCode, storageBoxObj, storageBoxObj.Details, input.StartCellCode, input.EndCellId);
-            var stockTask = await _stockTaskManagement.CreateWCSOut(input.ManageTypeCode, archiveBoxObj);
+            var stockTask = await _stockTaskManagement.CreateWCSOut(input.ManageTypeCode, materialBoxObj);
             return base.ObjectMapper.Map<StockTask, StockTaskDto>(stockTask);
         }
         public async Task<bool> BatBoxInByArea(string areaCode)
@@ -501,7 +500,7 @@ namespace WarehouseManagement.StockTasks
         {
             CreateStockTaskDto stockTaskDto = new();
             //找到档案盒
-            var box = await _archiveBoxRepository.GetListAsync(x => x.CellId > 5);
+            var box = await _materialBoxRepository.GetListAsync(x => x.CellId > 5);
             if (box.Count == 0)
             {
                 throw new UserFriendlyException(message: "档案盒不存在!");
@@ -533,7 +532,7 @@ namespace WarehouseManagement.StockTasks
                 var endCell = await _cellManager.SetAsStockOutAsync((int)mge.EndCellId);
                 var startCell = await _cellManager.SetAsStockOutAsync((int)mge.StartCellId);
                 //更新料箱的库位状态
-                var box = await _archiveBoxManager.UpdateStockCellAsync(mge.ArchiveBoxRfid, endCell.Id);
+                var box = await _materialBoxManager.UpdateStockCellAsync(mge.ArchiveBoxRfid, endCell.Id);
             }
             else if (mge.ManageTypeCode == ManageType.NpFullStockOut)
             {
@@ -541,7 +540,7 @@ namespace WarehouseManagement.StockTasks
                 var endCell = await _cellManager.SetAsStockOutAsync((int)mge.EndCellId);
                 var startCell = await _cellManager.SetAsStockOutAsync((int)mge.StartCellId);
                 //CompleteHandleCellOut(mge.StartCellId, mge.EndCellId);
-                var box = await _archiveBoxManager.UpdateStockOutCellAsync(mge.ArchiveBoxRfid);
+                var box = await _materialBoxManager.UpdateStockOutCellAsync(mge.ArchiveBoxRfid);
             }
             else if (mge.ManageTypeCode == ManageType.HPBatchStockIn)
             {

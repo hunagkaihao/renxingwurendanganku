@@ -4,6 +4,7 @@ using Lion.AbpPro.Extension.Customs.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp;
@@ -36,13 +37,19 @@ namespace WarehouseManagement.Goodss
             //UpdatePolicyName = GoodsStorePermissions.Goodss.Edit;
             //DeletePolicyName = GoodsStorePermissions.Goodss.Delete;
         }
+        /// <summary>
+        /// 创建物品类型
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         [Authorize(WarehouseManagementPermissions.GoodsManagement.Create)]
         public async Task<GoodsDto> CreateAsync(CreateGoodsDto input)
         {
-            //var goodsEntity = base.ObjectMapper.Map<CreateGoodsDto, Goods>(input);
-            //var goods=  await _goodsRepository.InsertAsync(goodsEntity);
-            var goods = await _goodsManagement.CreateAsync(input.GoodsCode, input.GoodsName, input.GoodsSpec, input.GoodsConstProperty1
-                , input.GoodsUnits);
+            var goods = await _goodsManagement.CreateAsync( input.GoodsCode, 
+                                                            input.GoodsName, 
+                                                            input.GoodsSpec,
+                                                            input.GoodsConstProperty1, 
+                                                            input.GoodsUnits);
             return  base.ObjectMapper.Map<Goods, GoodsDto>(goods);
         }
         [Authorize(WarehouseManagementPermissions.GoodsManagement.Create)]
@@ -111,6 +118,27 @@ namespace WarehouseManagement.Goodss
             }  
             return await Task.FromResult(goodsSelectDtos);
 
+        }
+
+        /// <summary>
+        /// 获取所有启用的物品类型作为RFID标签类型选项
+        /// </summary>
+        public async Task<List<GoodsTypeSelectDto>> GetRfidTypeOptionsAsync()
+        {
+            var goodsList = await _goodsRepository.GetListAsync();
+
+            var options = goodsList
+                .Where(g => g.GoodsStatus == GoodsStatus.Enable) // 只返回启用的
+                .OrderBy(g => g.GoodsCode)
+                .Select(g => new GoodsTypeSelectDto
+                {
+                    Id = g.Id,
+                    GoodsCode = g.GoodsCode,
+                    GoodsName = g.GoodsName
+                })
+                .ToList();
+
+            return options;
         }
 
     }

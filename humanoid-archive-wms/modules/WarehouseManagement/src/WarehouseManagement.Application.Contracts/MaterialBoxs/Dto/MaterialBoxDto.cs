@@ -6,9 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 
-namespace WarehouseManagement.ArchiveBoxs.Dto
+namespace WarehouseManagement.MaterialBoxs.Dto
 {
-    public class ArchiveBoxDto : AuditedEntityDto<int>
+    public class MaterialBoxDto : AuditedEntityDto<int>
     {
         //档案盒名称
         [Required]

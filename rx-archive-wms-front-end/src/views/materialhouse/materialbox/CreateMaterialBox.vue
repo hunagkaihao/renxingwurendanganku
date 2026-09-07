@@ -1,7 +1,7 @@
 <template>
   <BasicModal
     :width="600"
-    :title="t('创建档案盒')"
+    :title="t('创建物料盒')"
     :canFullscreen="false"
     @ok="submit"
     @cancel="cancel"
@@ -15,7 +15,6 @@
 </template>
 
 <script lang="ts">
-  import moment from 'moment'; //leixd
   import { defineComponent } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';

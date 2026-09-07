@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
-using WarehouseManagement.ArchiveBoxs.Aggregates;
-using WarehouseManagement.Archives.Aggregates;
+using WarehouseManagement.MaterialBoxs.Aggregates;
+using MaterialAggregate = WarehouseManagement.Material.Aggregates.Material;
 using WarehouseManagement.Cells;
 using WarehouseManagement.Checks.Aggregates;
 using WarehouseManagement.Goodss.Aggregates;
@@ -27,9 +27,9 @@ public class WarehouseManagementDbContext : AbpDbContext<WarehouseManagementDbCo
     public DbSet<GoodsClass> Goodsclasss { get; set; }
 
     public DbSet<GoodsType> Goodstypes { get; set; }
-    public DbSet<ArchiveBox> Archivebox { get; set; }
-    public DbSet<ArchiveBoxDetail> Archiveboxdetail { get; set; }
-    public DbSet<Archive> Archive{ get; set; }
+    public DbSet<MaterialBox> Archivebox { get; set; }
+    public DbSet<MaterialBoxDetail> Archiveboxdetail { get; set; }
+    public DbSet<MaterialAggregate> Material{ get; set; }
     public DbSet<Rfid> Rfid { get; set; }
     public DbSet<StockTask> Stocktasks { get; set; }
     public DbSet<StockTaskDetail> Stocktaskdetails { get; set; }

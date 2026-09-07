@@ -6,9 +6,9 @@ using Volo.Abp.Domain.Repositories;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 
-namespace WarehouseManagement.ArchiveBoxs.Dto
+namespace WarehouseManagement.MaterialBoxs.Dto
 {
-    public class CreateArchiveBoxDto
+    public class CreateMaterialBoxDto
     {
         //档案盒名称
         [Required]

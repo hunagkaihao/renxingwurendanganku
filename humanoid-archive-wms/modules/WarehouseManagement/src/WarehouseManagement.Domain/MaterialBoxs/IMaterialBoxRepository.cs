@@ -5,33 +5,33 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
-using WarehouseManagement.ArchiveBoxs.Aggregates;
+using WarehouseManagement.MaterialBoxs.Aggregates;
 
-namespace WarehouseManagement.ArchiveBoxs
+namespace WarehouseManagement.MaterialBoxs
 {
-    public interface IArchiveBoxRepository : IRepository<ArchiveBox, int>
+    public interface IMaterialBoxRepository : IRepository<MaterialBox, int>
     {
-        Task<ArchiveBox> FindByIdAsync(
+        Task<MaterialBox> FindByIdAsync(
             int id,
             bool includeDetails = true,
             CancellationToken cancellationToken = default);
         
-        Task<ArchiveBox> FindByBoxNameAsync(
+        Task<MaterialBox> FindByBoxNameAsync(
             string name,
             bool includeDetails = true,
             CancellationToken cancellationToken = default);
 
-        Task<ArchiveBox> FindByArchiveBoxcodeAsync(
+        Task<MaterialBox> FindByArchiveBoxcodeAsync(
             string archiveBoxBarcode,
             bool includeDetails = true,
             CancellationToken cancellationToken = default);
 
-        Task<ArchiveBox> FindByRfidCodeAsync(
+        Task<MaterialBox> FindByRfidCodeAsync(
             string rfidCode,
             bool includeDetails = true,
             CancellationToken cancellationToken = default);
 
-        Task<ArchiveBox> FindByCellIdAsync(
+        Task<MaterialBox> FindByCellIdAsync(
             int cellId,
             bool includeDetails = true,
             CancellationToken cancellationToken = default);

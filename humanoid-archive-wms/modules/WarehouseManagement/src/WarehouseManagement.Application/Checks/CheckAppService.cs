@@ -9,8 +9,8 @@ using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Uow;
 using Volo.Abp.Users;
-using WarehouseManagement.ArchiveBoxs;
-using WarehouseManagement.ArchiveBoxs.Aggregates;
+using WarehouseManagement.MaterialBoxs;
+using WarehouseManagement.MaterialBoxs.Aggregates;
 using WarehouseManagement.Cells;
 using WarehouseManagement.CheckHiss;
 using WarehouseManagement.CheckHiss.Aggregates;
@@ -46,7 +46,7 @@ namespace WarehouseManagement.Checks
         private readonly CheckManager _checkManagement;
         private readonly CellManager _cellManager;
         private readonly StockTaskManager _stockTaskManager;
-        private readonly ArchiveBoxManager _archiveBoxManager;
+        private readonly MaterialBoxManager _materialBoxManager;
         private readonly WcsApiManager _wcsApiManager;
         private readonly CheckDetailManager _checkDetailManager;
         private readonly CheckHisManager _checkHisManager;
@@ -115,7 +115,7 @@ namespace WarehouseManagement.Checks
         public CheckAppService(ICheckRepository checkRepository, CheckManager checkManagement
             , IGoodsRepository goodsRepository, ICheckDetailRepository checkDetailRepository
             , ICurrentUser currentUser, CellManager cellManager, StockTaskManager stockTaskManager,
-            ArchiveBoxManager archiveBoxManager,CheckDetailHisManager checkDetailHisManager
+            MaterialBoxManager materialBoxManager,CheckDetailHisManager checkDetailHisManager
             ,WcsApiManager wcsApiManager ,CheckDetailManager checkDetailManager,CheckHisManager checkHisManager
             ,TaskHisManager taskHisManager)
         {
@@ -126,7 +126,7 @@ namespace WarehouseManagement.Checks
             _currentUser = currentUser;
             _cellManager = cellManager;
             _stockTaskManager = stockTaskManager;
-            _archiveBoxManager = archiveBoxManager;
+            _materialBoxManager = materialBoxManager;
             _wcsApiManager = wcsApiManager;
             _checkDetailManager = checkDetailManager;
             _checkHisManager = checkHisManager;
@@ -232,10 +232,10 @@ namespace WarehouseManagement.Checks
             StockTaskDto stockTask = new();
             try
             {
-                var archiveBox = await _archiveBoxManager.GetArchiveBoxByCellId(cellId);
+                var archiveBox = await _materialBoxManager.GetArchiveBoxByCellId(cellId);
                 if (archiveBox != null)
                 {
-                    stockTask.ArchiveBoxRfid = archiveBox.ArchiveBoxRfid;
+                    stockTask.ArchiveBoxRfid = archiveBox.MaterialBoxRfid;
                 }
                 else
                 {
@@ -293,7 +293,7 @@ namespace WarehouseManagement.Checks
             {
                 if (stock.ArchiveBoxRfid != "")
                 {
-                    var archiveBox = await _archiveBoxManager.GetArchiveBoxByRfidCode(stock.ArchiveBoxRfid);
+                    var archiveBox = await _materialBoxManager.GetArchiveBoxByRfidCode(stock.ArchiveBoxRfid);
                     if(archiveBox == null)
                     {
                         throw new UserFriendlyException("档案盒标签不存在！");
@@ -712,12 +712,12 @@ PagingCheckDetailInput input)
             {
                 throw new UserFriendlyException("该条盘点记录已确认，不需要重复确认");
             }
-            ArchiveBox archiveBox = await _archiveBoxManager.GetArchiveBoxByBoxName(checkDetailHis.StockBarcode);
-            if(archiveBox == null)
+            MaterialBox materialBox = await _materialBoxManager.GetArchiveBoxByBoxName(checkDetailHis.StockBarcode);
+            if(materialBox == null)
             {
                 throw new UserFriendlyException("档案盒不存在，无法进行盘亏处理");
             }
-            if (archiveBox.Id > 0)
+            if (materialBox.Id > 0)
             {
                 throw new UserFriendlyException("需先处理错误库位库存，才能进行盘亏确认");
             }
@@ -749,7 +749,7 @@ PagingCheckDetailInput input)
         public async Task CreateSurplusIn(string ArBoxRfid, string cellName)
         {
             //step1 获取是否存在库位终
-            var archiveBox = await _archiveBoxManager.GetArchiveBoxByRfidCode(ArBoxRfid);
+            var archiveBox = await _materialBoxManager.GetArchiveBoxByRfidCode(ArBoxRfid);
             if(archiveBox == null)
             {
                 throw new UserFriendlyException("档案盒不存在，无法执行盘盈入库：");
@@ -772,7 +772,7 @@ PagingCheckDetailInput input)
 
             //step3 库存处理
             //更新档案盒的库位
-            await _archiveBoxManager.UpdateStockCellAsync(ArBoxRfid, currentCell.Id);
+            await _materialBoxManager.UpdateStockCellAsync(ArBoxRfid, currentCell.Id);
             //List<StorageList> storageLists = _storageListRepository.GetAllList(a => a.StorageId == stg.Id);
             //foreach (var storageList in storageLists)
             //{
@@ -805,7 +805,7 @@ PagingCheckDetailInput input)
         public async Task CreateLossOut(string ArBoxRfid, string cellName)
         {
             //step1 获取是否存在库位终
-            var stg = await _archiveBoxManager.GetArchiveBoxByRfidCode(ArBoxRfid);
+            var stg = await _materialBoxManager.GetArchiveBoxByRfidCode(ArBoxRfid);
             if (stg.CellId != 0)
             {
                 var cellnameE =await _cellManager.GetByIdAsync(stg.CellId);
@@ -825,7 +825,7 @@ PagingCheckDetailInput input)
 
             //step3 库存处理
             //更新档案盒的库位
-            await _archiveBoxManager.UpdateStockOutCellAsync(ArBoxRfid);
+            await _materialBoxManager.UpdateStockOutCellAsync(ArBoxRfid);
 
             //List<StorageList> storageLists = _storageListRepository.GetAllList(a => a.StorageId == stg.Id);
             //foreach (var storageList in storageLists)

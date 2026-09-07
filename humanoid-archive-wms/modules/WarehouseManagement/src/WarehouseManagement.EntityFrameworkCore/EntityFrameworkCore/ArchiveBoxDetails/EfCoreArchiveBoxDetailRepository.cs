@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
-using WarehouseManagement.ArchiveBoxs;
-using WarehouseManagement.ArchiveBoxs.Aggregates;
+using WarehouseManagement.MaterialBoxs;
+using WarehouseManagement.MaterialBoxs.Aggregates;
 
 namespace WarehouseManagement.EntityFrameworkCore.ArchiveBoxDetails
 {
-    public class EfCoreArchiveBoxDetailRepository : EfCoreRepository<IWarehouseManagementDbContext, ArchiveBoxDetail, int>
+    public class EfCoreArchiveBoxDetailRepository : EfCoreRepository<IWarehouseManagementDbContext, MaterialBoxDetail, int>
         , IArchiveBoxDetailRepository
     {
         public EfCoreArchiveBoxDetailRepository(IDbContextProvider<IWarehouseManagementDbContext> dbContextProvider) : base(dbContextProvider)
@@ -20,11 +20,11 @@ namespace WarehouseManagement.EntityFrameworkCore.ArchiveBoxDetails
 
         }
 
-        public async Task<ArchiveBoxDetail> FindByArchiveIdAsync(int id, bool includeDetails = true, CancellationToken cancellationToken = default)
+        public async Task<MaterialBoxDetail> FindByArchiveIdAsync(int id, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
             return await(await GetDbSetAsync())
                 .OrderBy(t => t.CreationTime)
-                .FirstOrDefaultAsync(t => t.ArchiveId == id, GetCancellationToken(cancellationToken));
+                .FirstOrDefaultAsync(t => t.MaterialId == id, GetCancellationToken(cancellationToken));
         }
     }
 }

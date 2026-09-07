@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Lion.AbpPro.Extension.Customs.Dtos;
 
-namespace WarehouseManagement.ArchiveBoxs.Dto
+namespace WarehouseManagement.MaterialBoxs.Dto
 {
-    public class PagingArchiveBoxListInput : PagingBase
+    public class PagingMaterialBoxListInput : PagingBase
     {
         /// <summary>
         /// 关键字

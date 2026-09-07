@@ -5,13 +5,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
-using WarehouseManagement.ArchiveBoxs.Aggregates;
+using WarehouseManagement.MaterialBoxs.Aggregates;
 
-namespace WarehouseManagement.ArchiveBoxs
+namespace WarehouseManagement.MaterialBoxs
 {
-    public interface IArchiveBoxDetailRepository : IRepository<ArchiveBoxDetail, int>
+    public interface IArchiveBoxDetailRepository : IRepository<MaterialBoxDetail, int>
     {
-        Task<ArchiveBoxDetail> FindByArchiveIdAsync(
+        Task<MaterialBoxDetail> FindByArchiveIdAsync(
             int id,
             bool includeDetails = true,
             CancellationToken cancellationToken = default);

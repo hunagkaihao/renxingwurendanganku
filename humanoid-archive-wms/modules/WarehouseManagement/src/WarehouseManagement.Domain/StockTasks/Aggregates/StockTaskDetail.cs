@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
-using WarehouseManagement.ArchiveBoxs.Aggregates;
+using WarehouseManagement.MaterialBoxs.Aggregates;
 using WarehouseManagement.Goodss.Aggregates;
 using WarehouseManagement.Plans.Aggregates;
 

@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WarehouseManagement.ArchiveBoxs.Aggregates;
+using WarehouseManagement.MaterialBoxs.Aggregates;
 
 namespace WarehouseManagement.EntityFrameworkCore.ArchiveBoxs
 {
     public static class ArchiveBoxEfCoreQueryableExtensions
     {
-        public static IQueryable<ArchiveBox> IncludeDetails(this IQueryable<ArchiveBox> queryable,
+        public static IQueryable<MaterialBox> IncludeDetails(this IQueryable<MaterialBox> queryable,
             bool include = true)
         {
             if (!include)

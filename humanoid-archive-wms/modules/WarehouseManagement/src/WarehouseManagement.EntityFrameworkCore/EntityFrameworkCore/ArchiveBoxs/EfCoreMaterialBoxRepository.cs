@@ -7,23 +7,23 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
-using WarehouseManagement.ArchiveBoxs;
-using WarehouseManagement.ArchiveBoxs.Aggregates;
+using WarehouseManagement.MaterialBoxs;
+using WarehouseManagement.MaterialBoxs.Aggregates;
 
 namespace WarehouseManagement.EntityFrameworkCore.ArchiveBoxs
 {
-    public class EfCoreArchiveBoxRepository : EfCoreRepository<IWarehouseManagementDbContext, ArchiveBox, int>, IArchiveBoxRepository
+    public class EfCoreMaterialBoxRepository : EfCoreRepository<IWarehouseManagementDbContext, MaterialBox, int>, IMaterialBoxRepository
     {
-        public EfCoreArchiveBoxRepository(IDbContextProvider<IWarehouseManagementDbContext> dbContextProvider) : base(dbContextProvider)
+        public EfCoreMaterialBoxRepository(IDbContextProvider<IWarehouseManagementDbContext> dbContextProvider) : base(dbContextProvider)
         {
 
         }
-        public async Task<List<ArchiveBox>> GetPagingListAsync(string filter = null, int maxResultCount = 10, int skipCount = 0, bool includeDetails = false, CancellationToken cancellationToken = default)
+        public async Task<List<MaterialBox>> GetPagingListAsync(string filter = null, int maxResultCount = 10, int skipCount = 0, bool includeDetails = false, CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
                 .IncludeDetails(includeDetails)
                 .WhereIf(!filter.IsNullOrWhiteSpace(),
-                    e => (e.ArchiveBoxName.Contains(filter)))
+                    e => (e.MaterialBoxName.Contains(filter)))
                 .OrderByDescending(e => e.CreationTime)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
@@ -33,17 +33,17 @@ namespace WarehouseManagement.EntityFrameworkCore.ArchiveBoxs
         {
             return await (await GetDbSetAsync())
                 .WhereIf(!filter.IsNullOrWhiteSpace(),
-                    e => (e.ArchiveBoxName.Contains(filter)))
+                    e => (e.MaterialBoxName.Contains(filter)))
                 .CountAsync(cancellationToken: cancellationToken);
         }
         public async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
-                .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.ArchiveBoxName.Contains(filter))
+                .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.MaterialBoxName.Contains(filter))
                 .LongCountAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<ArchiveBox> FindByIdAsync(int id, bool includeDetails = true, CancellationToken cancellationToken = default)
+        public async Task<MaterialBox> FindByIdAsync(int id, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
                 .IncludeDetails(includeDetails)//包含明细
@@ -51,31 +51,31 @@ namespace WarehouseManagement.EntityFrameworkCore.ArchiveBoxs
                 .FirstOrDefaultAsync(t => t.Id == id, GetCancellationToken(cancellationToken));
         }
 
-        public async Task<ArchiveBox> FindByBoxNameAsync(string boxName, bool includeDetails = true, CancellationToken cancellationToken = default)
+        public async Task<MaterialBox> FindByBoxNameAsync(string boxName, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
                 .IncludeDetails(includeDetails)//包含明细
                 .OrderBy(t => t.CreationTime)
-                .FirstOrDefaultAsync(t => t.ArchiveBoxName == boxName, GetCancellationToken(cancellationToken));
+                .FirstOrDefaultAsync(t => t.MaterialBoxName == boxName, GetCancellationToken(cancellationToken));
         }
 
-        public async Task<ArchiveBox> FindByBoxBarcodeAsync(string archiveBoxBarcode, bool includeDetails = true, CancellationToken cancellationToken = default)
+        public async Task<MaterialBox> FindByBoxBarcodeAsync(string archiveBoxBarcode, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
                 .IncludeDetails(includeDetails)//包含明细
                 .OrderBy(t => t.CreationTime)
-                .FirstOrDefaultAsync(t => t.ArchiveBoxName == archiveBoxBarcode, GetCancellationToken(cancellationToken));
+                .FirstOrDefaultAsync(t => t.MaterialBoxName == archiveBoxBarcode, GetCancellationToken(cancellationToken));
         }
 
-        public async Task<ArchiveBox> FindByRfidCodeAsync(string rfidCode, bool includeDetails = true, CancellationToken cancellationToken = default)
+        public async Task<MaterialBox> FindByRfidCodeAsync(string rfidCode, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
                 .IncludeDetails(includeDetails)//包含明细
                 .OrderBy(t => t.CreationTime)
-                .FirstOrDefaultAsync(t => t.ArchiveBoxRfid == rfidCode, GetCancellationToken(cancellationToken));
+                .FirstOrDefaultAsync(t => t.MaterialBoxRfid == rfidCode, GetCancellationToken(cancellationToken));
         }
 
-        public async Task<ArchiveBox> FindByCellIdAsync(int cellId, bool includeDetails = true, CancellationToken cancellationToken = default)
+        public async Task<MaterialBox> FindByCellIdAsync(int cellId, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
                 .IncludeDetails(includeDetails)//包含明细
@@ -83,12 +83,12 @@ namespace WarehouseManagement.EntityFrameworkCore.ArchiveBoxs
                 .FirstOrDefaultAsync(t => t.CellId == cellId, GetCancellationToken(cancellationToken));
         }
 
-        public async Task<ArchiveBox> FindByArchiveBoxcodeAsync(string archiveBoxBarcode, bool includeDetails = true, CancellationToken cancellationToken = default)
+        public async Task<MaterialBox> FindByArchiveBoxcodeAsync(string archiveBoxBarcode, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
             return await(await GetDbSetAsync())
                 .IncludeDetails(includeDetails)//包含明细
                 .OrderBy(t => t.CreationTime)
-                .FirstOrDefaultAsync(t => t.ArchiveBoxRfid == archiveBoxBarcode, GetCancellationToken(cancellationToken));
+                .FirstOrDefaultAsync(t => t.MaterialBoxRfid == archiveBoxBarcode, GetCancellationToken(cancellationToken));
         }
     }
 }

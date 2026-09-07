@@ -1,14 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore.Modeling;
-using WarehouseManagement.ArchiveBoxs.Aggregates;
+using WarehouseManagement.MaterialBoxs.Aggregates;
 using WarehouseManagement.Cells;
 using WarehouseManagement.Checks.Aggregates;
 using WarehouseManagement.Goodss.Aggregates;
 using WarehouseManagement.Plans.Aggregates;
 using WarehouseManagement.RfidCodes.Aggregates;
 using WarehouseManagement.StockTasks.Aggregates;
-using WarehouseManagement.Archives.Aggregates;
+using MaterialAggregate = WarehouseManagement.Material.Aggregates.Material;
 using WarehouseManagement.TaskHiss.Aggregates;
 using WarehouseManagement.Warehouses.Aggregates;
 using Check = WarehouseManagement.Checks.Aggregates.Check;
@@ -61,21 +61,21 @@ public static class WarehouseManagementDbContextModelCreatingExtensions
             b.ConfigureByConvention();
         });
 
-        builder.Entity<ArchiveBox>(b =>
+        builder.Entity<MaterialBox>(b =>
         {
-            b.ToTable(WarehouseManagementDbProperties.DbTablePrefix + nameof(ArchiveBox), WarehouseManagementDbProperties.DbSchema);
+            b.ToTable(WarehouseManagementDbProperties.DbTablePrefix + nameof(MaterialBox), WarehouseManagementDbProperties.DbSchema);
             b.HasIndex(q => q.CreationTime);
             b.ConfigureByConvention();
         });
-        builder.Entity<ArchiveBoxDetail>(b =>
+        builder.Entity<MaterialBoxDetail>(b =>
         {
-            b.ToTable(WarehouseManagementDbProperties.DbTablePrefix + nameof(ArchiveBoxDetail), WarehouseManagementDbProperties.DbSchema);
+            b.ToTable(WarehouseManagementDbProperties.DbTablePrefix + nameof(MaterialBoxDetail), WarehouseManagementDbProperties.DbSchema);
             b.HasIndex(q => q.CreationTime);
             b.ConfigureByConvention();
         });
-        builder.Entity<Archive>(b =>
+        builder.Entity<MaterialAggregate>(b =>
         {
-            b.ToTable(WarehouseManagementDbProperties.DbTablePrefix + nameof(Archive), WarehouseManagementDbProperties.DbSchema);
+            b.ToTable(WarehouseManagementDbProperties.DbTablePrefix + nameof(Material), WarehouseManagementDbProperties.DbSchema);
             b.HasIndex(q => q.CreationTime);
             b.ConfigureByConvention();
         });

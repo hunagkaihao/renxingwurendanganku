@@ -4,72 +4,72 @@ using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
-using WarehouseManagement.ArchiveBoxs.Aggregates;
-using WarehouseManagement.ArchiveBoxs.Dto;
-using WarehouseManagement.Archives;
+using WarehouseManagement.Material;
 using WarehouseManagement.Cells;
+using WarehouseManagement.MaterialBoxs.Aggregates;
+using WarehouseManagement.MaterialBoxs.Dto;
 using WarehouseManagement.RfidCodes;
 
-namespace WarehouseManagement.ArchiveBoxs
+namespace WarehouseManagement.MaterialBoxs
 {
-    public class ArchiveBoxAppService : WarehouseManagementAppService, IArchiveBoxAppService
+    public class MaterialBoxAppService : WarehouseManagementAppService, IMaterialBoxAppService
     {
-        private readonly ArchiveBoxManager _archiveBoxManager;
-        private readonly IArchiveBoxRepository _archiveBoxRepository;
+        private readonly MaterialBoxManager _materialBoxManager;
+        private readonly IMaterialBoxRepository _materialBoxRepository;
         private readonly ICellRepository _cellRepository;
         private readonly RfidCodeManager _rfidManager;
-        private readonly ArchiveManager _archiveManager;
-        private readonly ArchiveBoxDetailManager _archiveBoxDetailManager;
+        private readonly MaterialManager _materialManager;
+        private readonly MaterialBoxDetailManager _materialBoxDetailManager;
 
-        public ArchiveBoxAppService(ArchiveBoxManager archiveBoxManager
-            , IArchiveBoxRepository archiveBoxRepository    
+        public MaterialBoxAppService(MaterialBoxManager materialBoxManager
+            , IMaterialBoxRepository materialBoxRepository    
             , RfidCodeManager rfidManager
-            , ArchiveManager archiveManager
-            , ArchiveBoxDetailManager archiveBoxDetailManager
+            , MaterialManager materialManager
+            , MaterialBoxDetailManager materialBoxDetailManager
             , ICellRepository cellRepository
         )
         {
-            _archiveBoxManager = archiveBoxManager;
-            _archiveBoxRepository = archiveBoxRepository;
+            _materialBoxManager = materialBoxManager;
+            _materialBoxRepository = materialBoxRepository;
             _rfidManager = rfidManager;
-            _archiveManager = archiveManager;
-            _archiveBoxDetailManager = archiveBoxDetailManager;
+            _materialManager = materialManager;
+            _materialBoxDetailManager = materialBoxDetailManager;
             _cellRepository = cellRepository;
         }
 
-        public async Task<ArchiveBoxDto> CreateAsync(CreateArchiveBoxDto createArchiveBox)
+        public async Task<MaterialBoxDto> CreateAsync(CreateMaterialBoxDto createMaterialBox)
         {
             //检查标签是否存在
-            if (!createArchiveBox.ArchiveBoxRfid.IsNullOrEmpty() && !await _rfidManager.CheckExistRfidCode(createArchiveBox.ArchiveBoxRfid, 2))
+            if (!createMaterialBox.ArchiveBoxRfid.IsNullOrEmpty() && !await _rfidManager.CheckExistRfidCode(createMaterialBox.ArchiveBoxRfid, 2))
             {
-                throw new UserFriendlyException("数据库中不存在标签" + createArchiveBox.ArchiveBoxRfid);
+                throw new UserFriendlyException("数据库中不存在标签" + createMaterialBox.ArchiveBoxRfid);
             }
             //检查标签是否绑定
-            if (!createArchiveBox.ArchiveBoxRfid.IsNullOrEmpty() && await _archiveBoxManager.CheckUsedBoxRfid(createArchiveBox.ArchiveBoxRfid))
+            if (!createMaterialBox.ArchiveBoxRfid.IsNullOrEmpty() && await _materialBoxManager.CheckUsedBoxRfid(createMaterialBox.ArchiveBoxRfid))
             {
-                throw new UserFriendlyException(createArchiveBox.ArchiveBoxRfid + "标签已被绑定");
+                throw new UserFriendlyException(createMaterialBox.ArchiveBoxRfid + "标签已被绑定");
             }
             //检查档号不能为空
-            if (createArchiveBox.StockBarcode.IsNullOrEmpty())
+            if (createMaterialBox.StockBarcode.IsNullOrEmpty())
             {
                 throw new UserFriendlyException("档号不能为空");
             }
             //检查档案盒尺寸不能为空
-            if (createArchiveBox.CellModel.IsNullOrEmpty())
+            if (createMaterialBox.CellModel.IsNullOrEmpty())
             {
                 throw new UserFriendlyException("尺寸不能为空");
             }
-            var entity = base.ObjectMapper.Map<CreateArchiveBoxDto, ArchiveBox>(createArchiveBox);
+            var entity = base.ObjectMapper.Map<CreateMaterialBoxDto, MaterialBox>(createMaterialBox);
             
-            var archivebox = await _archiveBoxRepository.InsertAsync(entity);
-            return base.ObjectMapper.Map<ArchiveBox, ArchiveBoxDto>(archivebox);
+            var archivebox = await _materialBoxRepository.InsertAsync(entity);
+            return base.ObjectMapper.Map<MaterialBox, MaterialBoxDto>(archivebox);
         }
 
-        public async Task DeleteAsync(CreateArchiveBoxDto input)
+        public async Task DeleteAsync(CreateMaterialBoxDto input)
         {
-            await _archiveBoxManager.DeleteAsync(input.Id);
+            await _materialBoxManager.DeleteAsync(input.Id);
         }
-        public async Task<ArchiveBoxDto> UpdateAsync(CreateArchiveBoxDto input)
+        public async Task<MaterialBoxDto> UpdateAsync(CreateMaterialBoxDto input)
         {
             //检查标签是否存在
             if (!input.ArchiveBoxRfid.IsNullOrEmpty() && !await _rfidManager.CheckExistRfidCode(input.ArchiveBoxRfid, 2))
@@ -91,25 +91,25 @@ namespace WarehouseManagement.ArchiveBoxs
             {
                 throw new UserFriendlyException("档号不能为空");
             }
-            var entity = await _archiveBoxRepository.FindByIdAsync(input.Id);
+            var entity = await _materialBoxRepository.FindByIdAsync(input.Id);
             if (entity == null)
                 throw new UserFriendlyException(message: "档案盒不存在");
-            entity = base.ObjectMapper.Map<CreateArchiveBoxDto, ArchiveBox>(input,entity);
+            entity = base.ObjectMapper.Map<CreateMaterialBoxDto, MaterialBox>(input,entity);
 
-            var archivebox = await _archiveBoxRepository.UpdateAsync(entity);
+            var archivebox = await _materialBoxRepository.UpdateAsync(entity);
 
-            return base.ObjectMapper.Map<ArchiveBox, ArchiveBoxDto>(archivebox);
+            return base.ObjectMapper.Map<MaterialBox, MaterialBoxDto>(archivebox);
         }
         
-        public async Task<PagedResultDto<ArchiveBoxDto>> PageAsync(PagingArchiveBoxListInput input)
+        public async Task<PagedResultDto<MaterialBoxDto>> PageAsync(PagingMaterialBoxListInput input)
         {
-            var queryable = await _archiveBoxRepository.GetQueryableAsync();
+            var queryable = await _materialBoxRepository.GetQueryableAsync();
 
             //Prepare a query to join books and authors
             var query = from archiveBox in queryable
                         join celltemp in await _cellRepository.GetQueryableAsync() on archiveBox.CellId equals celltemp.Id into sc
                         from cell in sc.DefaultIfEmpty()
-                        where archiveBox.ArchiveBoxName.Contains(input.Filter.IsNullOrEmpty() ? "" : input.Filter.Trim())
+                        where archiveBox.MaterialBoxName.Contains(input.Filter.IsNullOrEmpty() ? "" : input.Filter.Trim())
                         select new { archiveBox ,cell };
 
             //Paging
@@ -125,7 +125,7 @@ namespace WarehouseManagement.ArchiveBoxs
             //Convert the query result to a list of BookDto objects
             var archiveBoxDtos = queryResult.Select(x =>
             {
-                var archiveBoxDtos = ObjectMapper.Map<ArchiveBox, ArchiveBoxDto>(x.archiveBox);
+                var archiveBoxDtos = ObjectMapper.Map<MaterialBox, MaterialBoxDto>(x.archiveBox);
                 archiveBoxDtos.CellCode = x.cell?.CellCode;
 
                 return archiveBoxDtos;
@@ -133,34 +133,34 @@ namespace WarehouseManagement.ArchiveBoxs
 
             var totalCount = queryResult.Count() + input.SkipCount;
 
-            return new PagedResultDto<ArchiveBoxDto>(
+            return new PagedResultDto<MaterialBoxDto>(
                 totalCount,
                 archiveBoxDtos
             );
         }
-        public async Task<PagedResultDto<ArchiveBoxDetailDto>> DetailAsync(PagingArchiveBoxDetailInput input)
+        public async Task<PagedResultDto<MaterialBoxDetailDto>> DetailAsync(PagingMaterialBoxDetailInput input)
         {
-            return await _archiveBoxDetailManager.GetDetailAsync(input);
+            return await _materialBoxDetailManager.GetDetailAsync(input);
         }
-        public async Task<ArchiveBoxDto> BindRfid(CreateArchiveBoxDto input)
+        public async Task<MaterialBoxDto> BindRfid(CreateMaterialBoxDto input)
         {
             try
             {
-                var entity =await _archiveBoxRepository.FindByIdAsync(input.Id);
+                var entity =await _materialBoxRepository.FindByIdAsync(input.Id);
                 //检查标签是否存在
                 if (!input.ArchiveBoxRfid.IsNullOrEmpty() && !await _rfidManager.CheckExistRfidCode(input.ArchiveBoxRfid, 2))
                 {
                     throw new UserFriendlyException("数据库中不存在标签" + input.ArchiveBoxRfid);
                 }
                 //检测标签是否被绑定
-                if (!input.ArchiveBoxRfid.IsNullOrEmpty() && await _archiveBoxManager.CheckUsedBoxRfid(input.ArchiveBoxRfid))
+                if (!input.ArchiveBoxRfid.IsNullOrEmpty() && await _materialBoxManager.CheckUsedBoxRfid(input.ArchiveBoxRfid))
                 {
                     throw new UserFriendlyException( input.ArchiveBoxRfid + "标签已被绑定");
                 }
-                entity.ArchiveBoxRfid = input.ArchiveBoxRfid;
-                var archivebox = await _archiveBoxRepository.UpdateAsync(entity);
+                entity.MaterialBoxRfid = input.ArchiveBoxRfid;
+                var archivebox = await _materialBoxRepository.UpdateAsync(entity);
 
-                return base.ObjectMapper.Map<ArchiveBox, ArchiveBoxDto>(archivebox);
+                return base.ObjectMapper.Map<MaterialBox, MaterialBoxDto>(archivebox);
             }
             catch (Exception ex)
             {
@@ -168,27 +168,27 @@ namespace WarehouseManagement.ArchiveBoxs
             }
         }
 
-        public async Task<Boolean> BindArchive(string archiveBoxRfid,string archiveRfid)
+        public async Task<Boolean> BindArchive(string MaterialBoxRfid,string MaterialRfid)
         {
-            var archiveBox = await _archiveBoxManager.GetArchiveBoxByRfidCode(archiveBoxRfid);
+            var archiveBox = await _materialBoxManager.GetArchiveBoxByRfidCode(MaterialBoxRfid);
             if (archiveBox == null)
             {
                 throw new UserFriendlyException(message: "档案盒不存在");
             }
-            var archive = await _archiveManager.GetArchiveByRfidCode(archiveRfid);
-            if (archive == null)
+            var Material = await _materialManager.GetArchiveByRfidCode(MaterialRfid);
+            if (Material == null)
             {
                 throw new UserFriendlyException("档案文件不存在");
             }
             //检查档案是否已绑定
-            var detail = await _archiveBoxDetailManager.GetDetailByArchiveId(archive.Id);
+            var detail = await _materialBoxDetailManager.GetDetailByArchiveId(Material.Id);
             if (detail != null)
             {
-                throw new UserFriendlyException("档案文件已经绑定在档案盒" + detail.ArchiveBoxId);
+                throw new UserFriendlyException("档案文件已经绑定在档案盒" + detail.MaterialBoxId);
             }
 
-            archiveBox.AddDetail(archiveBox.Id, archive.Id);
-            await _archiveBoxRepository.UpdateAsync(archiveBox);
+            archiveBox.AddDetail(archiveBox.Id, Material.Id);
+            await _materialBoxRepository.UpdateAsync(archiveBox);
             return true;
 
         }

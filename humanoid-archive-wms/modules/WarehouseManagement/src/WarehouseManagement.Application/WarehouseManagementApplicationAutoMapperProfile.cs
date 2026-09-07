@@ -1,9 +1,9 @@
-﻿using AutoMapper;
+using AutoMapper;
 
-using WarehouseManagement.ArchiveBoxs.Aggregates;
-using WarehouseManagement.ArchiveBoxs.Dto;
-using WarehouseManagement.Archives.Aggregates;
-using WarehouseManagement.Archives.Dto;
+using WarehouseManagement.MaterialBoxs.Aggregates;
+using WarehouseManagement.MaterialBoxs.Dto;
+using MaterialAggregate = WarehouseManagement.Material.Aggregates.Material;
+using WarehouseManagement.Material.Dto;
 using WarehouseManagement.Cells;
 using WarehouseManagement.Cells.Dto;
 using WarehouseManagement.CheckHiss.Aggregates;
@@ -41,11 +41,11 @@ public class WarehouseManagementApplicationAutoMapperProfile : Profile
         CreateMap<Goods, GoodsDto>();
 
 
-        CreateMap<ArchiveBox, ArchiveBoxDto>(MemberList.None); 
-        CreateMap<CreateArchiveBoxDto, ArchiveBox>(MemberList.None); ;
-        CreateMap<Archive, ArchiveDto>(MemberList.None); ;
-        CreateMap<CreateArchiveDto, Archive>(MemberList.None); ;
-        CreateMap<ArchiveBoxDetail, ArchiveBoxDetailDto>(MemberList.None); ;
+        CreateMap<MaterialBox, MaterialBoxDto>(MemberList.None); 
+        CreateMap<CreateMaterialBoxDto, MaterialBox>(MemberList.None); ;
+        CreateMap<MaterialAggregate, MaterialDto>(MemberList.None); ;
+        CreateMap<CreateMaterialDto, MaterialAggregate>(MemberList.None); ;
+        CreateMap<MaterialBoxDetail, MaterialBoxDetailDto>(MemberList.None); ;
 
         CreateMap<Rfid, RfidCodeDto>();
         CreateMap<CreateRfidCodeDto, Rfid>(MemberList.None); ;

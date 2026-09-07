@@ -19,7 +19,13 @@ namespace WarehouseManagement.StockTasks.Dto
         /// 物料名称
         /// </summary>
         public string GoodsName { get; set; }
+        /// <summary>
+        /// 物料规格
+        /// </summary>
         public string GoodsSpec { get; set; }
+        /// <summary>
+        /// 物料等级
+        /// </summary>
         public string GoodsBand { get; set; }
         /// <summary>
         /// 批号
@@ -33,11 +39,13 @@ namespace WarehouseManagement.StockTasks.Dto
         /// 数量
         /// </summary>
         public System.Decimal Quantity { get; set; }
-
         /// <summary>
         /// 订单号
         /// </summary>
         public string GoodsProperty1 { get; set; }
+        /// <summary>
+        /// 库存id
+        /// </summary>
         public int StockId { get; set; }
 
     }

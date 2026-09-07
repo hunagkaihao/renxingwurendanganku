@@ -36,20 +36,18 @@ namespace WarehouseManagement.StockTasks
         }
         [HttpPost("pageDetail")]
         [SwaggerOperation(summary: "获取任务清单明细", Tags = new[] { "StockTasks" })]
-        public async Task<PagedResultDto<StockTaskDetailDto>> GetPagingDetailListAsync(
-    PagingStockTaskDetailInput input)
+        public async Task<PagedResultDto<StockTaskDetailDto>> GetPagingDetailListAsync(PagingStockTaskDetailInput input)
         {
             return await _stockTaskAppService.GetPagingDetailListAsync(input);
         }
         [HttpPost("pageDetailByArchiveId")]
-        [SwaggerOperation(summary: "获取档案出入库任务清单明细", Tags = new[] { "StockTasks" })]
-        public async Task<PagedResultDto<StockTaskDetailDto>> GetPagingDetailListByArchiveIdAsync(
-    PagingStockTaskDetailInput input)
+        [SwaggerOperation(summary: "获取物料出入库任务清单明细", Tags = new[] { "StockTasks" })]
+        public async Task<PagedResultDto<StockTaskDetailDto>> GetPagingDetailListByMaterialIdAsync(PagingStockTaskDetailInput input)
         {
-            return await _stockTaskAppService.GetPagingDetailListByArchiveIdAsync(input);
+            return await _stockTaskAppService.GetPagingDetailListByMaterialIdAsync(input);
         }
         [HttpPost("update")]
-        [SwaggerOperation(summary: "修改档案盒", Tags = new[] { "StockTasks" })]
+        [SwaggerOperation(summary: "修改物料盒", Tags = new[] { "StockTasks" })]
         public async Task<StockTaskDto> UpdateAsync(UpdateStockTaskDto input)
         {
             return await _stockTaskAppService.UpdateAsync(input);
@@ -68,13 +66,13 @@ namespace WarehouseManagement.StockTasks
         }
 
         [HttpPost("createWCSIn")]
-        [SwaggerOperation(summary: "创建档案入库任务", Tags = new[] { "StockTasks" })]
+        [SwaggerOperation(summary: "创建物料入库任务", Tags = new[] { "StockTasks" })]
         public async Task<StockTaskDto> CreateWCSIn(CreateStockTaskDto input)
         {
             return await _stockTaskAppService.CreateWCSIn(input);
         }
         [HttpPost("wcsInSetCell")]
-        [SwaggerOperation(summary: "档案任务分配库位", Tags = new[] { "StockTasks" })]
+        [SwaggerOperation(summary: "物料任务分配库位", Tags = new[] { "StockTasks" })]
         public async Task<Boolean> WCSSetCell(int input)
         {
             return await _stockTaskAppService.WCSSetCell(input);
@@ -87,37 +85,37 @@ namespace WarehouseManagement.StockTasks
         }
 
         [HttpPost("createWCSOut")]
-        [SwaggerOperation(summary: "创建档案出库任务", Tags = new[] { "StockTasks" })]
+        [SwaggerOperation(summary: "创建物料出库任务", Tags = new[] { "StockTasks" })]
         public async Task<StockTaskDto> CreateWCSOut(CreateStockTaskDto input)
         {
             return await _stockTaskAppService.CreateWCSOut(input);
         }
         [HttpPost("batBoxInByArea")]
-        [SwaggerOperation(summary: "创建档案批量入库任务", Tags = new[] { "StockTasks" })]
+        [SwaggerOperation(summary: "创建物料批量入库任务", Tags = new[] { "StockTasks" })]
         public async Task<bool> BatBoxInByArea(string input)
         {
             return await _stockTaskAppService.BatBoxInByArea(input);
         }
         [HttpPost("clientInCell")]
-        [SwaggerOperation(summary: "一体机创建档案入库任务", Tags = new[] { "StockTasks" })]
+        [SwaggerOperation(summary: "一体机创建物料入库任务", Tags = new[] { "StockTasks" })]
         public async Task<bool> TaskAssignUseRfid(string rfid)
         {
             return await _stockTaskAppService.TaskAssignUseRfid(rfid);
         }
         [HttpPost("clientOutCell")]
-        [SwaggerOperation(summary: "一体机创建档案出库任务", Tags = new[] { "StockTasks" })]
+        [SwaggerOperation(summary: "一体机创建物料出库任务", Tags = new[] { "StockTasks" })]
         public async Task<bool> ClientOutCell(string rfid)
         {
             return await _stockTaskAppService.ClientOutCell(rfid);
         }
         [HttpPost("allInOutTask")]
-        [SwaggerOperation(summary: "一体机档案任务", Tags = new[] { "StockTasks" })]
+        [SwaggerOperation(summary: "一体机物料任务", Tags = new[] { "StockTasks" })]
         public async Task<List<StockTaskDto>> GetInOutTask()
         {
             return await _stockTaskAppService.GetInOutTask();
         }
         [HttpPost("openDoor")]
-        [SwaggerOperation(summary: "一体机档案任务", Tags = new[] { "StockTasks" })]
+        [SwaggerOperation(summary: "一体机物料开门任务", Tags = new[] { "StockTasks" })]
         public async Task ControlDoorOpen(int stockId)
         {
             await _stockTaskAppService.ControlDoorOpen(stockId);

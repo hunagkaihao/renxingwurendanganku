@@ -5,26 +5,24 @@ using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Entities.Auditing;
 
-
-
-namespace WarehouseManagement.ArchiveBoxs.Aggregates
+namespace WarehouseManagement.MaterialBoxs.Aggregates
 {
-    public class ArchiveBoxDetail : FullAuditedAggregateRoot<int>
+    public class MaterialBoxDetail : FullAuditedAggregateRoot<int>
     {
-        private ArchiveBoxDetail()
+        private MaterialBoxDetail()
         {
 
         }
 
-        public ArchiveBoxDetail(int archiveBoxId, int archiveId)
+        public MaterialBoxDetail(int MaterialBoxId, int MaterialId)
         {
-            ArchiveBoxId = archiveBoxId;
-            ArchiveId = archiveId;
+            this.MaterialBoxId = MaterialBoxId;
+            this.MaterialId = MaterialId;
         }
-        public int ArchiveBoxId { get; set; }
+        public int MaterialBoxId { get; set; }
         public int PlanListId { get; set; }
         public System.Decimal StorageListQuantity { get; set; }
-        public int ArchiveId { get; set; }
+        public int MaterialId { get; set; }
         public string EntryTime { get; set; }
         public string UpdateTime { get; set; }
         public string StorageListRemark { get; set; }

@@ -122,11 +122,11 @@ export const tableColumns: BasicColumn[] = [
 
 export const tableDetailColumns: BasicColumn[] = [
   {
-    title: t('档案标签'),
+    title: t('物料标签'),
     dataIndex: 'goodsCode',
   },
   {
-    title: t('档案题名'),
+    title: t('物料题名'),
     dataIndex: 'goodsName',
   },
   // {

@@ -1572,12 +1572,12 @@ export class ArchiveBoxsServiceProxy extends ServiceProxyBase {
     }
 
     /**
-     * 创建档案盒
+     * 创建物料盒
      * @param body (optional) 
      * @return Success
      */
     create(body: CreateArchiveBoxDto | undefined , cancelToken?: CancelToken | undefined): Promise<ArchiveBoxDto> {
-        let url_ = this.baseUrl + "/ArchiveBoxs/create";
+        let url_ = this.baseUrl + "/MaterialBoxs/create";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -1673,12 +1673,12 @@ export class ArchiveBoxsServiceProxy extends ServiceProxyBase {
     }
 
     /**
-     * 编辑档案盒
+     * 编辑物料盒
      * @param body (optional) 
      * @return Success
      */
     update(body: CreateArchiveBoxDto | undefined , cancelToken?: CancelToken | undefined): Promise<ArchiveBoxDto> {
-        let url_ = this.baseUrl + "/ArchiveBoxs/update";
+        let url_ = this.baseUrl + "/MaterialBoxs/update";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -1774,12 +1774,12 @@ export class ArchiveBoxsServiceProxy extends ServiceProxyBase {
     }
 
     /**
-     * 删除档案盒
+     * 删除物料盒
      * @param body (optional) 
      * @return Success
      */
     delete(body: CreateArchiveBoxDto | undefined , cancelToken?: CancelToken | undefined): Promise<void> {
-        let url_ = this.baseUrl + "/ArchiveBoxs/delete";
+        let url_ = this.baseUrl + "/MaterialBoxs/delete";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -1871,12 +1871,12 @@ export class ArchiveBoxsServiceProxy extends ServiceProxyBase {
     }
 
     /**
-     * 获取档案盒数据
+     * 获取物料盒数据
      * @param body (optional) 
      * @return Success
      */
     page(body: PagingArchiveBoxListInput | undefined , cancelToken?: CancelToken | undefined): Promise<ArchiveBoxDtoPagedResultDto> {
-        let url_ = this.baseUrl + "/ArchiveBoxs/page";
+        let url_ = this.baseUrl + "/MaterialBoxs/page";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -1972,12 +1972,12 @@ export class ArchiveBoxsServiceProxy extends ServiceProxyBase {
     }
 
     /**
-     * 获取档案盒数据明细
+     * 获取物料盒数据明细
      * @param body (optional) 
      * @return Success
      */
     pageDetail(body: PagingArchiveBoxDetailInput | undefined , cancelToken?: CancelToken | undefined): Promise<ArchiveBoxDetailDtoPagedResultDto> {
-        let url_ = this.baseUrl + "/ArchiveBoxs/pageDetail";
+        let url_ = this.baseUrl + "/MaterialBoxs/pageDetail";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -2073,12 +2073,12 @@ export class ArchiveBoxsServiceProxy extends ServiceProxyBase {
     }
 
     /**
-     * 档案盒绑定标签
+     * 物料盒绑定标签
      * @param body (optional) 
      * @return Success
      */
     bindRfid(body: CreateArchiveBoxDto | undefined , cancelToken?: CancelToken | undefined): Promise<ArchiveBoxDto> {
-        let url_ = this.baseUrl + "/ArchiveBoxs/bindRfid";
+        let url_ = this.baseUrl + "/MaterialBoxs/bindRfid";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -2174,19 +2174,19 @@ export class ArchiveBoxsServiceProxy extends ServiceProxyBase {
     }
 
     /**
-     * 档案盒绑定档案
+     * 物料盒绑定档案
      * @param archiveBoxRfid (optional) 
      * @param archiveRfid (optional) 
      * @return Success
      */
     bindArchive(archiveBoxRfid: string | undefined, archiveRfid: string | undefined , cancelToken?: CancelToken | undefined): Promise<boolean> {
-        let url_ = this.baseUrl + "/ArchiveBoxs/bindArchive?";
+        let url_ = this.baseUrl + "/MaterialBoxs/bindArchive?";
         if (archiveBoxRfid === null)
-            throw new Error("The parameter 'archiveBoxRfid' cannot be null.");
+            throw new Error("The parameter 'MaterialBoxRfid' cannot be null.");
         else if (archiveBoxRfid !== undefined)
             url_ += "ArchiveBoxRfid=" + encodeURIComponent("" + archiveBoxRfid) + "&";
         if (archiveRfid === null)
-            throw new Error("The parameter 'archiveRfid' cannot be null.");
+            throw new Error("The parameter 'MaterialRfid' cannot be null.");
         else if (archiveRfid !== undefined)
             url_ += "ArchiveRfid=" + encodeURIComponent("" + archiveRfid) + "&";
         url_ = url_.replace(/[?&]$/, "");
@@ -2293,12 +2293,12 @@ export class ArchivesServiceProxy extends ServiceProxyBase {
     }
 
     /**
-     * 创建档案
+     * 创建档物料
      * @param body (optional) 
      * @return Success
      */
     create(body: CreateArchiveDto | undefined , cancelToken?: CancelToken | undefined): Promise<ArchiveDto> {
-        let url_ = this.baseUrl + "/Archives/create";
+        let url_ = this.baseUrl + "/Material/create";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -2394,12 +2394,12 @@ export class ArchivesServiceProxy extends ServiceProxyBase {
     }
 
     /**
-     * 删除档案
+     * 删除物料
      * @param body (optional) 
      * @return Success
      */
     delete(body: CreateArchiveDto | undefined , cancelToken?: CancelToken | undefined): Promise<void> {
-        let url_ = this.baseUrl + "/Archives/delete";
+        let url_ = this.baseUrl + "/Material/delete";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -2491,12 +2491,12 @@ export class ArchivesServiceProxy extends ServiceProxyBase {
     }
 
     /**
-     * 编辑档案
+     * 编辑物料
      * @param body (optional) 
      * @return Success
      */
     update(body: CreateArchiveDto | undefined , cancelToken?: CancelToken | undefined): Promise<ArchiveDto> {
-        let url_ = this.baseUrl + "/Archives/update";
+        let url_ = this.baseUrl + "/Material/update";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -2592,12 +2592,12 @@ export class ArchivesServiceProxy extends ServiceProxyBase {
     }
 
     /**
-     * 查询档案
+     * 查询物料
      * @param body (optional) 
      * @return Success
      */
     page(body: PagingArchiveListInput | undefined , cancelToken?: CancelToken | undefined): Promise<ArchiveDtoPagedResultDto> {
-        let url_ = this.baseUrl + "/Archives/page";
+        let url_ = this.baseUrl + "/Material/page";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);

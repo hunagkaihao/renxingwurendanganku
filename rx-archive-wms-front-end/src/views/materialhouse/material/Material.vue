@@ -20,14 +20,14 @@
           @click="pickOut"
           v-auth="'WarehouseManagement.GoodsManagement.Create'"
         >
-          {{ t('借阅出库') }}
+          {{ t('借用出库') }}
         </a-button>
         <a-button
           type="primary"
           @click="pickOut"
           v-auth="'WarehouseManagement.GoodsManagement.Create'"
         >
-          {{ t('档案归还') }}
+          {{ t('物料归还') }}
         </a-button>
         <a-button
           type="primary"
