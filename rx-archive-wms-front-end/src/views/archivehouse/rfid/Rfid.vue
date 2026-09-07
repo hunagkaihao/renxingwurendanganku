@@ -148,11 +148,6 @@
       };
 
       function jsonPrint() {
-        // printJS({
-        //   printable: [{ 借阅人: '李杰', 借出时间: '123@gmail.com', 电话: '123' }],
-        //   properties: ['借阅人', '借出时间', '电话'],
-        //   type: 'json',
-        // });
         const boxId = selectedBoxIdRef.value;
         // 验证是否有值
         if (!boxId) {

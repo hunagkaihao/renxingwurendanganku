@@ -7748,6 +7748,88 @@ export class GoodssServiceProxy extends ServiceProxyBase {
         }
         return Promise.resolve<GoodsSelectDto[]>(null as any);
     }
+
+    /**
+     * 获取所有启用的物品类型作为RFID标签类型选项
+     * @return Success
+     */
+    getRfidTypeOptions(cancelToken?: CancelToken | undefined): Promise<GoodsTypeSelectDto[]> {
+        let url_ = this.baseUrl + "/Goodss/rfid-type-options";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.instance.request(transformedOptions_);
+        }).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processGetRfidTypeOptions(_response));
+        });
+    }
+
+    protected processGetRfidTypeOptions(response: AxiosResponse): Promise<GoodsTypeSelectDto[]> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            if (Array.isArray(resultData200)) {
+                result200 = [] as any;
+                for (let item of resultData200)
+                    result200!.push(GoodsTypeSelectDto.fromJS(item));
+            }
+            else {
+                result200 = <any>null;
+            }
+            return Promise.resolve<GoodsTypeSelectDto[]>(result200);
+
+        } else if (status === 403) {
+            const _responseText = response.data;
+            return throwException("Forbidden", status, _responseText, _headers);
+
+        } else if (status === 401) {
+            const _responseText = response.data;
+            return throwException("Unauthorized", status, _responseText, _headers);
+
+        } else if (status === 400) {
+            const _responseText = response.data;
+            return throwException("Bad Request", status, _responseText, _headers);
+
+        } else if (status === 404) {
+            const _responseText = response.data;
+            return throwException("Not Found", status, _responseText, _headers);
+
+        } else if (status === 500) {
+            const _responseText = response.data;
+            return throwException("Server Error", status, _responseText, _headers);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<GoodsTypeSelectDto[]>(null as any);
+    }
 }
 
 export class IdentityResourceServiceProxy extends ServiceProxyBase {
@@ -22900,6 +22982,58 @@ export class GoodsSelectDto implements IGoodsSelectDto {
 export interface IGoodsSelectDto {
     label: string | undefined;
     value: string | undefined;
+}
+
+export class GoodsTypeSelectDto implements IGoodsTypeSelectDto {
+    id!: number;
+    goodsCode!: string | undefined;
+    goodsName!: string | undefined;
+    label!: string | undefined;
+    value!: number;
+
+    constructor(data?: IGoodsTypeSelectDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.goodsCode = _data["goodsCode"];
+            this.goodsName = _data["goodsName"];
+            this.label = _data["label"];
+            this.value = _data["value"];
+        }
+    }
+
+    static fromJS(data: any): GoodsTypeSelectDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new GoodsTypeSelectDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["goodsCode"] = this.goodsCode;
+        data["goodsName"] = this.goodsName;
+        data["label"] = this.label;
+        data["value"] = this.value;
+        return data;
+    }
+}
+
+export interface IGoodsTypeSelectDto {
+    id: number;
+    goodsCode: string | undefined;
+    goodsName: string | undefined;
+    label: string | undefined;
+    value: number;
 }
 
 export enum GoodsStatus {

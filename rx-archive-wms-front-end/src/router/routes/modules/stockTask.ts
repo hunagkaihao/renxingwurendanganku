@@ -109,7 +109,7 @@ const stockTask: AppRouteModule = {
       name: 'StockTask',
       component: () => import('/@/views/archivehouse/stock/StockTask.vue'),
       meta: {
-        title: t('档案出入库管理'),
+        title: t('物料出入库管理'),
         policy: 'WarehouseManagement.StockTaskManagement',
         icon: 'ant-design:menu-outlined',
         ignoreKeepAlive: true, //忽略页面缓存，每次强制刷新

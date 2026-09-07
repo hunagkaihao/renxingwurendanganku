@@ -22,11 +22,11 @@ export const tableColumns: BasicColumn[] = [
   //   dataIndex: 'id',
   // },
   {
-    title: t('分类号'),
+    title: t('物品编号'),
     dataIndex: 'goodsCode',
   },
   {
-    title: t('分类名称'),
+    title: t('物品名称'),
     dataIndex: 'goodsName',
   },
 ];
@@ -44,7 +44,7 @@ export const createFormSchema: FormSchema[] = [
   {
     field: 'goodsCode',
     component: 'Input',
-    label: t('分类号'),
+    label: t('物品编号'),
     labelWidth: 85,
     colProps: {
       span: 12,
@@ -56,7 +56,7 @@ export const createFormSchema: FormSchema[] = [
   {
     field: 'goodsName',
     component: 'Input',
-    label: t('分类名称'),
+    label: t('物品名称'),
     labelWidth: 85,
     colProps: {
       span: 12,
@@ -71,7 +71,7 @@ export const editFormSchema: FormSchema[] = [
   {
     field: 'goodsCode',
     component: 'Input',
-    label: t('分类号'),
+    label: t('物品编号'),
     labelWidth: 85,
     colProps: {
       span: 12,
@@ -83,7 +83,7 @@ export const editFormSchema: FormSchema[] = [
   {
     field: 'goodsName',
     component: 'Input',
-    label: t('分类名称'),
+    label: t('物品名称'),
     labelWidth: 85,
     colProps: {
       span: 12,

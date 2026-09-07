@@ -28,7 +28,7 @@ const cellStore = useUserStore()
 const option = reactive([
   {
     value: 1,
-    label: '自动化叉车库',
+    label: '树脂留样间',
   },
   // {
   //   value: 2,

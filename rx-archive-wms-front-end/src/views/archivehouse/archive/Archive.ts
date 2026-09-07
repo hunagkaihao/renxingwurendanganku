@@ -23,35 +23,35 @@ const [openFullLoading, closeFullLoading] = useLoading({
 
 export const tableColumns: BasicColumn[] = [
   {
-    title: t('档号'),
+    title: t('物料号'),
     dataIndex: 'archivesCode',
   },
   {
-    title: t('题名'),
+    title: t('物料名称'),
     dataIndex: 'archivesName',
   },
   {
-    title: t('条码号'),
+    title: t('物料号'),
     dataIndex: 'rfidId',
   },
   {
     title: t('库位'),
     dataIndex: 'cellName',
   },
-  {
+/*  {
     title: t('案卷号'),
     dataIndex: 'goodsAJCode',
-  },
+  },*/
   {
     title: t('保管期限'),
     dataIndex: 'retentionPeriod',
   },
   {
-    title: t('所属档案盒'),
+    title: t('所属物料类型'),
     dataIndex: 'archiveBoxName',
   },
   {
-    title: t('档案盒条码'),
+    title: t('物料条码'),
     dataIndex: 'archiveBoxRfid',
   },
   {

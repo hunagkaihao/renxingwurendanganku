@@ -256,8 +256,8 @@ import { WareInfo } from '/#/store';
       const b :WareInfo[] = []
       const options =  reactive([
       {
-        value: '自动化叉车库',
-        label: '自动化叉车库',
+        value: '树脂留样间',
+        label: '树脂留样间',
       },
     ]);
 

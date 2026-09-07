@@ -120,7 +120,7 @@ export const tableColumns: BasicColumn[] = [
     dataIndex: 'id',
   },
   {
-    title: t('档案盒条码'),
+    title: t('物料类型条码'),
     dataIndex: 'archiveBoxRfid',
   },
   {

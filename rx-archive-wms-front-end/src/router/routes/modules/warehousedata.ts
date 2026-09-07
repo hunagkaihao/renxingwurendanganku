@@ -38,7 +38,7 @@ const basedata: AppRouteModule = {
       name: 'ArchiveType',
       component: () => import('/@/views/archivehouse/archivetype/ArchiveType.vue'),
       meta: {
-        title: t('档案类型'),
+        title: t('物品类型'),
         policy: 'WarehouseManagement.StorageBoxManagement',
         icon: 'fluent:archive-16-regular',
       },

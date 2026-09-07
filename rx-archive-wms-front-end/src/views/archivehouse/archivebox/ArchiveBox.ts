@@ -23,15 +23,15 @@ const [openFullLoading, closeFullLoading] = useLoading({
 
 export const tableColumns: BasicColumn[] = [
   {
-    title: t('档案盒标签'),
+    title: t('物料标签'),
     dataIndex: 'archiveBoxRfid',
   },
   {
-    title: t('档案盒名称'),
+    title: t('物料名称'),
     dataIndex: 'archiveBoxName',
   },
   {
-    title: t('档号'),
+    title: t('物料编号'),
     dataIndex: 'stockBarcode',
   },
   {
@@ -39,7 +39,7 @@ export const tableColumns: BasicColumn[] = [
     dataIndex: 'cellCode',
   },
   {
-    title: t('尺寸'),
+    title: t('类型'),
     dataIndex: 'cellModel',
     customRender: ({ text }) => {
       if (text != undefined) return cellModelSelectItem.filter((f) => f.value == text)[0].label;
@@ -57,10 +57,10 @@ export const tableColumns: BasicColumn[] = [
     title: t('保存期限'),
     dataIndex: 'retentionPeriod',
   },
-  {
+/*  {
     title: t('目录号'),
     dataIndex: 'catalogNo',
-  },
+  },*/
   {
     title: t('routes.warehouse.storageBoxManagement_createTime'),
     dataIndex: 'creationTime',
@@ -96,11 +96,11 @@ export const cellModelSelectItem: SelectItem[] = [
 
 export const tableDetailColumns: BasicColumn[] = [
   {
-    title: t('档案号'),
+    title: t('物料编号'),
     dataIndex: 'archiveCode',
   },
   {
-    title: t('档案名称'),
+    title: t('物料名称'),
     dataIndex: 'archiveName',
   },
 ];
@@ -118,7 +118,7 @@ export const createFormSchema: FormSchema[] = [
   {
     field: 'archiveBoxRfid',
     component: 'Input',
-    label: t('档案盒条码'),
+    label: t('物料条码'),
     labelWidth: 85,
     colProps: {
       span: 12,
@@ -130,7 +130,7 @@ export const createFormSchema: FormSchema[] = [
   {
     field: 'archiveBoxName',
     component: 'Input',
-    label: t('档案盒名'),
+    label: t('物料名称'),
     labelWidth: 85,
     required: true,
     colProps: {
@@ -143,7 +143,7 @@ export const createFormSchema: FormSchema[] = [
   {
     field: 'stockBarcode',
     component: 'Input',
-    label: t('档号'),
+    label: t('物料号'),
     labelWidth: 85,
     required: true,
     colProps: {
@@ -222,7 +222,7 @@ export const editFormSchema: FormSchema[] = [
   {
     field: 'archiveBoxRfid',
     component: 'Input',
-    label: t('档案盒条码'),
+    label: t('物料类型条码'),
     labelWidth: 85,
     required: true,
     colProps: {
@@ -236,7 +236,7 @@ export const editFormSchema: FormSchema[] = [
   {
     field: 'archiveBoxName',
     component: 'Input',
-    label: t('档案盒名'),
+    label: t('物料类型名称'),
     labelWidth: 85,
     required: true,
     colProps: {
@@ -249,7 +249,7 @@ export const editFormSchema: FormSchema[] = [
   {
     field: 'stockBarcode',
     component: 'Input',
-    label: t('档号'),
+    label: t('物料编号'),
     labelWidth: 85,
     required: true,
     colProps: {
@@ -262,7 +262,7 @@ export const editFormSchema: FormSchema[] = [
   {
     field: 'cellModel',
     component: 'Select',
-    label: t('尺寸'),
+    label: t('类型'),
     labelWidth: 85,
     required: true,
     colProps: {
@@ -539,7 +539,7 @@ export const bindArchiveFormSchema: FormSchema[] = [
   {
     field: 'archiveBoxRfid',
     component: 'Input',
-    label: t('档案盒条码'),
+    label: t('物料类型条码'),
     labelWidth: 85,
     colProps: {
       span: 24,
@@ -552,7 +552,7 @@ export const bindArchiveFormSchema: FormSchema[] = [
   {
     field: 'archiveRfid',
     component: 'Input',
-    label: t('档案条码'),
+    label: t('物料条码'),
     labelWidth: 85,
     colProps: {
       span: 24,

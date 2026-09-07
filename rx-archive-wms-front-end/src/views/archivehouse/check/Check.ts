@@ -83,7 +83,7 @@ export const planDetailColumns: BasicColumn[] = [
     dataIndex: 'manageId',
   },
   {
-    title: t('档案标签'),
+    title: t('物料标签'),
     dataIndex: 'stockBarcode',
   },
   {
@@ -158,7 +158,7 @@ export const hisDetailColumns: BasicColumn[] = [
   //   dataIndex: 'goodsId',
   // },
   {
-    title: t('档案盒标签'),
+    title: t('物料类型标签'),
     dataIndex: 'stockBarcode',
   },
   {
@@ -196,11 +196,11 @@ export const hisDetailColumns: BasicColumn[] = [
 ]
 export const tableColumns: BasicColumn[] = [
   {
-    title: t('档号'),
+    title: t('物料号'),
     dataIndex: 'goodsCode',
   },
   {
-    title: t('题名'),
+    title: t('物料名称'),
     dataIndex: 'goodsName',
   },
   {
@@ -211,20 +211,20 @@ export const tableColumns: BasicColumn[] = [
     title: t('库位'),
     dataIndex: 'cellName',
   },
-  {
+/*  {
     title: t('案卷号'),
     dataIndex: 'goodsAJCode',
-  },
+  },*/
   {
     title: t('保管期限'),
     dataIndex: 'retentionPeriod',
   },
   {
-    title: t('所属档案盒'),
+    title: t('所属物料类型'),
     dataIndex: 'archiveBoxName',
   },
   {
-    title: t('档案盒条码'),
+    title: t('物料类型条码'),
     dataIndex: 'archiveBoxRfid',
   },
   {

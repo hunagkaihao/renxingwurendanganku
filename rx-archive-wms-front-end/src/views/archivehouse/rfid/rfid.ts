@@ -4,6 +4,7 @@ import { SelectItem } from '/@/utils/SelectItem';
 // import moment from 'moment';
 import {
   GoodssServiceProxy,
+  GoodsTypeSelectDto,
   RfidServiceProxy,
   PagingRfidListInput,
   RfidCodeDtoPagedResultDto,
@@ -18,18 +19,64 @@ const { t } = useI18n();
 const [openFullLoading, closeFullLoading] = useLoading({
   tip: 'Loading...',
 });
-export const cellModelSelectItem: SelectItem[] = [
-  {
-    label: '档案盒',
-    value: '2',
-    key: 2,
-  },
-  {
-    label: '档案',
-    value: '1',
-    key: 1,
-  },
+
+// 保留历史硬编码选项作为兼容项（用于显示历史数据）
+export const legacyCellModelSelectItem: SelectItem[] = [
+  { label: '档案', value: '1', key: 1 },
+  { label: '档案盒', value: '2', key: 2 },
+  { label: '树脂颗粒', value: '9', key: 9},
+  { label: '薄膜', value: '10', key: 10},
 ];
+
+// 用于表格显示的选项（包含历史选项）
+export const cellModelSelectItem: SelectItem[] = [...legacyCellModelSelectItem];
+
+// 缓存物品类型选项
+let cachedRfidTypeOptions: any[] | null = null;
+
+/**
+ * 获取标签类型选项（带缓存）
+ * @returns 标签类型选项列表
+ */
+export async function getRfidTypeOptionsWithCache(): Promise<any[]> {
+  if (cachedRfidTypeOptions) {
+    return cachedRfidTypeOptions;
+  }
+
+  const _goodsServiceProxy = new GoodssServiceProxy();
+  try {
+    const options = await _goodsServiceProxy.getRfidTypeOptions();
+    const dynamicOptions = options.map((item) => ({
+      label: item.label || item.goodsName,
+      value: item.value || item.id,
+      key: item.value || item.id,
+    }));
+
+    // 合并历史选项和动态物品类型
+    cachedRfidTypeOptions = [
+      { label: '档案（历史）', value: 1, key: 1 },
+      { label: '档案盒（历史）', value: 2, key: 2 },
+      ...dynamicOptions,
+    ];
+
+    return cachedRfidTypeOptions;
+  } catch (error) {
+    console.error('加载物品类型失败:', error);
+    // 失败时回退到硬编码选项
+    return [
+      { label: '档案', value: 1, key: 1 },
+      { label: '档案盒', value: 2, key: 2 },
+    ];
+  }
+}
+
+/**
+ * 清除缓存（在创建物品类型后调用）
+ */
+export function clearRfidTypeCache() {
+  cachedRfidTypeOptions = null;
+}
+
 export const rfidEnableStatusSelectItem: SelectItem[] = [
   {
     label: '禁用',
@@ -125,25 +172,22 @@ export const createFormSchema: FormSchema[] = [
   },
   {
     field: 'rfidTypeCode',
-    component: 'Select',
+    component: 'ApiSelect',
     label: t('标签类型'),
-    defaultValue: '2', //设置默认值
-    //required: true,
+    required: true,
     colProps: {
       span: 12,
     },
     componentProps: {
-      //设置选项值
-      options: [
-        {
-          label: '档案盒',
-          value: '2',
-        },
-        {
-          label: '档案',
-          value: '1',
-        },
-      ],
+      api: getRfidTypeOptionsWithCache,
+      labelField: 'label',
+      valueField: 'value',
+      immediate: true,
+      placeholder: '请选择标签类型',
+      showSearch: true,
+      filterOption: (input: string, option: any) => {
+        return option.label.toLowerCase().includes(input.toLowerCase());
+      },
     },
   },
 ];

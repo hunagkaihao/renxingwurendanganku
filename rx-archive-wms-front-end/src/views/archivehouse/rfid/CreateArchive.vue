@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-  import moment from 'moment'; //leixd
+
   import { defineComponent } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';

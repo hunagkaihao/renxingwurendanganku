@@ -166,7 +166,7 @@ export const useUserStore = defineStore({
           isSts: false,
           idToken: '',
         });
-        this.setCell("自动化叉车库")
+        this.setCell("树脂留样间")
         console.log(this.cell);
 
         await this.getAbpApplicationConfigurationAsync();
