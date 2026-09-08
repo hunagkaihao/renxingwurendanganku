@@ -20,7 +20,7 @@ const { t } = useI18n();
 
 export const manageTypeCodeSelectItem: SelectItem[] = [
   {
-    label: '档案入库',
+    label: '物料入库',
     value: ManageType[ManageType.NPFullStockIn],
     key: ManageType.NPFullStockIn,
   },
@@ -30,12 +30,12 @@ export const manageTypeCodeSelectItem: SelectItem[] = [
     key: ManageType.NpFullStockOut,
   },
   {
-    label: '档案出库',
+    label: '物料出库',
     value: ManageType[ManageType.NPSortStockOut],
     key: ManageType.NPSortStockOut,
   },
   {
-    label: '借阅出库',
+    label: '借用出库',
     value: ManageType[ManageType.HPSortStockOut],
     key: ManageType.HPSortStockOut,
   },

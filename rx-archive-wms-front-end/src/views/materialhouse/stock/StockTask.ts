@@ -29,17 +29,17 @@ const [openFullLoading, closeFullLoading] = useLoading({
 
 export const manageTypeCodeSelectItem: SelectItem[] = [
   {
-    label: '档案入库',
+    label: '物料入库',
     value: ManageType[ManageType.NPFullStockIn],
     key: ManageType.NPFullStockIn,
   },
   {
-    label: '档案出库',
+    label: '物料出库',
     value: ManageType[ManageType.NpFullStockOut],
     key: ManageType.NpFullStockOut,
   },
   {
-    label: '借阅出库',
+    label: '借用出库',
     value: ManageType[ManageType.HPSortStockOut],
     key: ManageType.HPSortStockOut,
   },
@@ -53,7 +53,6 @@ export const manageTypeCodeSelectItem: SelectItem[] = [
     value: ManageType[ManageType.HPBatchStockIn],
     key: ManageType.HPBatchStockIn,
   },
-
   {
     label: '盘盈入库',
     value: ManageType[ManageType.SurplusIn],
@@ -120,8 +119,13 @@ export const tableColumns: BasicColumn[] = [
     dataIndex: 'id',
   },
   {
-    title: t('物料类型条码'),
-    dataIndex: 'materialBoxRfid',
+    title: t('物料码'),
+    dataIndex: 'materialBoxBarcode',
+    width: 150,
+    defaultHidden: false,
+    customRender: ({ record }) => {
+      return record.materialBoxBarcode || record.stockBarcode || '-';
+    },
   },
   {
     title: t('routes.stockTask.stockTaskManagement_manageTypeCode'),

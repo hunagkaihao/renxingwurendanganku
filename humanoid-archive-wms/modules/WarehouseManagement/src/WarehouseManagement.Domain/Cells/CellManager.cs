@@ -426,14 +426,20 @@ namespace WarehouseManagement.Cells
                 return true;
             return false;
         }
-        //自动分配出入档口
+        /// <summary>
+        /// 自动分配出入柜口
+        /// </summary>
+        /// <param name="warehouseId">仓库id</param>
+        /// <param name="cellModel">规格</param>
+        /// <returns></returns>
         public async Task<Cell> GetEmptyStation(int warehouseId,string cellModel)
         {
             //获取可用的空库位  符合料箱类型
-            var cellList = await _cellRepository
-                .GetListAsync(f => f.WarehouseId == warehouseId & f.CellStatus == CellStatus.Nohave & f.RunStatus == CellRunStatus.Enable
-               & f.CellModel == cellModel & f.CellType == CellType.Station)
-                ;
+            var cellList = await _cellRepository.GetListAsync(f => f.WarehouseId == warehouseId & 
+                                                                   f.CellStatus == CellStatus.Nohave &
+                                                                   f.RunStatus == CellRunStatus.Enable & 
+                                                                   f.CellModel == cellModel & 
+                                                                   f.CellType == CellType.Station);
             // 低层优先  通道优先
             return cellList.OrderBy(s => s.Cell_y).ThenBy(s => s.Cell_x).FirstOrDefault();
         }

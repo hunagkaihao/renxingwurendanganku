@@ -61,7 +61,20 @@ public class WarehouseManagementApplicationAutoMapperProfile : Profile
         CreateMap<StockTask, CreateStockTaskDto>(MemberList.None);
         CreateMap<UpdateStockTaskDto, StockTask>(MemberList.None); ;
         CreateMap<StockTask, UpdateStockTaskDto>(MemberList.None);
-        CreateMap<StockTask, StockTaskDto>(MemberList.None);
+        CreateMap<StockTask, StockTaskDto>(MemberList.None)
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+            .ForMember(dest => dest.ManageTypeCode, opt => opt.MapFrom(src => src.ManageTypeCode))
+            .ForMember(dest => dest.ManageStatus, opt => opt.MapFrom(src => src.ManageStatus))
+            .ForMember(dest => dest.MaterialBoxBarcode, opt => opt.MapFrom(src => src.MaterialBoxBarcode))
+            .ForMember(dest => dest.StockBarcode, opt => opt.MapFrom(src => src.MaterialBoxBarcode))
+            .ForMember(dest => dest.StartCellId, opt => opt.MapFrom(src => src.StartCellId))
+            .ForMember(dest => dest.StartCellCode, opt => opt.MapFrom(src => src.StartCellCode))
+            .ForMember(dest => dest.EndCellId, opt => opt.MapFrom(src => src.EndCellId))
+            .ForMember(dest => dest.EndCellCode, opt => opt.MapFrom(src => src.EndCellCode))
+            .ForMember(dest => dest.PlanId, opt => opt.MapFrom(src => src.PlanId))
+            .ForMember(dest => dest.PlanTypeCode, opt => opt.MapFrom(src => src.PlanTypeCode))
+            .ForMember(dest => dest.ManageLaneWay, opt => opt.MapFrom(src => src.ManageLaneWay))
+            .ForMember(dest => dest.CreationTime, opt => opt.MapFrom(src => src.CreationTime));
         CreateMap<StockTaskDto, StockTask>(MemberList.None);
         CreateMap<StockTaskDetail, PagingStockTaskDetailOutput>();
         CreateMap<StockTaskDetail, StockTaskDetailDto>(MemberList.None);

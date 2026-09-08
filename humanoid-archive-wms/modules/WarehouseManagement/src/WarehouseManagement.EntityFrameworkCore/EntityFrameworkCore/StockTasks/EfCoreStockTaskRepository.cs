@@ -23,7 +23,7 @@ namespace WarehouseManagement.EntityFrameworkCore.StockTasks
             return await (await GetDbSetAsync())
                 .IncludeDetails(includeDetails)
                 .WhereIf(!filter.IsNullOrWhiteSpace(),
-                    e => (e.ArchiveBoxRfid.Contains(filter)))
+                    e => (e.MaterialBoxBarcode.Contains(filter)))
                 .OrderByDescending(e => e.CreationTime)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
@@ -33,13 +33,13 @@ namespace WarehouseManagement.EntityFrameworkCore.StockTasks
         {
             return await (await GetDbSetAsync())
                 .WhereIf(!filter.IsNullOrWhiteSpace(),
-                    e => (e.ArchiveBoxRfid.Contains(filter)))
+                    e => (e.MaterialBoxBarcode.Contains(filter)))
                 .CountAsync(cancellationToken: cancellationToken);
         }
         public async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
-                .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.ArchiveBoxRfid.Contains(filter))
+                .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.MaterialBoxBarcode.Contains(filter))
                 .LongCountAsync(GetCancellationToken(cancellationToken));
         }
 
@@ -56,7 +56,7 @@ namespace WarehouseManagement.EntityFrameworkCore.StockTasks
             return await(await GetDbSetAsync())
                 .IncludeDetails(includeDetails)//包含明细
                 .OrderBy(t => t.CreationTime)
-                .FirstOrDefaultAsync(t => t.ArchiveBoxRfid == storageBoxBarcode, GetCancellationToken(cancellationToken));
+                .FirstOrDefaultAsync(t => t.MaterialBoxBarcode == storageBoxBarcode, GetCancellationToken(cancellationToken));
         }
 
 

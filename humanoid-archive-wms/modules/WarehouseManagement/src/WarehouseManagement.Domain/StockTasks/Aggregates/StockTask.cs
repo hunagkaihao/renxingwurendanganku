@@ -20,11 +20,11 @@ namespace WarehouseManagement.StockTasks.Aggregates
             ManageStatus = ManageStatus.WaitingExecute;
             Details = new List<StockTaskDetail>();
         }
-        public StockTask(string manageTypeCode, string archiveBoxRfid,int startCellId, int endCellId,string startCellCode, string endCellCode)
+        public StockTask(string manageTypeCode, string materialBoxBarcode,int startCellId, int endCellId,string startCellCode, string endCellCode)
         {
             //Id = id;
             ManageTypeCode = Enum.Parse<ManageType>(manageTypeCode);
-            ArchiveBoxRfid = archiveBoxRfid;
+            MaterialBoxBarcode = materialBoxBarcode;
             StartCellId = startCellId;
             EndCellId = endCellId;
             StartCellCode = startCellCode;
@@ -33,28 +33,31 @@ namespace WarehouseManagement.StockTasks.Aggregates
             //SetAsCompleated("Completed");
             Details = new List<StockTaskDetail>();
         }
-        public StockTask(string manageTypeCode,string archiveBoxRfid)
+        
+        public StockTask(string manageTypeCode,string materialBoxBarcode)
         {
+            // 任务类型
             ManageTypeCode = Enum.Parse<ManageType>(manageTypeCode);
-            ArchiveBoxRfid = archiveBoxRfid;
+            // 物料信息条码
+            MaterialBoxBarcode = materialBoxBarcode;
         }
         //出库任务
-        public StockTask(string manageTypeCode, string archiveBoxRfid ,string startCellCode,int startCellId)
+        public StockTask(string manageTypeCode, string materialBoxBarcode ,string startCellCode,int startCellId)
         {
             ManageTypeCode = Enum.Parse<ManageType>(manageTypeCode);
-            ArchiveBoxRfid = archiveBoxRfid;
+            MaterialBoxBarcode = materialBoxBarcode;
             StartCellCode = startCellCode;
             StartCellId = startCellId;
             Details = new List<StockTaskDetail>();
         }
 
 
-        public StockTask(string refTaskCode, string manageTypeCode, string archiveBoxRfid, int startCellId, int endCellId, string startCellCode, string endCellCode)
+        public StockTask(string refTaskCode, string manageTypeCode, string materialBoxBarcode, int startCellId, int endCellId, string startCellCode, string endCellCode)
         {
             //Id = id;
             ManageLaneWay = refTaskCode;//记录MES的任务编号
             ManageTypeCode = Enum.Parse<ManageType>(manageTypeCode);
-            ArchiveBoxRfid = archiveBoxRfid;
+            MaterialBoxBarcode = materialBoxBarcode;
             StartCellId = startCellId;
             EndCellId = endCellId;
             StartCellCode = startCellCode;
@@ -63,13 +66,13 @@ namespace WarehouseManagement.StockTasks.Aggregates
             //SetAsCompleated("Completed");
             Details = new List<StockTaskDetail>();
         }
-        public StockTask(ManageType manageTypeCode, int planId,string planTypeCode, string archiveBoxRfid, int startCellId, int endCellId, string startCellCode, string endCellCode)
+        public StockTask(ManageType manageTypeCode, int planId,string planTypeCode, string materialBoxBarcode, int startCellId, int endCellId, string startCellCode, string endCellCode)
         {
             //Id = id;
             ManageTypeCode = manageTypeCode;
             PlanId = planId;
             PlanTypeCode = planTypeCode;
-            ArchiveBoxRfid = archiveBoxRfid;
+            MaterialBoxBarcode = materialBoxBarcode;
             StartCellId = startCellId;
             EndCellId = endCellId;
             StartCellCode = startCellCode;
@@ -82,7 +85,7 @@ namespace WarehouseManagement.StockTasks.Aggregates
         public void Update(string manageTypeCode, string archiveBoxRfid, int startCellId, int endCellId, string startCellCode, string endCellCode)
         {
             ManageTypeCode = Enum.Parse<ManageType>(manageTypeCode);
-            ArchiveBoxRfid = archiveBoxRfid;
+            MaterialBoxBarcode = archiveBoxRfid;
             StartCellId = startCellId;
             EndCellId = endCellId;
             StartCellCode = startCellCode;
@@ -123,7 +126,7 @@ namespace WarehouseManagement.StockTasks.Aggregates
         /// <summary>
         /// 料箱条码
         /// </summary>
-        public string ArchiveBoxRfid { get; set; }
+        public string MaterialBoxBarcode { get; set; }
         /// <summary>
         /// 档案盒满空标识
         /// 0，空，1满
@@ -210,7 +213,7 @@ namespace WarehouseManagement.StockTasks.Aggregates
                 new StockTaskCompletedEto
                 {
                     StockTaskId = Id,
-                    ArchiveBoxRfid = ArchiveBoxRfid,
+                    ArchiveBoxRfid = MaterialBoxBarcode,
                     ManageTypeCode = ManageTypeCode,
                     StartCellId = (int)StartCellId,
                     EndCellId = (int)EndCellId,
@@ -241,7 +244,7 @@ namespace WarehouseManagement.StockTasks.Aggregates
                 new StockTaskCompletedEto
                 {
                     StockTaskId = Id,
-                    ArchiveBoxRfid = ArchiveBoxRfid,
+                    ArchiveBoxRfid = MaterialBoxBarcode,
                     ManageTypeCode = ManageTypeCode,
                     StartCellId = (int)StartCellId,
                     EndCellId = (int)EndCellId,
@@ -288,7 +291,7 @@ namespace WarehouseManagement.StockTasks.Aggregates
                 new StockTaskCanceledEto
                 {
                     StockTaskId = Id,
-                    ArchiveBoxRfid = ArchiveBoxRfid,
+                    ArchiveBoxRfid = MaterialBoxBarcode,
                     ManageTypeCode = ManageTypeCode,
                     StartCellId = StartCellId,
                     EndCellId = EndCellId,

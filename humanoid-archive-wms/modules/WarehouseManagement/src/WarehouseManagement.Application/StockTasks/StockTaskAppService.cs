@@ -48,11 +48,13 @@ namespace WarehouseManagement.StockTasks
         private readonly IPlanRepository _planRepository;
         private readonly IMaterialRepository _materialRepository;
 
-        public StockTaskAppService(IStockTaskRepository stockTaskRepository, StockTaskManager stockTaskManagement, 
-            PlanManager planManager,
-        IStockTaskDetailRepository stockTaskDetailRepository, IGoodsRepository goodsRepository, ICellRepository cellRepository,
-            IMaterialBoxRepository materialBoxRepository, CellManager cellManager, IPlanRepository planRepository,
-            WcsApiManager wcsApiManager, MaterialBoxManager materialBoxManager,IMaterialRepository materialRepository, UnitOfWorkManager unitOfWorkManager)
+        public StockTaskAppService( IStockTaskRepository stockTaskRepository, StockTaskManager stockTaskManagement, 
+                                    PlanManager planManager,IStockTaskDetailRepository stockTaskDetailRepository, 
+                                    IGoodsRepository goodsRepository, ICellRepository cellRepository,
+                                    IMaterialBoxRepository materialBoxRepository, CellManager cellManager, 
+                                    IPlanRepository planRepository,WcsApiManager wcsApiManager, 
+                                    MaterialBoxManager materialBoxManager,IMaterialRepository materialRepository, 
+                                    UnitOfWorkManager unitOfWorkManager)
         {
             _stockTaskRepository = stockTaskRepository;
             _stockTaskManagement = stockTaskManagement;
@@ -68,10 +70,6 @@ namespace WarehouseManagement.StockTasks
             _materialRepository = materialRepository;
         }
 
-
-       
-
-
         public async Task<PagedResultDto<StockTaskDto>> GetPagingListAsync(PagingStockTaskListInput input)
         {
             //Get the IQueryable<Book> from the repository
@@ -80,7 +78,7 @@ namespace WarehouseManagement.StockTasks
             //Prepare a query to join books and authors
             var query = from stockTask in queryable
                         where stockTask.CreationTime >= input.StartCreationTime & stockTask.CreationTime <= input.EndCreationTime
-                        & stockTask.ArchiveBoxRfid.Contains(input.Filter.IsNullOrEmpty() ? "" : input.Filter.Trim())
+                        & stockTask.MaterialBoxBarcode.Contains(input.Filter.IsNullOrEmpty() ? "" : input.Filter.Trim())
                         //& stockTask.ManageStatus.ToString().Contains(input.ManageStatus=="All"?"":input.ManageStatus)
                         & (input.ManageStatus == "All" ? 1 == 1 : stockTask.ManageStatus == Enum.Parse<ManageStatus>(input.ManageStatus))
                         select new { stockTask };
@@ -115,8 +113,7 @@ namespace WarehouseManagement.StockTasks
             );
         }
 
-        public async Task<PagedResultDto<StockTaskDetailDto>> GetPagingDetailListAsync(
-    PagingStockTaskDetailInput input)
+        public async Task<PagedResultDto<StockTaskDetailDto>> GetPagingDetailListAsync(PagingStockTaskDetailInput input)
         {
             //Get the IQueryable<Book> from the repository
             var queryable = await _stockTaskDetailRepository.GetQueryableAsync();
@@ -143,7 +140,7 @@ namespace WarehouseManagement.StockTasks
             var stockTaskDetailDtos = queryResult.Select(x =>
             {
                 var stockTaskDetailDtos = ObjectMapper.Map<StockTaskDetail, StockTaskDetailDto>(x.stockTaskDetail);
-                stockTaskDetailDtos.StockBarcode = x.stockTask.ArchiveBoxRfid;
+                stockTaskDetailDtos.StockBarcode = x.stockTask.MaterialBoxBarcode;
                 stockTaskDetailDtos.GoodsCode = x.goods.GoodsCode;
                 stockTaskDetailDtos.GoodsName = x.goods.GoodsName;
                 stockTaskDetailDtos.GoodsSpec = x.goods.GoodsSpec;
@@ -262,7 +259,12 @@ namespace WarehouseManagement.StockTasks
             return true;
         }
         
-        // 创建物料入库预约任务
+        /// <summary>
+        ///  创建物料入库预约任务
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        /// <exception cref="UserFriendlyException"></exception>
         public async Task<StockTaskDto> CreateWCSIn(CreateStockTaskDto input)
         {
             // 待修改：根据传入的物料信息，创建对应的容器和任务。不检查是否有对应容器。
@@ -297,7 +299,44 @@ namespace WarehouseManagement.StockTasks
             // 放回结果给前端
             return base.ObjectMapper.Map<StockTask, StockTaskDto>(stockTask);
         }
-        //下达档案任务分配库位
+        /// <summary>
+        /// 一体机扫描物料条码分配库位下发入库任务
+        /// </summary>
+        /// <param name="materialBoxBarcode">物料条码</param>
+        /// <returns></returns>
+        /// <exception cref="UserFriendlyException"></exception>
+        [UnitOfWork]
+        public async Task<bool> ScanAndDispatchToWCS(string materialBoxBarcode)
+        {
+            OpenDoorDto openDoorDto = new();
+            // 查找对应物料容器
+            var box = await _materialBoxRepository.FindByRfidCodeAsync(materialBoxBarcode);
+            if (box == null)
+            {
+                throw new UserFriendlyException("物料容器不存在!!!");
+            }
+            
+            // 根据物料码查找对应物料任务
+            var stockTask = await _stockTaskRepository.FindByBarcodeAsync(materialBoxBarcode);
+            if (stockTask == null)
+            {
+                throw new UserFriendlyException("预约入库任务不存在,请重新预约入库任务.");
+            }
+            // 分配物料库位并下发任务给RCS
+            await WCSSetCell(stockTask.Id);
+            
+            // 开柜门
+            openDoorDto.OrderCode = stockTask.Id.ToString();
+            await _wcsApiManager.OpenDoorForOrder(openDoorDto);
+
+            return true;
+        }
+        
+        /// <summary>
+        /// 下达物料任务分配库位
+        /// </summary>
+        /// <param name="StockTaskId"></param>
+        /// <returns></returns>
         public async Task<Boolean> WCSSetCell(int StockTaskId)
         {
             var stockTask = await _stockTaskManagement.WCSSetCell(StockTaskId);
@@ -310,6 +349,7 @@ namespace WarehouseManagement.StockTasks
             var stockTask = await _stockTaskManagement.StockDownloadIn(input);
             return base.ObjectMapper.Map<StockTask, StockTaskDto>(stockTask);
         }
+   
         //一体机扫码档案盒rfid下达wcs任务打开柜门
         [UnitOfWork]
         public async Task<bool> TaskAssignUseRfid(string rfid)
@@ -333,16 +373,16 @@ namespace WarehouseManagement.StockTasks
             {
                 throw new UserFriendlyException(message: "创建任务失败");
             }
-            //分配库位
+            //分配库位并下发任务给WCS
             await WCSSetCell(stock.Id);
-
-
+            
             //开柜门
             openDoorDto.OrderCode = stock.Id.ToString();
             await _wcsApiManager.OpenDoorForOrder(openDoorDto);
 
             return true;
         }
+        
         //一体机扫码档案盒rfid下达wcs任务打开柜门
         [UnitOfWork]
         public async Task<bool> ClientOutCell(string rfid)
@@ -541,7 +581,7 @@ namespace WarehouseManagement.StockTasks
                 var endCell = await _cellManager.SetAsStockOutAsync((int)mge.EndCellId);
                 var startCell = await _cellManager.SetAsStockOutAsync((int)mge.StartCellId);
                 //更新料箱的库位状态
-                var box = await _materialBoxManager.UpdateStockCellAsync(mge.ArchiveBoxRfid, endCell.Id);
+                var box = await _materialBoxManager.UpdateStockCellAsync(mge.MaterialBoxBarcode, endCell.Id);
             }
             else if (mge.ManageTypeCode == ManageType.NpFullStockOut)
             {
@@ -549,7 +589,7 @@ namespace WarehouseManagement.StockTasks
                 var endCell = await _cellManager.SetAsStockOutAsync((int)mge.EndCellId);
                 var startCell = await _cellManager.SetAsStockOutAsync((int)mge.StartCellId);
                 //CompleteHandleCellOut(mge.StartCellId, mge.EndCellId);
-                var box = await _materialBoxManager.UpdateStockOutCellAsync(mge.ArchiveBoxRfid);
+                var box = await _materialBoxManager.UpdateStockOutCellAsync(mge.MaterialBoxBarcode);
             }
             else if (mge.ManageTypeCode == ManageType.HPBatchStockIn)
             {
@@ -606,14 +646,7 @@ namespace WarehouseManagement.StockTasks
         {
             return await _stockTaskManagement.WcsCallBack(input);
         }
-
-
-
-
-
-
-
-
+        
 
     }
 }

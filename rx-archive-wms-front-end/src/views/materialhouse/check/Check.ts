@@ -224,7 +224,7 @@ export const tableColumns: BasicColumn[] = [
     dataIndex: 'materialBoxName',
   },
   {
-    title: t('物料类型条码'),
+    title: t('物料码'),
     dataIndex: 'materialBoxRfid',
   },
   {

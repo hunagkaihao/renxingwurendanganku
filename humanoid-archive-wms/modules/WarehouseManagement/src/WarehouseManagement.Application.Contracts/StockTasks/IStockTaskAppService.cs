@@ -45,6 +45,12 @@ namespace WarehouseManagement.StockTasks
         /// <returns></returns>
         Task<StockTaskDto> CreateWCSIn(CreateStockTaskDto input);
         /// <summary>
+        /// 扫码分配库位下发任务
+        /// </summary>
+        /// <param name="materialBoxBarcode"></param>
+        /// <returns></returns>
+        Task<bool> ScanAndDispatchToWCS(string materialBoxBarcode);
+        /// <summary>
         /// 档案入库分配库位
         /// </summary>
         /// <param name="input"></param>

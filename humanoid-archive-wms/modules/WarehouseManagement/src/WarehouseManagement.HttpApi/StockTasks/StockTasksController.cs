@@ -21,7 +21,6 @@ namespace WarehouseManagement.StockTasks
         {
             _stockTaskAppService = stockTaskAppService;
         }
-
         [HttpPost("delete")]
         [SwaggerOperation(summary: "删除任务", Tags = new[] { "StockTasks" })]
         public async Task DeleteAsync(IdIntInput input)
@@ -64,12 +63,17 @@ namespace WarehouseManagement.StockTasks
         {
             return await _stockTaskAppService.PickOutTask(input);
         }
-
         [HttpPost("createWCSIn")]
         [SwaggerOperation(summary: "创建物料入库预约任务", Tags = new[] { "StockTasks" })]
         public async Task<StockTaskDto> CreateWCSIn(CreateStockTaskDto input)
         {
             return await _stockTaskAppService.CreateWCSIn(input);
+        }
+        [HttpPost("scanAndDispatchToWCS")]
+        [SwaggerOperation(summary: "一体机扫码分配库位下任务", Tags = new[] { "StockTasks" })]
+        public async Task<bool> ScanAndDispatchToWCS(string materialBoxBarcode)
+        {
+            return await _stockTaskAppService.ScanAndDispatchToWCS(materialBoxBarcode);
         }
         [HttpPost("wcsInSetCell")]
         [SwaggerOperation(summary: "物料任务分配库位", Tags = new[] { "StockTasks" })]
@@ -83,7 +87,6 @@ namespace WarehouseManagement.StockTasks
         {
             return await _stockTaskAppService.OpenDoorAndWCSInExcute(input);
         }
-
         [HttpPost("createWCSOut")]
         [SwaggerOperation(summary: "创建物料出库任务", Tags = new[] { "StockTasks" })]
         public async Task<StockTaskDto> CreateWCSOut(CreateStockTaskDto input)
@@ -138,7 +141,6 @@ namespace WarehouseManagement.StockTasks
         {
             await _stockTaskAppService.CreateBatTest();
         }
-
         [HttpPost("~/wms/stockTask/wcsSetStockTaskStatus")]
         [SwaggerOperation(summary: "接收WCS任务状态", Tags = new[] { "StockTasks" })]
         public async Task<ResultWcsTaskDto> WcsSetStockTaskStatus(WcsCallBackRequest input)

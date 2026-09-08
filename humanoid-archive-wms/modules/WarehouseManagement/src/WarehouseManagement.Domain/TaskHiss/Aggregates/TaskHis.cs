@@ -28,7 +28,7 @@ namespace WarehouseManagement.TaskHiss.Aggregates
             ManageStatus=stockTask.ManageStatus;
             StartCellPosition = stockTask.StartCellCode;
             EndCellPosition = stockTask.EndCellCode;
-            StockBarcode =stockTask.ArchiveBoxRfid;
+            StockBarcode =stockTask.MaterialBoxBarcode;
             Details = new List<TaskHisDetail>();
             foreach (StockTaskDetail detail in stockTaskDetails)
             {

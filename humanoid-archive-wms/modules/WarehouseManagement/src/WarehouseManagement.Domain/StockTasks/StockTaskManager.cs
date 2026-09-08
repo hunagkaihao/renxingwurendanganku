@@ -125,12 +125,7 @@ namespace WarehouseManagement.StockTasks
         //    var entity = new StockTask(stockTask, stockTaskDetails);
         //    return await _stockTaskRepository.InsertAsync(entity);
         //}
-       
         
-       
-
-      
-
         public async Task DeleteAsync(int stockTaskId)
         {
             var entity = await _stockTaskRepository.FindByIdAsync(stockTaskId);
@@ -225,7 +220,7 @@ namespace WarehouseManagement.StockTasks
                 {
                     return false;
                 }
-                var mMain = await _stockTaskRepository.GetListAsync(a => a.ArchiveBoxRfid == boxRfid & (a.ManageStatus != ManageStatus.Complete & a.ManageStatus != ManageStatus.Cancel));
+                var mMain = await _stockTaskRepository.GetListAsync(a => a.MaterialBoxBarcode == boxRfid & (a.ManageStatus != ManageStatus.Complete & a.ManageStatus != ManageStatus.Cancel));
                 if (mMain.Count > 0)
                 {
                     return true;
@@ -285,7 +280,7 @@ namespace WarehouseManagement.StockTasks
                     exMessage = "档案盒未绑定标签";
                     throw new UserFriendlyException("档案盒未绑定标签");
                 }
-                stockTask.ArchiveBoxRfid = materialBox.MaterialBoxRfid;
+                stockTask.MaterialBoxBarcode = materialBox.MaterialBoxRfid;
 
                 if (materialBox.CellId == 0)
                 {
@@ -319,7 +314,7 @@ namespace WarehouseManagement.StockTasks
             //    throw new UserFriendlyException("未查询到用户");
             //}
 
-            StockTask s = new(ManageType.HPSortStockOut.ToString(),stockTask.ArchiveBoxRfid, startCell.CellCode ,startCell.Id);
+            StockTask s = new(ManageType.HPSortStockOut.ToString(),stockTask.MaterialBoxBarcode, startCell.CellCode ,startCell.Id);
             //会出现部分ID丢失的情况
             //if (s != null)
             //{
@@ -376,6 +371,13 @@ namespace WarehouseManagement.StockTasks
             Log.Debug("用户:" + "创建了出库任务，任务ID：" + "  方法名:" + System.Reflection.MethodBase.GetCurrentMethod().Name);
             return true;
         }
+        /// <summary>
+        /// 创建入库任务
+        /// </summary>
+        /// <param name="manageTypeCode">任务类型</param>
+        /// <param name="materialBox">物料码</param>
+        /// <returns></returns>
+        /// <exception cref="UserFriendlyException"></exception>
         public async Task<StockTask> CreateWCSIn(string manageTypeCode, MaterialBox materialBox)
         {
             //判断档案盒状态
@@ -393,11 +395,8 @@ namespace WarehouseManagement.StockTasks
             {
                 entity = new StockTask(manageTypeCode, materialBox.MaterialBoxRfid);
                 entity = await _stockTaskRepository.InsertAsync(entity, true);
-                Log.Debug($"Task:{entity.Id} Box:{materialBox.MaterialBoxRfid} CreateStockIn Inserted StockTaskData: {JsonConvert.SerializeObject(entity)}");
-                //entity.SetAsWaitingExecuted();
-
-                //await SetAsExecutingAsync(entity.Id);
-                //Log.Information($"Task:{entity.Id} Box:{storageBox.StorageBoxBarcode} CreateStockIn SetAsWaitingExecuted");
+                Log.Debug($"任务号:[{entity.Id}] 物料码:[{materialBox.MaterialBoxRfid}] " +
+                          $"创建入库任务成功,物料信息: {JsonConvert.SerializeObject(entity)}");
                 return await _stockTaskRepository.UpdateAsync(entity, true);
             }
             catch (Exception ex)
@@ -407,22 +406,26 @@ namespace WarehouseManagement.StockTasks
             }
 
         }
-        //分配库位
+        /// <summary>
+        /// 分配库位
+        /// </summary>
+        /// <param name="StockTaskId">任务id</param>
+        /// <returns></returns>
+        /// <exception cref="UserFriendlyException"></exception>
         [UnitOfWork]
         public async Task<bool> WCSSetCell(int StockTaskId)
         {
             var stockTask = await _stockTaskRepository.FindByIdAsync(StockTaskId);
             if (stockTask != null)
             {
-                var box = await _materialBoxManager.GetArchiveBoxByRfidCode(stockTask.ArchiveBoxRfid);
+                var box = await _materialBoxManager.GetArchiveBoxByRfidCode(stockTask.MaterialBoxBarcode);
                 if (stockTask.ManageStatus == ManageStatus.WaitingExecute)
                 {
                     Cell startCell ;
                     Cell endCell;
                     if (stockTask.StartCellId == 0 )
                     {
-                        //分配入库规格
-                        //2024多个仓库在登陆界面获取仓库的Id?
+                        // 分配入库规格
                         startCell = await _cellManager.GetEmptyStation(1, box.CellModel);
                         if (stockTask.ManageTypeCode == ManageType.NpFullStockOut)
                         {
@@ -445,7 +448,7 @@ namespace WarehouseManagement.StockTasks
                         //优先分配上一个出库库位
                         if(stockTask.ManageTypeCode != ManageType.NPSortStockOut)
                         {
-                            StockTask last = (await _stockTaskRepository.GetListAsync(x => x.ArchiveBoxRfid == stockTask.ArchiveBoxRfid & (x.ManageTypeCode == ManageType.NpFullStockOut || x.ManageTypeCode == ManageType.LossOut) & x.ManageStatus == ManageStatus.Complete)).OrderByDescending(o => o.Id).FirstOrDefault();
+                            StockTask last = (await _stockTaskRepository.GetListAsync(x => x.MaterialBoxBarcode == stockTask.MaterialBoxBarcode & (x.ManageTypeCode == ManageType.NpFullStockOut || x.ManageTypeCode == ManageType.LossOut) & x.ManageStatus == ManageStatus.Complete)).OrderByDescending(o => o.Id).FirstOrDefault();
                             if (last != null)
                             {
                                 endCell = await _cellManager.GetByIdAsync(last.StartCellId);
@@ -603,7 +606,7 @@ namespace WarehouseManagement.StockTasks
                             // 出库完成：释放起终点库位并将档案盒标记为出库。
                             await _cellManager.SetAsStockOutAsync((int)entity.EndCellId);
                             await _cellManager.SetAsStockOutAsync((int)entity.StartCellId);
-                            await _materialBoxManager.UpdateStockOutCellAsync(entity.ArchiveBoxRfid);
+                            await _materialBoxManager.UpdateStockOutCellAsync(entity.MaterialBoxBarcode);
                             entity.SetAsCompleted();
                         }
                         else if (entity.ManageTypeCode == ManageType.NPFullStockIn)
@@ -611,7 +614,7 @@ namespace WarehouseManagement.StockTasks
                             // 入库完成：目标库位入库、起点释放并绑定档案盒新库位。
                             var endCell = await _cellManager.SetAsStockInAsync((int)entity.EndCellId);
                             await _cellManager.SetAsStockOutAsync((int)entity.StartCellId);
-                            await _materialBoxManager.UpdateStockCellAsync(entity.ArchiveBoxRfid, endCell.Id);
+                            await _materialBoxManager.UpdateStockCellAsync(entity.MaterialBoxBarcode, endCell.Id);
                             entity.SetAsCompleted();
                         }
                         else
@@ -706,7 +709,7 @@ namespace WarehouseManagement.StockTasks
                  //设置库位状态
                  var endCell = await _cellManager.SetAsStockInAsync((int)entity.EndCellId);
                  await _materialBoxManager.UpdateStockCellAsync(plateCode, endCell.Id);
-                 entity.ArchiveBoxRfid = plateCode;
+                 entity.MaterialBoxBarcode = plateCode;
 
             }
             
@@ -782,11 +785,11 @@ namespace WarehouseManagement.StockTasks
                 var archiveBox = await _materialBoxManager.GetArchiveBoxByCellId(cellId);
                 if (archiveBox != null)
                 {
-                    stockTask.ArchiveBoxRfid = archiveBox.MaterialBoxRfid;
+                    stockTask.MaterialBoxBarcode = archiveBox.MaterialBoxRfid;
                 }
                 else
                 {
-                    stockTask.ArchiveBoxRfid = "";
+                    stockTask.MaterialBoxBarcode = "";
                 }
 
                 stockTask.PlanId = planId;
@@ -804,7 +807,7 @@ namespace WarehouseManagement.StockTasks
             {
                 throw new UserFriendlyException("ManageCreateCheckByCell异常");
             }
-            if (await ValidateStockManageExist(stockTask.ArchiveBoxRfid))
+            if (await ValidateStockManageExist(stockTask.MaterialBoxBarcode))
             {
                 throw new UserFriendlyException("档案盒已存在任务");
             }

@@ -218,7 +218,7 @@ namespace Lion.AbpPro.Jobs
                                             if (!string.Equals(stock.EndCellCode, actualResult.CellCode, StringComparison.Ordinal))
                                                 continue;
 
-                                            var comparison = CompareCheckResult(stock.ArchiveBoxRfid, actualResult);
+                                            var comparison = CompareCheckResult(stock.MaterialBoxBarcode, actualResult);
                                             if (!comparison.CanComplete)
                                                 continue;
 
@@ -268,7 +268,7 @@ namespace Lion.AbpPro.Jobs
                                                 continue;
                                             }
 
-                                            var comparison = CompareCheckResult(stock.ArchiveBoxRfid, actualResult);
+                                            var comparison = CompareCheckResult(stock.MaterialBoxBarcode, actualResult);
                                             if (!comparison.CanComplete)
                                                 continue;
 

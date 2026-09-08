@@ -235,11 +235,11 @@ namespace WarehouseManagement.Checks
                 var archiveBox = await _materialBoxManager.GetArchiveBoxByCellId(cellId);
                 if (archiveBox != null)
                 {
-                    stockTask.ArchiveBoxRfid = archiveBox.MaterialBoxRfid;
+                    stockTask.MaterialBoxBarcode = archiveBox.MaterialBoxRfid;
                 }
                 else
                 {
-                    stockTask.ArchiveBoxRfid = "";
+                    stockTask.MaterialBoxBarcode = "";
                 }
 
                 stockTask.PlanId = checkId;
@@ -257,7 +257,7 @@ namespace WarehouseManagement.Checks
             {
                 throw new UserFriendlyException("ManageCreateCheckByCell异常");
             }
-            if (await _stockTaskManager.ValidateStockManageExist(stockTask.ArchiveBoxRfid))
+            if (await _stockTaskManager.ValidateStockManageExist(stockTask.MaterialBoxBarcode))
             {
                 throw new UserFriendlyException("档案盒已存在任务");
             }
@@ -291,9 +291,9 @@ namespace WarehouseManagement.Checks
             };
             if(stock != null)
             {
-                if (stock.ArchiveBoxRfid != "")
+                if (stock.MaterialBoxBarcode != "")
                 {
-                    var archiveBox = await _materialBoxManager.GetArchiveBoxByRfidCode(stock.ArchiveBoxRfid);
+                    var archiveBox = await _materialBoxManager.GetArchiveBoxByRfidCode(stock.MaterialBoxBarcode);
                     if(archiveBox == null)
                     {
                         throw new UserFriendlyException("档案盒标签不存在！");
@@ -312,7 +312,7 @@ namespace WarehouseManagement.Checks
                         //var cell = await _cellManager.GetByIdAsync((int)stock.EndCellId);
                         checkDetail.CellName = stock.EndCellCode;
                     }
-                    checkDetail.StockBarcode = stock.ArchiveBoxRfid;
+                    checkDetail.StockBarcode = stock.MaterialBoxBarcode;
                     checkDetail.Account = 1;
                     checkDetail.GoodsId = 0;
                     checkDetail.BoxBarcode = "";
@@ -792,7 +792,7 @@ PagingCheckDetailInput input)
                 //ManageCreateTime = DateTime.Now.ToString(),//增加创建时间
                 //ManageBeginTime = DateTime.Now.ToString(),
                 //ManageEndTime = DateTime.Now.ToString(),
-                ArchiveBoxRfid = ArBoxRfid,
+                MaterialBoxBarcode = ArBoxRfid,
             };
             var entiety = base.ObjectMapper.Map<StockTaskDto, StockTask>(taskhis);
             var stockhis =await _taskHisManager.CreateAsync(entiety, entiety.Details);
@@ -846,7 +846,7 @@ PagingCheckDetailInput input)
                 //CreationTime = DateTime.Now.ToString(),//增加创建时间
                 //ManageBeginTime = DateTime.Now.ToString(),
                 //ManageEndTime = DateTime.Now.ToString(),
-                ArchiveBoxRfid = ArBoxRfid,
+                MaterialBoxBarcode = ArBoxRfid,
             };
             var entity = base.ObjectMapper.Map<StockTaskDto, StockTask>(taskhis);
             var stockhis = await _taskHisManager.CreateAsync(entity, null);

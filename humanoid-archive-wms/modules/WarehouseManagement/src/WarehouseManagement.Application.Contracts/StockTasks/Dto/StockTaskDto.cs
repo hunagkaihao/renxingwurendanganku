@@ -28,7 +28,7 @@ namespace WarehouseManagement.StockTasks.Dto
         /// 料箱条码
         /// </summary>
         public string StockBarcode { get; set; }
-        public string ArchiveBoxRfid { get; set; }
+        public string MaterialBoxBarcode { get; set; }
         public string PlanTypeCode { get; set; }
         /// <summary>
         /// 开始库位ID
