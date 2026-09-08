@@ -15,9 +15,9 @@ namespace WarehouseManagement.MaterialBoxs.Dto
         public string Filter { get; set; }
 
         /// <summary>
-        /// 档案名称
+        /// 物料盒名称
         /// </summary>
-        public string ArchiveBoxName { get; set; }
+        public string MaterialBoxName { get; set; }
 
     }
 }

@@ -16,21 +16,21 @@ namespace WarehouseManagement.MaterialBoxs.Dto
         [Required]
         public int Id { get; set; }
         /// <summary>
-        /// 物料条码
+        /// 物料盒名称
         /// </summary>
-        public string MaterialBarcode { get; set; }
+        public string MaterialBoxName { get; set; }
         /// <summary>
-        /// 物料名称
+        /// 物料盒RFID
         /// </summary>
-        public string MaterialName { get; set; }
+        public string MaterialBoxRfid { get; set; }
         /// <summary>
-        /// 物料号
+        /// 物料盒编码
         /// </summary>
-        public string MaterialNumber { get; set; }
+        public string StockBarcode { get; set; }
         /// <summary>
-        /// 物料类型
+        /// 物料盒类型
         /// </summary>
-        public string MaterialType { get; set; }
+        public string CellModel { get; set; }
         /// <summary>
         /// 分类编号
         /// </summary>

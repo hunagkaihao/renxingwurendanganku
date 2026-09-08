@@ -19,7 +19,7 @@
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { createFormSchema, createStorageBoxAsync } from './MaterialBox';
-  import { CreateArchiveBoxDto } from '/@/services/ServiceProxies';
+  import { CreateMaterialBoxDto } from '/@/services/ServiceProxies';
   import { useI18n } from '/@/hooks/web/useI18n';
   export default defineComponent({
     name: 'CreateArchive',
@@ -51,7 +51,7 @@
       // 保存用户
       const submit = async () => {
         try {
-          let request = getFieldsValue() as CreateArchiveBoxDto;
+          let request = getFieldsValue() as CreateMaterialBoxDto;
           await createStorageBoxAsync({
             request,
             changeOkLoading,

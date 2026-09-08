@@ -224,11 +224,11 @@ export const tableColumns: BasicColumn[] = [
   },
   {
     title: t('所属物料盒'),
-    dataIndex: 'archiveBoxName',
+    dataIndex: 'materialBoxName',
   },
   {
     title: t('物料盒条码'),
-    dataIndex: 'archiveBoxRfid',
+    dataIndex: 'materialBoxRfid',
   },
   {
     title: t('年度'),
@@ -278,11 +278,11 @@ export const checkHistableColumns: BasicColumn[] = [
     },
     {
       title: t('所属档案盒'),
-      dataIndex: 'archiveBoxName',
+      dataIndex: 'materialBoxName',
     },
     {
       title: t('档案盒条码'),
-      dataIndex: 'archiveBoxRfid',
+      dataIndex: 'materialBoxRfid',
     },
     {
       title: t('年度'),

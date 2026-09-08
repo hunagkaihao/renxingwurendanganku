@@ -41,7 +41,7 @@ namespace WarehouseManagement.MaterialBoxs
             var queryable = await _archiveBoxDetailRepository.GetQueryableAsync();
 
             var query = from archiveBoxDetail in queryable
-                        where archiveBoxDetail.MaterialBoxId == input.ArchiveBoxId
+                        where archiveBoxDetail.MaterialBoxId == input.MaterialBoxId
                         join ArchiveBox in await _materialBoxRepository.GetQueryableAsync() on archiveBoxDetail.MaterialBoxId equals ArchiveBox.Id
                         join Material in await _archiveRepository.GetQueryableAsync() on archiveBoxDetail.MaterialId equals Material.Id
                         select new { archiveBoxDetail, ArchiveBox, Material };
@@ -57,8 +57,8 @@ namespace WarehouseManagement.MaterialBoxs
             var archiveBoxDetailDtos = queryResult.Select(x =>
             {
                 var archiveBoxDetailDtos = ObjectMapper.Map<MaterialBoxDetail, MaterialBoxDetailDto>(x.archiveBoxDetail);
-                archiveBoxDetailDtos.ArchiveName = x.Material.MaterialName;
-                archiveBoxDetailDtos.ArchiveCode = x.Material.MaterialCode;
+                archiveBoxDetailDtos.MaterialName = x.Material.MaterialName;
+                archiveBoxDetailDtos.MaterialCode = x.Material.MaterialCode;
 
                 return archiveBoxDetailDtos;
             }).Take(input.PageSize).ToList();

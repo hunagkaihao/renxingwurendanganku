@@ -10,15 +10,15 @@ namespace WarehouseManagement.MaterialBoxs.Dto
 {
     public class MaterialBoxDto : AuditedEntityDto<int>
     {
-        //档案盒名称
+        //物料盒名称
         [Required]
-        public string ArchiveBoxName { get; set; }
-        public string ArchiveBoxRfid { get; set; }
-        //档案盒编码
+        public string MaterialBoxName { get; set; }
+        public string MaterialBoxRfid { get; set; }
+        //物料盒编码
         public string StockBarcode { get; set; }
         //库存状态 0，空，1满
         public string FullFlag { get; set; }
-        //档案盒备注
+        //物料盒备注
         public string StorageRemark { get; set; }
         //库位Id
         public int CellId { get; set; }
@@ -53,15 +53,15 @@ namespace WarehouseManagement.MaterialBoxs.Dto
         /// <summary>
         /// 归档日期
         /// </summary>
-        public string AchieveInDate { get; set; }
+        public string MaterialInDate { get; set; }
         /// <summary>
         /// 归档部门
         /// </summary>
-        public string AchieveInDept { get; set; }
+        public string MaterialInDept { get; set; }
         /// <summary>
         /// 移交人 归档人
         /// </summary>
-        public string Achiever { get; set; }
+        public string MaterialPeople { get; set; }
         /// <summary>
         /// 责任人
         /// </summary>

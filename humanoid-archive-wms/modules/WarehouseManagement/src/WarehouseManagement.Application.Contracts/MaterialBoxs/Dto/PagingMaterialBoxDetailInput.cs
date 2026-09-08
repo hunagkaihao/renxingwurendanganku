@@ -9,6 +9,6 @@ namespace WarehouseManagement.MaterialBoxs.Dto
 {
     public class PagingMaterialBoxDetailInput : PagingBase
     {
-        public int ArchiveBoxId { get; set; }
+        public int MaterialBoxId { get; set; }
     }
 }

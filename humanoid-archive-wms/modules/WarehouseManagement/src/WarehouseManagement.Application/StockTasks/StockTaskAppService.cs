@@ -265,6 +265,8 @@ namespace WarehouseManagement.StockTasks
         // 创建物料入库预约任务
         public async Task<StockTaskDto> CreateWCSIn(CreateStockTaskDto input)
         {
+            // 待修改：根据传入的物料信息，创建对应的容器和任务。不检查是否有对应容器。
+            
             // 查找物料盒对象
             MaterialBox materialBoxObj;
             if (input.MaterialBoxId != 0)
@@ -273,17 +275,17 @@ namespace WarehouseManagement.StockTasks
             }
             else
             {
-                materialBoxObj = await _materialBoxRepository.FindByArchiveBoxcodeAsync(input.MaterialCode);
+                materialBoxObj = await _materialBoxRepository.FindByMaterialBoxcodeAsync(input.MaterialCode);
             }
             
             // 校验物料盒状态
             if (materialBoxObj.CellModel == null)
             {
-                throw new UserFriendlyException("物料盒未设置尺寸");
+                throw new UserFriendlyException("物料容器未设置类型");
             }
             if (materialBoxObj.MaterialBoxRfid == null)
             {
-                throw new UserFriendlyException("物料盒未绑定标签");
+                throw new UserFriendlyException("物料容器未绑定标签");
             }
             
             // 设置任务类型
@@ -380,7 +382,7 @@ namespace WarehouseManagement.StockTasks
             }
             else
             {
-                materialBoxObj = await _materialBoxRepository.FindByArchiveBoxcodeAsync(input.MaterialCode);
+                materialBoxObj = await _materialBoxRepository.FindByMaterialBoxcodeAsync(input.MaterialCode);
             }
             input.ManageTypeCode = ManageType.NPSortStockOut.ToString();
             // var stockTask = await _stockTaskManagement.CreateStockInAsync(input.ManageTypeCode, storageBoxObj, storageBoxObj.Details, input.StartCellCode, input.EndCellId);

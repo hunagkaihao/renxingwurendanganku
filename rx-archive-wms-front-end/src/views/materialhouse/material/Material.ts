@@ -24,7 +24,7 @@ const [openFullLoading, closeFullLoading] = useLoading({
 export const tableColumns: BasicColumn[] = [
   {
     title: t('物料号'),
-    dataIndex: 'archivesCode',
+    dataIndex: 'materialCode',
   },
   {
     title: t('物料名称'),
@@ -48,7 +48,7 @@ export const tableColumns: BasicColumn[] = [
   },
   {
     title: t('物料条码'),
-    dataIndex: 'archiveBoxRfid',
+    dataIndex: 'materialBoxRfid',
   },
   {
     title: t('类别'),
@@ -114,7 +114,7 @@ export const searchFormSchema: FormSchema[] = [
 
 export const createFormSchema: FormSchema[] = [
   {
-    field: 'archivesRfid',
+    field: 'materialRfid',
     component: 'Input',
     label: t('物料标签'),
     labelWidth: 85,
@@ -127,7 +127,7 @@ export const createFormSchema: FormSchema[] = [
     },
   },
   {
-    field: 'archivesCode',
+    field: 'materialCode',
     component: 'Input',
     label: t('物料号'),
     labelWidth: 85,
@@ -140,7 +140,7 @@ export const createFormSchema: FormSchema[] = [
     },
   },
   {
-    field: 'archivesName',
+    field: 'materialName',
     component: 'Input',
     label: t('物料名'),
     labelWidth: 85,
@@ -180,7 +180,7 @@ export const createFormSchema: FormSchema[] = [
 
 export const editFormSchema: FormSchema[] = [
   {
-    field: 'archivesRfid',
+    field: 'materialRfid',
     component: 'Input',
     label: t('物料标签'),
     labelWidth: 85,
@@ -194,7 +194,7 @@ export const editFormSchema: FormSchema[] = [
     },
   },
   {
-    field: 'archivesCode',
+    field: 'materialCode',
     component: 'Input',
     label: t('物料号'),
     labelWidth: 85,
@@ -207,7 +207,7 @@ export const editFormSchema: FormSchema[] = [
     },
   },
   {
-    field: 'archivesName',
+    field: 'materialName',
     component: 'Input',
     label: t('物料名'),
     labelWidth: 85,
@@ -283,7 +283,7 @@ export const editFormSchema: FormSchema[] = [
 
 export const blindBoxFormSchema: FormSchema[] = [
   {
-    field: 'archiveName',
+    field: 'materialName',
     component: 'Input',
     label: t('物料名称'),
     labelWidth: 85,

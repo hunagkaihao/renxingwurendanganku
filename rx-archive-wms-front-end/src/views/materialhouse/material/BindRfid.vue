@@ -19,7 +19,7 @@
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { blindBoxFormSchema, blindBoxAsync } from './Material';
-  import { GoodsDto, CreateArchiveBoxDto } from '/@/services/ServiceProxies';
+  import { GoodsDto, CreateMaterialBoxDto } from '/@/services/ServiceProxies';
   import { useI18n } from '/@/hooks/web/useI18n';
   export default defineComponent({
     name: 'BlindBox',
@@ -40,8 +40,8 @@
       const [registerModal, { changeOkLoading, closeModal }] = useModalInner((data) => {
         currentGoodsInfo = data.record;
         setFieldsValue({
-          archiveBoxRfid: data.record.archiveBoxRfid,
-          archiveBoxName: data.record.archiveBoxName,
+          materialBoxRfid: data.record.materialBoxRfid,
+          materialBoxName: data.record.materialBoxName,
         });
       });
 
@@ -53,7 +53,7 @@
 
       const submit = async () => {
         try {
-          let request = getFieldsValue() as CreateArchiveBoxDto;
+          let request = getFieldsValue() as CreateMaterialBoxDto;
           request.id = currentGoodsInfo.id;
           await blindBoxAsync({
             request: request,

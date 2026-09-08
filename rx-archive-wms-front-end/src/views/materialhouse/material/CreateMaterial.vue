@@ -52,7 +52,7 @@
       const submit = async () => {
         try {
           let request = getFieldsValue() as CreateArchiveDto;
-          request.rfidId = request.archivesRfid;
+          request.rfidId = request.materialRfid;
           await CreateArchiveAsync({
             request,
             changeOkLoading,

@@ -121,7 +121,7 @@ export const tableColumns: BasicColumn[] = [
   },
   {
     title: t('物料类型条码'),
-    dataIndex: 'archiveBoxRfid',
+    dataIndex: 'materialBoxRfid',
   },
   {
     title: t('routes.stockTask.stockTaskManagement_manageTypeCode'),

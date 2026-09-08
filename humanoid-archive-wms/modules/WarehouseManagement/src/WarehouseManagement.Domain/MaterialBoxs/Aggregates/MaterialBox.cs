@@ -34,6 +34,21 @@ namespace WarehouseManagement.MaterialBoxs.Aggregates
             CellId = cellId;
             Log.Warning($"Box:{this.MaterialBoxRfid} is SetCell Cell:{cellId}。Method：{System.Reflection.MethodBase.GetCurrentMethod().Name}");
         }
+        public void AddDetail(int boxId,int archiveId)
+        {
+            Details.Add(new MaterialBoxDetail(boxId, archiveId));
+        }
+        public void RemoveDetail(int storageBoxDetailId)
+        {
+            var detail = Details.FirstOrDefault(item => item.Id == storageBoxDetailId);
+            if (null == detail)
+            {
+                return;
+            }
+
+            Details.Remove(detail);
+        }
+        
         /// <summary>
         /// 物料盒名称
         /// </summary>
@@ -162,19 +177,5 @@ namespace WarehouseManagement.MaterialBoxs.Aggregates
 
         public Guid? TenantId { get; set; }
 
-        public void AddDetail(int boxId,int archiveId)
-        {
-            Details.Add(new MaterialBoxDetail(boxId, archiveId));
-        }
-        public void RemoveDetail(int storageBoxDetailId)
-        {
-            var detail = Details.FirstOrDefault(item => item.Id == storageBoxDetailId);
-            if (null == detail)
-            {
-                return;
-            }
-
-            Details.Remove(detail);
-        }
     }
 }

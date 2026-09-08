@@ -40,24 +40,24 @@ namespace WarehouseManagement.MaterialBoxs
         public async Task<MaterialBoxDto> CreateAsync(CreateMaterialBoxDto createMaterialBox)
         {
             //检查标签是否存在
-            if (!createMaterialBox.MaterialNumber.IsNullOrEmpty() && !await _rfidManager.CheckExistRfidCode(createMaterialBox.MaterialNumber, 2))
+            if (!createMaterialBox.MaterialBoxRfid.IsNullOrEmpty() && !await _rfidManager.CheckExistRfidCode(createMaterialBox.MaterialBoxRfid, 2))
             {
-                throw new UserFriendlyException("数据库中不存在标签" + createMaterialBox.MaterialNumber);
+                throw new UserFriendlyException("数据库中不存在标签" + createMaterialBox.MaterialBoxRfid);
             }
             //检查标签是否绑定
-            if (!createMaterialBox.MaterialNumber.IsNullOrEmpty() && await _materialBoxManager.CheckUsedBoxRfid(createMaterialBox.MaterialNumber))
+            if (!createMaterialBox.MaterialBoxRfid.IsNullOrEmpty() && await _materialBoxManager.CheckUsedBoxRfid(createMaterialBox.MaterialBoxRfid))
             {
-                throw new UserFriendlyException(createMaterialBox.MaterialNumber + "标签已被绑定");
+                throw new UserFriendlyException(createMaterialBox.MaterialBoxRfid + "标签已被绑定");
             }
-            //检查档号不能为空
-            if (createMaterialBox.MaterialBarcode.IsNullOrEmpty())
+            //检查物料号不能为空
+            if (createMaterialBox.StockBarcode.IsNullOrEmpty())
             {
-                throw new UserFriendlyException("档号不能为空");
+                throw new UserFriendlyException("物料号不能为空");
             }
-            //检查档案盒尺寸不能为空
-            if (createMaterialBox.MaterialType.IsNullOrEmpty())
+            //检查物料容器里类型不能为空
+            if (createMaterialBox.CellModel.IsNullOrEmpty())
             {
-                throw new UserFriendlyException("尺寸不能为空");
+                throw new UserFriendlyException("物料容器类型不能为空");
             }
             var entity = base.ObjectMapper.Map<CreateMaterialBoxDto, MaterialBox>(createMaterialBox);
             
@@ -72,22 +72,22 @@ namespace WarehouseManagement.MaterialBoxs
         public async Task<MaterialBoxDto> UpdateAsync(CreateMaterialBoxDto input)
         {
             //检查标签是否存在
-            if (!input.MaterialNumber.IsNullOrEmpty() && !await _rfidManager.CheckExistRfidCode(input.MaterialNumber, 2))
+            if (!input.MaterialBoxRfid.IsNullOrEmpty() && !await _rfidManager.CheckExistRfidCode(input.MaterialBoxRfid, 2))
             {
-                throw new UserFriendlyException("数据库中不存在标签" + input.MaterialNumber);
+                throw new UserFriendlyException("数据库中不存在标签" + input.MaterialBoxRfid);
             }
             //检查标签是否绑定
-            //if (!input.ArchiveBoxRfid.IsNullOrEmpty() && await _archiveBoxManager.CheckUsedBoxRfid(input.ArchiveBoxRfid))
+            //if (!input.MaterialBoxRfid.IsNullOrEmpty() && await _archiveBoxManager.CheckUsedBoxRfid(input.MaterialBoxRfid))
             //{
-            //    throw new UserFriendlyException(input.ArchiveBoxRfid + "标签已被绑定");
+            //    throw new UserFriendlyException(input.MaterialBoxRfid + "标签已被绑定");
             //}
             //检查档号不能为空
-            if (input.MaterialBarcode.IsNullOrEmpty())
+            if (input.StockBarcode.IsNullOrEmpty())
             {
                 throw new UserFriendlyException("档号不能为空");
             }
             //检查档案盒尺寸不能为空
-            if (input.MaterialType.IsNullOrEmpty())
+            if (input.CellModel.IsNullOrEmpty())
             {
                 throw new UserFriendlyException("档号不能为空");
             }
@@ -148,16 +148,16 @@ namespace WarehouseManagement.MaterialBoxs
             {
                 var entity =await _materialBoxRepository.FindByIdAsync(input.Id);
                 //检查标签是否存在
-                if (!input.MaterialNumber.IsNullOrEmpty() && !await _rfidManager.CheckExistRfidCode(input.MaterialNumber, 2))
+                if (!input.MaterialBoxRfid.IsNullOrEmpty() && !await _rfidManager.CheckExistRfidCode(input.MaterialBoxRfid, 2))
                 {
-                    throw new UserFriendlyException("数据库中不存在标签" + input.MaterialNumber);
+                    throw new UserFriendlyException("数据库中不存在标签" + input.MaterialBoxRfid);
                 }
                 //检测标签是否被绑定
-                if (!input.MaterialNumber.IsNullOrEmpty() && await _materialBoxManager.CheckUsedBoxRfid(input.MaterialNumber))
+                if (!input.MaterialBoxRfid.IsNullOrEmpty() && await _materialBoxManager.CheckUsedBoxRfid(input.MaterialBoxRfid))
                 {
-                    throw new UserFriendlyException( input.MaterialNumber + "标签已被绑定");
+                    throw new UserFriendlyException( input.MaterialBoxRfid + "标签已被绑定");
                 }
-                entity.MaterialBoxRfid = input.MaterialNumber;
+                entity.MaterialBoxRfid = input.MaterialBoxRfid;
                 var archivebox = await _materialBoxRepository.UpdateAsync(entity);
 
                 return base.ObjectMapper.Map<MaterialBox, MaterialBoxDto>(archivebox);

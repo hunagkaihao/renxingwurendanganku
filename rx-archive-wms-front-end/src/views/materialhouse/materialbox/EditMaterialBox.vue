@@ -1,6 +1,6 @@
 <template>
   <BasicModal
-    :title="t('编辑物料盒')"
+    :title="t('编辑物料容器')"
     :width="600"
     :canFullscreen="false"
     @ok="submit"
@@ -18,7 +18,7 @@
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { editFormSchema, updateStorageBoxAsync } from './MaterialBox';
-  import { CreateArchiveBoxDto } from '/@/services/ServiceProxies';
+  import { CreateMaterialBoxDto } from '/@/services/ServiceProxies';
   import { useI18n } from '/@/hooks/web/useI18n';
   export default defineComponent({
     name: 'EditArchive',
@@ -35,12 +35,12 @@
           showActionButtonGroup: false,
         });
       const { t } = useI18n();
-      let currentGoodsInfo = new CreateArchiveBoxDto();
+      let currentGoodsInfo = new CreateMaterialBoxDto();
       const [registerModal, { changeOkLoading, closeModal }] = useModalInner((data) => {
         currentGoodsInfo = data.record;
         setFieldsValue({
-          archiveBoxRfid: data.record.archiveBoxRfid,
-          archiveBoxName: data.record.archiveBoxName,
+          materialBoxRfid: data.record.materialBoxRfid,
+          materialBoxName: data.record.materialBoxName,
           stockBarcode: data.record.stockBarcode,
           cellModel: data.record.cellModel,
           year: data.record.year,
@@ -59,7 +59,7 @@
 
       const submit = async () => {
         try {
-          let request = getFieldsValue() as CreateArchiveBoxDto;
+          let request = getFieldsValue() as CreateMaterialBoxDto;
           request.id = currentGoodsInfo.id;
           await updateStorageBoxAsync({
             request: request,

@@ -74,7 +74,7 @@
             },
             {
               icon: 'material-symbols:note-stack-add',
-              label: t('绑档案'),
+              label: t('绑物料'),
               auth: 'WarehouseManagement.GoodsManagement.Update',
               onClick: bindArchive.bind(null, record),
             },

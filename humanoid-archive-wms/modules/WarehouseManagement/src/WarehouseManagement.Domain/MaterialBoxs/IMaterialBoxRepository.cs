@@ -21,8 +21,8 @@ namespace WarehouseManagement.MaterialBoxs
             bool includeDetails = true,
             CancellationToken cancellationToken = default);
 
-        Task<MaterialBox> FindByArchiveBoxcodeAsync(
-            string archiveBoxBarcode,
+        Task<MaterialBox> FindByMaterialBoxcodeAsync(
+            string materialBoxBarcode,
             bool includeDetails = true,
             CancellationToken cancellationToken = default);
 

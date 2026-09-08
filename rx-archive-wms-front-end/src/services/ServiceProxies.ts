@@ -1576,7 +1576,7 @@ export class ArchiveBoxsServiceProxy extends ServiceProxyBase {
      * @param body (optional) 
      * @return Success
      */
-    create(body: CreateArchiveBoxDto | undefined , cancelToken?: CancelToken | undefined): Promise<MaterialBoxDto> {
+    create(body: CreateMaterialBoxDto | undefined , cancelToken?: CancelToken | undefined): Promise<MaterialBoxDto> {
         let url_ = this.baseUrl + "/MaterialBoxs/create";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1677,7 +1677,7 @@ export class ArchiveBoxsServiceProxy extends ServiceProxyBase {
      * @param body (optional) 
      * @return Success
      */
-    update(body: CreateArchiveBoxDto | undefined , cancelToken?: CancelToken | undefined): Promise<MaterialBoxDto> {
+    update(body: CreateMaterialBoxDto | undefined , cancelToken?: CancelToken | undefined): Promise<MaterialBoxDto> {
         let url_ = this.baseUrl + "/MaterialBoxs/update";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1778,7 +1778,7 @@ export class ArchiveBoxsServiceProxy extends ServiceProxyBase {
      * @param body (optional) 
      * @return Success
      */
-    delete(body: CreateArchiveBoxDto | undefined , cancelToken?: CancelToken | undefined): Promise<void> {
+    delete(body: CreateMaterialBoxDto | undefined , cancelToken?: CancelToken | undefined): Promise<void> {
         let url_ = this.baseUrl + "/MaterialBoxs/delete";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -2077,7 +2077,7 @@ export class ArchiveBoxsServiceProxy extends ServiceProxyBase {
      * @param body (optional) 
      * @return Success
      */
-    bindRfid(body: CreateArchiveBoxDto | undefined , cancelToken?: CancelToken | undefined): Promise<MaterialBoxDto> {
+    bindRfid(body: CreateMaterialBoxDto | undefined , cancelToken?: CancelToken | undefined): Promise<MaterialBoxDto> {
         let url_ = this.baseUrl + "/MaterialBoxs/bindRfid";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -17116,8 +17116,8 @@ export class MaterialBoxDto implements IArchiveBoxDto {
     creatorId!: string | undefined;
     lastModificationTime!: moment.Moment | undefined;
     lastModifierId!: string | undefined;
-    archiveBoxName!: string;
-    archiveBoxRfid!: string | undefined;
+    materialBoxName!: string;
+    materialBoxRfid!: string | undefined;
     stockBarcode!: string | undefined;
     fullFlag!: string | undefined;
     storageRemark!: string | undefined;
@@ -17157,8 +17157,8 @@ export class MaterialBoxDto implements IArchiveBoxDto {
             this.creatorId = _data["creatorId"];
             this.lastModificationTime = _data["lastModificationTime"] ? moment(_data["lastModificationTime"].toString()) : <any>undefined;
             this.lastModifierId = _data["lastModifierId"];
-            this.archiveBoxName = _data["archiveBoxName"];
-            this.archiveBoxRfid = _data["archiveBoxRfid"];
+            this.materialBoxName = _data["materialBoxName"];
+            this.materialBoxRfid = _data["materialBoxRfid"];
             this.stockBarcode = _data["stockBarcode"];
             this.fullFlag = _data["fullFlag"];
             this.storageRemark = _data["storageRemark"];
@@ -17198,8 +17198,8 @@ export class MaterialBoxDto implements IArchiveBoxDto {
         data["creatorId"] = this.creatorId;
         data["lastModificationTime"] = this.lastModificationTime ? this.lastModificationTime.toISOString() : <any>undefined;
         data["lastModifierId"] = this.lastModifierId;
-        data["archiveBoxName"] = this.archiveBoxName;
-        data["archiveBoxRfid"] = this.archiveBoxRfid;
+        data["materialBoxName"] = this.materialBoxName;
+        data["materialBoxRfid"] = this.materialBoxRfid;
         data["stockBarcode"] = this.stockBarcode;
         data["fullFlag"] = this.fullFlag;
         data["storageRemark"] = this.storageRemark;
@@ -17232,8 +17232,8 @@ export interface IArchiveBoxDto {
     creatorId: string | undefined;
     lastModificationTime: moment.Moment | undefined;
     lastModifierId: string | undefined;
-    archiveBoxName: string;
-    archiveBoxRfid: string | undefined;
+    materialBoxName: string;
+    materialBoxRfid: string | undefined;
     stockBarcode: string | undefined;
     fullFlag: string | undefined;
     storageRemark: string | undefined;
@@ -19180,27 +19180,26 @@ export interface ICreateApiScopeInput {
     showInDiscoveryDocument: boolean;
 }
 
-export class CreateArchiveBoxDto implements ICreateArchiveBoxDto {
+export class CreateMaterialBoxDto implements ICreateMaterialBoxDto {
     id!: number;
-    archiveBoxName!: string | undefined;
+    materialBoxName!: string | undefined;
     stockBarcode!: string | undefined;
-    archiveBoxRfid!: string | undefined;
+    materialBoxRfid!: string | undefined;
     storageRemark!: string | undefined;
     year!: number;
     secretLevel!: string | undefined;
     pages!: string | undefined;
     classCode!: string | undefined;
     className!: string | undefined;
-    achieveInDate!: string | undefined;
-    achieveInDept!: string | undefined;
-    achiever!: string | undefined;
+    materialInDate!: string | undefined;
+    materialInDept!: string | undefined;
+    materialPeople!: string | undefined;
     director!: string | undefined;
-    catalogNo!: string | undefined;
     retentionPeriod!: string | undefined;
     classType!: string | undefined;
     cellModel!: string | undefined;
 
-    constructor(data?: ICreateArchiveBoxDto) {
+    constructor(data?: ICreateMaterialBoxDto) {
         if (data) {
             for (var property in data) {
                 if (data.hasOwnProperty(property))
@@ -19212,29 +19211,28 @@ export class CreateArchiveBoxDto implements ICreateArchiveBoxDto {
     init(_data?: any) {
         if (_data) {
             this.id = _data["id"];
-            this.archiveBoxName = _data["archiveBoxName"];
+            this.materialBoxName = _data["materialBoxName"];
             this.stockBarcode = _data["stockBarcode"];
-            this.archiveBoxRfid = _data["archiveBoxRfid"];
+            this.materialBoxRfid = _data["materialBoxRfid"];
             this.storageRemark = _data["storageRemark"];
             this.year = _data["year"];
             this.secretLevel = _data["secretLevel"];
             this.pages = _data["pages"];
             this.classCode = _data["classCode"];
             this.className = _data["className"];
-            this.achieveInDate = _data["achieveInDate"];
-            this.achieveInDept = _data["achieveInDept"];
-            this.achiever = _data["achiever"];
+            this.materialInDate = _data["materialInDate"];
+            this.materialInDept = _data["materialInDept"];
+            this.materialPeople = _data["materialPeople"];
             this.director = _data["director"];
-            this.catalogNo = _data["catalogNo"];
             this.retentionPeriod = _data["retentionPeriod"];
             this.classType = _data["classType"];
             this.cellModel = _data["cellModel"];
         }
     }
 
-    static fromJS(data: any): CreateArchiveBoxDto {
+    static fromJS(data: any): CreateMaterialBoxDto {
         data = typeof data === 'object' ? data : {};
-        let result = new CreateArchiveBoxDto();
+        let result = new CreateMaterialBoxDto();
         result.init(data);
         return result;
     }
@@ -19242,20 +19240,19 @@ export class CreateArchiveBoxDto implements ICreateArchiveBoxDto {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
-        data["archiveBoxName"] = this.archiveBoxName;
+        data["materialBoxName"] = this.materialBoxName;
         data["stockBarcode"] = this.stockBarcode;
-        data["archiveBoxRfid"] = this.archiveBoxRfid;
+        data["materialBoxRfid"] = this.materialBoxRfid;
         data["storageRemark"] = this.storageRemark;
         data["year"] = this.year;
         data["secretLevel"] = this.secretLevel;
         data["pages"] = this.pages;
         data["classCode"] = this.classCode;
         data["className"] = this.className;
-        data["achieveInDate"] = this.achieveInDate;
-        data["achieveInDept"] = this.achieveInDept;
-        data["achiever"] = this.achiever;
+        data["materialInDate"] = this.materialInDate;
+        data["materialInDept"] = this.materialInDept;
+        data["materialPeople"] = this.materialPeople;
         data["director"] = this.director;
-        data["catalogNo"] = this.catalogNo;
         data["retentionPeriod"] = this.retentionPeriod;
         data["classType"] = this.classType;
         data["cellModel"] = this.cellModel;
@@ -19263,22 +19260,21 @@ export class CreateArchiveBoxDto implements ICreateArchiveBoxDto {
     }
 }
 
-export interface ICreateArchiveBoxDto {
+export interface ICreateMaterialBoxDto {
     id: number;
-    archiveBoxName: string | undefined;
+    materialBoxName: string | undefined;
     stockBarcode: string | undefined;
-    archiveBoxRfid: string | undefined;
+    materialBoxRfid: string | undefined;
     storageRemark: string | undefined;
     year: number;
     secretLevel: string | undefined;
     pages: string | undefined;
     classCode: string | undefined;
     className: string | undefined;
-    achieveInDate: string | undefined;
-    achieveInDept: string | undefined;
-    achiever: string | undefined;
+    materialInDate: string | undefined;
+    materialInDept: string | undefined;
+    materialPeople: string | undefined;
     director: string | undefined;
-    catalogNo: string | undefined;
     retentionPeriod: string | undefined;
     classType: string | undefined;
     cellModel: string | undefined;
@@ -19408,7 +19404,6 @@ export class CreateArchiveDto implements ICreateArchiveDto {
 
 export interface ICreateArchiveDto {
     id: number;
-    archivesName: string | undefined;
     archivesRfid: string | undefined;
     archivesCode: string | undefined;
     goodsRemark: string | undefined;

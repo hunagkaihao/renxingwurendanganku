@@ -90,8 +90,8 @@ namespace WarehouseManagement.Material.Dto
         public string ChenWendate { get; set; }
         public string Pages { get; set; }
         public string RetentionPeriod { get; set; }
-        public string AchieveInDept { get; set; }
-        public string AchieveInDate { get; set; }
+        public string MaterialInDept { get; set; }
+        public string MaterialInDate { get; set; }
         public string StorageRemark { get; set; }
         public string KuaiJiZhuTi { get; set; }
         public string Year { get; set; }

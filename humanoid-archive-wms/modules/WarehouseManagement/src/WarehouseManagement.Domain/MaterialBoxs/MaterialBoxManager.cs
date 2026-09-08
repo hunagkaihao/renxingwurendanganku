@@ -88,7 +88,7 @@ namespace WarehouseManagement.MaterialBoxs
         //更新档案盒所在库位
         public async Task<MaterialBox> UpdateStockCellAsync(string archiveBoxcode, int cellId)
         {
-            var entity = await _materialBoxRepository.FindByArchiveBoxcodeAsync(archiveBoxcode);
+            var entity = await _materialBoxRepository.FindByMaterialBoxcodeAsync(archiveBoxcode);
             if (entity == null)
                 throw new UserFriendlyException(message: "档案盒不存在");
             entity.SetCell(cellId);
@@ -97,7 +97,7 @@ namespace WarehouseManagement.MaterialBoxs
         //出库档案盒所在库位
         public async Task<MaterialBox> UpdateStockOutCellAsync(string archiveBoxcode)
         {
-            var entity = await _materialBoxRepository.FindByArchiveBoxcodeAsync(archiveBoxcode);
+            var entity = await _materialBoxRepository.FindByMaterialBoxcodeAsync(archiveBoxcode);
             if (entity == null)
                 throw new UserFriendlyException(message: "档案盒不存在");
             entity.SetCell(0);

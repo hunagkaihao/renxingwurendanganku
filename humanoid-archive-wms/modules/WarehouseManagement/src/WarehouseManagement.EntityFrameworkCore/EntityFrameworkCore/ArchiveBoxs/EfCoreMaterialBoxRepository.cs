@@ -83,12 +83,12 @@ namespace WarehouseManagement.EntityFrameworkCore.ArchiveBoxs
                 .FirstOrDefaultAsync(t => t.CellId == cellId, GetCancellationToken(cancellationToken));
         }
 
-        public async Task<MaterialBox> FindByArchiveBoxcodeAsync(string archiveBoxBarcode, bool includeDetails = true, CancellationToken cancellationToken = default)
+        public async Task<MaterialBox> FindByMaterialBoxcodeAsync(string materialBoxBarcode, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
             return await(await GetDbSetAsync())
                 .IncludeDetails(includeDetails)//包含明细
                 .OrderBy(t => t.CreationTime)
-                .FirstOrDefaultAsync(t => t.MaterialBoxRfid == archiveBoxBarcode, GetCancellationToken(cancellationToken));
+                .FirstOrDefaultAsync(t => t.MaterialBoxRfid == materialBoxBarcode, GetCancellationToken(cancellationToken));
         }
     }
 }

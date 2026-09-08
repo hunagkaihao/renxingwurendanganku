@@ -41,9 +41,9 @@
       const [registerModal, { changeOkLoading, closeModal }] = useModalInner((data) => {
         currentArchivesInfo = data.record;
         setFieldsValue({
-          archivesRfid: data.record.rfidId,
-          archivesCode: data.record.archivesCode,
-          archivesName: data.record.archivesName,
+          materialRfid: data.record.rfidId,
+          materialCode: data.record.materialCode,
+          materialName: data.record.materialName,
           year: data.record.year,
           secretLevel: data.record.secretLevel,
           classType: data.record.classType,
@@ -61,7 +61,7 @@
         try {
           let request = getFieldsValue() as CreateArchiveDto;
           request.id = currentArchivesInfo.id;
-          request.rfidId = request.archivesRfid;
+          request.rfidId = request.materialRfid;
           await updateArchivesAsync({
             request: request,
             changeOkLoading,

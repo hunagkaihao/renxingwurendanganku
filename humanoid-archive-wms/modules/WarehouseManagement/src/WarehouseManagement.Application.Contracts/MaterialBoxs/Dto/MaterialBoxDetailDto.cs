@@ -8,11 +8,11 @@ namespace WarehouseManagement.MaterialBoxs.Dto
 {
     public class MaterialBoxDetailDto
     {
-        public int ArchiveBoxId { get; set; }
+        public int MaterialBoxId { get; set; }
 
-        public int ArchiveId { get; set; }
-        public string ArchiveName { get; set; }
-        public string ArchiveCode { get; set; }
+        public int MaterialId { get; set; }
+        public string MaterialName { get; set; }
+        public string MaterialCode { get; set; }
         public int PlanListId { get; set; }
         public System.Decimal StorageListQuantity { get; set; }
         

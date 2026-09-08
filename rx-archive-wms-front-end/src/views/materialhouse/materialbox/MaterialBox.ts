@@ -10,7 +10,7 @@ import {
   PagingArchiveBoxDetailInput,
   ArchiveBoxDtoPagedResultDto,
   ArchiveBoxDetailDtoPagedResultDto,
-  CreateArchiveBoxDto,
+  CreateMaterialBoxDto,
 } from '/@/services/ServiceProxies';
 import { message } from 'ant-design-vue';
 import { useLoading } from '/@/components/Loading';
@@ -24,20 +24,20 @@ const [openFullLoading, closeFullLoading] = useLoading({
 export const tableColumns: BasicColumn[] = [
   {
     title: t('物料标签'),
-    dataIndex: 'archiveBoxRfid',
+    dataIndex: 'materialBoxRfid',
   },
   {
     title: t('物料名称'),
-    dataIndex: 'archiveBoxName',
+    dataIndex: 'materialBoxName',
   },
   {
     title: t('物料编号'),
     dataIndex: 'stockBarcode',
   },
-  {
+/*  {
     title: t('库位'),
     dataIndex: 'cellCode',
-  },
+  },*/
   {
     title: t('类型'),
     dataIndex: 'cellModel',
@@ -53,10 +53,10 @@ export const tableColumns: BasicColumn[] = [
     title: t('密级'),
     dataIndex: 'secretLevel',
   },*/
-  {
+/*  {
     title: t('保存期限'),
     dataIndex: 'retentionPeriod',
-  },
+  },*/
 /*  {
     title: t('目录号'),
     dataIndex: 'catalogNo',
@@ -84,12 +84,12 @@ export const secretLevelSelectItem: SelectItem[] = [
 export const cellModelSelectItem: SelectItem[] = [
   {
     label: '树脂颗粒',
-    value: 'shuzhikeli',
+    value: 'LL',
     key: 0,
   },
   {
     label: '薄膜',
-    value: 'bomo',
+    value: 'BL',
     key: 1,
   },
 ];
@@ -97,11 +97,11 @@ export const cellModelSelectItem: SelectItem[] = [
 export const tableDetailColumns: BasicColumn[] = [
   {
     title: t('物料编号'),
-    dataIndex: 'archiveCode',
+    dataIndex: 'materialCode',
   },
   {
     title: t('物料名称'),
-    dataIndex: 'archiveName',
+    dataIndex: 'materialName',
   },
 ];
 
@@ -116,7 +116,7 @@ export const searchFormSchema: FormSchema[] = [
 
 export const createFormSchema: FormSchema[] = [
   {
-    field: 'archiveBoxRfid',
+    field: 'materialBoxRfid',
     component: 'Input',
     label: t('物料条码'),
     labelWidth: 85,
@@ -128,7 +128,7 @@ export const createFormSchema: FormSchema[] = [
     },
   },
   {
-    field: 'archiveBoxName',
+    field: 'materialBoxName',
     component: 'Input',
     label: t('物料名称'),
     labelWidth: 85,
@@ -192,7 +192,7 @@ export const createFormSchema: FormSchema[] = [
     },
   },*/
 
-  {
+/*  {
     field: 'retentionPeriod',
     component: 'Input',
     label: t('保管期限'),
@@ -203,7 +203,7 @@ export const createFormSchema: FormSchema[] = [
     componentProps: {
       autocomplete: 'off',
     },
-  },
+  },*/
   /*{
     field: 'catalogNo',
     component: 'Input',
@@ -220,9 +220,9 @@ export const createFormSchema: FormSchema[] = [
 
 export const editFormSchema: FormSchema[] = [
   {
-    field: 'archiveBoxRfid',
+    field: 'materialBoxRfid',
     component: 'Input',
-    label: t('物料类型条码'),
+    label: t('物料条码'),
     labelWidth: 85,
     required: true,
     colProps: {
@@ -234,9 +234,9 @@ export const editFormSchema: FormSchema[] = [
     },
   },
   {
-    field: 'archiveBoxName',
+    field: 'materialBoxName',
     component: 'Input',
-    label: t('物料类型名称'),
+    label: t('物料名称'),
     labelWidth: 85,
     required: true,
     colProps: {
@@ -298,7 +298,7 @@ export const editFormSchema: FormSchema[] = [
       options: secretLevelSelectItem,
     },
   },*/
-  {
+/*  {
     field: 'retentionPeriod',
     component: 'Input',
     label: t('保管期限'),
@@ -310,7 +310,7 @@ export const editFormSchema: FormSchema[] = [
     componentProps: {
       autocomplete: 'off',
     },
-  },
+  },*/
 /*  {
     field: 'catalogNo',
     component: 'Input',
@@ -382,7 +382,7 @@ export async function deleteStorageBoxAsync({ id, reload }) {
   try {
     const _ArchiveBoxsServiceProxy = new ArchiveBoxsServiceProxy();
     openFullLoading();
-    const request = new CreateArchiveBoxDto();
+    const request = new CreateMaterialBoxDto();
     request.id = id;
     await _ArchiveBoxsServiceProxy.delete(request);
     closeFullLoading();
@@ -481,7 +481,7 @@ export async function blindBoxAsync({
   await validate();
 
   const _ArchiveBoxsServiceProxy = new ArchiveBoxsServiceProxy();
-  await _ArchiveBoxsServiceProxy.bindArchive(request.archiveBoxRfid, request.archiveRfid);
+  await _ArchiveBoxsServiceProxy.bindArchive(request.materialBoxRfid, request.archiveRfid);
   changeOkLoading(false);
   resetFields();
   message.success(t('common.operationSuccess'));
@@ -510,9 +510,9 @@ export async function blindRfidAsync({
 }
 export const blindBoxFormSchema: FormSchema[] = [
   {
-    field: 'archiveBoxName',
+    field: 'materialBoxName',
     component: 'Input',
-    label: t('档案盒名称'),
+    label: t('物料容器名称'),
     labelWidth: 85,
     colProps: {
       span: 24,
@@ -523,7 +523,7 @@ export const blindBoxFormSchema: FormSchema[] = [
     },
   },
   {
-    field: 'archiveBoxRfid',
+    field: 'materialBoxRfid',
     component: 'Input',
     label: t('标签条码'),
     labelWidth: 85,
@@ -537,7 +537,7 @@ export const blindBoxFormSchema: FormSchema[] = [
 ];
 export const bindArchiveFormSchema: FormSchema[] = [
   {
-    field: 'archiveBoxRfid',
+    field: 'materialBoxRfid',
     component: 'Input',
     label: t('物料类型条码'),
     labelWidth: 85,
@@ -550,7 +550,7 @@ export const bindArchiveFormSchema: FormSchema[] = [
     },
   },
   {
-    field: 'archiveRfid',
+    field: 'materialRfid',
     component: 'Input',
     label: t('物料条码'),
     labelWidth: 85,

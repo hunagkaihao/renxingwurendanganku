@@ -9,9 +9,9 @@ namespace WarehouseManagement.Material.Dto
     public class CreateMaterialDto
     {
         public int Id { get; set; }
-        public string ArchivesName { get; set; }
-        public string ArchivesRfid { get; set; }
-        public string ArchivesCode { get; set; }
+        public string MaterialName { get; set; }
+        public string MaterialRfid { get; set; }
+        public string MaterialCode { get; set; }
         public string GoodsRemark { get; set; }
         public string GoodsConstProperty1 { get; set; }
         public string GoodsConstProperty2 { get; set; }
@@ -32,9 +32,9 @@ namespace WarehouseManagement.Material.Dto
         //RFIDId
         public String RfidId { get; set; }
         /// <summary>
-        /// 档案盒标签
+        /// 物料盒标签
         /// </summary>
-        public string ArchiveBoxRfid { get; set; }
+        public string MaterialBoxRfid { get; set; }
         public string GoodsAJCode { get; set; }
         public string GoodsNo { get; set; }
         public string ClassCode { get; set; }
@@ -42,8 +42,8 @@ namespace WarehouseManagement.Material.Dto
         public string ChenWendate { get; set; }
         public string Pages { get; set; }
         public string RetentionPeriod { get; set; }
-        public string AchieveInDept { get; set; }
-        public string AchieveInDate { get; set; }
+        public string MaterialInDept { get; set; }
+        public string MaterialInDate { get; set; }
         public string StorageRemark { get; set; }
         public string KuaiJiZhuTi { get; set; }
         public string Year { get; set; }

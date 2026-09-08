@@ -43,15 +43,15 @@ namespace WarehouseManagement.Material
             //检查标签是否存在
             if (!createArchiveBox.RfidId.IsNullOrEmpty() && !await _rfidManager.CheckExistRfidCode(createArchiveBox.RfidId, 1))
             {
-                throw new UserFriendlyException("数据库中不存在标签" + createArchiveBox.ArchiveBoxRfid);
+                throw new UserFriendlyException("数据库中不存在标签" + createArchiveBox.MaterialBoxRfid);
             }
             //检查标签是否绑定
-            if (!createArchiveBox.ArchivesRfid.IsNullOrEmpty() && await _materialManager.CheckUsedBoxRfid(createArchiveBox.ArchivesRfid))
+            if (!createArchiveBox.MaterialRfid.IsNullOrEmpty() && await _materialManager.CheckUsedBoxRfid(createArchiveBox.MaterialRfid))
             {
-                throw new UserFriendlyException(createArchiveBox.ArchivesRfid + "标签已被绑定");
+                throw new UserFriendlyException(createArchiveBox.MaterialRfid + "标签已被绑定");
             }
             //检查档号不能为空
-            if (createArchiveBox.ArchivesCode.IsNullOrEmpty())
+            if (createArchiveBox.MaterialCode.IsNullOrEmpty())
             {
                 throw new UserFriendlyException("档号不能为空");
             }
@@ -112,21 +112,21 @@ namespace WarehouseManagement.Material
         public async Task<MaterialDto> UpdateAsync(CreateMaterialDto input)
         {
             //检查标签是否存在
-            if (!input.ArchiveBoxRfid.IsNullOrEmpty() && !await _rfidManager.CheckExistRfidCode(input.ArchiveBoxRfid, 2))
+            if (!input.MaterialBoxRfid.IsNullOrEmpty() && !await _rfidManager.CheckExistRfidCode(input.MaterialBoxRfid, 2))
             {
-                throw new UserFriendlyException("数据库中不存在标签" + input.ArchiveBoxRfid);
+                throw new UserFriendlyException("数据库中不存在标签" + input.MaterialBoxRfid);
             }
             //检查标签是否绑定
-            //if (!input.ArchiveBoxRfid.IsNullOrEmpty() && await _archiveBoxManager.CheckUsedBoxRfid(input.ArchiveBoxRfid))
+            //if (!input.MaterialBoxRfid.IsNullOrEmpty() && await _archiveBoxManager.CheckUsedBoxRfid(input.MaterialBoxRfid))
             //{
-            //    throw new UserFriendlyException(input.ArchiveBoxRfid + "标签已被绑定");
+            //    throw new UserFriendlyException(input.MaterialBoxRfid + "标签已被绑定");
             //}
             //检查档号不能为空
-            if (input.ArchivesCode.IsNullOrEmpty())
+            if (input.MaterialCode.IsNullOrEmpty())
             {
                 throw new UserFriendlyException("档号不能为空");
             }
-            var entity = await _materialRepository.FindByRfidCodeAsync(input.ArchivesRfid);
+            var entity = await _materialRepository.FindByRfidCodeAsync(input.MaterialRfid);
             if (entity == null)
                 throw new UserFriendlyException(message: "档案盒不存在");
             entity = base.ObjectMapper.Map<CreateMaterialDto, MaterialAggregate>(input, entity);
