@@ -10,28 +10,27 @@ namespace WarehouseManagement.MaterialBoxs.Dto
 {
     public class CreateMaterialBoxDto
     {
-        //档案盒名称
+        /// <summary>
+        /// 容器id
+        /// </summary>
         [Required]
         public int Id { get; set; }
-        public string ArchiveBoxName { get; set; }
-        //档案盒编码
-        public string StockBarcode { get; set; }
-        //档案盒RFID编号
-        public string ArchiveBoxRfid { get; set; }
-        //档案盒备注
-        public string StorageRemark { get; set; }
         /// <summary>
-        /// 年度
+        /// 物料条码
         /// </summary>
-        public int Year { get; set; }
+        public string MaterialBarcode { get; set; }
         /// <summary>
-        /// 密级
+        /// 物料名称
         /// </summary>
-        public string SecretLevel { get; set; }
+        public string MaterialName { get; set; }
         /// <summary>
-        /// 页数
+        /// 物料号
         /// </summary>
-        public string Pages { get; set; }
+        public string MaterialNumber { get; set; }
+        /// <summary>
+        /// 物料类型
+        /// </summary>
+        public string MaterialType { get; set; }
         /// <summary>
         /// 分类编号
         /// </summary>
@@ -41,25 +40,21 @@ namespace WarehouseManagement.MaterialBoxs.Dto
         /// </summary>
         public string ClassName { get; set; }
         /// <summary>
-        /// 归档日期
+        /// 物料保存日期
         /// </summary>
-        public string AchieveInDate { get; set; }
+        public string MaterialInDate { get; set; }
         /// <summary>
-        /// 归档部门
+        /// 物料保存部门
         /// </summary>
-        public string AchieveInDept { get; set; }
+        public string MaterialInDept { get; set; }
         /// <summary>
-        /// 移交人 归档人
+        /// 物料保存负责人
         /// </summary>
-        public string Achiever { get; set; }
+        public string MaterialPeople { get; set; }
         /// <summary>
         /// 责任人
         /// </summary>
         public string Director { get; set; }
-        /// <summary>
-        /// 目录号
-        /// </summary>
-        public string CatalogNo { get; set; }
         /// <summary>
         /// 保管期限
         /// </summary>
@@ -69,9 +64,5 @@ namespace WarehouseManagement.MaterialBoxs.Dto
         /// </summary>
         public string ClassType { get; set; }
 
-        /// <summary>
-        /// 尺寸
-        /// </summary>
-        public string CellModel { get; set; }
     }
 }

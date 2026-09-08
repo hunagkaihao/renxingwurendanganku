@@ -261,31 +261,38 @@ namespace WarehouseManagement.StockTasks
             await _stockTaskManagement.ManageCreateOut(stgId, stockTaskDetails, input[0].Userid);
             return true;
         }
-
-
-        //创建档案入库任务
+        
+        // 创建物料入库预约任务
         public async Task<StockTaskDto> CreateWCSIn(CreateStockTaskDto input)
         {
+            // 查找物料盒对象
             MaterialBox materialBoxObj;
-            if (input.ArchiveBoxId != 0)
+            if (input.MaterialBoxId != 0)
             {
-                materialBoxObj = await _materialBoxRepository.FindByIdAsync(input.ArchiveBoxId);
+                materialBoxObj = await _materialBoxRepository.FindByIdAsync(input.MaterialBoxId);
             }
             else
             {
-                materialBoxObj = await _materialBoxRepository.FindByArchiveBoxcodeAsync(input.ArchiveCode);
+                materialBoxObj = await _materialBoxRepository.FindByArchiveBoxcodeAsync(input.MaterialCode);
             }
+            
+            // 校验物料盒状态
             if (materialBoxObj.CellModel == null)
             {
-                throw new UserFriendlyException("档案盒未设置尺寸");
+                throw new UserFriendlyException("物料盒未设置尺寸");
             }
             if (materialBoxObj.MaterialBoxRfid == null)
             {
-                throw new UserFriendlyException("档案盒未绑定标签");
+                throw new UserFriendlyException("物料盒未绑定标签");
             }
+            
+            // 设置任务类型
             input.ManageTypeCode = ManageType.NPFullStockIn.ToString();
-            // var stockTask = await _stockTaskManagement.CreateStockInAsync(input.ManageTypeCode, storageBoxObj, storageBoxObj.Details, input.StartCellCode, input.EndCellId);
+            
+            // 创建入库任务
             var stockTask = await _stockTaskManagement.CreateWCSIn(input.ManageTypeCode, materialBoxObj);
+            
+            // 放回结果给前端
             return base.ObjectMapper.Map<StockTask, StockTaskDto>(stockTask);
         }
         //下达档案任务分配库位
@@ -315,7 +322,7 @@ namespace WarehouseManagement.StockTasks
             }
             else
             {
-                stockTaskDto.ArchiveBoxId = box.Id;
+                stockTaskDto.MaterialBoxId = box.Id;
             }
 
             //创建任务
@@ -348,7 +355,7 @@ namespace WarehouseManagement.StockTasks
             }
             else
             {
-                stockTaskDto.ArchiveBoxId = box.Id;
+                stockTaskDto.MaterialBoxId = box.Id;
             }
             //创建任务
             var stock = await CreateWCSOut(stockTaskDto);
@@ -367,13 +374,13 @@ namespace WarehouseManagement.StockTasks
         public async Task<StockTaskDto> CreateWCSOut(CreateStockTaskDto input)
         {
             MaterialBox materialBoxObj;
-            if (input.ArchiveBoxId != 0)
+            if (input.MaterialBoxId != 0)
             {
-                materialBoxObj = await _materialBoxRepository.FindByIdAsync(input.ArchiveBoxId);
+                materialBoxObj = await _materialBoxRepository.FindByIdAsync(input.MaterialBoxId);
             }
             else
             {
-                materialBoxObj = await _materialBoxRepository.FindByArchiveBoxcodeAsync(input.ArchiveCode);
+                materialBoxObj = await _materialBoxRepository.FindByArchiveBoxcodeAsync(input.MaterialCode);
             }
             input.ManageTypeCode = ManageType.NPSortStockOut.ToString();
             // var stockTask = await _stockTaskManagement.CreateStockInAsync(input.ManageTypeCode, storageBoxObj, storageBoxObj.Details, input.StartCellCode, input.EndCellId);
@@ -507,7 +514,7 @@ namespace WarehouseManagement.StockTasks
             }
             else
             {
-                stockTaskDto.ArchiveBoxId = box[0].Id;
+                stockTaskDto.MaterialBoxId = box[0].Id;
             }
             //创建任务
             var stock = await CreateWCSOut(stockTaskDto);

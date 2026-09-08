@@ -28,7 +28,7 @@ export const tableColumns: BasicColumn[] = [
   },
   {
     title: t('物料名称'),
-    dataIndex: 'archivesName',
+    dataIndex: 'materialName',
   },
   {
     title: t('物料号'),
@@ -38,33 +38,21 @@ export const tableColumns: BasicColumn[] = [
     title: t('库位'),
     dataIndex: 'cellName',
   },
-/*  {
-    title: t('案卷号'),
-    dataIndex: 'goodsAJCode',
-  },*/
   {
     title: t('保管期限'),
     dataIndex: 'retentionPeriod',
   },
   {
     title: t('所属物料类型'),
-    dataIndex: 'archiveBoxName',
+    dataIndex: 'materialType',
   },
   {
     title: t('物料条码'),
     dataIndex: 'archiveBoxRfid',
   },
   {
-    title: t('年度'),
-    dataIndex: 'year',
-  },
-  {
     title: t('类别'),
     dataIndex: 'classType',
-  },
-  {
-    title: t('密级'),
-    dataIndex: 'secretLevel',
   },
   {
     title: t('routes.material.goodsManagement_createTime'),
@@ -165,30 +153,6 @@ export const createFormSchema: FormSchema[] = [
     },
   },
   {
-    field: 'year',
-    component: 'Input',
-    label: t('年度'),
-    labelWidth: 85,
-    colProps: {
-      span: 12,
-    },
-    componentProps: {
-      autocomplete: 'off',
-    },
-  },
-  {
-    field: 'secretLevel',
-    component: 'Input',
-    label: t('密级'),
-    labelWidth: 85,
-    colProps: {
-      span: 12,
-    },
-    componentProps: {
-      autocomplete: 'off',
-    },
-  },
-  {
     field: 'classType',
     component: 'Input',
     label: t('类别'),
@@ -212,18 +176,6 @@ export const createFormSchema: FormSchema[] = [
       autocomplete: 'off',
     },
   },
-/*  {
-    field: 'goodsAJCode',
-    component: 'Input',
-    label: t('案卷号'),
-    labelWidth: 85,
-    colProps: {
-      span: 12,
-    },
-    componentProps: {
-      autocomplete: 'off',
-    },
-  },*/
 ];
 
 export const editFormSchema: FormSchema[] = [
@@ -475,5 +427,5 @@ export async function getDetaiTableListAsync(
   params: PagingStockTaskDetailInput
 ): Promise<StockTaskDetailDtoPagedResultDto> {
   const _ArchiveBoxsServiceProxy = new StockTasksServiceProxy();
-  return _ArchiveBoxsServiceProxy.pageDetailByArchiveId(params);
+  return _ArchiveBoxsServiceProxy.pageDetailByMaterialId(params);
 }

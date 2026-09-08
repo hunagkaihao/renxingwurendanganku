@@ -1,7 +1,7 @@
 <template>
   <BasicModal
     :width="600"
-    :title="t('创建物料盒')"
+    :title="t('创建物料容器')"
     :canFullscreen="false"
     @ok="submit"
     @cancel="cancel"

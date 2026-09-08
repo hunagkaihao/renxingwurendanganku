@@ -1576,7 +1576,7 @@ export class ArchiveBoxsServiceProxy extends ServiceProxyBase {
      * @param body (optional) 
      * @return Success
      */
-    create(body: CreateArchiveBoxDto | undefined , cancelToken?: CancelToken | undefined): Promise<ArchiveBoxDto> {
+    create(body: CreateArchiveBoxDto | undefined , cancelToken?: CancelToken | undefined): Promise<MaterialBoxDto> {
         let url_ = this.baseUrl + "/MaterialBoxs/create";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1606,7 +1606,7 @@ export class ArchiveBoxsServiceProxy extends ServiceProxyBase {
         });
     }
 
-    protected processCreate(response: AxiosResponse): Promise<ArchiveBoxDto> {
+    protected processCreate(response: AxiosResponse): Promise<MaterialBoxDto> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1620,8 +1620,8 @@ export class ArchiveBoxsServiceProxy extends ServiceProxyBase {
             const _responseText = response.data;
             let result200: any = null;
             let resultData200  = _responseText;
-            result200 = ArchiveBoxDto.fromJS(resultData200);
-            return Promise.resolve<ArchiveBoxDto>(result200);
+            result200 = MaterialBoxDto.fromJS(resultData200);
+            return Promise.resolve<MaterialBoxDto>(result200);
 
         } else if (status === 403) {
             const _responseText = response.data;
@@ -1669,7 +1669,7 @@ export class ArchiveBoxsServiceProxy extends ServiceProxyBase {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<ArchiveBoxDto>(null as any);
+        return Promise.resolve<MaterialBoxDto>(null as any);
     }
 
     /**
@@ -1677,7 +1677,7 @@ export class ArchiveBoxsServiceProxy extends ServiceProxyBase {
      * @param body (optional) 
      * @return Success
      */
-    update(body: CreateArchiveBoxDto | undefined , cancelToken?: CancelToken | undefined): Promise<ArchiveBoxDto> {
+    update(body: CreateArchiveBoxDto | undefined , cancelToken?: CancelToken | undefined): Promise<MaterialBoxDto> {
         let url_ = this.baseUrl + "/MaterialBoxs/update";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -1707,7 +1707,7 @@ export class ArchiveBoxsServiceProxy extends ServiceProxyBase {
         });
     }
 
-    protected processUpdate(response: AxiosResponse): Promise<ArchiveBoxDto> {
+    protected processUpdate(response: AxiosResponse): Promise<MaterialBoxDto> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -1721,8 +1721,8 @@ export class ArchiveBoxsServiceProxy extends ServiceProxyBase {
             const _responseText = response.data;
             let result200: any = null;
             let resultData200  = _responseText;
-            result200 = ArchiveBoxDto.fromJS(resultData200);
-            return Promise.resolve<ArchiveBoxDto>(result200);
+            result200 = MaterialBoxDto.fromJS(resultData200);
+            return Promise.resolve<MaterialBoxDto>(result200);
 
         } else if (status === 403) {
             const _responseText = response.data;
@@ -1770,7 +1770,7 @@ export class ArchiveBoxsServiceProxy extends ServiceProxyBase {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<ArchiveBoxDto>(null as any);
+        return Promise.resolve<MaterialBoxDto>(null as any);
     }
 
     /**
@@ -2077,7 +2077,7 @@ export class ArchiveBoxsServiceProxy extends ServiceProxyBase {
      * @param body (optional) 
      * @return Success
      */
-    bindRfid(body: CreateArchiveBoxDto | undefined , cancelToken?: CancelToken | undefined): Promise<ArchiveBoxDto> {
+    bindRfid(body: CreateArchiveBoxDto | undefined , cancelToken?: CancelToken | undefined): Promise<MaterialBoxDto> {
         let url_ = this.baseUrl + "/MaterialBoxs/bindRfid";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -2107,7 +2107,7 @@ export class ArchiveBoxsServiceProxy extends ServiceProxyBase {
         });
     }
 
-    protected processBindRfid(response: AxiosResponse): Promise<ArchiveBoxDto> {
+    protected processBindRfid(response: AxiosResponse): Promise<MaterialBoxDto> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -2121,8 +2121,8 @@ export class ArchiveBoxsServiceProxy extends ServiceProxyBase {
             const _responseText = response.data;
             let result200: any = null;
             let resultData200  = _responseText;
-            result200 = ArchiveBoxDto.fromJS(resultData200);
-            return Promise.resolve<ArchiveBoxDto>(result200);
+            result200 = MaterialBoxDto.fromJS(resultData200);
+            return Promise.resolve<MaterialBoxDto>(result200);
 
         } else if (status === 403) {
             const _responseText = response.data;
@@ -2170,7 +2170,7 @@ export class ArchiveBoxsServiceProxy extends ServiceProxyBase {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<ArchiveBoxDto>(null as any);
+        return Promise.resolve<MaterialBoxDto>(null as any);
     }
 
     /**
@@ -10889,8 +10889,8 @@ export class StockTasksServiceProxy extends ServiceProxyBase {
      * @param body (optional) 
      * @return Success
      */
-    pageDetailByArchiveId(body: PagingStockTaskDetailInput | undefined , cancelToken?: CancelToken | undefined): Promise<StockTaskDetailDtoPagedResultDto> {
-        let url_ = this.baseUrl + "/StockTasks/pageDetailByArchiveId";
+    pageDetailByMaterialId(body: PagingStockTaskDetailInput | undefined , cancelToken?: CancelToken | undefined): Promise<StockTaskDetailDtoPagedResultDto> {
+        let url_ = this.baseUrl + "/StockTasks/pageDetailByMaterialId";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -17110,7 +17110,7 @@ export interface IArchiveBoxDetailDtoPagedResultDto {
     totalCount: number;
 }
 
-export class ArchiveBoxDto implements IArchiveBoxDto {
+export class MaterialBoxDto implements IArchiveBoxDto {
     id!: number;
     creationTime!: moment.Moment;
     creatorId!: string | undefined;
@@ -17133,11 +17133,10 @@ export class ArchiveBoxDto implements IArchiveBoxDto {
     pages!: string | undefined;
     classCode!: string | undefined;
     className!: string | undefined;
-    achieveInDate!: string | undefined;
-    achieveInDept!: string | undefined;
-    achiever!: string | undefined;
+    materialInDate!: string | undefined;
+    materialInDept!: string | undefined;
+    materialPeople!: string | undefined;
     director!: string | undefined;
-    catalogNo!: string | undefined;
     retentionPeriod!: string | undefined;
     classType!: string | undefined;
     cellModel!: string | undefined;
@@ -17175,20 +17174,19 @@ export class ArchiveBoxDto implements IArchiveBoxDto {
             this.pages = _data["pages"];
             this.classCode = _data["classCode"];
             this.className = _data["className"];
-            this.achieveInDate = _data["achieveInDate"];
-            this.achieveInDept = _data["achieveInDept"];
-            this.achiever = _data["achiever"];
+            this.materialInDate = _data["materialInDate"];
+            this.materialInDept = _data["materialInDept"];
+            this.materialPeople = _data["materialPeople"];
             this.director = _data["director"];
-            this.catalogNo = _data["catalogNo"];
             this.retentionPeriod = _data["retentionPeriod"];
             this.classType = _data["classType"];
             this.cellModel = _data["cellModel"];
         }
     }
 
-    static fromJS(data: any): ArchiveBoxDto {
+    static fromJS(data: any): MaterialBoxDto {
         data = typeof data === 'object' ? data : {};
-        let result = new ArchiveBoxDto();
+        let result = new MaterialBoxDto();
         result.init(data);
         return result;
     }
@@ -17217,11 +17215,10 @@ export class ArchiveBoxDto implements IArchiveBoxDto {
         data["pages"] = this.pages;
         data["classCode"] = this.classCode;
         data["className"] = this.className;
-        data["achieveInDate"] = this.achieveInDate;
-        data["achieveInDept"] = this.achieveInDept;
-        data["achiever"] = this.achiever;
+        data["materialInDate"] = this.materialInDate;
+        data["materialInDept"] = this.materialInDept;
+        data["materialPeople"] = this.materialPeople;
         data["director"] = this.director;
-        data["catalogNo"] = this.catalogNo;
         data["retentionPeriod"] = this.retentionPeriod;
         data["classType"] = this.classType;
         data["cellModel"] = this.cellModel;
@@ -17252,18 +17249,17 @@ export interface IArchiveBoxDto {
     pages: string | undefined;
     classCode: string | undefined;
     className: string | undefined;
-    achieveInDate: string | undefined;
-    achieveInDept: string | undefined;
-    achiever: string | undefined;
+    materialInDate: string | undefined;
+    materialInDept: string | undefined;
+    materialPeople: string | undefined;
     director: string | undefined;
-    catalogNo: string | undefined;
     retentionPeriod: string | undefined;
     classType: string | undefined;
     cellModel: string | undefined;
 }
 
 export class ArchiveBoxDtoPagedResultDto implements IArchiveBoxDtoPagedResultDto {
-    items!: ArchiveBoxDto[] | undefined;
+    items!: MaterialBoxDto[] | undefined;
     totalCount!: number;
 
     constructor(data?: IArchiveBoxDtoPagedResultDto) {
@@ -17280,7 +17276,7 @@ export class ArchiveBoxDtoPagedResultDto implements IArchiveBoxDtoPagedResultDto
             if (Array.isArray(_data["items"])) {
                 this.items = [] as any;
                 for (let item of _data["items"])
-                    this.items!.push(ArchiveBoxDto.fromJS(item));
+                    this.items!.push(MaterialBoxDto.fromJS(item));
             }
             this.totalCount = _data["totalCount"];
         }
@@ -17306,7 +17302,7 @@ export class ArchiveBoxDtoPagedResultDto implements IArchiveBoxDtoPagedResultDto
 }
 
 export interface IArchiveBoxDtoPagedResultDto {
-    items: ArchiveBoxDto[] | undefined;
+    items: MaterialBoxDto[] | undefined;
     totalCount: number;
 }
 

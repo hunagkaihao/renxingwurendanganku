@@ -40,7 +40,7 @@ namespace WarehouseManagement.StockTasks
         {
             return await _stockTaskAppService.GetPagingDetailListAsync(input);
         }
-        [HttpPost("pageDetailByArchiveId")]
+        [HttpPost("pageDetailByMaterialId")]
         [SwaggerOperation(summary: "获取物料出入库任务清单明细", Tags = new[] { "StockTasks" })]
         public async Task<PagedResultDto<StockTaskDetailDto>> GetPagingDetailListByMaterialIdAsync(PagingStockTaskDetailInput input)
         {
@@ -66,7 +66,7 @@ namespace WarehouseManagement.StockTasks
         }
 
         [HttpPost("createWCSIn")]
-        [SwaggerOperation(summary: "创建物料入库任务", Tags = new[] { "StockTasks" })]
+        [SwaggerOperation(summary: "创建物料入库预约任务", Tags = new[] { "StockTasks" })]
         public async Task<StockTaskDto> CreateWCSIn(CreateStockTaskDto input)
         {
             return await _stockTaskAppService.CreateWCSIn(input);

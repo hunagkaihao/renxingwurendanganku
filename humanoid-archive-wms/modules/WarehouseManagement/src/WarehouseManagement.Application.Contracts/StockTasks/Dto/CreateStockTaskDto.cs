@@ -20,13 +20,13 @@ namespace WarehouseManagement.StockTasks.Dto
         /// </summary>
         public string StockBarcode { get; set; }
         /// <summary>
-        /// 料箱ID
+        /// 物料ID
         /// </summary>
-        public int ArchiveBoxId { get; set; }
+        public int MaterialBoxId { get; set; }
         /// <summary>
-        /// 料箱条码
+        /// 物料条码
         /// </summary>
-        public string ArchiveCode { get; set; }
+        public string MaterialCode { get; set; }
         /// <summary>
         /// 开始库位ID
         /// </summary>

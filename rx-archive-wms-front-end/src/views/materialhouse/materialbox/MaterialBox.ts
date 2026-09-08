@@ -45,14 +45,14 @@ export const tableColumns: BasicColumn[] = [
       if (text != undefined) return cellModelSelectItem.filter((f) => f.value == text)[0].label;
     },
   },
-  {
+  /*{
     title: t('年度'),
     dataIndex: 'year',
   },
   {
     title: t('密级'),
     dataIndex: 'secretLevel',
-  },
+  },*/
   {
     title: t('保存期限'),
     dataIndex: 'retentionPeriod',
@@ -83,13 +83,13 @@ export const secretLevelSelectItem: SelectItem[] = [
 ];
 export const cellModelSelectItem: SelectItem[] = [
   {
-    label: '3英寸',
-    value: 'Inch3',
+    label: '树脂颗粒',
+    value: 'shuzhikeli',
     key: 0,
   },
   {
-    label: '4英寸',
-    value: 'Inch4',
+    label: '薄膜',
+    value: 'bomo',
     key: 1,
   },
 ];
@@ -156,7 +156,7 @@ export const createFormSchema: FormSchema[] = [
   {
     field: 'cellModel',
     component: 'Select',
-    label: t('尺寸'),
+    label: t('物料类型'),
     labelWidth: 85,
     required: true,
     colProps: {
@@ -166,7 +166,7 @@ export const createFormSchema: FormSchema[] = [
       options: cellModelSelectItem,
     },
   },
-  {
+ /* {
     field: 'year',
     component: 'Input',
     label: t('年度'),
@@ -190,7 +190,7 @@ export const createFormSchema: FormSchema[] = [
     componentProps: {
       options: secretLevelSelectItem,
     },
-  },
+  },*/
 
   {
     field: 'retentionPeriod',
@@ -272,7 +272,7 @@ export const editFormSchema: FormSchema[] = [
       options: cellModelSelectItem,
     },
   },
-  {
+  /*{
     field: 'year',
     component: 'Input',
     label: t('年度'),
@@ -297,7 +297,7 @@ export const editFormSchema: FormSchema[] = [
     componentProps: {
       options: secretLevelSelectItem,
     },
-  },
+  },*/
   {
     field: 'retentionPeriod',
     component: 'Input',
@@ -311,7 +311,7 @@ export const editFormSchema: FormSchema[] = [
       autocomplete: 'off',
     },
   },
-  {
+/*  {
     field: 'catalogNo',
     component: 'Input',
     label: t('目录号'),
@@ -323,7 +323,7 @@ export const editFormSchema: FormSchema[] = [
     componentProps: {
       autocomplete: 'off',
     },
-  },
+  },*/
 ];
 
 /**

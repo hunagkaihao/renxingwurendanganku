@@ -34,29 +34,78 @@ namespace WarehouseManagement.MaterialBoxs.Aggregates
             CellId = cellId;
             Log.Warning($"Box:{this.MaterialBoxRfid} is SetCell Cell:{cellId}。Method：{System.Reflection.MethodBase.GetCurrentMethod().Name}");
         }
-        //物料盒名称
+        /// <summary>
+        /// 物料盒名称
+        /// </summary>
         [Required]
         public string MaterialBoxName { get; set; }
+        /// <summary>
+        /// 物料盒Rfid
+        /// </summary>
         public string MaterialBoxRfid { get; set; }
-        //物料盒编码
+        /// <summary>
+        /// 物料盒编码
+        /// </summary>
         public string StockBarcode { get; set; }
-        //库存状态 0，空，1满
+        /// <summary>
+        /// 库存状态 0，空，1满
+        /// </summary>
         public string FullFlag { get; set; }
-        //物料盒备注
+        /// <summary>
+        /// 物料盒备注
+        /// </summary>
         public string StorageRemark { get; set; }
-        //库位Id
+        /// <summary>
+        /// 库位Id
+        /// </summary>
         public int CellId { get; set; }
+        /// <summary>
+        /// 创建用户Id
+        /// </summary>
         public long? CreatorUserId { get; set; }
+        /// <summary>
+        /// 删除用户Id
+        /// </summary>
         public long? DeleterUserId { get; set; }
+        /// <summary>
+        /// 最新修改用户Id
+        /// </summary>
         public long? LastModifierUserId { get; set; }
+        /// <summary>
+        /// 物料产量属性1
+        /// </summary>
         public string GoodsConstProperty1 { get; set; }
+        /// <summary>
+        /// 物料产量属性2
+        /// </summary>
         public string GoodsConstProperty2 { get; set; }
+        /// <summary>
+        /// 物料产量属性3
+        /// </summary>
         public string GoodsConstProperty3 { get; set; }
+        /// <summary>
+        /// 物料产量属性4
+        /// </summary>
         public string GoodsConstProperty4 { get; set; }
+        /// <summary>
+        /// 物料产量属性5
+        /// </summary>
         public string GoodsConstProperty5 { get; set; }
+        /// <summary>
+        /// 物料产量属性6
+        /// </summary>
         public string GoodsConstProperty6 { get; set; }
+        /// <summary>
+        /// 物料产量属性7
+        /// </summary>
         public string GoodsConstProperty7 { get; set; }
+        /// <summary>
+        /// 物料产量属性8
+        /// </summary>
         public string GoodsConstProperty8 { get; set; }
+        /// <summary>
+        /// 物料产量属性9
+        /// </summary>
         public string GoodsConstProperty9 { get; set; }
         /// <summary>
         /// 年度
@@ -89,15 +138,11 @@ namespace WarehouseManagement.MaterialBoxs.Aggregates
         /// <summary>
         /// 移交人 归档人
         /// </summary>
-        public string Material { get; set; }
+        public string MaterialPeople { get; set; }
         /// <summary>
         /// 责任人
         /// </summary>
         public string Director { get; set; }
-        /// <summary>
-        /// 目录号
-        /// </summary>
-        public string CatalogNo { get; set; }
         /// <summary>
         /// 保管期限
         /// </summary>

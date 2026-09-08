@@ -67,10 +67,6 @@ namespace WarehouseManagement.MaterialBoxs.Dto
         /// </summary>
         public string Director { get; set; }
         /// <summary>
-        /// 目录号
-        /// </summary>
-        public string CatalogNo { get; set; }
-        /// <summary>
         /// 保管期限
         /// </summary>
         public string RetentionPeriod { get; set; }

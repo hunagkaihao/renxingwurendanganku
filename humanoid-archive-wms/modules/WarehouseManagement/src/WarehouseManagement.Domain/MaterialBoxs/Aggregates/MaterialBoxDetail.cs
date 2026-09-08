@@ -26,7 +26,7 @@ namespace WarehouseManagement.MaterialBoxs.Aggregates
         public string EntryTime { get; set; }
         public string UpdateTime { get; set; }
         public string StorageListRemark { get; set; }
-        public string ArchiveBoxRfid { get; set; }
+        public string MaterialBoxRfid { get; set; }
         public string GoodsProperty1 { get; set; }
         public string GoodsProperty2 { get; set; }
         public string GoodsProperty3 { get; set; }
