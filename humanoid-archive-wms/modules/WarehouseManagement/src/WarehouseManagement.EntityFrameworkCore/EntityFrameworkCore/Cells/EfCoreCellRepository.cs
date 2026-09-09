@@ -22,12 +22,14 @@ namespace WarehouseManagement.EntityFrameworkCore.Cells
             return await (await GetDbSetAsync())
                 .IncludeDetails(includeDetails)
                 .WhereIf(!filter.IsNullOrWhiteSpace(),
-                    e => (e.CellName.Contains(filter)))
+                    e => (e.CellName.Contains(filter) || e.CellCode.Contains(filter)))
                 .WhereIf(warehouseId!=0,
                     e => (e.WarehouseId==warehouseId))
                  .WhereIf(!cellType.IsNullOrWhiteSpace(),
                     e => (e.CellType==Enum.Parse<CellType>(cellType)))
-                .OrderByDescending(e => e.CreationTime)
+                .OrderBy(e => e.Cell_z)
+                .ThenBy(e => e.Cell_x)
+                .ThenBy(e => e.Cell_y)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
