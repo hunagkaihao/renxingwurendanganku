@@ -17547,6 +17547,7 @@ export class CellDto implements ICellDto {
     cellCode!: string | undefined;
     cellName!: string | undefined;
     cellType!: string | undefined;
+    cellModel!: string | undefined;
     deviceCode!: string | undefined;
     cell_z!: number;
     cell_x!: number;
@@ -17573,6 +17574,7 @@ export class CellDto implements ICellDto {
             this.cellCode = _data["cellCode"];
             this.cellName = _data["cellName"];
             this.cellType = _data["cellType"];
+            this.cellModel = _data["cellModel"];
             this.deviceCode = _data["deviceCode"];
             this.cell_z = _data["cell_z"];
             this.cell_x = _data["cell_x"];
@@ -17599,6 +17601,7 @@ export class CellDto implements ICellDto {
         data["cellCode"] = this.cellCode;
         data["cellName"] = this.cellName;
         data["cellType"] = this.cellType;
+        data["cellModel"] = this.cellModel;
         data["deviceCode"] = this.deviceCode;
         data["cell_z"] = this.cell_z;
         data["cell_x"] = this.cell_x;
@@ -17618,6 +17621,7 @@ export interface ICellDto {
     cellCode: string | undefined;
     cellName: string | undefined;
     cellType: string | undefined;
+    cellModel: string | undefined;
     deviceCode: string | undefined;
     cell_z: number;
     cell_x: number;
@@ -19439,6 +19443,7 @@ export class CreateCellDto implements ICreateCellDto {
     cellCode!: string;
     cellType!: string | undefined;
     cellName!: string | undefined;
+    cellModel!: string | undefined;
     warehouseId!: number;
 
     constructor(data?: ICreateCellDto) {
@@ -19455,6 +19460,7 @@ export class CreateCellDto implements ICreateCellDto {
             this.cellCode = _data["cellCode"];
             this.cellType = _data["cellType"];
             this.cellName = _data["cellName"];
+            this.cellModel = _data["cellModel"];
             this.warehouseId = _data["warehouseId"];
         }
     }
@@ -19471,6 +19477,7 @@ export class CreateCellDto implements ICreateCellDto {
         data["cellCode"] = this.cellCode;
         data["cellType"] = this.cellType;
         data["cellName"] = this.cellName;
+        data["cellModel"] = this.cellModel;
         data["warehouseId"] = this.warehouseId;
         return data;
     }
@@ -19480,6 +19487,7 @@ export interface ICreateCellDto {
     cellCode: string;
     cellType: string | undefined;
     cellName: string | undefined;
+    cellModel: string | undefined;
     warehouseId: number;
 }
 
@@ -29923,6 +29931,7 @@ export class UpdateCellDto implements IUpdateCellDto {
     cellCode!: string | undefined;
     cellType!: string | undefined;
     cellName!: string | undefined;
+    cellModel!: string | undefined;
     warehouseId!: number;
 
     constructor(data?: IUpdateCellDto) {
@@ -29940,6 +29949,7 @@ export class UpdateCellDto implements IUpdateCellDto {
             this.cellCode = _data["cellCode"];
             this.cellType = _data["cellType"];
             this.cellName = _data["cellName"];
+            this.cellModel = _data["cellModel"];
             this.warehouseId = _data["warehouseId"];
         }
     }
@@ -29957,6 +29967,7 @@ export class UpdateCellDto implements IUpdateCellDto {
         data["cellCode"] = this.cellCode;
         data["cellType"] = this.cellType;
         data["cellName"] = this.cellName;
+        data["cellModel"] = this.cellModel;
         data["warehouseId"] = this.warehouseId;
         return data;
     }
@@ -29967,6 +29978,7 @@ export interface IUpdateCellDto {
     cellCode: string | undefined;
     cellType: string | undefined;
     cellName: string | undefined;
+    cellModel: string | undefined;
     warehouseId: number;
 }
 

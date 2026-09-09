@@ -44,7 +44,7 @@ namespace WarehouseManagement.Cells
         [Authorize(WarehouseManagementPermissions.CellManagement.Create)]
         public async Task<CellDto> CreateAsync(CreateCellDto input)
         {
-            var cell = await _cellManagement.CreateAsync(input.CellCode,input.CellType,input.CellName,input.WarehouseId);
+            var cell = await _cellManagement.CreateAsync(input.CellCode, input.CellType, input.CellName, input.WarehouseId, input.CellModel);
             return  base.ObjectMapper.Map<Cell, CellDto>(cell);
         }
 
@@ -55,22 +55,22 @@ namespace WarehouseManagement.Cells
             {
                 throw new UserFriendlyException("已有库位信息，无法进行库位未初始化。");
             }
-            for (int z = 1; z <= input.Cell_z; z++)
+            for (int x = 1; x <= input.Cell_x; x++)
             {
                 for (int y = 1; y <= input.Cell_y; y++)
                 {
-                    for (int x = 1; x <= input.Cell_x; x++)
+                    for (int z = 1; z <= input.Cell_z; z++)
                     {
                         CreateCellDto cell = new CreateCellDto();
                         cell.CellType = "Cell";
 
                         // WMS 与 WCS 统一使用“排D2-列D3-层D2”的库位码协议。
-                        // 坐标字段含义保持为 z=排、x=列、y=层，例如第1排、第1列、第1层生成 01-001-01。
+                        // 坐标字段含义为 x=排、y=列、z=层，例如第1排、第1列、第1层生成 01-001-01。
                         // 列号必须补齐三位，否则 WCS 按自身标准生成盘点结果时会返回 01-001-01，
                         // 而 WMS 若保存成 01-01-01，将无法按 CellCode 匹配出入库库位和盘点冻结快照。
-                        cell.CellCode = z.ToString().PadLeft(2, '0') + '-' +
-                                        x.ToString().PadLeft(3, '0') + '-' +
-                                        y.ToString().PadLeft(2, '0');
+                        cell.CellCode = x.ToString().PadLeft(2, '0') + '-' +
+                                        y.ToString().PadLeft(3, '0') + '-' +
+                                        z.ToString().PadLeft(2, '0');
                         cell.CellName = cell.CellCode;
                         cell.WarehouseId = 1;
                         await _cellManagement.CreateAsync(cell.CellCode, cell.CellType, cell.CellName, cell.WarehouseId);
@@ -86,8 +86,8 @@ namespace WarehouseManagement.Cells
         {
             //var cellEntity = base.ObjectMapper.Map<CreateCellDto, Cell>(input);
             //var cell=  await _cellRepository.InsertAsync(cellEntity);
-            var cell = await _cellManagement.CustomCreateAsync(input.CellCode, input.CellType, input.CellName
-                , input.CellGroup, input.Cell_z, input.Cell_x, input.Cell_y, input.CellStorageType, input.DeviceCode
+        var cell = await _cellManagement.CustomCreateAsync(input.CellCode, input.CellType, input.CellName
+            , input.CellGroup, input.Cell_x, input.Cell_y, input.Cell_z, input.CellStorageType, input.DeviceCode
                 , input.CustomCode, input.CellModel, input.WarehouseId);
             return base.ObjectMapper.Map<Cell, CellDto>(cell);
         }
@@ -150,7 +150,7 @@ namespace WarehouseManagement.Cells
         [Authorize(WarehouseManagementPermissions.CellManagement.Update)]
         public virtual async Task<CellDto> UpdateAsync(UpdateCellDto input)
         {
-            var cell= await _cellManagement.UpdateAsync(input.Id,input.CellName,input.CellCode,input.CellType);
+        var cell= await _cellManagement.UpdateAsync(input.Id, input.CellName, input.CellCode, input.CellType, input.CellModel);
             return base.ObjectMapper.Map<Cell, CellDto>(cell);
         }
 

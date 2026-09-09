@@ -27,7 +27,11 @@ namespace WarehouseManagement.Warehouses
         /// <summary>
         /// 接驳
         /// </summary>
-        JB = 5
+        JB = 5,
+        /// <summary>
+        /// 留样间
+        /// </summary>
+        LY = 6
 
     }
 }

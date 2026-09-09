@@ -11,14 +11,14 @@
           {{ t('common.createText') }}
         </a-button>
       
-        <a-button
+<!--        <a-button
             preIcon="ant-design:plus-circle-outlined"
             type="primary"
             @click="createCellBat"
             v-auth="'WarehouseManagement.CellManagement.Create'"
           >
           {{ t('密集架库位初始化') }}
-        </a-button>
+        </a-button>-->
       </template>
       <template #isActive="{ record }">
         <Tag :color="record.isActive ? 'green' : 'red'">
@@ -85,7 +85,6 @@
   import EditCell from './EditCell.vue';
   import { message } from 'ant-design-vue';
   import { useI18n } from '/@/hooks/web/useI18n';
-  import{ useUserStore } from '/@/store/modules/user'
   import { Tag } from 'ant-design-vue';
   
   export default defineComponent({
@@ -103,7 +102,6 @@
       const { t } = useI18n();
       const [registerCreateCellModal, { openModal: openCreateCellModal }] = useModal();
       const [registercreateCellBatModal, { openModal: createCellBat }] = useModal();
-      const cellStore = useUserStore()
       const [registerEditCellModal, { openModal: openEditCellModal }] = useModal();
       //console.log(cellStore.getWare)
 

@@ -25,7 +25,7 @@ namespace WarehouseManagement.Cells
 
         }
         public Cell(string cellCode, string cellType, string cellName, string cellGroup
-     , int cell_z, int cell_x, int cell_y, string cellStorageType, string deviceCode
+     , int cell_x, int cell_y, int cell_z, string cellStorageType, string deviceCode
      , string customCode, string cellModel, int warehouseId = 0)
         {
             SetIntProperties();
@@ -33,9 +33,9 @@ namespace WarehouseManagement.Cells
             CellType = Enum.Parse<CellType>(cellType);
             CellName = cellName;
             CellGroup = cellGroup;
-            Cell_z = cell_z;
             Cell_x = cell_x;
             Cell_y = cell_y;
+            Cell_z = cell_z;
             CellStorageType = cellStorageType;
             DeviceCode = deviceCode;
             CustomCode = customCode;
@@ -56,16 +56,16 @@ namespace WarehouseManagement.Cells
             CellCode = cellCode;
             CellType = Enum.Parse<CellType>(cellType); 
             WarehouseId= warehouseId;
-            if (CellType==CellType.Cell|| CellType == CellType.CTUCell|| CellType == CellType.WallCell)
+            if (CellType == CellType.Cell || CellType == CellType.CTUCell || CellType == CellType.WallCell || CellType == CellType.Station)
             {
                 var cellXYZ =cellCode.Split('-');
                 if (cellXYZ.Length == 3)
                 {
                     try
                     {
-                        Cell_z = Convert.ToInt32(cellXYZ[0]);
-                        Cell_x = Convert.ToInt32(cellXYZ[1]);
-                        Cell_y = Convert.ToInt32(cellXYZ[2]);
+                    Cell_x = Convert.ToInt32(cellXYZ[0]);
+                    Cell_y = Convert.ToInt32(cellXYZ[1]);
+                    Cell_z = Convert.ToInt32(cellXYZ[2]);
                     }
                     catch (Exception)
                     {
@@ -75,29 +75,16 @@ namespace WarehouseManagement.Cells
 
                     CellGroup = CellCode;
                     CellName = cellName;
+                    if (CellType == CellType.Station)
+                    {
+                        DeviceCode = CellCode;
+                    }
                 }
                 else
                 {
                     throw new UserFriendlyException("库位录入数据不符合规范，格式为：00-00-00");
                 }
 
-            }
-            else if (CellType==CellType.Station)
-            {
-                if (CellCode.Length == 5)//站台 以12开头  12001-
-                {
-                    //CellType = "Station";
-                    Cell_z = 0;
-                    Cell_x = 1;
-                    Cell_y = 1;
-                    CellGroup = "1";
-                    CellName = cellName;
-                    DeviceCode = CellCode;
-                }
-                else
-                {
-                    throw new UserFriendlyException("站台录入数据不符合规范，格式为：");
-                }
             }
             else
             {
@@ -141,7 +128,7 @@ namespace WarehouseManagement.Cells
             Log.Debug($"Cell:{CellCode} CellStatus is set {cellStatus} Method:{System.Reflection.MethodBase.GetCurrentMethod().Name}");
             //Log.Warning($"库位:{CellCode}的库位状态设置为{cellStatus}。方法名：{System.Reflection.MethodBase.GetCurrentMethod().Name}");
         }
-        public int? WarehouseId { get; set; }
+        public int WarehouseId { get; set; }
         public int? AreaId { get; set; }
         public int? LogicId { get; set; }
         public string CellName { get; set; }

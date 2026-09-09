@@ -21,7 +21,7 @@
   import {  createCellAsync , createFormSchema } from './Cell';
   import { CreateCellDto } from '/@/services/ServiceProxies';
   import { useI18n } from '/@/hooks/web/useI18n';
-  import{ useUserStore } from '/@/store/modules/user'
+
   export default defineComponent({
     name: 'CreateCell',
     components: {
@@ -35,7 +35,6 @@
       // const ctx = useContexts();
 
       const { t } = useI18n();
-      const cellStore = useUserStore()
 
       const [registerModal, { changeOkLoading, closeModal }] = useModalInner();
       const [registerCellForm, { getFieldsValue, validate, resetFields }] = useForm({

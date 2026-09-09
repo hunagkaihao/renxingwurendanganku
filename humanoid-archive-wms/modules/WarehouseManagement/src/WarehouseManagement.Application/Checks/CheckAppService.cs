@@ -68,13 +68,13 @@ namespace WarehouseManagement.Checks
 
             var groups = cells
                 .Where(x => x.CellType == CellType.Cell)
-                .GroupBy(x => new { Row = x.Cell_z, Layer = x.Cell_y })
+            .GroupBy(x => new { Row = x.Cell_x, Layer = x.Cell_z })
                 .OrderBy(x => x.Key.Row)
                 .ThenBy(x => x.Key.Layer);
 
             foreach (var group in groups)
             {
-                List<Cell> orderedCells = group.OrderBy(x => x.Cell_x).ToList();
+            List<Cell> orderedCells = group.OrderBy(x => x.Cell_y).ToList();
                 List<Cell> continuousCells = new();
 
                 void AddSegment()
@@ -100,7 +100,7 @@ namespace WarehouseManagement.Checks
 
                 foreach (Cell cell in orderedCells)
                 {
-                    if (continuousCells.Count > 0 && cell.Cell_x != continuousCells[^1].Cell_x + 1)
+            if (continuousCells.Count > 0 && cell.Cell_y != continuousCells[^1].Cell_y + 1)
                         AddSegment();
 
                     continuousCells.Add(cell);

@@ -44,6 +44,7 @@
           cellName: data.record.cellName,
           cellCode: data.record.cellCode,
           cellType: data.record.cellType,
+          cellModel: data.record.cellModel
         });
       });
 

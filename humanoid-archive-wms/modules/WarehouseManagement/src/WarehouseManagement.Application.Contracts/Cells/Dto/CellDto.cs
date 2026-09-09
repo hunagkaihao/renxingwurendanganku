@@ -10,6 +10,7 @@ namespace WarehouseManagement.Cells.Dto
         public string CellCode { get; set; }
         public string CellName { get; set; }
         public string CellType { get; set; }
+        public string CellModel { get; set; }
         public string DeviceCode { get; set; }
         public int Cell_z { get; set; }
         public int Cell_x { get; set; }

@@ -23,7 +23,6 @@ namespace WarehouseManagement.Warehouses.Aggregates
             WarehouseCode = warehouseCode;
             WarehouseName = warehouseName;
             WarehouseType = warehouseType;
-
         }
 
         public void Update(string warehouseCode, string warehouseName, WarehouseType warehouseType)
@@ -48,7 +47,6 @@ namespace WarehouseManagement.Warehouses.Aggregates
         /// 仓库类型
         /// </summary>
         public WarehouseType WarehouseType { get; set; }
-
         /// <summary>
         /// 仓库备注
         /// </summary>
@@ -61,9 +59,6 @@ namespace WarehouseManagement.Warehouses.Aggregates
         /// 租户ID
         /// </summary>
         public Guid? TenantId { get; set; }
-
-
-
-
+        
     }
 }

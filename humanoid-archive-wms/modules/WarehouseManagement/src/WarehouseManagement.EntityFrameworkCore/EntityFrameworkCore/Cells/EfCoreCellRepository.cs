@@ -27,9 +27,9 @@ namespace WarehouseManagement.EntityFrameworkCore.Cells
                     e => (e.WarehouseId==warehouseId))
                  .WhereIf(!cellType.IsNullOrWhiteSpace(),
                     e => (e.CellType==Enum.Parse<CellType>(cellType)))
-                .OrderBy(e => e.Cell_z)
-                .ThenBy(e => e.Cell_x)
+                .OrderBy(e => e.Cell_x)
                 .ThenBy(e => e.Cell_y)
+                .ThenBy(e => e.Cell_z)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }

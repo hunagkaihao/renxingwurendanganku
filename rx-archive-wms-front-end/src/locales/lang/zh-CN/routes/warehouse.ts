@@ -29,9 +29,9 @@ export default {
   cellManagement_edit_station: '编辑工作站',
   cellManagement_cellCode: '库位编码',
   cellManagement_cellType: '库位类型',
-  cellManagement_z: '排',
-  cellManagement_x: '列',
-  cellManagement_y: '层',
+  cellManagement_x: '排',
+  cellManagement_y: '列',
+  cellManagement_z: '层',
   cellManagement_stationCode: '工作站编码',
   cellManagement_stationName: '工作站名称',
 

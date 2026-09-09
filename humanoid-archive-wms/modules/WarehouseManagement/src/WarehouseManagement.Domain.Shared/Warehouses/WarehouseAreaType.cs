@@ -19,7 +19,15 @@ namespace WarehouseManagement.Warehouses
         /// <summary>
         /// 接驳区
         /// </summary>
-        J
+        J,
+        /// <summary>
+        /// 自动留样区
+        /// </summary>
+        AutoLY,
+        /// <summary>
+        /// 手动留样区
+        /// </summary>
+        ManualLY,
 
     }
 }

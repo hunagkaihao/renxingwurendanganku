@@ -44,13 +44,17 @@ namespace WarehouseManagement.Cells
         /// <param name="code"></param>
         /// <param name="displayText"></param>
         /// <param name="description"></param>
-        public async Task<Cell> CreateAsync(string cellCode, string cellType, string cellName, int warehouseId = 1)
+        public async Task<Cell> CreateAsync(string cellCode, string cellType, string cellName, int warehouseId = 1, string cellModel = null)
         {
             if (await IsExistCode(cellCode))
             {
                 throw new UserFriendlyException(message: "库位编码已存在");
             }
             var entity = new Cell(cellCode, cellType, cellName, warehouseId);
+            if (!string.IsNullOrWhiteSpace(cellModel))
+            {
+                entity.CellModel = cellModel;
+            }
             return await _cellRepository.InsertAsync(entity);
         }
         /// <summary>
@@ -58,14 +62,14 @@ namespace WarehouseManagement.Cells
         /// </summary>
         /// <returns></returns>
         public async Task<Cell> CustomCreateAsync(string cellCode, string cellType, string cellName, string cellGroup
-            , int cell_z, int cell_x, int cell_y, string cellStorageType, string deviceCode, string customCode, string cellModel, int warehouseId = 0)
+            , int cell_x, int cell_y, int cell_z, string cellStorageType, string deviceCode, string customCode, string cellModel, int warehouseId = 0)
         {
             if (await IsExistCode(cellCode))
             {
                 throw new UserFriendlyException(message: "库位编码已存在");
             }
-            var entity = new Cell(cellCode, cellType, cellName, cellGroup, cell_z,
-                cell_x, cell_y, cellStorageType, deviceCode, customCode, cellModel, warehouseId);
+        var entity = new Cell(cellCode, cellType, cellName, cellGroup, cell_x,
+            cell_y, cell_z, cellStorageType, deviceCode, customCode, cellModel, warehouseId);
             return await _cellRepository.InsertAsync(entity);
         }
 
@@ -76,12 +80,16 @@ namespace WarehouseManagement.Cells
                 throw new UserFriendlyException(message: "物品不存在");
             await _cellRepository.DeleteAsync(entity);
         }
-        public async Task<Cell> UpdateAsync(int id,string cellName, string cellCode, string cellType)
+        public async Task<Cell> UpdateAsync(int id, string cellName, string cellCode, string cellType, string cellModel = null)
         {
             var entity = await _cellRepository.FindByIdAsync(id);
             if (entity == null)
                 throw new UserFriendlyException(message: "物品不存在");
-            entity.Update(cellName, cellCode, cellType);
+            entity.Update(cellCode, cellType, cellName, entity.WarehouseId);
+            if (!string.IsNullOrWhiteSpace(cellModel))
+            {
+                entity.CellModel = cellModel;
+            }
             return await _cellRepository.UpdateAsync(entity);
         }
 

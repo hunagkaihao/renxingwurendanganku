@@ -12,7 +12,6 @@ import {
   WarehousesServiceProxy,
   PagingWarehouseListInput,
   WarehouseDtoPagedResultDto,
-  CreateCellDto,
   UpdateCellDto,
 } from '/@/services/ServiceProxies';
 import { message } from 'ant-design-vue';
@@ -20,7 +19,6 @@ import { useLoading } from '/@/components/Loading';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { SelectItem } from '/@/utils/SelectItem';
 import{ useUserStore } from '/@/store/modules/user'
-import warehouse from '/@/locales/lang/zh-CN/routes/warehouse';
 import { reactive } from 'vue';
 
 const { t } = useI18n();
@@ -29,26 +27,8 @@ const option = reactive([
   {
     value: 1,
     label: '树脂留样间',
-  },
-  // {
-  //   value: 2,
-  //   label: '仓库二',
-  // },
-  // {
-  //   value: 3,
-  //   label: '仓库三',
-  // },
+  }
 ]);
-
-// for (let index = 0; index < a.length; index++) {
-//   const b = ({value:0,label:''}) ;
-//   b.value = a[index].wareid 
-//   b.label = a[index].warename 
-//   console.log(b)
-//   option.push(b) 
-// }
-
-
 
 const [openFullLoading, closeFullLoading] = useLoading({
   tip: 'Loading...',
@@ -60,28 +40,24 @@ export const cellTypeSelectItem: SelectItem[] = [
     value: 'Cell',
     key: 0,
   },
-  // {
-  //   label: 'CTU库位',
-  //   value: 'CTUCell',
-  //   key: 1,
-  // },
-  // {
-  //   label: '分拨墙',
-  //   value: 'WallCell',
-  //   key: 2,
-  // },
   {
     label: '柜门',
     value: 'Station',
-    key: 3,
-  },
-  // {
-  // label: '异常站台',
-  // value: 'ErrorStation',
-  // key: 4,
-  // }
+    key: 1,
+  }
 ];
-
+export const cellModelSelectItem : SelectItem[] = [
+  {
+    label: '树脂颗粒',
+    value: 'LL',
+    key: 0,
+  },
+  {
+    label: '薄膜',
+    value: 'ML',
+    key: 1,
+  }
+]
 export const cellStatusSelectItem: SelectItem[] = [
   {
     label: '满货',
@@ -104,7 +80,6 @@ export const cellStatusSelectItem: SelectItem[] = [
     key: 3,
   },
 ];
-
 export const runStatusSelectItem: SelectItem[] = [
   {
     label: '禁用',
@@ -127,6 +102,14 @@ export const runStatusSelectItem: SelectItem[] = [
     key: 3,
   },
 ];
+export const warehouseSelectItem: SelectItem[] = [
+  {
+    label: '树脂留样间',
+    value: "1",
+    key: 1,
+  }
+]
+
 export const WareColumns: BasicColumn[] = [
   {
     title: t('仓库编号'),
@@ -148,7 +131,6 @@ export const WareColumns: BasicColumn[] = [
     },
   },
 ]
-
 export const tableColumns: BasicColumn[] = [
   {
     title: t('routes.warehouse.cellManagement_cellCode'),
@@ -159,16 +141,19 @@ export const tableColumns: BasicColumn[] = [
     dataIndex: 'cellName',
   },
   {
+    title: t('库位规格'),
+    dataIndex: 'cellModel',
+    customRender: ({ text }) => {
+      const item = cellModelSelectItem.find((f) => f.value == text);
+      return item ? item.label : text;  // 找不到时直接显示原始值
+    },
+  },
+  {
     title: t('routes.warehouse.cellManagement_cellType'),
     dataIndex: 'cellType',
     customRender: ({ text }) => {
       return cellTypeSelectItem.filter((f) => f.value == text)[0].label;
     },
-  },
-  {
-    title: t('routes.warehouse.cellManagement_z'),
-    dataIndex: 'cell_z',
-    width: 50,
   },
   {
     title: t('routes.warehouse.cellManagement_x'),
@@ -178,6 +163,11 @@ export const tableColumns: BasicColumn[] = [
   {
     title: t('routes.warehouse.cellManagement_y'),
     dataIndex: 'cell_y',
+    width: 50,
+  },
+  {
+    title: t('routes.warehouse.cellManagement_z'),
+    dataIndex: 'cell_z',
     width: 50,
   },
   {
@@ -224,7 +214,7 @@ export const searchFormSchema: FormSchema[] = reactive([
     defaultValue: cellStore.getCell,
     colProps: { span: 8 },
     componentProps:{
-      options:option
+      options:warehouseSelectItem
     }
   },
 ]);
@@ -270,16 +260,13 @@ export const WareFormSchema: FormSchema[] = [
   
 export const createFormSchema: FormSchema[] = reactive([
   {
-    field: 'cellCode',
+    field: 'cellName',
     component: 'Input',
-    label: t('routes.warehouse.cellManagement_cellCode'),
+    label: t('库位名称'),
     labelWidth: 85,
     required: true,
     colProps: {
       span: 12,
-    },
-    componentProps: {
-      autocomplete: 'off',
     },
   },
   {
@@ -297,28 +284,43 @@ export const createFormSchema: FormSchema[] = reactive([
     }
   },
   {
-    field: 'cellName',
+    field: 'cellCode',
     component: 'Input',
-    label: t('库位名称'),
+    label: t('routes.warehouse.cellManagement_cellCode'),
     labelWidth: 85,
     required: true,
     colProps: {
       span: 12,
     },
-    
+    componentProps: {
+      autocomplete: 'off',
+    },
+  },
+  {
+    field: 'cellModel',
+    component: 'Select',
+    label: t('库位规格'),
+    labelWidth: 85,
+    required: true,
+    defaultValue: 'LL',
+    colProps: {
+      span: 12,
+    },
+    componentProps: {
+      options:cellModelSelectItem,
+    }
   },
   {
     field: 'warehouseId',
     component: 'Select',
     label: t('所属仓库'),
     labelWidth: 85,
-    //required: true,
-    //defaultValue: cellStore.getCell,
+    defaultValue: '1',
     colProps: {
       span: 12,
     },
     componentProps: {
-      options:option
+      options:warehouseSelectItem
     },
   },
 ]);
@@ -326,7 +328,7 @@ export const createCellBatFormSchema: FormSchema[] =[
   {
     field: 'cell_x',
     component: 'Input',
-    label: t('列数'),
+    label: t('排数'),
     labelWidth: 85,
     required: true,
     colProps: {
@@ -339,7 +341,7 @@ export const createCellBatFormSchema: FormSchema[] =[
   {
     field: 'cell_y',
     component: 'Input',
-    label: t('层数'),
+    label: t('列数'),
     labelWidth: 85,
     required: true,
     colProps: {
@@ -352,7 +354,7 @@ export const createCellBatFormSchema: FormSchema[] =[
   {
     field: 'cell_z',
     component: 'Input',
-    label: t('排数'),
+    label: t('层数'),
     labelWidth: 85,
     required: true,
     colProps: {
@@ -392,7 +394,7 @@ export const editFormSchema: FormSchema[] = [
   },
   {
     field: 'cellType',
-    component: 'Input',
+    component: 'Select',
     label: t('routes.warehouse.cellManagement_cellType'),
     labelWidth: 85,
     required: true,
@@ -400,9 +402,22 @@ export const editFormSchema: FormSchema[] = [
       span: 12,
     },
     componentProps: {
-      autocomplete: 'off',
-      disabled: true,
+      options:cellTypeSelectItem,
     },
+  },
+  {
+    field: 'cellModel',
+    component: 'Select',
+    label: t('库位规格'),
+    labelWidth: 85,
+    required: true,
+    defaultValue: 'LL',
+    colProps: {
+      span: 12,
+    },
+    componentProps: {
+      options:cellModelSelectItem,
+    }
   },
 ];
 
@@ -471,7 +486,7 @@ export async function getTableListByZAsync(
 }
 
 /**
- * 创建书籍
+ * 创建库位
  * @param param0
  */
 export async function createCellAsync({
