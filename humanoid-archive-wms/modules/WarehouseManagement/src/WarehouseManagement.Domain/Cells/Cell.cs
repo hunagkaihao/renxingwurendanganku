@@ -146,6 +146,10 @@ namespace WarehouseManagement.Cells
         /// 
         /// </summary>
         public string CellModel { get; set; }
+        /// <summary>
+        /// 当前存放物料码；空值表示无货。
+        /// </summary>
+        public string MaterialCode { get; set; }
         public CellStatus CellStatus { get; private set; }
         public CellRunStatus RunStatus { get; private set; }
         public string CellForkType { get; set; }

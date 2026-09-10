@@ -67,6 +67,10 @@ public static class WarehouseManagementDbContextModelCreatingExtensions
             b.HasIndex(q => q.CreationTime);
             b.ConfigureByConvention();
         });
+        builder.Entity<Cell>(b =>
+        {
+            b.Property(q => q.MaterialCode).HasMaxLength(128);
+        });
         builder.Entity<MaterialBoxDetail>(b =>
         {
             b.ToTable(WarehouseManagementDbProperties.DbTablePrefix + nameof(MaterialBoxDetail), WarehouseManagementDbProperties.DbSchema);

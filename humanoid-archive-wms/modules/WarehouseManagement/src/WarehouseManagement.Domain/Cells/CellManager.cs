@@ -243,6 +243,16 @@ namespace WarehouseManagement.Cells
             return await _cellRepository.UpdateAsync(cell);
         }
 
+        public async Task<Cell> SetMaterialCodeAsync(int cellId, string materialCode)
+        {
+            var cell = await _cellRepository.FindByIdAsync(cellId);
+            if (cell == null)
+                throw new UserFriendlyException(message: "库位不存在");
+
+            cell.MaterialCode = materialCode;
+            return await _cellRepository.UpdateAsync(cell);
+        }
+
         /// <summary>
         /// 根据区域码获取库位清单
         /// </summary>

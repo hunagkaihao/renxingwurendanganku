@@ -12,6 +12,11 @@ namespace WarehouseManagement.Cells.Dto
         /// </summary>
         public string Filter { get; set; }
 
+        /// <summary>
+        /// 物料码
+        /// </summary>
+        public string MaterialCode { get; set; }
+
         public int CellZ { get; set; }
         /// <summary>
         /// 仓库ID

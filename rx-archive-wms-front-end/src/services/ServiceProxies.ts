@@ -17117,6 +17117,7 @@ export class MaterialBoxDto implements IArchiveBoxDto {
     lastModificationTime!: moment.Moment | undefined;
     lastModifierId!: string | undefined;
     materialBoxName!: string;
+    materialBoxBarcode!: string | undefined;
     materialBoxRfid!: string | undefined;
     stockBarcode!: string | undefined;
     fullFlag!: string | undefined;
@@ -17158,6 +17159,7 @@ export class MaterialBoxDto implements IArchiveBoxDto {
             this.lastModificationTime = _data["lastModificationTime"] ? moment(_data["lastModificationTime"].toString()) : <any>undefined;
             this.lastModifierId = _data["lastModifierId"];
             this.materialBoxName = _data["materialBoxName"];
+            this.materialBoxBarcode = _data["materialBoxBarcode"];
             this.materialBoxRfid = _data["materialBoxRfid"];
             this.stockBarcode = _data["stockBarcode"];
             this.fullFlag = _data["fullFlag"];
@@ -17199,6 +17201,7 @@ export class MaterialBoxDto implements IArchiveBoxDto {
         data["lastModificationTime"] = this.lastModificationTime ? this.lastModificationTime.toISOString() : <any>undefined;
         data["lastModifierId"] = this.lastModifierId;
         data["materialBoxName"] = this.materialBoxName;
+        data["materialBoxBarcode"] = this.materialBoxBarcode;
         data["materialBoxRfid"] = this.materialBoxRfid;
         data["stockBarcode"] = this.stockBarcode;
         data["fullFlag"] = this.fullFlag;
@@ -17233,6 +17236,7 @@ export interface IArchiveBoxDto {
     lastModificationTime: moment.Moment | undefined;
     lastModifierId: string | undefined;
     materialBoxName: string;
+    materialBoxBarcode: string | undefined;
     materialBoxRfid: string | undefined;
     stockBarcode: string | undefined;
     fullFlag: string | undefined;
@@ -17548,6 +17552,7 @@ export class CellDto implements ICellDto {
     cellName!: string | undefined;
     cellType!: string | undefined;
     cellModel!: string | undefined;
+    materialCode!: string | undefined;
     deviceCode!: string | undefined;
     cell_z!: number;
     cell_x!: number;
@@ -17575,6 +17580,7 @@ export class CellDto implements ICellDto {
             this.cellName = _data["cellName"];
             this.cellType = _data["cellType"];
             this.cellModel = _data["cellModel"];
+            this.materialCode = _data["materialCode"];
             this.deviceCode = _data["deviceCode"];
             this.cell_z = _data["cell_z"];
             this.cell_x = _data["cell_x"];
@@ -17602,6 +17608,7 @@ export class CellDto implements ICellDto {
         data["cellName"] = this.cellName;
         data["cellType"] = this.cellType;
         data["cellModel"] = this.cellModel;
+        data["materialCode"] = this.materialCode;
         data["deviceCode"] = this.deviceCode;
         data["cell_z"] = this.cell_z;
         data["cell_x"] = this.cell_x;
@@ -17622,6 +17629,7 @@ export interface ICellDto {
     cellName: string | undefined;
     cellType: string | undefined;
     cellModel: string | undefined;
+    materialCode: string | undefined;
     deviceCode: string | undefined;
     cell_z: number;
     cell_x: number;
@@ -25307,6 +25315,7 @@ export class PagingCellListInput implements IPagingCellListInput {
     /** 跳过多少条 */
     readonly skipCount!: number;
     filter!: string | undefined;
+    materialCode!: string | undefined;
     cellZ!: number;
     warehouseId!: number;
     cellType!: string | undefined;
@@ -25326,6 +25335,7 @@ export class PagingCellListInput implements IPagingCellListInput {
             this.pageSize = _data["pageSize"];
             (<any>this).skipCount = _data["skipCount"];
             this.filter = _data["filter"];
+            this.materialCode = _data["materialCode"];
             this.cellZ = _data["cellZ"];
             this.warehouseId = _data["warehouseId"];
             this.cellType = _data["cellType"];
@@ -25345,6 +25355,7 @@ export class PagingCellListInput implements IPagingCellListInput {
         data["pageSize"] = this.pageSize;
         data["skipCount"] = this.skipCount;
         data["filter"] = this.filter;
+        data["materialCode"] = this.materialCode;
         data["cellZ"] = this.cellZ;
         data["warehouseId"] = this.warehouseId;
         data["cellType"] = this.cellType;
@@ -25360,6 +25371,7 @@ export interface IPagingCellListInput {
     /** 跳过多少条 */
     skipCount: number;
     filter: string | undefined;
+    materialCode: string | undefined;
     cellZ: number;
     warehouseId: number;
     cellType: string | undefined;

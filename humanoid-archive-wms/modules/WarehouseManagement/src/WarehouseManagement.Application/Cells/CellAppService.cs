@@ -122,11 +122,11 @@ namespace WarehouseManagement.Cells
 
 
             var result = new PagedResultDto<CellDto>();
-            var totalCount = await _cellRepository.GetPagingCountAsync(input.Filter, input.WarehouseId, input.CellType);
+            var totalCount = await _cellRepository.GetPagingCountAsync(input.Filter, input.MaterialCode, input.WarehouseId, input.CellType);
             result.TotalCount = totalCount;
             if (totalCount <= 0) return result;
 
-            var entities = await _cellRepository.GetPagingListAsync(input.Filter,input.WarehouseId,input.CellType, input.PageSize,
+            var entities = await _cellRepository.GetPagingListAsync(input.Filter, input.MaterialCode, input.WarehouseId, input.CellType, input.PageSize,
                 input.SkipCount, false);
             result.Items = ObjectMapper.Map<List<Cell>, List<CellDto>>(entities);
 

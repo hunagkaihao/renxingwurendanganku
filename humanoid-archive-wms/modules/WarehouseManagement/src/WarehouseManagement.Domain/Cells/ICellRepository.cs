@@ -27,6 +27,7 @@ namespace WarehouseManagement.Cells
 
         Task<List<Cell>> GetPagingListAsync(
             string filter = null,
+            string materialCode = null,
             int warehouseId = 0,
             string cellType = null,
             int maxResultCount = 10,
@@ -35,6 +36,7 @@ namespace WarehouseManagement.Cells
             CancellationToken cancellationToken = default);
 
         Task<long> GetPagingCountAsync(string filter = null,
+            string materialCode = null,
             int warehouseId = 0,
             string cellType = null,
             CancellationToken cancellationToken = default);

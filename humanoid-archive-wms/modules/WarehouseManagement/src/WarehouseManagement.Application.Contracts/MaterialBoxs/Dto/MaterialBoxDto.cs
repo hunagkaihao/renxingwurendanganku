@@ -13,6 +13,8 @@ namespace WarehouseManagement.MaterialBoxs.Dto
         //物料盒名称
         [Required]
         public string MaterialBoxName { get; set; }
+        //物料盒条码
+        public string MaterialBoxBarcode { get; set; }
         public string MaterialBoxRfid { get; set; }
         //物料盒编码
         public string StockBarcode { get; set; }

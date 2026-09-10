@@ -141,6 +141,11 @@ export const tableColumns: BasicColumn[] = [
     dataIndex: 'cellName',
   },
   {
+    title: t('物料码'),
+    dataIndex: 'materialCode',
+    customRender: ({ text }) => (text && String(text).trim() ? text : '-'),
+  },
+  {
     title: t('库位规格'),
     dataIndex: 'cellModel',
     customRender: ({ text }) => {
@@ -203,7 +208,13 @@ export const WaresearchFormSchema: FormSchema[] = [
 export const searchFormSchema: FormSchema[] = reactive([
   {
     field: 'filter',
-    label: t('关键字:'),
+    label: t('库位编码:'),
+    component: 'Input',
+    colProps: { span: 8 },
+  },
+  {
+    field: 'materialCode',
+    label: t('物料码'),
     component: 'Input',
     colProps: { span: 8 },
   },

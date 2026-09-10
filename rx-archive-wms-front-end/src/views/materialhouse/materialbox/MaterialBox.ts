@@ -24,7 +24,7 @@ const [openFullLoading, closeFullLoading] = useLoading({
 export const tableColumns: BasicColumn[] = [
   {
     title: t('物料码'),
-    dataIndex: 'materialBoxRfid',
+    dataIndex: 'materialBoxBarcode',
   },
   {
     title: t('物料名称'),
@@ -33,6 +33,7 @@ export const tableColumns: BasicColumn[] = [
   {
     title: t('物料编号'),
     dataIndex: 'stockBarcode',
+    ifShow: false,
   },
 /*  {
     title: t('库位'),
