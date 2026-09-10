@@ -11,8 +11,8 @@ import {
   PagingTaskHisDetailInput,
   TaskHisDetailDtoPagedResultDto,
   CellDtoListResultDto,
-  ManageType,
-  ManageStatus,
+  TaskType,
+  TaskStatus,
 } from '/@/services/ServiceProxies';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { SelectItem } from '/@/utils/SelectItem';
@@ -21,68 +21,73 @@ const { t } = useI18n();
 export const manageTypeCodeSelectItem: SelectItem[] = [
   {
     label: '物料入库',
-    value: ManageType[ManageType.NPFullStockIn],
-    key: ManageType.NPFullStockIn,
+    value: TaskType[TaskType.NPFullStockIn],
+    key: TaskType.NPFullStockIn,
   },
   {
     label: '无计划出库',
-    value: ManageType[ManageType.NpFullStockOut],
-    key: ManageType.NpFullStockOut,
+    value: TaskType[TaskType.NpFullStockOut],
+    key: TaskType.NpFullStockOut,
   },
   {
     label: '物料出库',
-    value: ManageType[ManageType.NPSortStockOut],
-    key: ManageType.NPSortStockOut,
+    value: TaskType[TaskType.NPSortStockOut],
+    key: TaskType.NPSortStockOut,
   },
   {
     label: '借用出库',
-    value: ManageType[ManageType.HPSortStockOut],
-    key: ManageType.HPSortStockOut,
+    value: TaskType[TaskType.HPSortStockOut],
+    key: TaskType.HPSortStockOut,
   },
   {
     label: '批量盘点',
-    value: ManageType[ManageType.HpAnnualCheckDown],
-    key: ManageType.HpAnnualCheckDown,
+    value: TaskType[TaskType.HpAnnualCheckDown],
+    key: TaskType.HpAnnualCheckDown,
   },
   {
     label: '批量入库',
-    value: ManageType[ManageType.HPBatchStockIn],
-    key: ManageType.HPBatchStockIn,
+    value: TaskType[TaskType.HPBatchStockIn],
+    key: TaskType.HPBatchStockIn,
   },
   {
     label: '盘盈入库',
-    value: ManageType[ManageType.SurplusIn],
-    key: ManageType.SurplusIn,
+    value: TaskType[TaskType.SurplusIn],
+    key: TaskType.SurplusIn,
   },
 ];
 
 export const manageStatusSelectItem: SelectItem[] = [
   {
     label: '等待执行',
-    value: ManageStatus[ManageStatus.WaitingExecute],
-    key: ManageStatus.WaitingExecute,
+    value: TaskStatus[TaskStatus.WaitingExecute],
+    key: TaskStatus.WaitingExecute,
   },
   {
     label: '取消',
-    value: ManageStatus[ManageStatus.Cancel],
-    key: ManageStatus.Cancel,
+    value: TaskStatus[TaskStatus.Cancel],
+    key: TaskStatus.Cancel,
   },
   {
     label: '完成',
-    value: ManageStatus[ManageStatus.Complete],
-    key: ManageStatus.Complete,
+    value: TaskStatus[TaskStatus.Complete],
+    key: TaskStatus.Complete,
   },
   {
     label: '错误',
-    value: ManageStatus[ManageStatus.Error],
-    key: ManageStatus.Error,
+    value: TaskStatus[TaskStatus.Error],
+    key: TaskStatus.Error,
   },
   {
     label: '已下达',
-    value: ManageStatus[ManageStatus.OrderCatched],
-    key: ManageStatus.OrderCatched,
+    value: TaskStatus[TaskStatus.OrderCatched],
+    key: TaskStatus.OrderCatched,
   },
 ];
+
+function getSelectLabel(options: SelectItem[], value: unknown): string {
+  const item = options.find((option) => option.key == value || option.value == value);
+  return item?.label ?? (value === null || value === undefined || value === '' ? '-' : String(value));
+}
 
 export const tableColumns: BasicColumn[] = [
   {
@@ -91,16 +96,16 @@ export const tableColumns: BasicColumn[] = [
   },
   {
     title: t('routes.stockTask.stockTaskManagement_manageTypeCode'),
-    dataIndex: 'manageTypeCode',
+    dataIndex: 'taskTypeCode',
     customRender: ({ text }) => {
-      return manageTypeCodeSelectItem.filter((f) => f.key == text)[0].label;
+      return getSelectLabel(manageTypeCodeSelectItem, text);
     },
   },
   {
     title: t('routes.stockTask.stockTaskManagement_manageStatus'),
-    dataIndex: 'manageStatus',
+    dataIndex: 'taskStatus',
     customRender: ({ text }) => {
-      return manageStatusSelectItem.filter((f) => f.key == text)[0].label;
+      return getSelectLabel(manageStatusSelectItem, text);
     },
   },
   {

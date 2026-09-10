@@ -17,7 +17,7 @@
         </a-button>
         <a-button
           type="primary"
-          @click="createIn"
+          @click="message.info('请在物料出入库管理页面创建入库预约')"
           v-auth="'WarehouseManagement.GoodsManagement.Create'"
         >
           {{ t('入库') }}

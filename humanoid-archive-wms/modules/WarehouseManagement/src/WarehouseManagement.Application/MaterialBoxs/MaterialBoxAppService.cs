@@ -157,7 +157,7 @@ namespace WarehouseManagement.MaterialBoxs
                 {
                     throw new UserFriendlyException( input.MaterialBoxRfid + "标签已被绑定");
                 }
-                entity.MaterialBoxRfid = input.MaterialBoxRfid;
+                entity.MaterialBoxBarcode = input.MaterialBoxRfid;
                 var archivebox = await _materialBoxRepository.UpdateAsync(entity);
 
                 return base.ObjectMapper.Map<MaterialBox, MaterialBoxDto>(archivebox);
@@ -170,7 +170,7 @@ namespace WarehouseManagement.MaterialBoxs
 
         public async Task<Boolean> BindArchive(string MaterialBoxRfid,string MaterialRfid)
         {
-            var archiveBox = await _materialBoxManager.GetArchiveBoxByRfidCode(MaterialBoxRfid);
+            var archiveBox = await _materialBoxManager.GetMaterialBoxByRfidCode(MaterialBoxRfid);
             if (archiveBox == null)
             {
                 throw new UserFriendlyException(message: "档案盒不存在");

@@ -15,7 +15,7 @@ namespace WarehouseManagement.StockTasks.Aggregates
         public int StockTaskId { get; set; }
 
         public string ArchiveBoxRfid { get; set; }
-        public ManageType ManageTypeCode { get; set; }
+        public TaskType TaskTypeCode { get; set; }
         public int StartCellId { get; set; }
         public int EndCellId { get; set; }
         public String ManageStatus { get; set; }

@@ -16,23 +16,22 @@ namespace WarehouseManagement.MaterialBoxs.Aggregates
         {
             Details = new List<MaterialBoxDetail>();
         }
-        public void Update(string materialBoxName, string stockBarcode)
+        public void Update(string materialBoxName, string materialBoxBarcode)
         {
             MaterialBoxName = materialBoxName;
-            StockBarcode = stockBarcode;
+            MaterialBoxBarcode = materialBoxBarcode;
         }
 
-        public MaterialBox(string materialBoxName, string stockBarcode)
+        public MaterialBox(string materialBoxName, string materialBoxBarcode)
         {
-            //Id = id;
             MaterialBoxName = materialBoxName;
-            StockBarcode = stockBarcode;
+            MaterialBoxBarcode = materialBoxBarcode;
             Details = new List<MaterialBoxDetail>();
         }
         public void SetCell(int cellId)
         {
             CellId = cellId;
-            Log.Warning($"Box:{this.MaterialBoxRfid} is SetCell Cell:{cellId}。Method：{System.Reflection.MethodBase.GetCurrentMethod().Name}");
+            Log.Warning($"Box:{this.MaterialBoxBarcode} is SetCell Cell:{cellId}。Method：{System.Reflection.MethodBase.GetCurrentMethod().Name}");
         }
         public void AddDetail(int boxId,int archiveId)
         {
@@ -55,13 +54,9 @@ namespace WarehouseManagement.MaterialBoxs.Aggregates
         [Required]
         public string MaterialBoxName { get; set; }
         /// <summary>
-        /// 物料盒Rfid
+        /// 物料盒条码
         /// </summary>
-        public string MaterialBoxRfid { get; set; }
-        /// <summary>
-        /// 物料盒编码
-        /// </summary>
-        public string StockBarcode { get; set; }
+        public string MaterialBoxBarcode { get; set; }
         /// <summary>
         /// 库存状态 0，空，1满
         /// </summary>
@@ -89,7 +84,7 @@ namespace WarehouseManagement.MaterialBoxs.Aggregates
         /// <summary>
         /// 物料产量属性1
         /// </summary>
-        public string GoodsConstProperty1 { get; set; }
+        public string MaterialUnit { get; set; }
         /// <summary>
         /// 物料产量属性2
         /// </summary>
@@ -167,14 +162,16 @@ namespace WarehouseManagement.MaterialBoxs.Aggregates
         /// </summary>
         public string ClassType { get; set; }
         /// <summary>
-        /// 尺寸
+        /// 物料规格
         /// </summary>
         public string CellModel { get; set; }
         /// <summary>
-        /// 档案盒存储明细
+        /// 物料容器存储明细
         /// </summary>
         public List<MaterialBoxDetail> Details { get; private set; }
-
+        /// <summary>
+        /// 租赁 id
+        /// </summary>
         public Guid? TenantId { get; set; }
 
     }

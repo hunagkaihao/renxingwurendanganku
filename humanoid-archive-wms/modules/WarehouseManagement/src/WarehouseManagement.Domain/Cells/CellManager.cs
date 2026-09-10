@@ -452,23 +452,31 @@ namespace WarehouseManagement.Cells
             return cellList.OrderBy(s => s.Cell_y).ThenBy(s => s.Cell_x).FirstOrDefault();
         }
 
-        //自动分配密集架库位
+        /// <summary>
+        /// 自动分配密集架库位
+        /// </summary>
+        /// <param name="warehouseId">仓库id</param>
+        /// <param name="cellModel">库位规格</param>
+        /// <returns></returns>
         public async Task<Cell> GetEmptyCell(int warehouseId, string cellModel)
         {
-            //获取分拨墙配置
-            //var allSettings = _settingDefinitionManager.GetAll().ToList(); GetSetting
-
-            //var settings = allSettings.Where(e => e.Properties.ContainsKey("BigToSmall")).ToList();
+            // 是否启用排列层从大到小的规则
             ZBigToSmall = Convert.ToBoolean(await _settingDefinitionManager.GetSetting("ZBigToSmall")); 
             XBigToSmall = Convert.ToBoolean(await _settingDefinitionManager.GetSetting("XBigToSmall"));
             YBigToSmall = Convert.ToBoolean(await _settingDefinitionManager.GetSetting("YBigToSmall"));
-            //获取可用的空库位  符合料箱类型
-            var cellList = await _cellRepository
-                .GetListAsync(f => f.WarehouseId == warehouseId & f.CellStatus == CellStatus.Nohave & f.RunStatus == CellRunStatus.Enable
-               & f.CellModel == cellModel & f.CellType == CellType.Cell)
-                ;
-            // 低层优先  通道优先
-            //return cellList.OrderBy(s => s.Cell_y).ThenBy(s => s.Cell_x).FirstOrDefault();
+            
+            // 获取可用的空库位  符合料箱类型
+            var cellList = await _cellRepository.GetListAsync(
+                    f => f.WarehouseId == warehouseId & 
+                             f.CellStatus == CellStatus.Nohave & 
+                             f.RunStatus == CellRunStatus.Enable & 
+                             f.CellModel == cellModel & 
+                             f.CellType == CellType.Cell);
+            if (cellList == null)
+            {
+                throw new UserFriendlyException("无可用库位");
+            }
+            
             //按配置规则执行
             if(ZBigToSmall)
             {
@@ -476,17 +484,29 @@ namespace WarehouseManagement.Cells
                 {
                     if (XBigToSmall)
                     {
-                        return cellList.OrderByDescending(s => s.Cell_z).ThenByDescending(s => s.Cell_y).ThenByDescending(s => s.Cell_x).FirstOrDefault();
+                        return cellList.OrderByDescending(s => s.Cell_z)
+                                       .ThenByDescending(s => s.Cell_y)
+                                       .ThenByDescending(s => s.Cell_x)
+                                       .FirstOrDefault();
                     }
-                    return cellList.OrderByDescending(s => s.Cell_z).ThenByDescending(s => s.Cell_y).ThenBy(s => s.Cell_x).FirstOrDefault();
+                    return cellList.OrderByDescending(s => s.Cell_z)
+                                   .ThenByDescending(s => s.Cell_y)
+                                   .ThenBy(s => s.Cell_x)
+                                   .FirstOrDefault();
                 }
                 else
                 {
                     if (XBigToSmall)
                     {
-                        return cellList.OrderByDescending(s => s.Cell_z).ThenBy(s => s.Cell_y).ThenByDescending(s => s.Cell_x).FirstOrDefault();
+                        return cellList.OrderByDescending(s => s.Cell_z)
+                                       .ThenBy(s => s.Cell_y)
+                                       .ThenByDescending(s => s.Cell_x)
+                                       .FirstOrDefault();
                     }
-                    return cellList.OrderByDescending(s => s.Cell_z).ThenBy(s => s.Cell_y).ThenBy(s => s.Cell_x).FirstOrDefault();
+                    return cellList.OrderByDescending(s => s.Cell_z)
+                                   .ThenBy(s => s.Cell_y)
+                                   .ThenBy(s => s.Cell_x)
+                                   .FirstOrDefault();
                 }
             }
             else
@@ -495,21 +515,32 @@ namespace WarehouseManagement.Cells
                 {
                     if (XBigToSmall)
                     {
-                        return cellList.OrderBy(s => s.Cell_z).ThenByDescending(s => s.Cell_y).ThenByDescending(s => s.Cell_x).FirstOrDefault();
+                        return cellList.OrderBy(s => s.Cell_z)
+                                       .ThenByDescending(s => s.Cell_y)
+                                       .ThenByDescending(s => s.Cell_x)
+                                       .FirstOrDefault();
                     }
-                    return cellList.OrderBy(s => s.Cell_z).ThenByDescending(s => s.Cell_y).ThenBy(s => s.Cell_x).FirstOrDefault();
+                    return cellList.OrderBy(s => s.Cell_z)
+                                   .ThenByDescending(s => s.Cell_y)
+                                   .ThenBy(s => s.Cell_x)
+                                   .FirstOrDefault();
                 }
                 else
                 {
                     if (XBigToSmall)
                     {
-                        return cellList.OrderBy(s => s.Cell_z).ThenBy(s => s.Cell_y).ThenByDescending(s => s.Cell_x).FirstOrDefault();
+                        return cellList.OrderBy(s => s.Cell_z)
+                                       .ThenBy(s => s.Cell_y)
+                                       .ThenByDescending(s => s.Cell_x)
+                                       .FirstOrDefault();
                     }
-                    return cellList.OrderBy(s => s.Cell_z).ThenBy(s => s.Cell_y).ThenBy(s => s.Cell_x).FirstOrDefault();
+                    return cellList.OrderBy(s => s.Cell_z)
+                                   .ThenBy(s => s.Cell_y)
+                                   .ThenBy(s => s.Cell_x)
+                                   .FirstOrDefault();
                 }
             }
         }
-
-
+        
     }
 }

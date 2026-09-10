@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace WarehouseManagement.StockTasks
 {
-    public enum ManageStatus
+    public enum TaskStatus
     {   
         /// <summary>
         /// 等待执行
         /// </summary>
         WaitingExecute,
         /// <summary>
-        /// 监控任务获取
+        /// 命令抓取
         /// </summary>
         OrderCatched,
         /// <summary>

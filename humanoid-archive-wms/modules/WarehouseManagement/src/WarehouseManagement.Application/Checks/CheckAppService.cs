@@ -27,6 +27,7 @@ using WarehouseManagement.TaskHiss.Dto;
 using WarehouseManagement.WcsTasks;
 using WarehouseManagement.WcsTasks.Dto;
 using Check = WarehouseManagement.Checks.Aggregates.Check;
+using TaskStatus = WarehouseManagement.StockTasks.TaskStatus;
 
 namespace WarehouseManagement.Checks
 {
@@ -235,7 +236,7 @@ namespace WarehouseManagement.Checks
                 var archiveBox = await _materialBoxManager.GetArchiveBoxByCellId(cellId);
                 if (archiveBox != null)
                 {
-                    stockTask.MaterialBoxBarcode = archiveBox.MaterialBoxRfid;
+                    stockTask.MaterialBoxBarcode = archiveBox.MaterialBoxBarcode;
                 }
                 else
                 {
@@ -245,8 +246,8 @@ namespace WarehouseManagement.Checks
                 stockTask.PlanId = checkId;
                 stockTask.PlanTypeCode = "Check";
                 stockTask.EndCellId = cellId;
-                stockTask.ManageTypeCode = ManageType.HpAnnualCheckDown;
-                stockTask.ManageStatus = ManageStatus.Executing;
+                stockTask.TaskTypeCode = TaskType.HpAnnualCheckDown;
+                stockTask.TaskStatus = TaskStatus.Executing;
                 stockTask.StartCellId = cellId;
                 stockTask.StartCellCode = cellCode;
                 stockTask.EndCellCode = cellCode;
@@ -293,7 +294,7 @@ namespace WarehouseManagement.Checks
             {
                 if (stock.MaterialBoxBarcode != "")
                 {
-                    var archiveBox = await _materialBoxManager.GetArchiveBoxByRfidCode(stock.MaterialBoxBarcode);
+                    var archiveBox = await _materialBoxManager.GetMaterialBoxByRfidCode(stock.MaterialBoxBarcode);
                     if(archiveBox == null)
                     {
                         throw new UserFriendlyException("档案盒标签不存在！");
@@ -341,16 +342,15 @@ namespace WarehouseManagement.Checks
             var stock= await _stockTaskManager.FindByIdAsync(stockId);
             if (stock != null)
             {
-                if(stock.ManageStatus == ManageStatus.WaitingExecute)
+                if(stock.TaskStatus == TaskStatus.WaitingExecute)
                 {
                     //创建WCS任务
                     var res = await DownloadToWcsAsync(stockId, cellCode);
                     //保存结果查询码
-                    stock.ManageRemark = res.QueryCode;
+                    stock.TaskRemark = res.QueryCode;
                     //更新库位状态到执行中
-                    stock.ManageStatus = ManageStatus.Executing;
-                    stock.ManageBeginTime = DateTime.Now.ToString();
-                    stock.ManageLaneWay = "盘点任务1号取货位";
+                    stock.TaskStatus = TaskStatus.Executing;
+                    stock.TaskBeginTime = DateTime.Now.ToString();
                     await _stockTaskManager.UpdateAsync(stock);
 
                     //更新库位状态
@@ -749,7 +749,7 @@ PagingCheckDetailInput input)
         public async Task CreateSurplusIn(string ArBoxRfid, string cellName)
         {
             //step1 获取是否存在库位终
-            var archiveBox = await _materialBoxManager.GetArchiveBoxByRfidCode(ArBoxRfid);
+            var archiveBox = await _materialBoxManager.GetMaterialBoxByRfidCode(ArBoxRfid);
             if(archiveBox == null)
             {
                 throw new UserFriendlyException("档案盒不存在，无法执行盘盈入库：");
@@ -786,8 +786,8 @@ PagingCheckDetailInput input)
             {
                 StartCellCode = null,
                 EndCellCode = cellName,
-                ManageTypeCode = ManageType.SurplusIn,
-                ManageStatus = ManageStatus.Complete,
+                TaskTypeCode = TaskType.SurplusIn,
+                TaskStatus = TaskStatus.Complete,
                 //ManageOperator = _currentUser.UserName,
                 //ManageCreateTime = DateTime.Now.ToString(),//增加创建时间
                 //ManageBeginTime = DateTime.Now.ToString(),
@@ -805,7 +805,7 @@ PagingCheckDetailInput input)
         public async Task CreateLossOut(string ArBoxRfid, string cellName)
         {
             //step1 获取是否存在库位终
-            var stg = await _materialBoxManager.GetArchiveBoxByRfidCode(ArBoxRfid);
+            var stg = await _materialBoxManager.GetMaterialBoxByRfidCode(ArBoxRfid);
             if (stg.CellId != 0)
             {
                 var cellnameE =await _cellManager.GetByIdAsync(stg.CellId);
@@ -840,8 +840,8 @@ PagingCheckDetailInput input)
             {
                 StartCellCode = null,
                 EndCellCode = null,
-                ManageTypeCode = ManageType.SurplusIn,
-                ManageStatus = ManageStatus.Complete,
+                TaskTypeCode = TaskType.SurplusIn,
+                TaskStatus = TaskStatus.Complete,
                 //ManageOperator = _currentUser.UserName,
                 //CreationTime = DateTime.Now.ToString(),//增加创建时间
                 //ManageBeginTime = DateTime.Now.ToString(),

@@ -7,6 +7,7 @@ using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
 using WarehouseManagement.StockTasks;
 using WarehouseManagement.StockTasks.Aggregates;
+using TaskStatus = WarehouseManagement.StockTasks.TaskStatus;
 
 namespace WarehouseManagement.TaskHiss.Aggregates
 {
@@ -24,8 +25,8 @@ namespace WarehouseManagement.TaskHiss.Aggregates
             //Id = id;
             StockTaskId = stockTask.Id;
             PlanTypeCode = stockTask.PlanTypeCode;
-            ManageTypeCode = stockTask.ManageTypeCode;
-            ManageStatus=stockTask.ManageStatus;
+            TaskTypeCode = stockTask.TaskTypeCode;
+            TaskStatus=stockTask.TaskStatus;
             StartCellPosition = stockTask.StartCellCode;
             EndCellPosition = stockTask.EndCellCode;
             StockBarcode =stockTask.MaterialBoxBarcode;
@@ -55,11 +56,11 @@ namespace WarehouseManagement.TaskHiss.Aggregates
         /// <summary>
         /// 任务类型
         /// </summary>
-        public ManageType ManageTypeCode { get; set; }
+        public TaskType TaskTypeCode { get; set; }
         /// <summary>
         /// 任务状态
         /// </summary>
-        public ManageStatus ManageStatus { get; set; }
+        public TaskStatus TaskStatus { get; set; }
         /// <summary>
         /// 料箱条码
         /// </summary>
@@ -71,19 +72,19 @@ namespace WarehouseManagement.TaskHiss.Aggregates
         /// <summary>
         /// 任务操作者
         /// </summary>
-        public string ManageOperator { get; set; }
+        public string TaskOperator { get; set; }
         /// <summary>
         /// 任务开始时间
         /// </summary>
-        public string ManageBeginTime { get; set; }
+        public string TaskBeginTime { get; set; }
         /// <summary>
         /// 任务完成时间
         /// </summary>
-        public string ManageEndTime { get; set; }
+        public string TaskEndTime { get; set; }
         /// <summary>
         /// 任务确认时间
         /// </summary>
-        public string ManageConfirmTime { get; set; }
+        public string TaskConfirmTime { get; set; }
         /// <summary>
         /// 任务备注
         /// </summary>

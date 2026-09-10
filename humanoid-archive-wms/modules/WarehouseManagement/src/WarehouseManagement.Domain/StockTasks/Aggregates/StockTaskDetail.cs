@@ -122,7 +122,7 @@ namespace WarehouseManagement.StockTasks.Aggregates
         public string GoodsBatchNo { get; set; }
         public string InspectResult { get; set; }
 
-        public ManageStatus StorageListStatus { get; set; }
+        public TaskStatus StorageListStatus { get; set; }
 
 
 

@@ -99,8 +99,8 @@ public static class WarehouseManagementDbContextModelCreatingExtensions
         {
             b.ToTable(WarehouseManagementDbProperties.DbTablePrefix + nameof(StockTask), WarehouseManagementDbProperties.DbSchema);
             b.HasIndex(q => q.CreationTime);
-            b.Property(b => b.ManageTypeCode).HasColumnType("varchar(20)");
-            b.Property(b => b.ManageStatus).HasColumnType("varchar(20)");
+            b.Property(b => b.TaskTypeCode).HasColumnType("varchar(20)");
+            b.Property(b => b.TaskStatus).HasColumnType("varchar(20)");
             //b.HasMany(u => u.Goodss).WithOne().HasForeignKey(ur => ur.StorageBoxId).IsRequired();
             b.ConfigureByConvention();
         });
@@ -120,8 +120,8 @@ public static class WarehouseManagementDbContextModelCreatingExtensions
         {
             b.ToTable(WarehouseManagementDbProperties.DbTablePrefix + nameof(TaskHis), WarehouseManagementDbProperties.DbSchema);
             b.HasIndex(q => q.CreationTime);
-            b.Property(b => b.ManageTypeCode).HasColumnType("varchar(20)");
-            b.Property(b => b.ManageStatus).HasColumnType("varchar(20)");
+            b.Property(b => b.TaskTypeCode).HasColumnType("varchar(20)");
+            b.Property(b => b.TaskStatus).HasColumnType("varchar(20)");
             //b.HasMany(u => u.Goodss).WithOne().HasForeignKey(ur => ur.StorageBoxId).IsRequired();
             b.ConfigureByConvention();
         });

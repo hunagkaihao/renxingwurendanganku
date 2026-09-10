@@ -72,7 +72,7 @@ namespace WarehouseManagement.EntityFrameworkCore.ArchiveBoxs
             return await (await GetDbSetAsync())
                 .IncludeDetails(includeDetails)//包含明细
                 .OrderBy(t => t.CreationTime)
-                .FirstOrDefaultAsync(t => t.MaterialBoxRfid == rfidCode, GetCancellationToken(cancellationToken));
+                .FirstOrDefaultAsync(t => t.MaterialBoxBarcode == rfidCode, GetCancellationToken(cancellationToken));
         }
 
         public async Task<MaterialBox> FindByCellIdAsync(int cellId, bool includeDetails = true, CancellationToken cancellationToken = default)
@@ -88,7 +88,7 @@ namespace WarehouseManagement.EntityFrameworkCore.ArchiveBoxs
             return await(await GetDbSetAsync())
                 .IncludeDetails(includeDetails)//包含明细
                 .OrderBy(t => t.CreationTime)
-                .FirstOrDefaultAsync(t => t.MaterialBoxRfid == materialBoxBarcode, GetCancellationToken(cancellationToken));
+                .FirstOrDefaultAsync(t => t.MaterialBoxBarcode == materialBoxBarcode, GetCancellationToken(cancellationToken));
         }
     }
 }

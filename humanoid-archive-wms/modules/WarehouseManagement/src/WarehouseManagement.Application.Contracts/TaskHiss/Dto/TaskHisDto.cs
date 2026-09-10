@@ -11,7 +11,7 @@ namespace WarehouseManagement.TaskHiss.Dto
         /// <summary>
         /// 任务类型
         /// </summary>
-        public ManageType ManageTypeCode { get; set; }
+        public TaskType TaskTypeCode { get; set; }
         /// <summary>
         /// 料箱条码
         /// </summary>
@@ -35,7 +35,7 @@ namespace WarehouseManagement.TaskHiss.Dto
         /// <summary>
         /// 任务状态
         /// </summary>
-        public ManageStatus ManageStatus { get; set; }
+        public TaskStatus TaskStatus { get; set; }
         /// <summary>
         /// 任务编号
         /// </summary>

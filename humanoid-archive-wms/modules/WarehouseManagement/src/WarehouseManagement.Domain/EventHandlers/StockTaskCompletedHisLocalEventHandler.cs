@@ -9,6 +9,7 @@ using Volo.Abp.EventBus.Distributed;
 using WarehouseManagement.StockTasks;
 using WarehouseManagement.StockTasks.Aggregates;
 using WarehouseManagement.TaskHiss;
+using TaskStatus = WarehouseManagement.StockTasks.TaskStatus;
 
 namespace WarehouseManagement.EventHandlers
 {
@@ -30,7 +31,7 @@ namespace WarehouseManagement.EventHandlers
         
         public async Task HandleEventAsync(StockTaskCompletedEto eventData)
         {
-            if (eventData.ManageStatus == ManageStatus.Complete.ToString())
+            if (eventData.ManageStatus == TaskStatus.Complete.ToString())
             {
                 var stockTask = await _stockTaskManager.FindByIdAsync(eventData.StockTaskId);
 

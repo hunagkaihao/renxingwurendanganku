@@ -12,10 +12,11 @@ import {
   StockTaskDetailDtoPagedResultDto,
   CellDtoListResultDto,
   IdIntInput,
-  ManageType,
-  ManageStatus,
+  TaskType,
+  TaskStatus,
   WcsTasksServiceProxy,
   OpenDoorDto,
+  CreateStockTaskDto,
 } from '/@/services/ServiceProxies';
 import { message } from 'ant-design-vue';
 import { useLoading } from '/@/components/Loading';
@@ -30,33 +31,33 @@ const [openFullLoading, closeFullLoading] = useLoading({
 export const manageTypeCodeSelectItem: SelectItem[] = [
   {
     label: '物料入库',
-    value: ManageType[ManageType.NPFullStockIn],
-    key: ManageType.NPFullStockIn,
+    value: TaskType[TaskType.NPFullStockIn],
+    key: TaskType.NPFullStockIn,
   },
   {
     label: '物料出库',
-    value: ManageType[ManageType.NpFullStockOut],
-    key: ManageType.NpFullStockOut,
+    value: TaskType[TaskType.NpFullStockOut],
+    key: TaskType.NpFullStockOut,
   },
   {
     label: '借用出库',
-    value: ManageType[ManageType.HPSortStockOut],
-    key: ManageType.HPSortStockOut,
+    value: TaskType[TaskType.HPSortStockOut],
+    key: TaskType.HPSortStockOut,
   },
   {
     label: '盘点任务',
-    value: ManageType[ManageType.HpAnnualCheckDown],
-    key: ManageType.HpAnnualCheckDown,
+    value: TaskType[TaskType.HpAnnualCheckDown],
+    key: TaskType.HpAnnualCheckDown,
   },
   {
     label: '批量入库',
-    value: ManageType[ManageType.HPBatchStockIn],
-    key: ManageType.HPBatchStockIn,
+    value: TaskType[TaskType.HPBatchStockIn],
+    key: TaskType.HPBatchStockIn,
   },
   {
     label: '盘盈入库',
-    value: ManageType[ManageType.SurplusIn],
-    key: ManageType.SurplusIn,
+    value: TaskType[TaskType.SurplusIn],
+    key: TaskType.SurplusIn,
   },
 ];
 
@@ -68,50 +69,60 @@ export const manageStatusSelectItem: SelectItem[] = [
   },
   {
     label: '等待执行',
-    value: ManageStatus[ManageStatus.WaitingExecute],
-    key: ManageStatus.WaitingExecute,
+    value: TaskStatus[TaskStatus.WaitingExecute],
+    key: TaskStatus.WaitingExecute,
   },
   {
     label: '已下达',
-    value: ManageStatus[ManageStatus.OrderCatched],
-    key: ManageStatus.OrderCatched,
+    value: TaskStatus[TaskStatus.OrderCatched],
+    key: TaskStatus.OrderCatched,
   },
   {
     label: '龙门抓取中',
-    value: ManageStatus[ManageStatus.RobotPlace],
-    key: ManageStatus.RobotPlace,
+    value: TaskStatus[TaskStatus.RobotPlace],
+    key: TaskStatus.RobotPlace,
   },
   {
     label: '取消',
-    value: ManageStatus[ManageStatus.Cancel],
-    key: ManageStatus.Cancel,
+    value: TaskStatus[TaskStatus.Cancel],
+    key: TaskStatus.Cancel,
   },
   {
     label: '完成',
-    value: ManageStatus[ManageStatus.Complete],
-    key: ManageStatus.Complete,
+    value: TaskStatus[TaskStatus.Complete],
+    key: TaskStatus.Complete,
   },
   {
     label: '错误',
-    value: ManageStatus[ManageStatus.Error],
-    key: ManageStatus.Error,
+    value: TaskStatus[TaskStatus.Error],
+    key: TaskStatus.Error,
   },
   {
     label: '已下达',
-    value: ManageStatus[ManageStatus.OrderCatched],
-    key: ManageStatus.OrderCatched,
+    value: TaskStatus[TaskStatus.OrderCatched],
+    key: TaskStatus.OrderCatched,
   },
   {
     label: '等待确认',
-    value: ManageStatus[ManageStatus.WaitingConfirm],
-    key: ManageStatus.WaitingConfirm,
+    value: TaskStatus[TaskStatus.WaitingConfirm],
+    key: TaskStatus.WaitingConfirm,
   },
   {
     label: '执行中',
-    value: ManageStatus[ManageStatus.Executing],
-    key: ManageStatus.Executing,
+    value: TaskStatus[TaskStatus.Executing],
+    key: TaskStatus.Executing,
   },
 ];
+
+export const materialTypeSelectItem: SelectItem[] = [
+  { label: '膜料', value: 'ML', key: 1 },
+  { label: '粒料', value: 'LL', key: 0 },
+];
+
+function getSelectLabel(options: SelectItem[], value: unknown): string {
+  const item = options.find((option) => option.key == value || option.value == value);
+  return item?.label ?? (value === null || value === undefined || value === '' ? '-' : String(value));
+}
 
 export const tableColumns: BasicColumn[] = [
   {
@@ -129,16 +140,16 @@ export const tableColumns: BasicColumn[] = [
   },
   {
     title: t('routes.stockTask.stockTaskManagement_manageTypeCode'),
-    dataIndex: 'manageTypeCode',
+    dataIndex: 'taskTypeCode',
     customRender: ({ text }) => {
-      return manageTypeCodeSelectItem.filter((f) => f.key == text)[0].label;
+      return getSelectLabel(manageTypeCodeSelectItem, text);
     },
   },
   {
     title: t('routes.stockTask.stockTaskManagement_manageStatus'),
-    dataIndex: 'manageStatus',
+    dataIndex: 'taskStatus',
     customRender: ({ text }) => {
-      return manageStatusSelectItem.filter((f) => f.key == text)[0].label;
+      return getSelectLabel(manageStatusSelectItem, text);
     },
   },
   {
@@ -251,10 +262,10 @@ export const searchFormSchema: FormSchema[] = [
 
 export const createFormSchema: FormSchema[] = [
   {
-    field: 'stockTaskBarcode',
+    field: 'materialCode',
     component: 'Input',
-    label: t('routes.stockTask.stockTaskManagement_stockTaskBarcode'),
-    labelWidth: 85,
+    label: '物料条码',
+    labelWidth: 100,
     required: true,
     colProps: {
       span: 12,
@@ -262,6 +273,30 @@ export const createFormSchema: FormSchema[] = [
     componentProps: {
       autocomplete: 'off',
     },
+  },
+  {
+    field: 'materialName', component: 'Input', label: '物料名称', labelWidth: 100, required: true,
+    colProps: { span: 12 }, componentProps: { autocomplete: 'off' },
+  },
+  {
+    field: 'materialType', component: 'Select', label: '物料类型', labelWidth: 100, required: true,
+    colProps: { span: 12 }, componentProps: { options: materialTypeSelectItem },
+  },
+  {
+    field: 'materialUnit', component: 'Input', label: '单位', labelWidth: 100, required: true,
+    colProps: { span: 12 }, componentProps: { autocomplete: 'off' },
+  },
+  {
+    field: 'validityDays', component: 'InputNumber', label: '有效期（天）', labelWidth: 100, required: true,
+    colProps: { span: 12 }, componentProps: { min: 0, precision: 0 },
+  },
+  {
+    field: 'creatorUserCode', component: 'Input', label: '创建用户 ID', labelWidth: 100, required: true,
+    colProps: { span: 12 }, componentProps: { autocomplete: 'off' },
+  },
+  {
+    field: 'materialCreateTime', component: 'DatePicker', label: '创建时间', labelWidth: 100, required: true,
+    colProps: { span: 12 }, componentProps: { showTime: true, valueFormat: 'YYYY-MM-DD HH:mm:ss', format: 'YYYY-MM-DD HH:mm:ss' },
   },
 ];
 
@@ -438,6 +473,16 @@ export async function updateStockTaskAsync({
 
   const _stockTasksServiceProxy = new StockTasksServiceProxy();
   await _stockTasksServiceProxy.update(request);
+  changeOkLoading(false);
+  resetFields();
+  message.success(t('common.operationSuccess'));
+  closeModal();
+}
+
+export async function createWCSInAsync({ request, changeOkLoading, validate, closeModal, resetFields }) {
+  changeOkLoading(true);
+  await validate();
+  await new StockTasksServiceProxy().createWCSIn(new CreateStockTaskDto(request));
   changeOkLoading(false);
   resetFields();
   message.success(t('common.operationSuccess'));

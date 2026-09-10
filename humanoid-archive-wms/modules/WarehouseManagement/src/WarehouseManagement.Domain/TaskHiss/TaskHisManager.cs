@@ -5,6 +5,7 @@ using Volo.Abp;
 using WarehouseManagement.StockTasks;
 using WarehouseManagement.StockTasks.Aggregates;
 using WarehouseManagement.TaskHiss.Aggregates;
+using TaskStatus = WarehouseManagement.StockTasks.TaskStatus;
 
 namespace WarehouseManagement.TaskHiss
 {
@@ -69,7 +70,7 @@ namespace WarehouseManagement.TaskHiss
         //获取七日出入库数据
         public async Task<List<TaskHis>> GetSevenDayHisAsync()
         {
-            var entity = await _taskHisRepository.GetListAsync(x => x.ManageStatus == ManageStatus.Complete & (x.ManageTypeCode == ManageType.NPFullStockIn|| x.ManageTypeCode == ManageType.NPSortStockOut || x.ManageTypeCode == ManageType.HPSortStockOut));
+            var entity = await _taskHisRepository.GetListAsync(x => x.TaskStatus == TaskStatus.Complete & (x.TaskTypeCode == TaskType.NPFullStockIn|| x.TaskTypeCode == TaskType.NPSortStockOut || x.TaskTypeCode == TaskType.HPSortStockOut));
             return entity;
         }
     }

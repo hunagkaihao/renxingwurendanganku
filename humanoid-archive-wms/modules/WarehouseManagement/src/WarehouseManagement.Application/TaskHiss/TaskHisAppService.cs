@@ -16,6 +16,7 @@ using WarehouseManagement.Goodss;
 using WarehouseManagement.Cells;
 using WarehouseManagement.StockTasks;
 using WarehouseManagement.Material;
+using TaskStatus = WarehouseManagement.StockTasks.TaskStatus;
 
 namespace WarehouseManagement.TaskHiss
 {
@@ -72,7 +73,7 @@ namespace WarehouseManagement.TaskHiss
                         //from ecell in ec.DefaultIfEmpty()
                         where taskHis.CreationTime >= input.StartCreationTime & taskHis.CreationTime <= input.EndCreationTime 
                         & taskHis.StockBarcode.Contains(input.Filter.IsNullOrEmpty() ? "" : input.Filter.Trim())
-                        & (input.ManageStatus == "All" ? 1 == 1 : taskHis.ManageStatus == Enum.Parse<ManageStatus>(input.ManageStatus))
+                        & (input.ManageStatus == "All" ? 1 == 1 : taskHis.TaskStatus == Enum.Parse<TaskStatus>(input.ManageStatus))
                         orderby taskHis.CreationTime descending
                         select new { taskHis};
 

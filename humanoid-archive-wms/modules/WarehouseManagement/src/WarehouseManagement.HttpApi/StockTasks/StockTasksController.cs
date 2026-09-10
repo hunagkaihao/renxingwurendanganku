@@ -58,7 +58,7 @@ namespace WarehouseManagement.StockTasks
             return await _stockTaskAppService.SetAsCancelAsync(input);
         }
         [HttpPost("pickOutTask")]
-        [SwaggerOperation(summary: "创建借阅出库任务", Tags = new[] { "StockTasks" })]
+        [SwaggerOperation(summary: "创建借用出库任务", Tags = new[] { "StockTasks" })]
         public async Task<bool> PickOutTask(List<PickOutDto> input)
         {
             return await _stockTaskAppService.PickOutTask(input);

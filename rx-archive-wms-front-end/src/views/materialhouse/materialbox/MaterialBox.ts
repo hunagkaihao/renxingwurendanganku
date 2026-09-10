@@ -89,7 +89,7 @@ export const cellModelSelectItem: SelectItem[] = [
   },
   {
     label: '薄膜',
-    value: 'BL',
+    value: 'ML',
     key: 1,
   },
 ];
@@ -420,7 +420,7 @@ export async function createWCSIn({ id, reload }) {
     const _stockTasksServiceProxy = new StockTasksServiceProxy();
     openFullLoading();
     const request = new CreateStockTaskDto();
-    request.archiveBoxId = id;
+    request.materialBoxId = id;
     await _stockTasksServiceProxy.createWCSIn(request);
     closeFullLoading();
     message.success(t('common.operationSuccess'));
@@ -435,7 +435,7 @@ export async function createWCSOut({ id, reload }) {
     const _stockTasksServiceProxy = new StockTasksServiceProxy();
     openFullLoading();
     const request = new CreateStockTaskDto();
-    request.archiveBoxId = id;
+    request.materialBoxId = id;
     await _stockTasksServiceProxy.createWCSOut(request);
     closeFullLoading();
     message.success(t('common.operationSuccess'));

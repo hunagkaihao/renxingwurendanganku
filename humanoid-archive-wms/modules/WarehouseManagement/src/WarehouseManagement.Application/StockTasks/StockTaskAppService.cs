@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Lion.AbpPro.Extension.Customs.Dtos;
@@ -80,7 +81,7 @@ namespace WarehouseManagement.StockTasks
                         where stockTask.CreationTime >= input.StartCreationTime & stockTask.CreationTime <= input.EndCreationTime
                         & stockTask.MaterialBoxBarcode.Contains(input.Filter.IsNullOrEmpty() ? "" : input.Filter.Trim())
                         //& stockTask.ManageStatus.ToString().Contains(input.ManageStatus=="All"?"":input.ManageStatus)
-                        & (input.ManageStatus == "All" ? 1 == 1 : stockTask.ManageStatus == Enum.Parse<ManageStatus>(input.ManageStatus))
+                        & (input.ManageStatus == "All" ? 1 == 1 : stockTask.TaskStatus == Enum.Parse<TaskStatus>(input.ManageStatus))
                         select new { stockTask };
 
             //Paging
@@ -265,36 +266,37 @@ namespace WarehouseManagement.StockTasks
         /// <param name="input"></param>
         /// <returns></returns>
         /// <exception cref="UserFriendlyException"></exception>
+        [UnitOfWork]
         public async Task<StockTaskDto> CreateWCSIn(CreateStockTaskDto input)
         {
-            // 待修改：根据传入的物料信息，创建对应的容器和任务。不检查是否有对应容器。
-            
-            // 查找物料盒对象
-            MaterialBox materialBoxObj;
-            if (input.MaterialBoxId != 0)
+            if (!DateTime.TryParseExact(
+                    input.MaterialCreateTime,
+                    "yyyy-MM-dd HH:mm:ss",
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.None,
+                    out var materialCreateTime))
             {
-                materialBoxObj = await _materialBoxRepository.FindByIdAsync(input.MaterialBoxId);
+                throw new UserFriendlyException("创建时间格式必须为 yyyy-MM-dd HH:mm:ss");
             }
-            else
+
+            // 每次预约均按传入物料创建容器记录；不查询或校验既有容器状态。
+            var materialBoxObj = new MaterialBox(input.MaterialName, input.MaterialCode)
             {
-                materialBoxObj = await _materialBoxRepository.FindByMaterialBoxcodeAsync(input.MaterialCode);
-            }
-            
-            // 校验物料盒状态
-            if (materialBoxObj.CellModel == null)
-            {
-                throw new UserFriendlyException("物料容器未设置类型");
-            }
-            if (materialBoxObj.MaterialBoxRfid == null)
-            {
-                throw new UserFriendlyException("物料容器未绑定标签");
-            }
-            
+                MaterialBoxBarcode = input.MaterialCode,
+                CellModel = input.MaterialType,
+                MaterialUnit = input.MaterialUnit,
+                RetentionPeriod = input.ValidityDays.ToString(CultureInfo.InvariantCulture),
+                MaterialPeople = input.CreatorUserCode,
+                MaterialInDate = materialCreateTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture),
+                CreationTime = materialCreateTime
+            };
+            materialBoxObj = await _materialBoxRepository.InsertAsync(materialBoxObj, true);
+
             // 设置任务类型
-            input.ManageTypeCode = ManageType.NPFullStockIn.ToString();
+            input.TaskTypeCode = TaskType.NPFullStockIn.ToString();
             
             // 创建入库任务
-            var stockTask = await _stockTaskManagement.CreateWCSIn(input.ManageTypeCode, materialBoxObj);
+            var stockTask = await _stockTaskManagement.CreateWCSIn(input.TaskTypeCode, materialBoxObj);
             
             // 放回结果给前端
             return base.ObjectMapper.Map<StockTask, StockTaskDto>(stockTask);
@@ -354,7 +356,6 @@ namespace WarehouseManagement.StockTasks
         [UnitOfWork]
         public async Task<bool> TaskAssignUseRfid(string rfid)
         {
-            CreateStockTaskDto stockTaskDto = new();
             OpenDoorDto openDoorDto = new();
             //找到档案盒
             var box = await _materialBoxRepository.FindByRfidCodeAsync(rfid);
@@ -362,13 +363,11 @@ namespace WarehouseManagement.StockTasks
             {
                 throw new UserFriendlyException("档案盒不存在!!");
             }
-            else
-            {
-                stockTaskDto.MaterialBoxId = box.Id;
-            }
-
-            //创建任务
-            var stock = await CreateWCSIn(stockTaskDto);
+            // 一体机流程使用已扫描到的容器创建任务，不走外部预约接口的物料建档参数校验。
+            var stockTask = await _stockTaskManagement.CreateWCSIn(
+                TaskType.NPFullStockIn.ToString(),
+                box);
+            var stock = base.ObjectMapper.Map<StockTask, StockTaskDto>(stockTask);
             if (stock == null)
             {
                 throw new UserFriendlyException(message: "创建任务失败");
@@ -424,9 +423,9 @@ namespace WarehouseManagement.StockTasks
             {
                 materialBoxObj = await _materialBoxRepository.FindByMaterialBoxcodeAsync(input.MaterialCode);
             }
-            input.ManageTypeCode = ManageType.NPSortStockOut.ToString();
+            input.TaskTypeCode = TaskType.NPSortStockOut.ToString();
             // var stockTask = await _stockTaskManagement.CreateStockInAsync(input.ManageTypeCode, storageBoxObj, storageBoxObj.Details, input.StartCellCode, input.EndCellId);
-            var stockTask = await _stockTaskManagement.CreateWCSOut(input.ManageTypeCode, materialBoxObj);
+            var stockTask = await _stockTaskManagement.CreateWCSOut(input.TaskTypeCode, materialBoxObj);
             return base.ObjectMapper.Map<StockTask, StockTaskDto>(stockTask);
         }
         public async Task<bool> BatBoxInByArea(string areaCode)
@@ -480,8 +479,8 @@ namespace WarehouseManagement.StockTasks
                     mainObj.EndCellId = cId;
                     mainObj.EndCellCode = cell.CellCode;
                     mainObj.PlanId = plan.Id;
-                    mainObj.ManageTypeCode = ManageType.HPBatchStockIn;
-                    mainObj.ManageStatus = ManageStatus.Executing;
+                    mainObj.TaskTypeCode = TaskType.HPBatchStockIn;
+                    mainObj.TaskStatus = TaskStatus.Executing;
                     var st = base.ObjectMapper.Map<StockTaskDto, StockTask>(mainObj);
                     var stock = await _stockTaskManagement.CreateCheckAsync(st);
 
@@ -509,7 +508,7 @@ namespace WarehouseManagement.StockTasks
         [UnitOfWork]
         public async Task<List<StockTaskDto>> GetInOutTask()
         {
-            var manageMainlist =await _stockTaskRepository.GetListAsync(a => a.ManageTypeCode == ManageType.NPFullStockIn || a.ManageTypeCode == ManageType.NPSortStockOut);
+            var manageMainlist =await _stockTaskRepository.GetListAsync(a => a.TaskTypeCode == TaskType.NPFullStockIn || a.TaskTypeCode == TaskType.NPSortStockOut);
             List<StockTaskDto> listResultDtos = new();
             foreach (var item in manageMainlist)
             {
@@ -573,7 +572,7 @@ namespace WarehouseManagement.StockTasks
             await WCSSetCell(stockId);
             var mge = await _stockTaskManagement.FindByIdAsync(stockId);
             
-            if (mge.ManageTypeCode == ManageType.HpAnnualCheckDown)
+            if (mge.TaskTypeCode == TaskType.HpAnnualCheckDown)
             {
                 //_storageManager.UnLockCell(mge.StartCellId);
                 //_storageManager.UnLockCell(mge.EndCellId);
@@ -583,7 +582,7 @@ namespace WarehouseManagement.StockTasks
                 //更新料箱的库位状态
                 var box = await _materialBoxManager.UpdateStockCellAsync(mge.MaterialBoxBarcode, endCell.Id);
             }
-            else if (mge.ManageTypeCode == ManageType.NpFullStockOut)
+            else if (mge.TaskTypeCode == TaskType.NpFullStockOut)
             {
                 //出库时 库存处理
                 var endCell = await _cellManager.SetAsStockOutAsync((int)mge.EndCellId);
@@ -591,7 +590,7 @@ namespace WarehouseManagement.StockTasks
                 //CompleteHandleCellOut(mge.StartCellId, mge.EndCellId);
                 var box = await _materialBoxManager.UpdateStockOutCellAsync(mge.MaterialBoxBarcode);
             }
-            else if (mge.ManageTypeCode == ManageType.HPBatchStockIn)
+            else if (mge.TaskTypeCode == TaskType.HPBatchStockIn)
             {
                 //设置库位状态
                 var endCell = await _cellManager.SetAsStockOutAsync((int)mge.EndCellId);
@@ -615,8 +614,8 @@ namespace WarehouseManagement.StockTasks
 
 
             //更新任务状态
-            mge.ManageEndTime = DateTime.Now.ToString();
-            mge.ManageStatus = ManageStatus.Complete;
+            mge.TaskEndTime = DateTime.Now.ToString();
+            mge.TaskStatus = TaskStatus.Complete;
             await _stockTaskRepository.UpdateAsync(mge);
             await CurrentUnitOfWork.SaveChangesAsync();
         }

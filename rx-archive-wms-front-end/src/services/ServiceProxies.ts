@@ -19847,8 +19847,14 @@ export class CreateStockTaskDto implements ICreateStockTaskDto {
     manageTypeCode!: string | undefined;
     storageBoxId!: number;
     stockBarcode!: string | undefined;
-    archiveBoxId!: number;
-    archiveCode!: string | undefined;
+    materialBoxId!: number;
+    materialCode!: string | undefined;
+    materialName!: string | undefined;
+    materialType!: string | undefined;
+    materialUnit!: string | undefined;
+    validityDays!: number;
+    creatorUserCode!: string | undefined;
+    materialCreateTime!: string | undefined;
     startCellId!: number;
     startCellCode!: string | undefined;
     endCellId!: number;
@@ -19869,8 +19875,14 @@ export class CreateStockTaskDto implements ICreateStockTaskDto {
             this.manageTypeCode = _data["manageTypeCode"];
             this.storageBoxId = _data["storageBoxId"];
             this.stockBarcode = _data["stockBarcode"];
-            this.archiveBoxId = _data["archiveBoxId"];
-            this.archiveCode = _data["archiveCode"];
+            this.materialBoxId = _data["materialBoxId"];
+            this.materialCode = _data["materialCode"];
+            this.materialName = _data["materialName"];
+            this.materialType = _data["materialType"];
+            this.materialUnit = _data["materialUnit"];
+            this.validityDays = _data["validityDays"];
+            this.creatorUserCode = _data["creatorUserCode"];
+            this.materialCreateTime = _data["materialCreateTime"];
             this.startCellId = _data["startCellId"];
             this.startCellCode = _data["startCellCode"];
             this.endCellId = _data["endCellId"];
@@ -19891,8 +19903,14 @@ export class CreateStockTaskDto implements ICreateStockTaskDto {
         data["manageTypeCode"] = this.manageTypeCode;
         data["storageBoxId"] = this.storageBoxId;
         data["stockBarcode"] = this.stockBarcode;
-        data["archiveBoxId"] = this.archiveBoxId;
-        data["archiveCode"] = this.archiveCode;
+        data["materialBoxId"] = this.materialBoxId;
+        data["materialCode"] = this.materialCode;
+        data["materialName"] = this.materialName;
+        data["materialType"] = this.materialType;
+        data["materialUnit"] = this.materialUnit;
+        data["validityDays"] = this.validityDays;
+        data["creatorUserCode"] = this.creatorUserCode;
+        data["materialCreateTime"] = this.materialCreateTime;
         data["startCellId"] = this.startCellId;
         data["startCellCode"] = this.startCellCode;
         data["endCellId"] = this.endCellId;
@@ -19906,8 +19924,14 @@ export interface ICreateStockTaskDto {
     manageTypeCode: string | undefined;
     storageBoxId: number;
     stockBarcode: string | undefined;
-    archiveBoxId: number;
-    archiveCode: string | undefined;
+    materialBoxId: number;
+    materialCode: string | undefined;
+    materialName: string | undefined;
+    materialType: string | undefined;
+    materialUnit: string | undefined;
+    validityDays: number;
+    creatorUserCode: string | undefined;
+    materialCreateTime: string | undefined;
     startCellId: number;
     startCellCode: string | undefined;
     endCellId: number;
@@ -24357,7 +24381,7 @@ export enum LoginResultType {
     RequiresTwoFactor = 5,
 }
 
-export enum ManageStatus {
+export enum TaskStatus {
     WaitingExecute = 0,
     OrderCatched = 1,
     Executing = 2,
@@ -24380,7 +24404,7 @@ export enum ManageStatus {
     TaskDeleteRequest = 19,
 }
 
-export enum ManageType {
+export enum TaskType {
     NPFullStockIn = 0,
     HPFullStockIn = 1,
     NPSortStockOut = 2,
@@ -26621,7 +26645,7 @@ export class PagingStockTaskListInput implements IPagingStockTaskListInput {
     filter!: string | undefined;
     startCreationTime!: moment.Moment;
     endCreationTime!: moment.Moment;
-    manageStatus!: string | undefined;
+    taskStatus!: string | undefined;
 
     constructor(data?: IPagingStockTaskListInput) {
         if (data) {
@@ -26640,7 +26664,7 @@ export class PagingStockTaskListInput implements IPagingStockTaskListInput {
             this.filter = _data["filter"];
             this.startCreationTime = _data["startCreationTime"] ? moment(_data["startCreationTime"].toString()) : <any>undefined;
             this.endCreationTime = _data["endCreationTime"] ? moment(_data["endCreationTime"].toString()) : <any>undefined;
-            this.manageStatus = _data["manageStatus"];
+            this.taskStatus = _data["manageStatus"];
         }
     }
 
@@ -26659,7 +26683,7 @@ export class PagingStockTaskListInput implements IPagingStockTaskListInput {
         data["filter"] = this.filter;
         data["startCreationTime"] = this.startCreationTime ? this.startCreationTime.toISOString() : <any>undefined;
         data["endCreationTime"] = this.endCreationTime ? this.endCreationTime.toISOString() : <any>undefined;
-        data["manageStatus"] = this.manageStatus;
+        data["taskStatus"] = this.taskStatus;
         return data;
     }
 }
@@ -26674,7 +26698,7 @@ export interface IPagingStockTaskListInput {
     filter: string | undefined;
     startCreationTime: moment.Moment;
     endCreationTime: moment.Moment;
-    manageStatus: string | undefined;
+    taskStatus: string | undefined;
 }
 
 export class PagingTaskHisDetailInput implements IPagingTaskHisDetailInput {
@@ -28816,17 +28840,16 @@ export class StockTaskDto implements IStockTaskDto {
     creatorId!: string | undefined;
     lastModificationTime!: moment.Moment | undefined;
     lastModifierId!: string | undefined;
-    manageTypeCode!: ManageType;
-    manageTypeCodeString!: string | undefined;
-    stockBarcode!: string | undefined;
-    archiveBoxRfid!: string | undefined;
+    taskTypeCode!: TaskType;
+    taskTypeCodeString!: string | undefined;
+    materialBoxBarcode!: string | undefined;
     planTypeCode!: string | undefined;
     startCellId!: number;
     startCellCode!: string | undefined;
     endCellId!: number | undefined;
     endCellCode!: string | undefined;
-    manageStatus!: ManageStatus;
-    manageStatusString!: string | undefined;
+    taskStatus!: TaskStatus;
+    taskStatusString!: string | undefined;
     planId!: number;
     manageLaneWay!: string | undefined;
 
@@ -28846,17 +28869,16 @@ export class StockTaskDto implements IStockTaskDto {
             this.creatorId = _data["creatorId"];
             this.lastModificationTime = _data["lastModificationTime"] ? moment(_data["lastModificationTime"].toString()) : <any>undefined;
             this.lastModifierId = _data["lastModifierId"];
-            this.manageTypeCode = _data["manageTypeCode"];
-            this.manageTypeCodeString = _data["manageTypeCodeString"];
-            this.stockBarcode = _data["stockBarcode"];
-            this.archiveBoxRfid = _data["archiveBoxRfid"];
+            this.taskTypeCode = _data["taskTypeCode"];
+            this.taskTypeCodeString = _data["taskTypeCodeString"];
+            this.materialBoxBarcode = _data["materialBoxBarcode"];
             this.planTypeCode = _data["planTypeCode"];
             this.startCellId = _data["startCellId"];
             this.startCellCode = _data["startCellCode"];
             this.endCellId = _data["endCellId"];
             this.endCellCode = _data["endCellCode"];
-            this.manageStatus = _data["manageStatus"];
-            this.manageStatusString = _data["manageStatusString"];
+            this.taskStatus = _data["taskStatus"];
+            this.taskStatusString = _data["taskStatusString"];
             this.planId = _data["planId"];
             this.manageLaneWay = _data["manageLaneWay"];
         }
@@ -28876,17 +28898,16 @@ export class StockTaskDto implements IStockTaskDto {
         data["creatorId"] = this.creatorId;
         data["lastModificationTime"] = this.lastModificationTime ? this.lastModificationTime.toISOString() : <any>undefined;
         data["lastModifierId"] = this.lastModifierId;
-        data["manageTypeCode"] = this.manageTypeCode;
-        data["manageTypeCodeString"] = this.manageTypeCodeString;
-        data["stockBarcode"] = this.stockBarcode;
-        data["archiveBoxRfid"] = this.archiveBoxRfid;
+        data["taskTypeCode"] = this.taskTypeCode;
+        data["taskTypeCodeString"] = this.taskTypeCodeString;
+        data["materialBoxBarcode"] = this.materialBoxBarcode;
         data["planTypeCode"] = this.planTypeCode;
         data["startCellId"] = this.startCellId;
         data["startCellCode"] = this.startCellCode;
         data["endCellId"] = this.endCellId;
         data["endCellCode"] = this.endCellCode;
-        data["manageStatus"] = this.manageStatus;
-        data["manageStatusString"] = this.manageStatusString;
+        data["taskStatus"] = this.taskStatus;
+        data["taskStatusString"] = this.taskStatusString;
         data["planId"] = this.planId;
         data["manageLaneWay"] = this.manageLaneWay;
         return data;
@@ -28899,17 +28920,16 @@ export interface IStockTaskDto {
     creatorId: string | undefined;
     lastModificationTime: moment.Moment | undefined;
     lastModifierId: string | undefined;
-    manageTypeCode: ManageType;
-    manageTypeCodeString: string | undefined;
-    stockBarcode: string | undefined;
-    archiveBoxRfid: string | undefined;
+    taskTypeCode: TaskType;
+    taskTypeCodeString: string | undefined;
+    materialBoxBarcode: string | undefined;
     planTypeCode: string | undefined;
     startCellId: number;
     startCellCode: string | undefined;
     endCellId: number | undefined;
     endCellCode: string | undefined;
-    manageStatus: ManageStatus;
-    manageStatusString: string | undefined;
+    taskStatus: TaskStatus;
+    taskStatusString: string | undefined;
     planId: number;
     manageLaneWay: string | undefined;
 }
@@ -29140,13 +29160,13 @@ export class TaskHisDto implements ITaskHisDto {
     creatorId!: string | undefined;
     lastModificationTime!: moment.Moment | undefined;
     lastModifierId!: string | undefined;
-    manageTypeCode!: ManageType;
+    taskTypeCode!: TaskType;
     stockBarcode!: string | undefined;
     startCellId!: number | undefined;
     startCellPosition!: string | undefined;
     endCellId!: number | undefined;
     endCellPosition!: string | undefined;
-    manageStatus!: ManageStatus;
+    taskStatus!: TaskStatus;
     manageLaneWay!: string | undefined;
 
     constructor(data?: ITaskHisDto) {
@@ -29165,13 +29185,13 @@ export class TaskHisDto implements ITaskHisDto {
             this.creatorId = _data["creatorId"];
             this.lastModificationTime = _data["lastModificationTime"] ? moment(_data["lastModificationTime"].toString()) : <any>undefined;
             this.lastModifierId = _data["lastModifierId"];
-            this.manageTypeCode = _data["manageTypeCode"];
+            this.taskTypeCode = _data["taskTypeCode"];
             this.stockBarcode = _data["stockBarcode"];
             this.startCellId = _data["startCellId"];
             this.startCellPosition = _data["startCellPosition"];
             this.endCellId = _data["endCellId"];
             this.endCellPosition = _data["endCellPosition"];
-            this.manageStatus = _data["manageStatus"];
+            this.taskStatus = _data["taskStatus"];
             this.manageLaneWay = _data["manageLaneWay"];
         }
     }
@@ -29190,13 +29210,13 @@ export class TaskHisDto implements ITaskHisDto {
         data["creatorId"] = this.creatorId;
         data["lastModificationTime"] = this.lastModificationTime ? this.lastModificationTime.toISOString() : <any>undefined;
         data["lastModifierId"] = this.lastModifierId;
-        data["manageTypeCode"] = this.manageTypeCode;
+        data["taskTypeCode"] = this.taskTypeCode;
         data["stockBarcode"] = this.stockBarcode;
         data["startCellId"] = this.startCellId;
         data["startCellPosition"] = this.startCellPosition;
         data["endCellId"] = this.endCellId;
         data["endCellPosition"] = this.endCellPosition;
-        data["manageStatus"] = this.manageStatus;
+        data["taskStatus"] = this.taskStatus;
         data["manageLaneWay"] = this.manageLaneWay;
         return data;
     }
@@ -29208,13 +29228,13 @@ export interface ITaskHisDto {
     creatorId: string | undefined;
     lastModificationTime: moment.Moment | undefined;
     lastModifierId: string | undefined;
-    manageTypeCode: ManageType;
+    taskTypeCode: TaskType;
     stockBarcode: string | undefined;
     startCellId: number | undefined;
     startCellPosition: string | undefined;
     endCellId: number | undefined;
     endCellPosition: string | undefined;
-    manageStatus: ManageStatus;
+    taskStatus: TaskStatus;
     manageLaneWay: string | undefined;
 }
 

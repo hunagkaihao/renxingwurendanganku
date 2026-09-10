@@ -10,6 +10,7 @@ using Volo.Abp.EventBus.Distributed;
 using WarehouseManagement.Plans;
 using WarehouseManagement.StockTasks;
 using WarehouseManagement.StockTasks.Aggregates;
+using TaskStatus = WarehouseManagement.StockTasks.TaskStatus;
 
 namespace WarehouseManagement.EventHandlers
 {
@@ -33,28 +34,28 @@ namespace WarehouseManagement.EventHandlers
         public async Task HandleEventAsync(StockTaskCompletedEto eventData)
         {
             var stockTask = await _stockTaskManager.FindByIdAsync(eventData.StockTaskId);
-            if (eventData.ManageStatus == ManageStatus.WaitingExecute.ToString())
+            if (eventData.ManageStatus == TaskStatus.WaitingExecute.ToString())
             {
                 await _planManager.UpdateExcuteQtyAsync(stockTask.Details);
             }
-            else if (eventData.ManageStatus == ManageStatus.Complete.ToString())
+            else if (eventData.ManageStatus == TaskStatus.Complete.ToString())
             {
                 await _planManager.UpdateCompleteQtyAsync(stockTask.Details);
 
             }
-            else if (eventData.ManageStatus == ManageStatus.Cancel.ToString())
+            else if (eventData.ManageStatus == TaskStatus.Cancel.ToString())
             {
                 await _planManager.UpdateCancelQtyAsync(stockTask.Details);
             }
             //var stockTask = await _stockTaskManager.FindByIdAsync(eventData.StockTaskId);
-            if (eventData.ManageTypeCode == StockTasks.ManageType.NPFullStockIn)
+            if (eventData.TaskTypeCode == StockTasks.TaskType.NPFullStockIn)
             {
                 //await _storageBoxManager.UpdateStockCellAsync(eventData.StockBarcode, eventData.EndCellId);
             }
-            if (eventData.ManageTypeCode == ManageType.NpFullStockOut
-                || eventData.ManageTypeCode == ManageType.NPSortStockOut
-                || eventData.ManageTypeCode == ManageType.EmptyStockOut
-                || eventData.ManageTypeCode == ManageType.HpAnnualCheckDown)
+            if (eventData.TaskTypeCode == TaskType.NpFullStockOut
+                || eventData.TaskTypeCode == TaskType.NPSortStockOut
+                || eventData.TaskTypeCode == TaskType.EmptyStockOut
+                || eventData.TaskTypeCode == TaskType.HpAnnualCheckDown)
             {
                 //await _storageBoxManager.UpdateOutStockCellAsync(eventData.StockBarcode, eventData.StartCellId, stockTask.Details);
             }

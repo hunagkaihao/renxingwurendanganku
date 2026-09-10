@@ -50,8 +50,8 @@ namespace WarehouseManagement.Boards
             {
                 slist.Add(DateTime.Now.AddDays(-i).Day.ToString() + "日");
                 ilist.Add(entity.Count(x => x.CreationTime.Date == DateTime.Now.AddDays(-i).Date));
-                inlist.Add(entity.Count(x => x.CreationTime.Date == DateTime.Now.AddDays(-i).Date & x.ManageTypeCode == ManageType.NPFullStockIn));
-                outlist.Add(entity.Count(x => x.CreationTime.Date == DateTime.Now.AddDays(-i).Date & x.ManageTypeCode == ManageType.NPSortStockOut));
+                inlist.Add(entity.Count(x => x.CreationTime.Date == DateTime.Now.AddDays(-i).Date & x.TaskTypeCode == TaskType.NPFullStockIn));
+                outlist.Add(entity.Count(x => x.CreationTime.Date == DateTime.Now.AddDays(-i).Date & x.TaskTypeCode == TaskType.NPSortStockOut));
             }
             sevenDayTasksDto.TotalCount = entity.Count;
             sevenDayTasksDto.Keys = slist;

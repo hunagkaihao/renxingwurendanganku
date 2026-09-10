@@ -126,7 +126,7 @@ namespace Lion.AbpPro.Jobs
                             if (_wcsApiManager.WCSSimulation)
                             {
                                 var planStocks = stocks
-                                    .Where(f => f.ManageTypeCode == ManageType.HPBatchStockIn)
+                                    .Where(f => f.TaskTypeCode == TaskType.HPBatchStockIn)
                                     .ToList();
 
                                 foreach (var stock in planStocks)
@@ -175,7 +175,7 @@ namespace Lion.AbpPro.Jobs
                                 }
                             }
                             //计划任务完成
-                            var s = stocks.Find(f => f.ManageTypeCode == ManageType.HPBatchStockIn);
+                            var s = stocks.Find(f => f.TaskTypeCode == TaskType.HPBatchStockIn);
                             if (s == null)
                             {
                                 await _planManager.SetAsCompletedAsync(plans[0].Id);
@@ -187,7 +187,7 @@ namespace Lion.AbpPro.Jobs
                             CheckOrderResultDto checkOrderResultDto = new();
                             checkOrderResultDto.QueryCode = check[0].BatchNo;
                             var targetChecks = stocks
-                                .Where(f => f.ManageTypeCode == ManageType.HpAnnualCheckDown &&
+                                .Where(f => f.TaskTypeCode == TaskType.HpAnnualCheckDown &&
                                             f.PlanId == check[0].Id)
                                 .ToList();
 
@@ -258,7 +258,7 @@ namespace Lion.AbpPro.Jobs
                                             // 因此使用“当前盘点计划 + 实际库位码”定位 WMS 冻结的单库位快照任务。
                                             // PlanId 条件用于隔离不同批次，避免历史未清理任务中存在相同库位码时串单。
                                             var stock = stocks.Find(f =>
-                                                f.ManageTypeCode == ManageType.HpAnnualCheckDown &&
+                                                f.TaskTypeCode == TaskType.HpAnnualCheckDown &&
                                                 f.PlanId == check[0].Id &&
                                                 string.Equals(f.EndCellCode, actualResult.CellCode, StringComparison.Ordinal));
                                             if (stock == null)
@@ -311,7 +311,7 @@ namespace Lion.AbpPro.Jobs
                             {
                                 for (int i = 0; i < stocks.Count; i++)
                                 {
-                                    if (stocks[i].ManageTypeCode == ManageType.HpAnnualCheckDown || stocks[i].ManageTypeCode == ManageType.HPBatchStockIn)
+                                    if (stocks[i].TaskTypeCode == TaskType.HpAnnualCheckDown || stocks[i].TaskTypeCode == TaskType.HPBatchStockIn)
                                     {
                                         //CheckOrderResultDto checkOrderResultDto = new();
                                         //checkOrderResultDto.QueryCode = stocks[i].ManageRemark;

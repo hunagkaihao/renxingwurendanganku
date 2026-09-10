@@ -99,7 +99,7 @@ namespace WarehouseManagement.Material
                 var materialDto = ObjectMapper.Map<MaterialAggregate, MaterialDto>(x.Material);
                 if (x.MaterialBox != null)  // 注意：可能为 null
                 {
-                    materialDto.MaterialBoxRfid = x.MaterialBox.MaterialBoxRfid;
+                    materialDto.MaterialBoxRfid = x.MaterialBox.MaterialBoxBarcode;
                     materialDto.MaterialBoxName = x.MaterialBox.MaterialBoxName;
                     materialDto.MaterialBoxId = x.MaterialBox.Id;
                 }

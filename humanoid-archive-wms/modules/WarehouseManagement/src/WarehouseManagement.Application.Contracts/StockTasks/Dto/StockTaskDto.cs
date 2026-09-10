@@ -7,28 +7,56 @@ namespace WarehouseManagement.StockTasks.Dto
 {
     public class StockTaskDto : AuditedEntityDto<int>
     {
-        private ManageType _manageType;
-        private ManageStatus _manageStatus;
+        private TaskType _taskType;
+        private TaskStatus _taskStatus;
+        
         /// <summary>
-        /// 任务类型
+        /// 任务类型编码
         /// </summary>
-        public ManageType ManageTypeCode {
+        public TaskType TaskTypeCode {
             get
             {
-                return _manageType;
+                return _taskType;
             }
             set
             {
-                _manageType = value;
-                ManageTypeCodeString = _manageType.ToString();
+                _taskType = value;
+                TaskTypeCodeString = _taskType.ToString();
             }
         }
-        public string ManageTypeCodeString { get; set; }
         /// <summary>
-        /// 料箱条码
+        /// 任务类型字符串
         /// </summary>
-        public string StockBarcode { get; set; }
+        public string TaskTypeCodeString { get; set; }
+        /// <summary>
+        /// 任务状态编号
+        /// </summary>
+        public TaskStatus TaskStatus { 
+            get 
+            {
+                return _taskStatus;
+            } 
+            set 
+            {
+                _taskStatus = value;
+                TaskStatusString = _taskStatus.ToString();
+            } 
+        }
+        /// <summary>
+        /// 任务状态字符串
+        /// </summary>
+        public string TaskStatusString { get; set; }
+        /// <summary>
+        /// 物料条码
+        /// </summary>
         public string MaterialBoxBarcode { get; set; }
+        /// <summary>
+        /// 计划ID
+        /// </summary>
+        public int PlanId { get; set; }
+        /// <summary>
+        /// 计划任务类型
+        /// </summary>
         public string PlanTypeCode { get; set; }
         /// <summary>
         /// 开始库位ID
@@ -46,30 +74,6 @@ namespace WarehouseManagement.StockTasks.Dto
         /// 结束库位编码
         /// </summary>
         public string EndCellCode { get; set; }
-        /// <summary>
-        /// 任务状态
-        /// </summary>
-        public ManageStatus ManageStatus { 
-            get 
-            {
-                return _manageStatus;
-            } 
-            set 
-            {
-                _manageStatus = value;
-                ManageStatusString = _manageStatus.ToString();
-            } 
-        }
-
-        public string ManageStatusString { get; set; }
-        /// <summary>
-        /// 计划ID
-        /// </summary>
-        public int PlanId { get; set; }
-        /// <summary>
-        /// 任务编号
-        /// </summary>
-        public string ManageLaneWay { get; set; }
-
+        
     }
 }

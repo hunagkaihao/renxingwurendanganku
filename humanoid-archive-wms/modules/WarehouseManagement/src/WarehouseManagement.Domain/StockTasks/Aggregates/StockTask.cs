@@ -12,98 +12,7 @@ namespace WarehouseManagement.StockTasks.Aggregates
 {
     public class StockTask :   FullAuditedAggregateRoot<int>, IMultiTenant
     {
-        /// <summary>
-        /// 出入库任务表
-        /// </summary>
-        private StockTask()
-        {
-            ManageStatus = ManageStatus.WaitingExecute;
-            Details = new List<StockTaskDetail>();
-        }
-        public StockTask(string manageTypeCode, string materialBoxBarcode,int startCellId, int endCellId,string startCellCode, string endCellCode)
-        {
-            //Id = id;
-            ManageTypeCode = Enum.Parse<ManageType>(manageTypeCode);
-            MaterialBoxBarcode = materialBoxBarcode;
-            StartCellId = startCellId;
-            EndCellId = endCellId;
-            StartCellCode = startCellCode;
-            EndCellCode = endCellCode;
-            ManageStatus = ManageStatus.WaitingExecute;
-            //SetAsCompleated("Completed");
-            Details = new List<StockTaskDetail>();
-        }
-        
-        public StockTask(string manageTypeCode,string materialBoxBarcode)
-        {
-            // 任务类型
-            ManageTypeCode = Enum.Parse<ManageType>(manageTypeCode);
-            // 物料信息条码
-            MaterialBoxBarcode = materialBoxBarcode;
-        }
-        //出库任务
-        public StockTask(string manageTypeCode, string materialBoxBarcode ,string startCellCode,int startCellId)
-        {
-            ManageTypeCode = Enum.Parse<ManageType>(manageTypeCode);
-            MaterialBoxBarcode = materialBoxBarcode;
-            StartCellCode = startCellCode;
-            StartCellId = startCellId;
-            Details = new List<StockTaskDetail>();
-        }
-
-
-        public StockTask(string refTaskCode, string manageTypeCode, string materialBoxBarcode, int startCellId, int endCellId, string startCellCode, string endCellCode)
-        {
-            //Id = id;
-            ManageLaneWay = refTaskCode;//记录MES的任务编号
-            ManageTypeCode = Enum.Parse<ManageType>(manageTypeCode);
-            MaterialBoxBarcode = materialBoxBarcode;
-            StartCellId = startCellId;
-            EndCellId = endCellId;
-            StartCellCode = startCellCode;
-            EndCellCode = endCellCode;
-            ManageStatus = ManageStatus.Executing;
-            //SetAsCompleated("Completed");
-            Details = new List<StockTaskDetail>();
-        }
-        public StockTask(ManageType manageTypeCode, int planId,string planTypeCode, string materialBoxBarcode, int startCellId, int endCellId, string startCellCode, string endCellCode)
-        {
-            //Id = id;
-            ManageTypeCode = manageTypeCode;
-            PlanId = planId;
-            PlanTypeCode = planTypeCode;
-            MaterialBoxBarcode = materialBoxBarcode;
-            StartCellId = startCellId;
-            EndCellId = endCellId;
-            StartCellCode = startCellCode;
-            EndCellCode = endCellCode;
-            ManageStatus = ManageStatus.WaitingExecute;
-            //SetAsCompleated("Completed");
-            Details = new List<StockTaskDetail>();
-        }
-
-        public void Update(string manageTypeCode, string archiveBoxRfid, int startCellId, int endCellId, string startCellCode, string endCellCode)
-        {
-            ManageTypeCode = Enum.Parse<ManageType>(manageTypeCode);
-            MaterialBoxBarcode = archiveBoxRfid;
-            StartCellId = startCellId;
-            EndCellId = endCellId;
-            StartCellCode = startCellCode;
-            EndCellCode = endCellCode;
-        }
-
-        public void SetStartCell(int startCellId, string startCellCode)
-        {
-            StartCellId = startCellId;
-            StartCellCode = startCellCode;
-        }
-        public void SetEndCell(int endCellId, string endCellCode)
-        {
-            EndCellId = endCellId;
-            EndCellCode= endCellCode;
-        }
-
-        /// <summary>
+         /// <summary>
         /// 组盘ID 暂时未用
         /// </summary>
         public int? GoodsTemplateId { get; set; }
@@ -118,11 +27,11 @@ namespace WarehouseManagement.StockTasks.Aggregates
         /// <summary>
         /// 任务类型
         /// </summary>
-        public ManageType ManageTypeCode { get; set; }
+        public TaskType TaskTypeCode { get; set; }
         /// <summary>
         /// 任务状态
         /// </summary>
-        public ManageStatus ManageStatus { get; set; }
+        public TaskStatus TaskStatus { get; set; }
         /// <summary>
         /// 料箱条码
         /// </summary>
@@ -156,31 +65,27 @@ namespace WarehouseManagement.StockTasks.Aggregates
         /// <summary>
         /// 任务操作者
         /// </summary>
-        public string ManageOperator { get; set; }
+        public string TaskOperator { get; set; }
         /// <summary>
         /// 任务开始时间
         /// </summary>
-        public string ManageBeginTime { get; set; }
+        public string TaskBeginTime { get; set; }
         /// <summary>
         /// 任务完成时间
         /// </summary>
-        public string ManageEndTime { get; set; }
+        public string TaskEndTime { get; set; }
         /// <summary>
         /// 任务优先级
         /// </summary>
-        public string ManageLevel { get; set; }
+        public string TaskLevel { get; set; }
         /// <summary>
         /// 任务备注
         /// </summary>
-        public string ManageRemark { get; set; }
+        public string TaskRemark { get; set; }
         /// <summary>
         /// 任务确认时间
         /// </summary>
-        public string ManageConfirmTime { get; set; }
-        /// <summary>
-        /// 任务巷道
-        /// </summary>
-        public string ManageLaneWay { get; set; }
+        public string TaskConfirmTime { get; set; }
         /// <summary>
         /// 重量
         /// </summary>
@@ -193,10 +98,99 @@ namespace WarehouseManagement.StockTasks.Aggregates
         /// 料箱存储明细
         /// </summary>
         public List<StockTaskDetail> Details { get; private set; }
+        
+        /// <summary>
+        /// 出入库任务表
+        /// </summary>
+        private StockTask()
+        {
+            TaskStatus = TaskStatus.WaitingExecute;
+            Details = new List<StockTaskDetail>();
+        }
+        public StockTask(string manageTypeCode, string materialBoxBarcode,int startCellId, int endCellId,string startCellCode, string endCellCode)
+        {
+            //Id = id;
+            TaskTypeCode = Enum.Parse<TaskType>(manageTypeCode);
+            MaterialBoxBarcode = materialBoxBarcode;
+            StartCellId = startCellId;
+            EndCellId = endCellId;
+            StartCellCode = startCellCode;
+            EndCellCode = endCellCode;
+            TaskStatus = TaskStatus.WaitingExecute;
+            //SetAsCompleated("Completed");
+            Details = new List<StockTaskDetail>();
+        }
+        
+        public StockTask(string manageTypeCode,string materialBoxBarcode)
+        {
+            // 任务类型
+            TaskTypeCode = Enum.Parse<TaskType>(manageTypeCode);
+            // 物料信息条码
+            MaterialBoxBarcode = materialBoxBarcode;
+        }
+        //出库任务
+        public StockTask(string manageTypeCode, string materialBoxBarcode ,string startCellCode,int startCellId)
+        {
+            TaskTypeCode = Enum.Parse<TaskType>(manageTypeCode);
+            MaterialBoxBarcode = materialBoxBarcode;
+            StartCellCode = startCellCode;
+            StartCellId = startCellId;
+            Details = new List<StockTaskDetail>();
+        }
+        
+        public StockTask(string refTaskCode, string manageTypeCode, string materialBoxBarcode, int startCellId, int endCellId, string startCellCode, string endCellCode)
+        {
+            //Id = id;
+            TaskTypeCode = Enum.Parse<TaskType>(manageTypeCode);
+            MaterialBoxBarcode = materialBoxBarcode;
+            StartCellId = startCellId;
+            EndCellId = endCellId;
+            StartCellCode = startCellCode;
+            EndCellCode = endCellCode;
+            TaskStatus = TaskStatus.Executing;
+            //SetAsCompleated("Completed");
+            Details = new List<StockTaskDetail>();
+        }
+        public StockTask(TaskType taskTypeCode, int planId,string planTypeCode, string materialBoxBarcode, int startCellId, int endCellId, string startCellCode, string endCellCode)
+        {
+            //Id = id;
+            TaskTypeCode = taskTypeCode;
+            PlanId = planId;
+            PlanTypeCode = planTypeCode;
+            MaterialBoxBarcode = materialBoxBarcode;
+            StartCellId = startCellId;
+            EndCellId = endCellId;
+            StartCellCode = startCellCode;
+            EndCellCode = endCellCode;
+            TaskStatus = TaskStatus.WaitingExecute;
+            //SetAsCompleated("Completed");
+            Details = new List<StockTaskDetail>();
+        }
 
+        public void Update(string manageTypeCode, string archiveBoxRfid, int startCellId, int endCellId, string startCellCode, string endCellCode)
+        {
+            TaskTypeCode = Enum.Parse<TaskType>(manageTypeCode);
+            MaterialBoxBarcode = archiveBoxRfid;
+            StartCellId = startCellId;
+            EndCellId = endCellId;
+            StartCellCode = startCellCode;
+            EndCellCode = endCellCode;
+        }
+
+        public void SetStartCell(int startCellId, string startCellCode)
+        {
+            StartCellId = startCellId;
+            StartCellCode = startCellCode;
+        }
+        public void SetEndCell(int endCellId, string endCellCode)
+        {
+            EndCellId = endCellId;
+            EndCellCode= endCellCode;
+        }
+        
         public void SetAsCompleted()
         {
-            ManageStatus = ManageStatus.Complete;
+            TaskStatus = TaskStatus.Complete;
             //ADD an EVENT TO BE PUBLISHED
             //分布式事件发布
             //AddDistributedEvent(
@@ -214,20 +208,20 @@ namespace WarehouseManagement.StockTasks.Aggregates
                 {
                     StockTaskId = Id,
                     ArchiveBoxRfid = MaterialBoxBarcode,
-                    ManageTypeCode = ManageTypeCode,
+                    TaskTypeCode = TaskTypeCode,
                     StartCellId = (int)StartCellId,
                     EndCellId = (int)EndCellId,
-                    ManageStatus = ManageStatus.Complete.ToString(),
+                    ManageStatus = TaskStatus.Complete.ToString(),
                 }
             );
         }
-        public void SetManageStatus(ManageStatus manageStatus)
+        public void SetManageStatus(TaskStatus taskStatus)
         {
-            ManageStatus = manageStatus;
+            TaskStatus = taskStatus;
         }
         public void SetAsWaitingExecuted()
         {
-            ManageStatus = ManageStatus.WaitingExecute;
+            TaskStatus = TaskStatus.WaitingExecute;
             //ADD an EVENT TO BE PUBLISHED
             //分布式事件发布
             //AddDistributedEvent(
@@ -245,10 +239,10 @@ namespace WarehouseManagement.StockTasks.Aggregates
                 {
                     StockTaskId = Id,
                     ArchiveBoxRfid = MaterialBoxBarcode,
-                    ManageTypeCode = ManageTypeCode,
+                    TaskTypeCode = TaskTypeCode,
                     StartCellId = (int)StartCellId,
                     EndCellId = (int)EndCellId,
-                    ManageStatus = ManageStatus.WaitingExecute.ToString(),
+                    ManageStatus = TaskStatus.WaitingExecute.ToString(),
                 }
             );
         }
@@ -273,18 +267,18 @@ namespace WarehouseManagement.StockTasks.Aggregates
 
         public void SetAsExecuting()
         {
-            ManageStatus =  ManageStatus.Executing;
+            TaskStatus =  TaskStatus.Executing;
         }
         /// <summary>
         /// 设置任务为等待确认
         /// </summary>
         public void SetAsWaitingConfirm()
         {
-            ManageStatus = ManageStatus.WaitingConfirm;
+            TaskStatus = TaskStatus.WaitingConfirm;
         }
         public void SetAsCancel()
         {
-            ManageStatus = ManageStatus.Cancel;
+            TaskStatus = TaskStatus.Cancel;
             //ADD an EVENT TO BE PUBLISHED
             //本地事件发布
             AddLocalEvent(
@@ -292,10 +286,10 @@ namespace WarehouseManagement.StockTasks.Aggregates
                 {
                     StockTaskId = Id,
                     ArchiveBoxRfid = MaterialBoxBarcode,
-                    ManageTypeCode = ManageTypeCode,
+                    TaskTypeCode = TaskTypeCode,
                     StartCellId = StartCellId,
                     EndCellId = EndCellId,
-                    ManageStatus = ManageStatus.Cancel.ToString(),
+                    ManageStatus = TaskStatus.Cancel.ToString(),
                 }
             );
         }

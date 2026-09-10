@@ -3,7 +3,10 @@
       <BasicTable @register="registerTable"
       @selection-change="onSelectChange"
       :clickToRowSelect="true" size="small">
-        <template #toolbar>
+      <template #toolbar>
+          <a-button type="primary" @click="openCreateStockTaskModal(true)" v-auth="'WarehouseManagement.GoodsManagement.Create'">
+            创建入库预约
+          </a-button>
           <a-button
             type="primary"
             @click="wcsInCell"
@@ -47,6 +50,7 @@
         </template>
         
       </BasicTable>
+      <CreateStockTask @register="registerCreateStockTaskModal" @reload="reload" />
 
     </div>
   </template>
@@ -60,17 +64,20 @@
     import { message } from 'ant-design-vue';
     import { useI18n } from '/@/hooks/web/useI18n';
     import { Tag } from 'ant-design-vue';
+    import CreateStockTask from './CreateStockTask.vue';
     export default defineComponent({
       name: 'StockTask',
       components: {
         BasicTable,
         TableAction,
         Tag,
+        CreateStockTask,
       },
       setup() {
         const { createConfirm } = useMessage();
         const { t } = useI18n();
         const [registerCreateArchiveModal, { openModal: openCreateArchiveModal }] = useModal();
+        const [registerCreateStockTaskModal, { openModal: openCreateStockTaskModal }] = useModal();
   
         const [registerEditArchiveModal, { openModal: openEditArchiveModal }] = useModal();
   
@@ -148,7 +155,7 @@
 
         const cancalTask = async () => {
           if(selectedBoxIdRef.value == ''){
-            message.error("请先选择档案盒")
+            message.error("请先选择要取消的任务")
             return
           }
             let msg = t('确认取消任务？');
@@ -183,6 +190,8 @@
           registerTable,
           handleEdit,
           registerCreateArchiveModal,
+          registerCreateStockTaskModal,
+          openCreateStockTaskModal,
           openCreateArchiveModal,
           registerEditArchiveModal,
           registerBlindBoxModal,
@@ -198,4 +207,3 @@
       },
     });
   </script>
-  

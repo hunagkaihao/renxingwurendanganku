@@ -66,7 +66,7 @@ namespace WarehouseManagement.MaterialBoxs
             return await _materialBoxRepository.FindByCellIdAsync(cellId);
         }
 
-        public async Task<MaterialBox> GetArchiveBoxByRfidCode(string rfidCode)
+        public async Task<MaterialBox> GetMaterialBoxByRfidCode(string rfidCode)
         {
             return await _materialBoxRepository.FindByRfidCodeAsync(rfidCode);
         }
@@ -78,7 +78,7 @@ namespace WarehouseManagement.MaterialBoxs
         //标签是否被绑定
         public async Task<bool> CheckUsedBoxRfid(string rfidCode)
         {
-            var achiveBoxobj = await _materialBoxRepository.GetListAsync(x => x.MaterialBoxRfid == rfidCode);
+            var achiveBoxobj = await _materialBoxRepository.GetListAsync(x => x.MaterialBoxBarcode == rfidCode);
             if (achiveBoxobj.FirstOrDefault() != null)
             {
                 return true;

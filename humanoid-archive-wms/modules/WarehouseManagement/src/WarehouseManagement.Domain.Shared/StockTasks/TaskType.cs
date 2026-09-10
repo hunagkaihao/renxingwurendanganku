@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace WarehouseManagement.StockTasks
 {
-    public enum ManageType
+    public enum TaskType
     {
         /// <summary>
-        /// 档案盒入库
+        /// 物料入库
         /// </summary>
         NPFullStockIn,
         /// <summary>
@@ -17,11 +17,11 @@ namespace WarehouseManagement.StockTasks
         /// </summary>
         HPFullStockIn,
         /// <summary>
-        /// 档案盒出库
+        /// 物料出库
         /// </summary>
         NPSortStockOut,
         /// <summary>
-        /// 档案借阅出库
+        /// 物料借用出库
         /// </summary>
         HPSortStockOut,
         /// <summary>
@@ -48,12 +48,10 @@ namespace WarehouseManagement.StockTasks
         /// 空档案盒出库
         /// </summary>
         EmptyStockOut,
-
         /// <summary>
         /// 封存品出库
         /// </summary>
         SealedGoodsDown,
-
         /// <summary>
         /// 无计划拣选出库
         /// </summary>
@@ -74,7 +72,6 @@ namespace WarehouseManagement.StockTasks
         /// 盘亏出库
         /// </summary>
         LossOut,
-
-
+        
     }
 }
