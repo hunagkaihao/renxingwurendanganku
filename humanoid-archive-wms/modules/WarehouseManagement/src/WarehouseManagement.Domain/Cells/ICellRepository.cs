@@ -33,12 +33,14 @@ namespace WarehouseManagement.Cells
             int maxResultCount = 10,
             int skipCount = 0,
             bool includeDetails = false,
+            bool onlyHasMaterial = false,
             CancellationToken cancellationToken = default);
 
         Task<long> GetPagingCountAsync(string filter = null,
             string materialCode = null,
             int warehouseId = 0,
             string cellType = null,
+            bool onlyHasMaterial = false,
             CancellationToken cancellationToken = default);
 
 

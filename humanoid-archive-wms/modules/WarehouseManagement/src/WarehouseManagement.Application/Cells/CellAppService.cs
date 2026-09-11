@@ -133,6 +133,27 @@ namespace WarehouseManagement.Cells
             return result;
         }
 
+        public async Task<PagedResultDto<CellDto>> GetInventoryPagingListAsync(PagingInventoryCellInput input)
+        {
+            var result = new PagedResultDto<CellDto>();
+            var totalCount = await _cellRepository.GetPagingCountAsync(
+                filter: input.Filter,
+                onlyHasMaterial: true);
+            result.TotalCount = totalCount;
+            if (totalCount <= 0)
+            {
+                return result;
+            }
+
+            var entities = await _cellRepository.GetPagingListAsync(
+                filter: input.Filter,
+                maxResultCount: input.PageSize,
+                skipCount: input.SkipCount,
+                onlyHasMaterial: true);
+            result.Items = ObjectMapper.Map<List<Cell>, List<CellDto>>(entities);
+            return result;
+        }
+
 
         public async Task<ListResultDto<CellDto>> GetCellListByZAsync(PagingCellListInput input)
         {

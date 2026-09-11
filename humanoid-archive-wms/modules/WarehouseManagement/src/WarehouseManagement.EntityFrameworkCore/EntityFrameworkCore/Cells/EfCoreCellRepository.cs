@@ -17,7 +17,7 @@ namespace WarehouseManagement.EntityFrameworkCore.Cells
         {
 
         }
-        public async Task<List<Cell>> GetPagingListAsync(string filter = null, string materialCode = null, int warehouseId = 0, string cellType = null, int maxResultCount = 10, int skipCount = 0, bool includeDetails = false, CancellationToken cancellationToken = default)
+        public async Task<List<Cell>> GetPagingListAsync(string filter = null, string materialCode = null, int warehouseId = 0, string cellType = null, int maxResultCount = 10, int skipCount = 0, bool includeDetails = false, bool onlyHasMaterial = false, CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
                 .IncludeDetails(includeDetails)
@@ -25,6 +25,8 @@ namespace WarehouseManagement.EntityFrameworkCore.Cells
                     e => (e.CellName.Contains(filter) || e.CellCode.Contains(filter)))
                 .WhereIf(!materialCode.IsNullOrWhiteSpace(),
                     e => e.MaterialCode != null && e.MaterialCode.Contains(materialCode))
+                .WhereIf(onlyHasMaterial,
+                    e => e.MaterialCode != null && e.MaterialCode != "")
                 .WhereIf(warehouseId!=0,
                     e => (e.WarehouseId==warehouseId))
                  .WhereIf(!cellType.IsNullOrWhiteSpace(),
@@ -36,13 +38,15 @@ namespace WarehouseManagement.EntityFrameworkCore.Cells
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<long> GetPagingCountAsync(string filter = null, string materialCode = null, int warehouseId = 0, string cellType = null, CancellationToken cancellationToken = default)
+        public async Task<long> GetPagingCountAsync(string filter = null, string materialCode = null, int warehouseId = 0, string cellType = null, bool onlyHasMaterial = false, CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
                 .WhereIf(!filter.IsNullOrWhiteSpace(),
                     e => (e.CellName.Contains(filter) || e.CellCode.Contains(filter)))
                 .WhereIf(!materialCode.IsNullOrWhiteSpace(),
                     e => e.MaterialCode != null && e.MaterialCode.Contains(materialCode))
+                .WhereIf(onlyHasMaterial,
+                    e => e.MaterialCode != null && e.MaterialCode != "")
                 .WhereIf(warehouseId != 0,
                     e => (e.WarehouseId == warehouseId))
                 .WhereIf(!cellType.IsNullOrWhiteSpace(),

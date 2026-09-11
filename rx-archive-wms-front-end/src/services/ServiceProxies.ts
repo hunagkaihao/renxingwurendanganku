@@ -3817,6 +3817,41 @@ export class CellsServiceProxy extends ServiceProxyBase {
     }
 
     /**
+     * 第三方分页查询库位库存
+     * @param body (optional)
+     * @return Success
+     */
+    inventoryPage(body: PagingInventoryCellInput | undefined , cancelToken?: CancelToken | undefined): Promise<CellDtoPagedResultDto> {
+        let url_ = this.baseUrl + "/Cells/inventory/page";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.instance.request(transformedOptions_);
+        }).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processPage(_response));
+        });
+    }
+
+    /**
      * 通过排获取库位清单
      * @param body (optional) 
      * @return Success
@@ -25422,6 +25457,62 @@ export interface IPagingCellListInput {
     cellZ: number;
     warehouseId: number;
     cellType: string | undefined;
+}
+
+export class PagingInventoryCellInput implements IPagingInventoryCellInput {
+    /** 当前页面.默认从1开始 */
+    pageIndex!: number;
+    /** 每页多少条.每页显示多少记录 */
+    pageSize!: number;
+    /** 跳过多少条 */
+    readonly skipCount!: number;
+    /** 库位名称或库位编码关键字 */
+    filter!: string | undefined;
+
+    constructor(data?: IPagingInventoryCellInput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.pageIndex = _data["pageIndex"];
+            this.pageSize = _data["pageSize"];
+            (<any>this).skipCount = _data["skipCount"];
+            this.filter = _data["filter"];
+        }
+    }
+
+    static fromJS(data: any): PagingInventoryCellInput {
+        data = typeof data === 'object' ? data : {};
+        let result = new PagingInventoryCellInput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["pageIndex"] = this.pageIndex;
+        data["pageSize"] = this.pageSize;
+        data["skipCount"] = this.skipCount;
+        data["filter"] = this.filter;
+        return data;
+    }
+}
+
+export interface IPagingInventoryCellInput {
+    /** 当前页面.默认从1开始 */
+    pageIndex: number;
+    /** 每页多少条.每页显示多少记录 */
+    pageSize: number;
+    /** 跳过多少条 */
+    skipCount: number;
+    /** 库位名称或库位编码关键字 */
+    filter: string | undefined;
 }
 
 export class PagingCheckDetailHisDto implements IPagingCheckDetailHisDto {

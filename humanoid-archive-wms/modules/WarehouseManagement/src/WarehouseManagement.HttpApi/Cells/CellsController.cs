@@ -70,6 +70,12 @@ namespace WarehouseManagement.Cells
         {
             return await _cellAppService.GetPagingListAsync(input); ;
         }
+        [HttpPost("inventory/page")]
+        [SwaggerOperation(summary: "库位库存查询", Tags = new[] { "Cells" })]
+        public async Task<PagedResultDto<CellDto>> GetInventoryPagingListAsync(PagingInventoryCellInput input)
+        {
+            return await _cellAppService.GetInventoryPagingListAsync(input);
+        }
         [HttpPost("getCellsByZ")]
         [SwaggerOperation(summary: "通过排获取库位清单", Tags = new[] { "Cells" })]
         public async Task<ListResultDto<CellDto>> GetCellListByZAsync(PagingCellListInput input)

@@ -13,9 +13,9 @@ namespace WarehouseManagement.Cells.Dto
         public string CellModel { get; set; }
         public string MaterialCode { get; set; }
         public string DeviceCode { get; set; }
-        public int Cell_z { get; set; }
         public int Cell_x { get; set; }
         public int Cell_y { get; set; }
+        public int Cell_z { get; set; }
         public string CellStatus { get; set; }
         public string RunStatus { get; set; }
 
