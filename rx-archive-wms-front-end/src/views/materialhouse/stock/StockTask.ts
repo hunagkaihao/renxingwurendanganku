@@ -393,6 +393,7 @@ export async function getTableListAsync(
   params: PagingStockTaskListInput
 ): Promise<StockTaskDtoPagedResultDto> {
   const _stockTasksServiceProxy = new StockTasksServiceProxy();
+  params.hideCompletedTasks = true;
   return _stockTasksServiceProxy.page(params);
 }
 

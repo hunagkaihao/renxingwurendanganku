@@ -92,6 +92,10 @@ namespace WarehouseManagement.StockTasks
                         where stockTask.CreationTime >= input.StartCreationTime & 
                               stockTask.CreationTime <= input.EndCreationTime & 
                               stockTask.MaterialBoxBarcode.Contains(input.Filter.IsNullOrEmpty() ? "" : input.Filter.Trim()) &
+                              (!input.HideCompletedTasks ||
+                               (stockTask.TaskStatus != TaskStatus.Cancel &
+                                stockTask.TaskStatus != TaskStatus.Complete &
+                                stockTask.TaskStatus != TaskStatus.ExceptionComplete)) &
                               (input.TaskStatus == "All" ? 1 == 1 : stockTask.TaskStatus == Enum.Parse<TaskStatus>(input.TaskStatus))
                               select new { stockTask };
 

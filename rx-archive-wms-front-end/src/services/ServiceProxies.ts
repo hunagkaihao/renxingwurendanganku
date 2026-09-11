@@ -26705,6 +26705,7 @@ export class PagingStockTaskListInput implements IPagingStockTaskListInput {
     startCreationTime!: moment.Moment;
     endCreationTime!: moment.Moment;
     taskStatus!: string | undefined;
+    hideCompletedTasks!: boolean;
 
     constructor(data?: IPagingStockTaskListInput) {
         if (data) {
@@ -26724,6 +26725,7 @@ export class PagingStockTaskListInput implements IPagingStockTaskListInput {
             this.startCreationTime = _data["startCreationTime"] ? moment(_data["startCreationTime"].toString()) : <any>undefined;
             this.endCreationTime = _data["endCreationTime"] ? moment(_data["endCreationTime"].toString()) : <any>undefined;
             this.taskStatus = _data["taskStatus"];
+            this.hideCompletedTasks = _data["hideCompletedTasks"];
         }
     }
 
@@ -26743,6 +26745,7 @@ export class PagingStockTaskListInput implements IPagingStockTaskListInput {
         data["startCreationTime"] = this.startCreationTime ? this.startCreationTime.toISOString() : <any>undefined;
         data["endCreationTime"] = this.endCreationTime ? this.endCreationTime.toISOString() : <any>undefined;
         data["taskStatus"] = this.taskStatus;
+        data["hideCompletedTasks"] = this.hideCompletedTasks;
         return data;
     }
 }
@@ -26758,6 +26761,7 @@ export interface IPagingStockTaskListInput {
     startCreationTime: moment.Moment;
     endCreationTime: moment.Moment;
     taskStatus: string | undefined;
+    hideCompletedTasks: boolean;
 }
 
 export class PagingTaskHisDetailInput implements IPagingTaskHisDetailInput {
