@@ -403,7 +403,7 @@ namespace WarehouseManagement.StockTasks
         /// <returns></returns>
         /// <exception cref="UserFriendlyException"></exception>
         [UnitOfWork]
-        public async Task<bool> WCSSetCell(int StockTaskId)
+      public async Task<bool> WCSSetCell(int StockTaskId)
         {
             // 查询任务
             var stockTask = await _stockTaskRepository.FindByIdAsync(StockTaskId);
@@ -411,18 +411,25 @@ namespace WarehouseManagement.StockTasks
             {
                 // 查询物料
                 var box = await _materialBoxManager.GetMaterialBoxByRfidCode(stockTask.MaterialBoxBarcode);
-                if (stockTask.TaskStatus == TaskStatus.WaitingExecute)
-                {
-                    Cell startCell, endCell;
+              if (stockTask.TaskStatus == TaskStatus.WaitingExecute)
+              {
+                  if (box == null || string.IsNullOrWhiteSpace(box.CellModel))
+                  {
+                      throw new UserFriendlyException("物料容器未设置物料类型，无法分配库位!");
+                  }
+
+                  var cellModel = box.CellModel.Trim();
+                  Cell startCell;
+                  Cell endCell = null;
                     
                     // 分配起始库位
                     if (stockTask.StartCellId == 0)
                     {
                         // 分配入库规格
-                        startCell = await _cellManager.GetEmptyStation(1, box.CellModel);
+                        startCell = await _cellManager.GetEmptyStation(1, cellModel);
                         if (stockTask.TaskTypeCode == TaskType.NpFullStockOut)
                         {
-                            startCell = await _cellManager.GetEmptyCell(1, box.CellModel);
+                          startCell = await _cellManager.GetEmptyCell(1, cellModel);
                         }
                         if (startCell == null) throw new UserFriendlyException("没有空闲的柜格.");
                         
@@ -433,6 +440,11 @@ namespace WarehouseManagement.StockTasks
                     { 
                         // 物料出库
                         startCell = await _cellManager.GetByIdAsync((int)stockTask.StartCellId);
+                        if (startCell == null || !string.Equals(startCell.CellModel, cellModel, StringComparison.Ordinal))
+                        {
+                            throw new UserFriendlyException("起始库位类型与物料类型不一致，无法下发任务!");
+                        }
+
                         stockTask.StartCellCode = startCell.CellCode;
                     }
 
@@ -452,15 +464,16 @@ namespace WarehouseManagement.StockTasks
                             {
                                 endCell = await _cellManager.GetByIdAsync(last.StartCellId);
                             }
-                            else
+
+                            if (endCell == null || !string.Equals(endCell.CellModel, cellModel, StringComparison.Ordinal))
                             {
-                                //分配入库库位
-                                endCell = await _cellManager.GetEmptyCell(1, box.CellModel);
+                                //复用库位不存在或类型不匹配时，按物料类型重新分配入库库位
+                                endCell = await _cellManager.GetEmptyCell(1, cellModel);
                             }
                         }
                         else
                         {
-                            endCell = await _cellManager.GetEmptyStation(1, box.CellModel);
+                          endCell = await _cellManager.GetEmptyStation(1, cellModel);
                         }
                         if (endCell == null) throw new UserFriendlyException("没有空闲的柜格或库位.");
                         
@@ -495,17 +508,24 @@ namespace WarehouseManagement.StockTasks
                         throw new UserFriendlyException(result.Message);
                     }
 
-                    //记录日志
-                    try
-                    {
-                        Log.Warning("用户" + "  下达了入库任务" + stockTask.Id + "  方法名:" + System.Reflection.MethodBase.GetCurrentMethod().Name);
-                        return true;
-                    }
-                    catch (Exception)
-                    {
-                        Log.Warning("系统后台下达了入库任务" + stockTask.Id + "  方法名:" + System.Reflection.MethodBase.GetCurrentMethod().Name);
-                        return true;
-                    }
+                  //记录日志
+                  var taskAction = ToWcsTaskType(stockTask.TaskTypeCode) switch
+                  {
+                      "StockIn" => "入库",
+                      "StockOut" => "出库",
+                      _ => stockTask.TaskTypeCode.ToString()
+                  };
+
+                  try
+                  {
+                      Log.Warning($"用户下达了{taskAction}任务id:[{stockTask.Id}] 方法名:[{System.Reflection.MethodBase.GetCurrentMethod().Name}]");
+                      return true;
+                  }
+                  catch (Exception)
+                  {
+                      Log.Warning($"系统后台下达了{taskAction}任务id:[{stockTask.Id}] 方法名:[{System.Reflection.MethodBase.GetCurrentMethod().Name}]");
+                      return true;
+                  }
                 }
                 else
                 {
@@ -536,31 +556,34 @@ namespace WarehouseManagement.StockTasks
                 f.TaskStatus != TaskStatus.WaitingExecute);
         }
 
-        public async Task<StockTask> CreateWCSOut(string manageTypeCode, MaterialBox materialBox)
+        /// <summary>
+        /// 创建出库任务
+        /// </summary>
+        /// <param name="taskTypeCode"></param>
+        /// <param name="materialBox"></param>
+        /// <returns></returns>
+        /// <exception cref="UserFriendlyException"></exception>
+        public async Task<StockTask> CreateWCSOut(string taskTypeCode, MaterialBox materialBox)
         {
-            //判断档案盒状态
+            // 判断物料容器状态
             if (materialBox.CellId == 0)
             {
-                throw new UserFriendlyException(message: "档案盒不在库位");
+                throw new UserFriendlyException(message: "物料不在库位");
             }
-            //
+            // 查询起始库位
             var startCell = await _cellManager.GetByIdAsync(materialBox.CellId);
-            //判断档案盒是否存在库位任务
+            
+            // 判断物料容器是否存在库位任务
             if (await ValidateStockManageExist(materialBox.MaterialBoxBarcode))
             {
-                throw new UserFriendlyException(message: "档案盒已存在出入库任务");
+                throw new UserFriendlyException(message: "物料已存在出库任务");
             }
             StockTask entity = null;
             try
             {
-                entity = new StockTask(manageTypeCode, materialBox.MaterialBoxBarcode, startCell.CellCode, startCell.Id);
+                entity = new StockTask(taskTypeCode, materialBox.MaterialBoxBarcode, startCell.CellCode, startCell.Id);
+                
                 return await _stockTaskRepository.InsertAsync(entity, true);
-                Log.Debug($"Task:{entity.Id} Box:{materialBox.MaterialBoxBarcode} CreateStockIn Inserted StockTaskData: {JsonConvert.SerializeObject(entity)}");
-                //entity.SetAsWaitingExecuted();
-
-                //await SetAsExecutingAsync(entity.Id);
-                //Log.Information($"Task:{entity.Id} Box:{storageBox.StorageBoxBarcode} CreateStockIn SetAsWaitingExecuted");
-                //return await _stockTaskRepository.UpdateAsync(entity, true);
             }
             catch (Exception ex)
             {
@@ -569,6 +592,7 @@ namespace WarehouseManagement.StockTasks
             }
 
         }
+        
         //从WCS返回更新状态
         [UnitOfWork]
         public async Task<StockTask> UpdateStatusAsync(int stockTaskId, WcsTaskStatus status)
@@ -604,6 +628,7 @@ namespace WarehouseManagement.StockTasks
                             // 出库完成：释放起终点库位并将档案盒标记为出库。
                             await _cellManager.SetAsStockOutAsync((int)entity.EndCellId);
                             await _cellManager.SetAsStockOutAsync((int)entity.StartCellId);
+                            await _cellManager.SetMaterialCodeAsync((int)entity.StartCellId, null);
                             await _materialBoxManager.UpdateStockOutCellAsync(entity.MaterialBoxBarcode);
                             entity.SetAsCompleted();
                         }
@@ -611,6 +636,7 @@ namespace WarehouseManagement.StockTasks
                         {
                             // 入库完成：目标库位入库、起点释放并绑定档案盒新库位。
                             var endCell = await _cellManager.SetAsStockInAsync((int)entity.EndCellId);
+                            await _cellManager.SetMaterialCodeAsync(endCell.Id, entity.MaterialBoxBarcode);
                             await _cellManager.SetAsStockOutAsync((int)entity.StartCellId);
                             await _materialBoxManager.UpdateStockCellAsync(entity.MaterialBoxBarcode, endCell.Id);
                             entity.SetAsCompleted();

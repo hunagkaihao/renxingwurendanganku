@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -16,6 +17,7 @@ namespace WarehouseManagement.WcsTasks
 {
     public class WcsApiManager : WcsTaskDomainService
     {
+        private static readonly ConcurrentDictionary<string, DateTime> SimulationOrders = new();
         private readonly IHttpClientFactory _httpClientFactory;
         public string WCSServer { get; set; }
         public bool WCSEnable { get; set; }
@@ -34,19 +36,31 @@ namespace WarehouseManagement.WcsTasks
         /// </summary>
         /// <returns></returns>
         public async Task<ResultWcsTaskDto> StockOrderCreate(string orderCode, string plateCode, string startNode,
-            string endNode, string taskType, int priority)
+                                                             string endNode, string taskType, int priority)
         {
+            if (WCSSimulation)
+            {
+                SimulationOrders[orderCode] = DateTime.Now;
+                Log.Information($"WCS 虚拟创建任务: " +
+                                $"任务id=[{orderCode}], " +
+                                $"物料码=[{plateCode}], " +
+                                $"起始位置=[{startNode}], " +
+                                $"目标位置=[{endNode}], " +
+                                $"任务类型=[{taskType}], " +
+                                $"优先级=[{priority}]");
+
+                return new ResultWcsTaskDto(true, "WCS 虚拟创建任务");
+            }
             if (!WCSEnable)
             {
                 Log.Information("WCS服务配置为不可用");
                 return null;
             }
 
-            Log.Information("WCS创建出入库订单号：" + orderCode + "档案盒号" + plateCode + "开始位置：" + startNode + "终点位置：" + endNode);
+            Log.Information($"WCS创建出入库订单号：[{orderCode}] 物料编号: [{plateCode}] 开始位置: [{startNode}] 终点位置: [{endNode}]");
             StockOrderCreateDto stockOrderCreate =
                 new StockOrderCreateDto(orderCode, plateCode, startNode, endNode, taskType, priority);
-            var response =
-                await _httpClientFactory.PostAsync<StockOrderCreateDto, ResultWcsTaskDto>("TTWCS",
+            var response =await _httpClientFactory.PostAsync<StockOrderCreateDto, ResultWcsTaskDto>("TTWCS",
                     $"{WCSServer}/wcs/dispatch/order/stockOrderCreate", stockOrderCreate);
 
             return response;
@@ -186,18 +200,19 @@ namespace WarehouseManagement.WcsTasks
             if (WCSSimulation)
             {
                 Log.Information("WCS 模拟查询状态");
-                var responsetest = new ListResultSstatesDto
+                var simulationResponse = new ListResultSstatesDto
                 {
-                    orderStates = new List<ResultStatesDto>
-                    {
-                        new ResultStatesDto 
-                        { 
-                            OrderCode = "OrderCode", 
-                            ExecState = "已完成" 
-                        }
-                    }
+                    orderStates = SimulationOrders
+                        .Select(order => new ResultStatesDto
+                        {
+                            OrderCode = order.Key,
+                            Status = WcsTaskStatus.Completed,
+                            ExecState = "已完成",
+                            HappenTime = order.Value.ToString("yyyy-MM-dd HH:mm:ss")
+                        })
+                        .ToList()
                 };
-                return responsetest;
+                return simulationResponse;
             }
 
             if (!WCSEnable)
@@ -301,18 +316,24 @@ namespace WarehouseManagement.WcsTasks
         }
 
         /// <summary>
-        /// 打开取档口门
+        /// 打开取柜门
         /// </summary>
         /// <returns></returns>
         public async Task<ResultWcsTaskDto> OpenDoor(OpenDoorDto openDoor)
         {
+            if (WCSSimulation)
+            {
+                Log.Information($"WCS 虚拟打开柜门: OrderCode={openDoor}");
+                return new ResultWcsTaskDto(true, "WCS 虚拟打开柜门");
+            }
+
             if (!WCSEnable)
             {
                 Log.Information("WCS服务配置为不可用");
                 return null;
             }
 
-            Log.Information("WCS打开取档口");
+            Log.Information("WCS打开取柜门");
             var response =
                 await _httpClientFactory.PostAsync<OpenDoorDto, ResultWcsTaskDto>("TTWCS",
                     $"{WCSServer}/wcs/dispatch/order/doorCanOpenByOrder", openDoor);
@@ -322,19 +343,29 @@ namespace WarehouseManagement.WcsTasks
 
 
         /// <summary>
-        /// 打开取档口
+        /// 打开取柜门
         /// </summary>
         /// <param name="openDoor"></param>
         /// <returns></returns>
         public async Task<OpenDoorForOrderDto> OpenDoorForOrder(OpenDoorDto orderCode)
         {
+            if (WCSSimulation)
+            {
+                Log.Information($"WCS 虚拟开柜门: OrderCode={orderCode}");
+                return new OpenDoorForOrderDto
+                {
+                    success = true,
+                    message = "WCS 虚拟开柜门"
+                };
+            }
+
             if (!WCSEnable)
             {
                 Log.Information("WCS服务配置为不可用");
                 return null;
             }
 
-            Log.Information("WCS打开取档口");
+            Log.Information("WCS打开取柜门");
             var response =
                 await _httpClientFactory.PostAsync<OpenDoorDto, OpenDoorForOrderDto>("TTWCS",
                     $"{WCSServer}/wcs/dispatch/order/doorCanOpenByOrder", orderCode);

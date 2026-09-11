@@ -87,12 +87,6 @@ namespace WarehouseManagement.StockTasks
         {
             return await _stockTaskAppService.OpenDoorAndWCSInExcute(input);
         }
-        [HttpPost("createWCSOut")]
-        [SwaggerOperation(summary: "创建物料出库任务", Tags = new[] { "StockTasks" })]
-        public async Task<StockTaskDto> CreateWCSOut(CreateStockTaskDto input)
-        {
-            return await _stockTaskAppService.CreateWCSOut(input);
-        }
         [HttpPost("batBoxInByArea")]
         [SwaggerOperation(summary: "创建物料批量入库任务", Tags = new[] { "StockTasks" })]
         public async Task<bool> BatBoxInByArea(string input)
@@ -105,11 +99,17 @@ namespace WarehouseManagement.StockTasks
         {
             return await _stockTaskAppService.TaskAssignUseRfid(rfid);
         }
+        [HttpPost("createWCSOut")]
+        [SwaggerOperation(summary: "创建物料出库预约任务", Tags = new[] { "StockTasks" })]
+        public async Task<StockTaskDto> CreateWCSOut(CreateStockTaskDto input)
+        {
+            return await _stockTaskAppService.CreateWCSOut(input);
+        }
         [HttpPost("clientOutCell")]
         [SwaggerOperation(summary: "一体机创建物料出库任务", Tags = new[] { "StockTasks" })]
-        public async Task<bool> ClientOutCell(string rfid)
+        public async Task<StockTaskDto> ClientOutCell(string materialCode = null, string cellCode = null)
         {
-            return await _stockTaskAppService.ClientOutCell(rfid);
+            return await _stockTaskAppService.ClientOutCell(materialCode, cellCode);
         }
         [HttpPost("allInOutTask")]
         [SwaggerOperation(summary: "一体机物料任务", Tags = new[] { "StockTasks" })]
@@ -147,8 +147,6 @@ namespace WarehouseManagement.StockTasks
         {
             return await _stockTaskAppService.WcsSetStockTaskStatus(input);
         }
-
-
-
+        
     }
 }

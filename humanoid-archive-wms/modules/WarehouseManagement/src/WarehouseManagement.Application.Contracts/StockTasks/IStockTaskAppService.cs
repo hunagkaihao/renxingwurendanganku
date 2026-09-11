@@ -47,7 +47,7 @@ namespace WarehouseManagement.StockTasks
         /// <summary>
         /// 扫码分配库位下发任务
         /// </summary>
-        /// <param name="materialBoxBarcode"></param>
+        /// <param name="materialBoxBarcode">物料容器条码</param>
         /// <returns></returns>
         Task<bool> ScanAndDispatchToWCS(string materialBoxBarcode);
         /// <summary>
@@ -83,9 +83,10 @@ namespace WarehouseManagement.StockTasks
         /// <summary>
         /// 一体机出库
         /// </summary>
-        /// <param name="rfid"></param>
+        /// <param name="materialCode">物料码</param>
+        /// <param name="cellCode">库位编码或名称</param>
         /// <returns></returns>
-        Task<bool> ClientOutCell(string rfid);
+        Task<StockTaskDto> ClientOutCell(string materialCode = null, string cellCode = null);
         /// <summary>
         /// 获取出入库任务
         /// </summary>

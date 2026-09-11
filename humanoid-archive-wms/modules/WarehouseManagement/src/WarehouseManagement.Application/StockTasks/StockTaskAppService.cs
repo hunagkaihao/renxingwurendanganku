@@ -317,6 +317,11 @@ namespace WarehouseManagement.StockTasks
             {
                 throw new UserFriendlyException("物料容器不存在!!!");
             }
+
+            if (string.IsNullOrWhiteSpace(box.CellModel))
+            {
+                throw new UserFriendlyException("物料容器未设置物料类型，无法分配库位!");
+            }
             
             // 根据物料码查找对应物料任务
             var stockTask = await _stockTaskRepository.FindByBarcodeAsync(materialBoxBarcode);
@@ -344,6 +349,7 @@ namespace WarehouseManagement.StockTasks
             var stockTask = await _stockTaskManagement.WCSSetCell(StockTaskId);
             return stockTask;
         }
+        
         //扫码打开柜门,创建任务
         public async Task<StockTaskDto> OpenDoorAndWCSInExcute(int input)
         {
@@ -384,20 +390,49 @@ namespace WarehouseManagement.StockTasks
         
         //一体机扫码档案盒rfid下达wcs任务打开柜门
         [UnitOfWork]
-        public async Task<bool> ClientOutCell(string rfid)
+        public async Task<StockTaskDto> ClientOutCell(string materialCode = null, string cellCode = null)
         {
+            if (string.IsNullOrWhiteSpace(materialCode) && string.IsNullOrWhiteSpace(cellCode))
+            {
+                throw new UserFriendlyException(message: "物料码和库位不能同时为空!");
+            }
+
+            Cell cell = null;
+            if (!string.IsNullOrWhiteSpace(cellCode))
+            {
+                cell = await _cellRepository.FindByCodeAsync(cellCode.Trim());
+                if (cell == null)
+                {
+                    throw new UserFriendlyException(message: "库位不存在!");
+                }
+
+                if (string.IsNullOrWhiteSpace(cell.MaterialCode))
+                {
+                    throw new UserFriendlyException(message: "库位无货，无法创建出库任务!");
+                }
+
+                if (!string.IsNullOrWhiteSpace(materialCode) &&
+                    !string.Equals(cell.MaterialCode, materialCode.Trim(), StringComparison.Ordinal))
+                {
+                    throw new UserFriendlyException(message: "输入库位中的物料码与输入物料码不一致，出库任务下发失败!");
+                }
+
+                materialCode = cell.MaterialCode;
+            }
 
             CreateStockTaskDto stockTaskDto = new();
-            //找到档案盒
-            var box = await _materialBoxRepository.FindByRfidCodeAsync(rfid);
+            var box = await _materialBoxRepository.FindByMaterialBoxcodeAsync(materialCode.Trim());
             if (box == null)
             {
-                throw new UserFriendlyException(message: "档案盒不存在!");
+                throw new UserFriendlyException(message: "物料不存在!");
             }
-            else
+
+            if (cell != null && box.CellId != cell.Id)
             {
-                stockTaskDto.MaterialBoxId = box.Id;
+                throw new UserFriendlyException(message: "物料容器所在库位与输入库位不一致，出库任务下发失败!");
             }
+
+            stockTaskDto.MaterialBoxId = box.Id;
             //创建任务
             var stock = await CreateWCSOut(stockTaskDto);
             if (stock == null)
@@ -407,11 +442,20 @@ namespace WarehouseManagement.StockTasks
             //分配库位
             await WCSSetCell(stock.Id);
 
+            var updatedStockTask = await _stockTaskManagement.FindByIdAsync(stock.Id);
+            if (updatedStockTask == null)
+            {
+                throw new UserFriendlyException(message: "任务不存在");
+            }
 
-            return true;
-
+            return base.ObjectMapper.Map<StockTask, StockTaskDto>(updatedStockTask);
         }
-        //创建档案出库任务
+        
+        /// <summary>
+        /// 创建物料出库任务
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public async Task<StockTaskDto> CreateWCSOut(CreateStockTaskDto input)
         {
             MaterialBox materialBoxObj;
@@ -424,10 +468,11 @@ namespace WarehouseManagement.StockTasks
                 materialBoxObj = await _materialBoxRepository.FindByMaterialBoxcodeAsync(input.MaterialCode);
             }
             input.TaskTypeCode = TaskType.NPSortStockOut.ToString();
-            // var stockTask = await _stockTaskManagement.CreateStockInAsync(input.ManageTypeCode, storageBoxObj, storageBoxObj.Details, input.StartCellCode, input.EndCellId);
+
             var stockTask = await _stockTaskManagement.CreateWCSOut(input.TaskTypeCode, materialBoxObj);
             return base.ObjectMapper.Map<StockTask, StockTaskDto>(stockTask);
         }
+        
         public async Task<bool> BatBoxInByArea(string areaCode)
         {
             List<int> cellIds = await _cellManager.GetCellidsByAreaCode(areaCode);

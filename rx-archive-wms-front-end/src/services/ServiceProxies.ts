@@ -11900,15 +11900,20 @@ export class StockTasksServiceProxy extends ServiceProxyBase {
 
     /**
      * 一体机创建档案出库任务
-     * @param rfid (optional) 
+     * @param materialCode (optional)
+     * @param cellCode (optional)
      * @return Success
      */
-    clientOutCell(rfid: string | undefined , cancelToken?: CancelToken | undefined): Promise<boolean> {
+    clientOutCell(materialCode: string | undefined, cellCode?: string | undefined, cancelToken?: CancelToken | undefined): Promise<StockTaskDto> {
         let url_ = this.baseUrl + "/StockTasks/clientOutCell?";
-        if (rfid === null)
-            throw new Error("The parameter 'rfid' cannot be null.");
-        else if (rfid !== undefined)
-            url_ += "rfid=" + encodeURIComponent("" + rfid) + "&";
+        if (materialCode === null)
+            throw new Error("The parameter 'materialCode' cannot be null.");
+        else if (materialCode !== undefined)
+            url_ += "materialCode=" + encodeURIComponent("" + materialCode) + "&";
+        if (cellCode === null)
+            throw new Error("The parameter 'cellCode' cannot be null.");
+        else if (cellCode !== undefined)
+            url_ += "cellCode=" + encodeURIComponent("" + cellCode) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ = <AxiosRequestConfig>{
@@ -11933,7 +11938,7 @@ export class StockTasksServiceProxy extends ServiceProxyBase {
         });
     }
 
-    protected processClientOutCell(response: AxiosResponse): Promise<boolean> {
+    protected processClientOutCell(response: AxiosResponse): Promise<StockTaskDto> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -11947,9 +11952,8 @@ export class StockTasksServiceProxy extends ServiceProxyBase {
             const _responseText = response.data;
             let result200: any = null;
             let resultData200  = _responseText;
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
-    
-            return Promise.resolve<boolean>(result200);
+            result200 = StockTaskDto.fromJS(resultData200);
+            return Promise.resolve<StockTaskDto>(result200);
 
         } else if (status === 403) {
             const _responseText = response.data;
