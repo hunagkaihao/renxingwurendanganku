@@ -243,7 +243,7 @@ export const searchFormSchema: FormSchema[] = [
   //   }
   // },
   {
-    field: 'manageStatus',
+    field: 'taskStatus',
     component: 'Select',
     label: t('任务状态'),
     labelWidth: 130,

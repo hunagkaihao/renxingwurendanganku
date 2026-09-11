@@ -8,6 +8,8 @@ using Lion.AbpPro.Extension.Customs.Dtos;
 using Serilog;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Data;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Uow;
 using WarehouseManagement.MaterialBoxs;
 using WarehouseManagement.MaterialBoxs.Aggregates;
@@ -48,6 +50,7 @@ namespace WarehouseManagement.StockTasks
         private readonly IMaterialBoxRepository _materialBoxRepository;
         private readonly IPlanRepository _planRepository;
         private readonly IMaterialRepository _materialRepository;
+        private readonly IDataFilter _dataFilter;
 
         public StockTaskAppService( IStockTaskRepository stockTaskRepository, StockTaskManager stockTaskManagement, 
                                     PlanManager planManager,IStockTaskDetailRepository stockTaskDetailRepository, 
@@ -55,7 +58,7 @@ namespace WarehouseManagement.StockTasks
                                     IMaterialBoxRepository materialBoxRepository, CellManager cellManager, 
                                     IPlanRepository planRepository,WcsApiManager wcsApiManager, 
                                     MaterialBoxManager materialBoxManager,IMaterialRepository materialRepository, 
-                                    UnitOfWorkManager unitOfWorkManager)
+                                    UnitOfWorkManager unitOfWorkManager, IDataFilter dataFilter)
         {
             _stockTaskRepository = stockTaskRepository;
             _stockTaskManagement = stockTaskManagement;
@@ -69,49 +72,47 @@ namespace WarehouseManagement.StockTasks
             _wcsApiManager = wcsApiManager;
             _materialBoxManager = materialBoxManager;
             _materialRepository = materialRepository;
+            _dataFilter = dataFilter;
         }
-
+        
+        /// <summary>
+        /// 获取页列表
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public async Task<PagedResultDto<StockTaskDto>> GetPagingListAsync(PagingStockTaskListInput input)
         {
-            //Get the IQueryable<Book> from the repository
+            using var disableSoftDeleteFilter = _dataFilter.Disable<ISoftDelete>();
+
+            // 获取任务表
             var queryable = await _stockTaskRepository.GetQueryableAsync();
 
-            //Prepare a query to join books and authors
+            // 筛选满足条件项
             var query = from stockTask in queryable
-                        where stockTask.CreationTime >= input.StartCreationTime & stockTask.CreationTime <= input.EndCreationTime
-                        & stockTask.MaterialBoxBarcode.Contains(input.Filter.IsNullOrEmpty() ? "" : input.Filter.Trim())
-                        //& stockTask.ManageStatus.ToString().Contains(input.ManageStatus=="All"?"":input.ManageStatus)
-                        & (input.ManageStatus == "All" ? 1 == 1 : stockTask.TaskStatus == Enum.Parse<TaskStatus>(input.ManageStatus))
-                        select new { stockTask };
+                        where stockTask.CreationTime >= input.StartCreationTime & 
+                              stockTask.CreationTime <= input.EndCreationTime & 
+                              stockTask.MaterialBoxBarcode.Contains(input.Filter.IsNullOrEmpty() ? "" : input.Filter.Trim()) &
+                              (input.TaskStatus == "All" ? 1 == 1 : stockTask.TaskStatus == Enum.Parse<TaskStatus>(input.TaskStatus))
+                              select new { stockTask };
 
-            //Paging
-            query = query
-                //.OrderBy(NormalizeSorting(input.Sorting))
-                .OrderByDescending(f => f.stockTask.Id)
-                .Skip(input.SkipCount)
-                .Take(1000);
-            //.Take(input.MaxResultCount);
+            // 降序排序
+            query = query .OrderByDescending(f => f.stockTask.Id)
+                          .Skip(input.SkipCount)
+                          .Take(input.PageSize);
 
-            //Execute the query and get a list
+            // 执行查询获取列表
             var queryResult = await AsyncExecuter.ToListAsync(query);
 
-            //Convert the query result to a list of BookDto objects
+            // 转换查询结构为列表对象
             var stockTaskDtos = queryResult.Select(x =>
             {
                 var stockTaskDtos = ObjectMapper.Map<StockTask, StockTaskDto>(x.stockTask);
-                //stockTaskDtos.StartCellCode = x.scell?.CellCode;
-                //stockTaskDtos.EndCellCode = x.ecell?.CellCode;
                 return stockTaskDtos;
             }).ToList();
-
-            //Get the total count with another query
-            //var totalCount = await _stockTaskDetailRepository.GetCountAsync();
+            
             var totalCount = queryResult.Count() + input.SkipCount;
 
-            return new PagedResultDto<StockTaskDto>(
-                totalCount,
-                stockTaskDtos
-            );
+            return new PagedResultDto<StockTaskDto>(totalCount, stockTaskDtos);
         }
 
         public async Task<PagedResultDto<StockTaskDetailDto>> GetPagingDetailListAsync(PagingStockTaskDetailInput input)

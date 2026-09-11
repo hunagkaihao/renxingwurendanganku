@@ -26723,7 +26723,7 @@ export class PagingStockTaskListInput implements IPagingStockTaskListInput {
             this.filter = _data["filter"];
             this.startCreationTime = _data["startCreationTime"] ? moment(_data["startCreationTime"].toString()) : <any>undefined;
             this.endCreationTime = _data["endCreationTime"] ? moment(_data["endCreationTime"].toString()) : <any>undefined;
-            this.taskStatus = _data["manageStatus"];
+            this.taskStatus = _data["taskStatus"];
         }
     }
 
