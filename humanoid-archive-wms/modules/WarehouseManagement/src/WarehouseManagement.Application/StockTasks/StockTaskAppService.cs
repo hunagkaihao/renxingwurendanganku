@@ -390,8 +390,16 @@ namespace WarehouseManagement.StockTasks
         
         //一体机扫码档案盒rfid下达wcs任务打开柜门
         [UnitOfWork]
-        public async Task<StockTaskDto> ClientOutCell(string materialCode = null, string cellCode = null)
+        public async Task<StockTaskDto> ClientOutCell(ClientOutCellInput input)
         {
+            if (input == null)
+            {
+                throw new UserFriendlyException(message: "请求参数不能为空!");
+            }
+
+            var materialCode = input.MaterialCode;
+            var cellCode = input.CellCode;
+
             if (string.IsNullOrWhiteSpace(materialCode) && string.IsNullOrWhiteSpace(cellCode))
             {
                 throw new UserFriendlyException(message: "物料码和库位不能同时为空!");

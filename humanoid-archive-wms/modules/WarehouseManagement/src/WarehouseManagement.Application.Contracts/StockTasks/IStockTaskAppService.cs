@@ -83,10 +83,9 @@ namespace WarehouseManagement.StockTasks
         /// <summary>
         /// 一体机出库
         /// </summary>
-        /// <param name="materialCode">物料码</param>
-        /// <param name="cellCode">库位编码或名称</param>
+        /// <param name="input">客户端出库请求</param>
         /// <returns></returns>
-        Task<StockTaskDto> ClientOutCell(string materialCode = null, string cellCode = null);
+        Task<StockTaskDto> ClientOutCell(ClientOutCellInput input);
         /// <summary>
         /// 获取出入库任务
         /// </summary>

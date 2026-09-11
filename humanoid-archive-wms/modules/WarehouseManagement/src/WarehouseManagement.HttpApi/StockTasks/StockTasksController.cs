@@ -107,9 +107,9 @@ namespace WarehouseManagement.StockTasks
         }
         [HttpPost("clientOutCell")]
         [SwaggerOperation(summary: "一体机创建物料出库任务", Tags = new[] { "StockTasks" })]
-        public async Task<StockTaskDto> ClientOutCell(string materialCode = null, string cellCode = null)
+        public async Task<StockTaskDto> ClientOutCell(ClientOutCellInput input)
         {
-            return await _stockTaskAppService.ClientOutCell(materialCode, cellCode);
+            return await _stockTaskAppService.ClientOutCell(input);
         }
         [HttpPost("allInOutTask")]
         [SwaggerOperation(summary: "一体机物料任务", Tags = new[] { "StockTasks" })]

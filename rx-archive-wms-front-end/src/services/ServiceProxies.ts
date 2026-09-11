@@ -11904,22 +11904,18 @@ export class StockTasksServiceProxy extends ServiceProxyBase {
      * @param cellCode (optional)
      * @return Success
      */
-    clientOutCell(materialCode: string | undefined, cellCode?: string | undefined, cancelToken?: CancelToken | undefined): Promise<StockTaskDto> {
-        let url_ = this.baseUrl + "/StockTasks/clientOutCell?";
-        if (materialCode === null)
-            throw new Error("The parameter 'materialCode' cannot be null.");
-        else if (materialCode !== undefined)
-            url_ += "materialCode=" + encodeURIComponent("" + materialCode) + "&";
-        if (cellCode === null)
-            throw new Error("The parameter 'cellCode' cannot be null.");
-        else if (cellCode !== undefined)
-            url_ += "cellCode=" + encodeURIComponent("" + cellCode) + "&";
+    clientOutCell(body: ClientOutCellInput | undefined, cancelToken?: CancelToken | undefined): Promise<StockTaskDto> {
+        let url_ = this.baseUrl + "/StockTasks/clientOutCell";
         url_ = url_.replace(/[?&]$/, "");
 
+        const content_ = JSON.stringify(body);
+
         let options_ = <AxiosRequestConfig>{
+            data: content_,
             method: "POST",
             url: url_,
             headers: {
+                "Content-Type": "application/json",
                 "Accept": "text/plain"
             },
             cancelToken
@@ -19853,6 +19849,53 @@ export interface ICreateStationDto {
     cellType: string | undefined;
     cellName: string | undefined;
     warehouseId: number;
+}
+
+export class ClientOutCellInput implements IClientOutCellInput {
+    materialCode!: string | undefined;
+    cellCode!: string | undefined;
+
+    constructor(data?: IClientOutCellInput) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.materialCode = _data["materialCode"];
+            this.cellCode = _data["cellCode"];
+        }
+    }
+
+    static fromJS(data: any): ClientOutCellInput {
+        data = typeof data === 'object' ? data : {};
+        let result = new ClientOutCellInput();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["materialCode"] = this.materialCode;
+        data["cellCode"] = this.cellCode;
+        return data;
+    }
+
+    clone(): ClientOutCellInput {
+        const json = this.toJSON();
+        let result = new ClientOutCellInput();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IClientOutCellInput {
+    materialCode: string | undefined;
+    cellCode: string | undefined;
 }
 
 export class CreateStockTaskDto implements ICreateStockTaskDto {
