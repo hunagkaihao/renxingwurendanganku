@@ -131,9 +131,9 @@ namespace WarehouseManagement.MaterialBoxs
             var pageItems = items.Select(archiveBox => new MaterialBoxPageDto
             {
                 Id = archiveBox.Id,
-                MaterialCode = archiveBox.MaterialBoxBarcode,
-                MaterialName = archiveBox.MaterialBoxName,
-                MaterialType = archiveBox.CellModel,
+                MaterialBoxBarcode = archiveBox.MaterialBoxBarcode,
+                MaterialBoxName = archiveBox.MaterialBoxName,
+                CellModel = archiveBox.CellModel,
                 MaterialUnit = archiveBox.MaterialUnit,
                 RetentionPeriod = archiveBox.RetentionPeriod,
                 MaterialPeople = archiveBox.MaterialPeople,
