@@ -21,7 +21,7 @@ namespace WarehouseManagement.MaterialBoxs
         Task DeleteAsync(CreateMaterialBoxDto input);
 
         //获取档案盒清单
-        Task<PagedResultDto<MaterialBoxDto>> PageAsync(PagingMaterialBoxListInput input);
+        Task<PagedResultDto<MaterialBoxPageDto>> PageAsync(PagingMaterialBoxListInput input);
 
         //档案盒绑定标签
         Task<MaterialBoxDto> BindRfid(CreateMaterialBoxDto input);

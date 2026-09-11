@@ -57,54 +57,45 @@ namespace WarehouseManagement.TaskHiss
         //    return  base.ObjectMapper.Map<TaskHis, TaskHisDto>(taskHis);
         //}
        
-
+        /// <summary>
+        /// 获取页列表
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public async Task<PagedResultDto<TaskHisDto>> GetPagingListAsync(PagingTaskHisListInput input)
         {
-
-
-            //Get the IQueryable<Book> from the repository
+            // 获取任务历史表
             var queryable = await _taskHisRepository.GetQueryableAsync();
 
-            //Prepare a query to join books and authors
+            // 查询符合条件的数据
             var query = from taskHis in queryable
-                        //join scelltemp in await _cellRepository.GetQueryableAsync() on taskHis.StartCellId equals scelltemp.Id into sc
-                        //from scell in sc.DefaultIfEmpty()
-                        //join ecelltemp in await _cellRepository.GetQueryableAsync() on taskHis.EndCellId equals ecelltemp.Id into ec
-                        //from ecell in ec.DefaultIfEmpty()
-                        where taskHis.CreationTime >= input.StartCreationTime & taskHis.CreationTime <= input.EndCreationTime 
-                        & taskHis.StockBarcode.Contains(input.Filter.IsNullOrEmpty() ? "" : input.Filter.Trim())
-                        & (input.ManageStatus == "All" ? 1 == 1 : taskHis.TaskStatus == Enum.Parse<TaskStatus>(input.ManageStatus))
-                        orderby taskHis.CreationTime descending
-                        select new { taskHis};
+                        where taskHis.CreationTime >= input.StartCreationTime & 
+                              taskHis.CreationTime <= input.EndCreationTime  & 
+                              taskHis.MaterialBarcode.Contains(input.Filter.IsNullOrEmpty() ? "" : input.Filter.Trim()) & 
+                              (input.TaskStatus == "All" ? 1 == 1 : taskHis.TaskStatus == Enum.Parse<TaskStatus>(input.TaskStatus))
+                              orderby taskHis.CreationTime descending
+                              select new { taskHis};
 
-            //Paging
+            // 降序排序
             query = query
-                //.OrderBy(NormalizeSorting(input.Sorting))
-                .OrderByDescending(f => f.taskHis.Id)
-                .Skip(input.SkipCount)
-                .Take(1000);
-            //.Take(input.MaxResultCount);
+                    .OrderByDescending(f => f.taskHis.Id)
+                    .Skip(input.SkipCount)
+                    .Take(input.PageSize);
 
-            //Execute the query and get a list
+            // 转换为列表
             var queryResult = await AsyncExecuter.ToListAsync(query);
 
-            //Convert the query result to a list of BookDto objects
+            // 返回对象数据
             var taskHisDtos = queryResult.Select(x =>
             {
                 var taskHisDtos = ObjectMapper.Map<TaskHis, TaskHisDto>(x.taskHis);
-                //taskHisDtos.StartCellCode = x.scell?.CellCode;
-                //taskHisDtos.EndCellCode = x.ecell?.CellCode;
                 return taskHisDtos;
             }).ToList();
 
-            //Get the total count with another query
-            //var totalCount = await _taskHisDetailRepository.GetCountAsync();
+            // 统计总数
             var totalCount = queryResult.Count()+ input.SkipCount;
 
-            return new PagedResultDto<TaskHisDto>(
-                totalCount,
-                taskHisDtos
-            );
+            return new PagedResultDto<TaskHisDto>(totalCount, taskHisDtos);
         }
 
         public async Task<PagedResultDto<TaskHisDetailDto>> GetPagingDetailListAsync(
@@ -135,7 +126,7 @@ namespace WarehouseManagement.TaskHiss
             var taskHisDetailDtos = queryResult.Select(x =>
             {
                 var taskHisDetailDtos = ObjectMapper.Map<TaskHisDetail, TaskHisDetailDto>(x.taskHisDetail);
-                taskHisDetailDtos.StockBarcode = x.taskHis.StockBarcode;
+                taskHisDetailDtos.StockBarcode = x.taskHis.MaterialBarcode;
                 taskHisDetailDtos.GoodsCode = x.material.MaterialCode;
                 taskHisDetailDtos.GoodsName = x.material.MaterialName;
                 taskHisDetailDtos.GoodsSpec = x.material.GoodsSpec;

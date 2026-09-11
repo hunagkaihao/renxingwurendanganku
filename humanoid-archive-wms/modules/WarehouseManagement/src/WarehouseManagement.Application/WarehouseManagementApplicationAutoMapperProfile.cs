@@ -77,7 +77,9 @@ public class WarehouseManagementApplicationAutoMapperProfile : Profile
         CreateMap<StockTaskDetail, PagingStockTaskDetailOutput>();
         CreateMap<StockTaskDetail, StockTaskDetailDto>(MemberList.None);
 
-        CreateMap<TaskHis, TaskHisDto>(MemberList.None);
+        CreateMap<TaskHis, TaskHisDto>(MemberList.None)
+            .ForMember(destination => destination.MaterialBarcode,
+                options => options.MapFrom(source => source.MaterialBarcode));
         CreateMap<TaskHisDetail, TaskHisDetailDto>(MemberList.None);
 
 

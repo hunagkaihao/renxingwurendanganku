@@ -23,7 +23,7 @@ namespace WarehouseManagement.EntityFrameworkCore.TaskHiss
             return await (await GetDbSetAsync())
                 .IncludeDetails(includeDetails)
                 .WhereIf(!filter.IsNullOrWhiteSpace(),
-                    e => (e.StockBarcode.Contains(filter)))
+                    e => (e.MaterialBarcode.Contains(filter)))
                 .OrderByDescending(e => e.CreationTime)
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
@@ -33,13 +33,13 @@ namespace WarehouseManagement.EntityFrameworkCore.TaskHiss
         {
             return await (await GetDbSetAsync())
                 .WhereIf(!filter.IsNullOrWhiteSpace(),
-                    e => (e.StockBarcode.Contains(filter)))
+                    e => (e.MaterialBarcode.Contains(filter)))
                 .CountAsync(cancellationToken: cancellationToken);
         }
         public async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
         {
             return await (await GetDbSetAsync())
-                .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.StockBarcode.Contains(filter))
+                .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.MaterialBarcode.Contains(filter))
                 .LongCountAsync(GetCancellationToken(cancellationToken));
         }
 

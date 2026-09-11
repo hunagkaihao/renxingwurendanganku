@@ -40,7 +40,7 @@ namespace WarehouseManagement.MaterialBoxs
         }
         [HttpPost("page")]
         [SwaggerOperation(summary: "获取物料容器数据", Tags = new[] { "MaterialBoxs" })]
-        public async Task<PagedResultDto<MaterialBoxDto>> PageAsync(PagingMaterialBoxListInput input)
+        public async Task<PagedResultDto<MaterialBoxPageDto>> PageAsync(PagingMaterialBoxListInput input)
         {
             return await _materialBoxAppService.PageAsync(input);
         }

@@ -15,9 +15,14 @@ namespace WarehouseManagement.MaterialBoxs.Dto
         public string Filter { get; set; }
 
         /// <summary>
-        /// 物料盒名称
+        /// 创建时间起点（含）。
         /// </summary>
-        public string MaterialBoxName { get; set; }
+        public DateTime? StartCreationTime { get; set; }
+
+        /// <summary>
+        /// 创建时间终点（含）。
+        /// </summary>
+        public DateTime? EndCreationTime { get; set; }
 
     }
 }

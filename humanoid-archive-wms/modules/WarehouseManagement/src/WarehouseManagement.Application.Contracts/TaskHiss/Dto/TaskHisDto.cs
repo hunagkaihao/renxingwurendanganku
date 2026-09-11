@@ -15,7 +15,7 @@ namespace WarehouseManagement.TaskHiss.Dto
         /// <summary>
         /// 料箱条码
         /// </summary>
-        public string StockBarcode { get; set; }
+        public string MaterialBarcode { get; set; }
         /// <summary>
         /// 开始库位ID
         /// </summary>
@@ -36,10 +36,5 @@ namespace WarehouseManagement.TaskHiss.Dto
         /// 任务状态
         /// </summary>
         public TaskStatus TaskStatus { get; set; }
-        /// <summary>
-        /// 任务编号
-        /// </summary>
-        public string ManageLaneWay { get; set; }
-
     }
 }

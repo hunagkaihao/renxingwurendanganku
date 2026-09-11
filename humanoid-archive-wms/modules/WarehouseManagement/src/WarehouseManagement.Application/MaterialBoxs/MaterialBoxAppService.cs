@@ -101,42 +101,45 @@ namespace WarehouseManagement.MaterialBoxs
             return base.ObjectMapper.Map<MaterialBox, MaterialBoxDto>(archivebox);
         }
         
-        public async Task<PagedResultDto<MaterialBoxDto>> PageAsync(PagingMaterialBoxListInput input)
+        /// <summary>
+        /// 分页查询
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public async Task<PagedResultDto<MaterialBoxPageDto>> PageAsync(PagingMaterialBoxListInput input)
         {
             var queryable = await _materialBoxRepository.GetQueryableAsync();
-
-            //Prepare a query to join books and authors
-            var query = from archiveBox in queryable
-                        join celltemp in await _cellRepository.GetQueryableAsync() on archiveBox.CellId equals celltemp.Id into sc
-                        from cell in sc.DefaultIfEmpty()
-                        where archiveBox.MaterialBoxName.Contains(input.Filter.IsNullOrEmpty() ? "" : input.Filter.Trim())
-                        select new { archiveBox ,cell };
-
-            //Paging
-            query = query
-                .OrderByDescending(f => f.archiveBox.Id)
-                .Skip(input.SkipCount)
-                .Take(1000);
-            //.Take(input.MaxResultCount);
-
-            //Execute the query and get a list
-            var queryResult = await AsyncExecuter.ToListAsync(query);
-
-            //Convert the query result to a list of BookDto objects
-            var archiveBoxDtos = queryResult.Select(x =>
+            var filter = input.Filter.IsNullOrEmpty() ? "" : input.Filter.Trim();
+            var query = queryable.Where(archiveBox =>
+                archiveBox.MaterialBoxBarcode.Contains(filter) ||
+                archiveBox.MaterialBoxName.Contains(filter));
+            if (input.StartCreationTime.HasValue)
             {
-                var archiveBoxDtos = ObjectMapper.Map<MaterialBox, MaterialBoxDto>(x.archiveBox);
-                archiveBoxDtos.CellCode = x.cell?.CellCode;
+                query = query.Where(archiveBox => archiveBox.CreationTime >= input.StartCreationTime.Value);
+            }
+            if (input.EndCreationTime.HasValue)
+            {
+                query = query.Where(archiveBox => archiveBox.CreationTime <= input.EndCreationTime.Value);
+            }
 
-                return archiveBoxDtos;
-            }).Take(input.PageSize).ToList();
-
-            var totalCount = queryResult.Count() + input.SkipCount;
-
-            return new PagedResultDto<MaterialBoxDto>(
-                totalCount,
-                archiveBoxDtos
-            );
+            var pageSize = input.PageSize > 0 ? input.PageSize : 10;
+            var skipCount = (input.PageIndex - 1) * pageSize;
+            var items = await AsyncExecuter.ToListAsync(query
+                .OrderByDescending(archiveBox => archiveBox.Id)
+                .Skip(skipCount)
+                .Take(pageSize));
+            var pageItems = items.Select(archiveBox => new MaterialBoxPageDto
+            {
+                Id = archiveBox.Id,
+                MaterialCode = archiveBox.MaterialBoxBarcode,
+                MaterialName = archiveBox.MaterialBoxName,
+                MaterialType = archiveBox.CellModel,
+                MaterialUnit = archiveBox.MaterialUnit,
+                RetentionPeriod = archiveBox.RetentionPeriod,
+                MaterialPeople = archiveBox.MaterialPeople,
+                CreationTime = archiveBox.CreationTime
+            }).ToList();
+            return new PagedResultDto<MaterialBoxPageDto>(pageItems.Count, pageItems);
         }
         public async Task<PagedResultDto<MaterialBoxDetailDto>> DetailAsync(PagingMaterialBoxDetailInput input)
         {

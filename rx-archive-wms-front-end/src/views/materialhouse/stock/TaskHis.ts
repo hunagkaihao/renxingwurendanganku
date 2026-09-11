@@ -92,7 +92,7 @@ function getSelectLabel(options: SelectItem[], value: unknown): string {
 export const tableColumns: BasicColumn[] = [
   {
     title: t('routes.stockTask.stockTaskManagement_stockTaskBarcode'),
-    dataIndex: 'stockBarcode',
+    dataIndex: 'materialBarcode',
   },
   {
     title: t('routes.stockTask.stockTaskManagement_manageTypeCode'),
@@ -203,7 +203,7 @@ export const searchFormSchema: FormSchema[] = [
   },
   
   {
-    field: 'manageStatus',
+    field: 'taskStatus',
     component: 'Select',
     label: t('任务状态'),
     labelWidth: 130,

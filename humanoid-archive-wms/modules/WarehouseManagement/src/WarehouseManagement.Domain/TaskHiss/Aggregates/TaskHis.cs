@@ -29,7 +29,7 @@ namespace WarehouseManagement.TaskHiss.Aggregates
             TaskStatus=stockTask.TaskStatus;
             StartCellPosition = stockTask.StartCellCode;
             EndCellPosition = stockTask.EndCellCode;
-            StockBarcode =stockTask.MaterialBoxBarcode;
+            MaterialBarcode = stockTask.MaterialBoxBarcode;
             Details = new List<TaskHisDetail>();
             foreach (StockTaskDetail detail in stockTaskDetails)
             {
@@ -38,10 +38,10 @@ namespace WarehouseManagement.TaskHiss.Aggregates
 
         }
 
-        //public void Update(string manageTypeCode, string stockBarcode)
+        //public void Update(string manageTypeCode, string materialBarcode)
         //{
         //    ManageTypeCode = manageTypeCode;
-        //    StockBarcode = stockBarcode;
+        //    MaterialBarcode = materialBarcode;
         //}
         public int StockTaskId { get; set; }
         /// <summary>
@@ -64,7 +64,7 @@ namespace WarehouseManagement.TaskHiss.Aggregates
         /// <summary>
         /// 料箱条码
         /// </summary>
-        public string StockBarcode { get; set; }
+        public string MaterialBarcode { get; set; }
         //开始库位
         public string StartCellPosition { get; set; }
         //结束库位
