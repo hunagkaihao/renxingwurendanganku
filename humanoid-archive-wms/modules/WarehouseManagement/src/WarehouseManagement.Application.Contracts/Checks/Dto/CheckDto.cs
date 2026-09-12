@@ -15,7 +15,7 @@ namespace WarehouseManagement.Checks.Dto
         /// 盘点类型
         /// </summary>
         public CheckType CheckType { get; set; }
-        public string GoodsCode { get; set; }
+        public string MaterialCode { get; set; }
         public string BatchNo { get; set; }
         /// <summary>
         /// 区域编码

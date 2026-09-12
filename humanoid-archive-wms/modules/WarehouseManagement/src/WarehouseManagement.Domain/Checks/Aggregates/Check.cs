@@ -35,12 +35,21 @@ namespace WarehouseManagement.Checks.Aggregates
         /// 盘点类型
         /// </summary>
         public CheckType CheckType { get; set; }
-        public string GoodsCode { get; set; }
+        /// <summary>
+        /// 物料码
+        /// </summary>
+        public string MaterialCode { get; set; }
+        /// <summary>
+        /// 物料批次
+        /// </summary>
         public string BatchNo { get; set; }
         /// <summary>
         /// 区域编码
         /// </summary>
         public string AreaCode { get; set; }
+        /// <summary>
+        /// 供应商
+        /// </summary>
         public string Supplier { get; set; }
         /// <summary>
         /// 创建时间
@@ -70,7 +79,9 @@ namespace WarehouseManagement.Checks.Aggregates
         /// 盘点计划明细
         /// </summary>
         public List<CheckDetail> Details { get; private set; }
-
+        /// <summary>
+        /// 租赁id
+        /// </summary>
         public Guid? TenantId { get; set; }
 
         public void AddDetail(int CheckDetailId)

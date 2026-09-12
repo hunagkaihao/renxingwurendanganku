@@ -187,6 +187,8 @@ public static class WarehouseManagementDbContextModelCreatingExtensions
         {
             b.ToTable(WarehouseManagementDbProperties.DbTablePrefix + nameof(CheckDetailHis), WarehouseManagementDbProperties.DbSchema);
             b.HasIndex(q => q.CreationTime);
+            // 盘点历史明细数据库列已统一为 TaskId。
+            b.Property(b => b.TaskId).HasColumnName("TaskId");
             b.ConfigureByConvention();
         });
         builder.Entity<Warehouse>(b =>

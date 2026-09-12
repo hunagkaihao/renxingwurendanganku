@@ -16,8 +16,8 @@ namespace WarehouseManagement.CheckHiss.Aggregates
         public Guid? TenantId { get; set; }
         //计划Id
         public int CheckId { get; set; }
-        //管理任务ID
-        public int ManageId { get; set; }
+        //关联的盘点任务 ID（StockTask.Id）
+        public int TaskId { get; set; }
         //盘点备注
         public string Remark { get; set; }
         public string StockBarcode { get; set; }

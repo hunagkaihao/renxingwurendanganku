@@ -37,7 +37,9 @@ namespace WarehouseManagement.Checks
         /// <returns></returns>
         public Task<Check> CreateByAreaCodeAsync(Check entity)
         {
-            return _checkRepository.InsertAsync(entity);
+            // 创建接口需要在返回前取得数据库生成的盘点计划主键，
+            // 因此立即保存并让 EF 回填 Check.Id。
+            return _checkRepository.InsertAsync(entity, autoSave: true);
         }
 
         /// <summary>

@@ -51,19 +51,19 @@ namespace Lion.AbpPro.Jobs
                 case WcsCheckCellStatus.Empty:
                     return string.IsNullOrEmpty(expected)
                         ? (true, 2, "盘点一致：账面为空，现场扫描也为空")
-                        : (true, 3, $"盘亏：账面档案盒为{expected}，现场扫描为空");
+                        : (true, 3, $"盘亏：账面物料容器为{expected}，现场扫描为空");
 
                 case WcsCheckCellStatus.Scanned:
                     if (string.IsNullOrEmpty(actual))
                         return (true, 6, "扫描异常：WCS标记扫描成功但未返回实际条码");
 
                     if (string.IsNullOrEmpty(expected))
-                        return (true, 4, $"盘盈：账面为空，现场扫描到档案盒{actual}");
+                        return (true, 4, $"盘盈：账面为空，现场扫描到物料容器{actual}");
 
                     if (string.Equals(expected, actual, StringComparison.Ordinal))
-                        return (true, 2, $"盘点一致：账面与现场均为档案盒{actual}");
+                        return (true, 2, $"盘点一致：账面与现场均为物料容器{actual}");
 
-                    return (true, 5, $"错位：账面档案盒为{expected}，现场扫描为{actual}");
+                    return (true, 5, $"错位：账面物料容器为{expected}，现场扫描为{actual}");
 
                 case WcsCheckCellStatus.ScanError:
                     return (true, 6, "扫码异常：二维码未能识别");
@@ -105,270 +105,274 @@ namespace Lion.AbpPro.Jobs
 
         private async void DoWork(object? obj)
         {
-            //mTimer.Change(Timeout.Infinite, Timeout.Infinite);
-
-                //Do something
-                //空请求体 ky
-                while (true)
+            //Do something
+            //空请求体 ky
+            while (true)
+            {
+                try
                 {
-                    try
+                    await Task.Delay(2000);
+                    var stocks = await _stockTaskManager.GetNoCompleteAsync();
+                    var check = await _checkManager.GetExcetingCheck();
+                    var plans = await _planManager.GetExcetingPlan();
+
+                    if (plans.Count > 0)
                     {
-                        await Task.Delay(2000);
-                        var stocks = await _stockTaskManager.GetNoCompleteAsync();
-                        var check = await _checkManager.GetExcetingCheck();
-                        var plans = await _planManager.GetExcetingPlan();
+                        CheckOrderResultDto checkOrderResultDto = new();
+                        checkOrderResultDto.QueryCode = plans[0].HdDefineStr1;
 
-                        if (plans.Count > 0)
+                        if (_wcsApiManager.WCSSimulation)
                         {
-                            CheckOrderResultDto checkOrderResultDto = new();
-                            checkOrderResultDto.QueryCode = plans[0].HdDefineStr1;
+                            var planStocks = stocks
+                                .Where(f => f.TaskTypeCode == TaskType.HPBatchStockIn)
+                                .ToList();
 
-                            if (_wcsApiManager.WCSSimulation)
+                            foreach (var stock in planStocks)
                             {
-                                var planStocks = stocks
-                                    .Where(f => f.TaskTypeCode == TaskType.HPBatchStockIn)
-                                    .ToList();
+                                if (string.IsNullOrWhiteSpace(stock.EndCellCode))
+                                    continue;
 
-                                foreach (var stock in planStocks)
+                                CheckOrderResultDto simulationRequest = new()
                                 {
-                                    if (string.IsNullOrWhiteSpace(stock.EndCellCode))
+                                    QueryCode = checkOrderResultDto.QueryCode,
+                                    OrderCode = stock.Id.ToString(),
+                                    CellCode = stock.EndCellCode
+                                };
+
+                                var simulationRes = await _wcsApiManager.CheckOrderResult(simulationRequest);
+                                if (simulationRes == null || simulationRes.Cells == null)
+                                    continue;
+
+                                for (var i = 0; i < simulationRes.Cells.Count; i++)
+                                {
+                                    if (simulationRes.Cells[i].PlateCode == "waiting")
                                         continue;
 
-                                    CheckOrderResultDto simulationRequest = new()
-                                    {
-                                        QueryCode = checkOrderResultDto.QueryCode,
-                                        OrderCode = stock.Id.ToString(),
-                                        CellCode = stock.EndCellCode
-                                    };
-
-                                    var simulationRes = await _wcsApiManager.CheckOrderResult(simulationRequest);
-                                    if (simulationRes == null || simulationRes.Cells == null)
-                                        continue;
-
-                                    for (var i = 0; i < simulationRes.Cells.Count; i++)
-                                    {
-                                        if (simulationRes.Cells[i].PlateCode == "waiting")
-                                            continue;
-
-                                        await _stockTaskManager.PlanResults(stock.Id, simulationRes.Cells[i].PlateCode);
-                                    }
+                                    await _stockTaskManager.PlanResults(stock.Id, simulationRes.Cells[i].PlateCode);
                                 }
-                            }
-                            else
-                            {
-                                var res = await _wcsApiManager.CheckOrderResult(checkOrderResultDto);
-                                if (res != null)
-                                {
-                                    for (var i = 0; i < res.Cells.Count; i++)
-                                    {
-                                        if (res.Cells[i].PlateCode == "waiting")
-                                            continue;
-                                        //处理盘点结果
-                                        //await _stockTaskManager.CheckResults(Convert.ToInt32(res.Cells[i].OrderCode), res.Cells[i].PlateCode);
-                                        var stock = stocks.Find(f => f.Id == Convert.ToInt32(res.Cells[i].OrderCode));
-                                        if (stock != null)
-                                        {
-                                            //档案入库
-                                            await _stockTaskManager.PlanResults(Convert.ToInt32(res.Cells[i].OrderCode), res.Cells[i].PlateCode);
-                                        }
-                                    }
-                                }
-                            }
-                            //计划任务完成
-                            var s = stocks.Find(f => f.TaskTypeCode == TaskType.HPBatchStockIn);
-                            if (s == null)
-                            {
-                                await _planManager.SetAsCompletedAsync(plans[0].Id);
                             }
                         }
+                        else
+                        {
+                            var res = await _wcsApiManager.CheckOrderResult(checkOrderResultDto);
+                            if (res != null)
+                            {
+                                for (var i = 0; i < res.Cells.Count; i++)
+                                {
+                                    if (res.Cells[i].PlateCode == "waiting")
+                                        continue;
+                                    //处理盘点结果
+                                    //await _stockTaskManager.CheckResults(Convert.ToInt32(res.Cells[i].OrderCode), res.Cells[i].PlateCode);
+                                    var stock = stocks.Find(f => f.Id == Convert.ToInt32(res.Cells[i].OrderCode));
+                                    if (stock != null)
+                                    {
+                                        //档案入库
+                                        await _stockTaskManager.PlanResults(Convert.ToInt32(res.Cells[i].OrderCode), res.Cells[i].PlateCode);
+                                    }
+                                }
+                            }
+                        }
+                        //计划任务完成
+                        var s = stocks.Find(f => f.TaskTypeCode == TaskType.HPBatchStockIn);
+                        if (s == null)
+                        {
+                            await _planManager.SetAsCompletedAsync(plans[0].Id);
+                        }
+                    }
 
                         if (check.Count != 0)
                         {
-                            CheckOrderResultDto checkOrderResultDto = new();
-                            checkOrderResultDto.QueryCode = check[0].BatchNo;
-                            var targetChecks = stocks
-                                .Where(f => f.TaskTypeCode == TaskType.HpAnnualCheckDown &&
-                                            f.PlanId == check[0].Id)
-                                .ToList();
+                        CheckOrderResultDto checkOrderResultDto = new();
+                        checkOrderResultDto.QueryCode = check[0].BatchNo;
+                        var targetChecks = stocks
+                            .Where(f => f.TaskTypeCode == TaskType.HpAnnualCheckDown &&
+                                        f.PlanId == check[0].Id)
+                            .ToList();
 
-                            if (_wcsApiManager.WCSSimulation)
-                            {
-                                foreach (var stock in targetChecks)
-                                {
-                                    if (string.IsNullOrWhiteSpace(stock.EndCellCode))
-                                        continue;
-
-                                    CheckOrderResultDto simulationRequest = new()
-                                    {
-                                        QueryCode = checkOrderResultDto.QueryCode,
-                                        OrderCode = stock.Id.ToString(),
-                                        CellCode = stock.EndCellCode
-                                    };
-
-                                    var simulationRes = await _wcsApiManager.CheckOrderResult(simulationRequest);
-                                    if (simulationRes == null || simulationRes.Cells == null)
-                                        continue;
-
-                                    for (var i = 0; i < simulationRes.Cells.Count; i++)
-                                    {
-                                        try
-                                        {
-                                            Cells actualResult = simulationRes.Cells[i];
-
-                                            if (!string.Equals(stock.EndCellCode, actualResult.CellCode, StringComparison.Ordinal))
-                                                continue;
-
-                                            var comparison = CompareCheckResult(stock.MaterialBoxBarcode, actualResult);
-                                            if (!comparison.CanComplete)
-                                                continue;
-
-                                            await _checkAppService.CompleteCheckCellAsync(
-                                                stock.Id,
-                                                comparison.Flag,
-                                                comparison.Remark,
-                                                actualResult.Status == WcsCheckCellStatus.Scanned
-                                                    ? actualResult.PlateCode
-                                                    : string.Empty);
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            Cells failedResult = simulationRes.Cells[i];
-                                            Log.Error(ex,
-                                                "处理WCS盘点结果失败：CheckId={CheckId}, QueryCode={QueryCode}, OrderCode={OrderCode}, CellCode={CellCode}",
-                                                check[0].Id,
-                                                checkOrderResultDto.QueryCode,
-                                                failedResult?.OrderCode,
-                                                failedResult?.CellCode);
-                                        }
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                var res = await _wcsApiManager.CheckOrderResult(checkOrderResultDto);
-                                if (res != null)
-                                {
-                                    for (var i = 0; i < res.Cells.Count; i++)
-                                    {
-                                        try
-                                        {
-                                            Cells actualResult = res.Cells[i];
-
-                                            // WCS 的扫描段 OrderCode 不再等于单个 StockTask.Id，
-                                            // 因此使用“当前盘点计划 + 实际库位码”定位 WMS 冻结的单库位快照任务。
-                                            // PlanId 条件用于隔离不同批次，避免历史未清理任务中存在相同库位码时串单。
-                                            var stock = stocks.Find(f =>
-                                                f.TaskTypeCode == TaskType.HpAnnualCheckDown &&
-                                                f.PlanId == check[0].Id &&
-                                                string.Equals(f.EndCellCode, actualResult.CellCode, StringComparison.Ordinal));
-                                            if (stock == null)
-                                            {
-                                                // 查询接口会重复返回本批次已经完成的库位或历史任务记录。
-                                                // 视为幂等重复/过期结果，直接跳过即可。
-                                                continue;
-                                            }
-
-                                            var comparison = CompareCheckResult(stock.MaterialBoxBarcode, actualResult);
-                                            if (!comparison.CanComplete)
-                                                continue;
-
-                                            // WMS 在一个工作单元内完成历史落地、库位解锁和任务结束；
-                                            // 盘点结果不会在此直接修改档案盒正式库位或库存。
-                                            await _checkAppService.CompleteCheckCellAsync(
-                                                stock.Id,
-                                                comparison.Flag,
-                                                comparison.Remark,
-                                                actualResult.Status == WcsCheckCellStatus.Scanned
-                                                    ? actualResult.PlateCode
-                                                    : string.Empty);
-                                        }
-                                        catch (Exception ex)
-                                        {
-                                            // 单个异常库位不能阻断同一批次其他库位的盘点结果落地。
-                                            Cells failedResult = res.Cells[i];
-                                            Log.Error(ex,
-                                                "处理WCS盘点结果失败：CheckId={CheckId}, QueryCode={QueryCode}, OrderCode={OrderCode}, CellCode={CellCode}",
-                                                check[0].Id,
-                                                checkOrderResultDto.QueryCode,
-                                                failedResult?.OrderCode,
-                                                failedResult?.CellCode);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        if (stocks.Count != 0)
+                        if (_wcsApiManager.WCSSimulation)
                         {
-                            var states = await _wcsApiManager.States();
-                            if (states == null)
+                            foreach (var stock in targetChecks)
                             {
-                                Log.Warning($"WCS 状态为 [{states}]");
-                                continue;
+                                if (string.IsNullOrWhiteSpace(stock.EndCellCode))
+                                    continue;
+
+                                CheckOrderResultDto simulationRequest = new()
+                                {
+                                    QueryCode = checkOrderResultDto.QueryCode,
+                                    OrderCode = stock.Id.ToString(),
+                                    CellCode = stock.EndCellCode,
+                                    // 虚拟 WCS 按盘点任务冻结时的账面条码回传，默认形成盘点一致结果。
+                                    SimulationExpectedPlateCode = stock.MaterialBoxBarcode
+                                };
+
+                                var simulationRes = await _wcsApiManager.CheckOrderResult(simulationRequest);
+                                if (simulationRes == null || simulationRes.Cells == null)
+                                    continue;
+
+                                for (var i = 0; i < simulationRes.Cells.Count; i++)
+                                {
+                                    try
+                                    {
+                                        Cells actualResult = simulationRes.Cells[i];
+
+                                        if (!string.Equals(stock.EndCellCode, actualResult.CellCode, StringComparison.Ordinal))
+                                            continue;
+
+                                        var comparison = CompareCheckResult(stock.MaterialBoxBarcode, actualResult);
+                                        if (!comparison.CanComplete)
+                                            continue;
+
+                                        await _checkAppService.CompleteCheckCellAsync(
+                                            stock.Id,
+                                            comparison.Flag,
+                                            comparison.Remark,
+                                            actualResult.Status == WcsCheckCellStatus.Scanned
+                                                ? actualResult.PlateCode
+                                                : string.Empty);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Cells failedResult = simulationRes.Cells[i];
+                                        Log.Error(ex,
+                                            "处理WCS盘点结果失败：CheckId={CheckId}, QueryCode={QueryCode}, OrderCode={OrderCode}, CellCode={CellCode}",
+                                            check[0].Id,
+                                            checkOrderResultDto.QueryCode,
+                                            failedResult?.OrderCode,
+                                            failedResult?.CellCode);
+                                    }
+                                }
                             }
 
-                            if (states.orderStates.Count != 0)
+                            // 兼容先前已结束全部子任务、但主计划尚未收口的盘点计划；
+                            // 对仍有活动明细的计划不会产生任何状态变更。
+                            foreach (var executingCheck in check)
                             {
-                                for (int i = 0; i < stocks.Count; i++)
+                                await _checkAppService.CompleteCheckIfNoActiveDetailsAsync(executingCheck.Id);
+                            }
+                        }
+                        else
+                        {
+                            var res = await _wcsApiManager.CheckOrderResult(checkOrderResultDto);
+                            if (res != null)
+                            {
+                                for (var i = 0; i < res.Cells.Count; i++)
                                 {
-                                    if (stocks[i].TaskTypeCode == TaskType.HpAnnualCheckDown || stocks[i].TaskTypeCode == TaskType.HPBatchStockIn)
+                                    try
                                     {
-                                        //CheckOrderResultDto checkOrderResultDto = new();
-                                        //checkOrderResultDto.QueryCode = stocks[i].ManageRemark;
-                                        //var res = await _wcsApiManager.CheckOrderResult(checkOrderResultDto);
-                                        //获取执行中的盘点任务
-                                        //if (res != null)
-                                        //{
-                                        //    if (res.Cells[0].PlateCode == "waiting")
-                                        //        return;
-                                        //    //处理盘点结果
-                                        //    await _stockTaskManager.CheckResults(Convert.ToInt32(res.Cells[0].OrderCode), res.Cells[0].PlateCode);
-                                        //    var flag = 1;
-                                        //    if (res.Cells[0].PlateCode == "empty" && stocks[i].ArchiveBoxRfid == "")
-                                        //    {
-                                        //        flag = 2;
-                                        //    }
-                                        //    else if (res.Cells[0].PlateCode == "empty" && stocks[i].ArchiveBoxRfid != "")
-                                        //    {
-                                        //        flag = 3;
-                                        //    }
-                                        //    else if (res.Cells[0].PlateCode != "empty" && stocks[i].ArchiveBoxRfid == "")
-                                        //    {
-                                        //        flag = 4;
-                                        //    }
-                                        //    else if (res.Cells[0].PlateCode != "empty" && stocks[i].ArchiveBoxRfid != "")
-                                        //    {
-                                        //        flag = 2;
-                                        //    }
-                                        //    //盘点任务完成
-                                        //    await _checkAppService.CompleteOne(stocks[i].Id, stocks[i].ArchiveBoxRfid, flag, res.Cells[0].PlateCode);
-                                        //}
-                                    }
-                                    else
-                                    {
-                                        var state = states.orderStates.Find(f => f.OrderCode == Convert.ToString(stocks[i].Id));
-                                        if (state != null)
-                                        {
-                                            await _stockTaskManager.UpdateStatusAsync(stocks[i].Id, state.Status);
+                                        Cells actualResult = res.Cells[i];
 
+                                        // WCS 的扫描段 OrderCode 不再等于单个 StockTask.Id，
+                                        // 因此使用“当前盘点计划 + 实际库位码”定位 WMS 冻结的单库位快照任务。
+                                        // PlanId 条件用于隔离不同批次，避免历史未清理任务中存在相同库位码时串单。
+                                        var stock = stocks.Find(f =>
+                                            f.TaskTypeCode == TaskType.HpAnnualCheckDown &&
+                                            f.PlanId == check[0].Id &&
+                                            string.Equals(f.EndCellCode, actualResult.CellCode, StringComparison.Ordinal));
+                                        if (stock == null)
+                                        {
+                                            // 查询接口会重复返回本批次已经完成的库位或历史任务记录。
+                                            // 视为幂等重复/过期结果，直接跳过即可。
+                                            continue;
                                         }
+
+                                        var comparison = CompareCheckResult(stock.MaterialBoxBarcode, actualResult);
+                                        if (!comparison.CanComplete)
+                                            continue;
+
+                                        // WMS 在一个工作单元内完成历史落地、库位解锁和任务结束；
+                                        // 盘点结果不会在此直接修改物料容器正式库位或库存。
+                                        await _checkAppService.CompleteCheckCellAsync(
+                                            stock.Id,
+                                            comparison.Flag,
+                                            comparison.Remark,
+                                            actualResult.Status == WcsCheckCellStatus.Scanned
+                                                ? actualResult.PlateCode
+                                                : string.Empty);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        // 单个异常库位不能阻断同一批次其他库位的盘点结果落地。
+                                        Cells failedResult = res.Cells[i];
+                                        Log.Error(ex,
+                                            "处理WCS盘点结果失败：CheckId={CheckId}, QueryCode={QueryCode}, OrderCode={OrderCode}, CellCode={CellCode}",
+                                            check[0].Id,
+                                            checkOrderResultDto.QueryCode,
+                                            failedResult?.OrderCode,
+                                            failedResult?.CellCode);
                                     }
                                 }
                             }
                         }
-
-
-                        //mTimer.Change(mDelayTime, Timeout.Infinite);
                     }
-                    catch (Exception ex)
+
+                    if (stocks.Count != 0)
                     {
-                        Log.Debug(ex.ToString());
+                        var states = await _wcsApiManager.States();
+                        if (states == null)
+                        {
+                            Log.Warning($"WCS 状态为 [{states}]");
+                            continue;
+                        }
+
+                        if (states.orderStates.Count != 0)
+                        {
+                            for (int i = 0; i < stocks.Count; i++)
+                            {
+                                if (stocks[i].TaskTypeCode == TaskType.HpAnnualCheckDown || stocks[i].TaskTypeCode == TaskType.HPBatchStockIn)
+                                {
+                                    //CheckOrderResultDto checkOrderResultDto = new();
+                                    //checkOrderResultDto.QueryCode = stocks[i].ManageRemark;
+                                    //var res = await _wcsApiManager.CheckOrderResult(checkOrderResultDto);
+                                    //获取执行中的盘点任务
+                                    //if (res != null)
+                                    //{
+                                    //    if (res.Cells[0].PlateCode == "waiting")
+                                    //        return;
+                                    //    //处理盘点结果
+                                    //    await _stockTaskManager.CheckResults(Convert.ToInt32(res.Cells[0].OrderCode), res.Cells[0].PlateCode);
+                                    //    var flag = 1;
+                                    //    if (res.Cells[0].PlateCode == "empty" && stocks[i].ArchiveBoxRfid == "")
+                                    //    {
+                                    //        flag = 2;
+                                    //    }
+                                    //    else if (res.Cells[0].PlateCode == "empty" && stocks[i].ArchiveBoxRfid != "")
+                                    //    {
+                                    //        flag = 3;
+                                    //    }
+                                    //    else if (res.Cells[0].PlateCode != "empty" && stocks[i].ArchiveBoxRfid == "")
+                                    //    {
+                                    //        flag = 4;
+                                    //    }
+                                    //    else if (res.Cells[0].PlateCode != "empty" && stocks[i].ArchiveBoxRfid != "")
+                                    //    {
+                                    //        flag = 2;
+                                    //    }
+                                    //    //盘点任务完成
+                                    //    await _checkAppService.CompleteOne(stocks[i].Id, stocks[i].ArchiveBoxRfid, flag, res.Cells[0].PlateCode);
+                                    //}
+                                }
+                                else
+                                {
+                                    var state = states.orderStates.Find(f => f.OrderCode == Convert.ToString(stocks[i].Id));
+                                    if (state != null)
+                                    {
+                                        await _stockTaskManager.UpdateStatusAsync(stocks[i].Id, state.Status);
+
+                                    }
+                                }
+                            }
+                        }
                     }
-            }
 
 
-
-
+                    //mTimer.Change(mDelayTime, Timeout.Infinite);
+                }
+                catch (Exception ex)
+                {
+                    Log.Debug(ex.ToString());
+                }
+        }
+            
         }
     }
 }

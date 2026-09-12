@@ -14,7 +14,7 @@ namespace WarehouseManagement.CheckHiss.Aggregates
         public Guid? TenantId { get; set; }
         public string CheckCode { get; set; }
         public string CheckType { get; set; }
-        public string GoodsCode { get; set; }
+        public string MaterialCode { get; set; }
         public string BatchNo { get; set; }
         public string AreaCode { get; set; }
         public string Supplier { get; set; }

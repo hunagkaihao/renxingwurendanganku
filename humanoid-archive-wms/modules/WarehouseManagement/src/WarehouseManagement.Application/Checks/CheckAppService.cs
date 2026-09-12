@@ -135,13 +135,17 @@ namespace WarehouseManagement.Checks
             _taskHisManager = taskHisManager;
         }
         //[Authorize(WarehouseManagementPermissions.CheckManagement.Create)]
-        //创建盘点计划
+        /// <summary>
+        /// 创建盘点计划
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         [AllowAnonymous]
         public async Task<CheckDto> CreateCheckByAreaAsync(CreateCheckDto input)
         {
             var entity = new Check(input.AreaCode)
             {
-                CheckCode = "YK" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                CheckCode = "LY" + DateTime.Now.ToString("yyyyMMddHHmmss"),
                 CheckStatus = CheckStatus.Waiting,
                 CheckType = CheckType.AreaCodeAuto,
                 AreaCode = input.AreaCode,
@@ -152,20 +156,25 @@ namespace WarehouseManagement.Checks
             return  base.ObjectMapper.Map<Check, CheckDto>(check);
         }
 
-        //执行盘点计划
+        /// <summary>
+        /// 执行盘点计划
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        /// <exception cref="UserFriendlyException"></exception>
         [AllowAnonymous]
         public async Task<bool> SetAsExecutingAsync(IdIntInput input)
         {
-            // 盘点期间不允许出入库任务改变现场档案盒位置，
+            // 盘点期间不允许出入库任务改变现场物料位置，
             // 否则 WMS 冻结的账面快照会与扫描过程发生并发漂移。
             if (await _stockTaskManager.ExistInOutManage())
             {
-                throw new UserFriendlyException("盘点计划下达过程中不允许有档案盒的出入库任务!");
+                throw new UserFriendlyException("盘点计划下达过程中不允许有物料的出入库任务!");
             }
             try
             {
                 Check mCheckMain = await _checkRepository.FindByIdAsync(input.Id);
-                //20220422 避免同一盘点计划，多次下达。
+                // 避免同一盘点计划，多次下达。
                 if (mCheckMain.CheckStatus != CheckStatus.Waiting)
                 {
                     throw new UserFriendlyException("计划不能重复下达!");
@@ -218,7 +227,7 @@ namespace WarehouseManagement.Checks
                 //如果是自定义异常，则使用原抛出
                 if (!exceptionClassName.Contains("UserFriendlyException"))
                 {
-                    throw new UserFriendlyException("下达任务失败!" + ex.ToString());
+                    throw new UserFriendlyException("下达盘点任务失败!" + ex.ToString());
                 }
                 else
                 {
@@ -281,6 +290,7 @@ namespace WarehouseManagement.Checks
             await CurrentUnitOfWork.SaveChangesAsync();
             return stock;
         }
+        
         //创建盘点明细
         public async Task CreateCheckList(int checkId , StockTask stock)
         {
@@ -408,7 +418,7 @@ namespace WarehouseManagement.Checks
             string actualPlateCode)
         {
             StockTask stockTask = await _stockTaskManager.FindByIdAsync(stockId);
-            bool historyExists = await _checkDetailHisManager.ExistsByManageIdAsync(stockId);
+            bool historyExists = await _checkDetailHisManager.ExistsByTaskIdAsync(stockId);
 
             // StockTask 已被完成事件转入历史并删除时，历史记录就是本次结果已经成功处理的证据。
             // WCS 的查询接口每次返回整批结果，因此同一库位被重复轮询属于正常情况，应幂等成功。
@@ -489,22 +499,13 @@ namespace WarehouseManagement.Checks
                         //删除盘点子表
                         await _checkDetailRepository.DeleteAsync(ck.Id);
                     }
-                    //判断是否全部盘点完毕
-                    List<CheckDetail> checkDetails = await _checkDetailManager.GetCheckDetail(check.Id);
-                    if(checkDetails.Count == 0)
-                    {
-                        check.CheckStatus = CheckStatus.Complete;
-                        check.IsDeleted = true;
-                        await _checkManagement.UpdateAsync(check, true);
-                        
-                        CheckHis ckhis =await _checkHisManager.GetHisByIdAsync(checkHisId);
-                        ckhis.FinishTime = DateTime.Now.ToString();
-                        ckhis.CheckStatus = CheckStatus.Complete.ToString();
-                        await _checkHisManager.UpdateAsync(ckhis);
-                        
-                        /*//删除对应的年度任务盘点
-                        await _checkManagement.DeleteAsync(ckhis.CheckCode);*/
-                    }
+
+                    // DeleteAsync 的删除状态尚未写入数据库时，紧随其后的查询仍会读取到旧明细，
+                    // 导致最后一个库位已完成但主盘点计划无法从 Executing 收口为 Complete。
+                    // 这里仍处于 CompleteCheckCellAsync 的同一工作单元内，刷写失败会由事务统一回滚。
+                    await CurrentUnitOfWork.SaveChangesAsync();
+
+                    await CompleteCheckIfNoActiveDetailsAsync(check.Id);
                 }
                 return bResult;
             }
@@ -512,6 +513,42 @@ namespace WarehouseManagement.Checks
             {
                 throw new UserFriendlyException(ex.ToString());
             }
+        }
+
+        /// <summary>
+        /// 在所有盘点明细均已落入历史后，统一收口盘点主表和盘点历史状态。
+        /// 该方法可被 WCS 回调和定时轮询重复调用，已完成或仍有明细时均不会重复写入。
+        /// </summary>
+        [UnitOfWork]
+        public virtual async Task<bool> CompleteCheckIfNoActiveDetailsAsync(int checkId)
+        {
+            Check check = await _checkManagement.GetCheck(checkId);
+            if (check == null || check.CheckStatus != CheckStatus.Executing)
+                return false;
+
+            List<CheckDetail> checkDetails = await _checkDetailManager.GetCheckDetail(checkId);
+            if (checkDetails.Count != 0)
+                return false;
+
+            CheckHis checkHis = (await _checkHisManager.GetHisAsync(check.CheckCode)).FirstOrDefault();
+            if (checkHis == null)
+            {
+                int checkHisId = await CreateCheckHis(check);
+                checkHis = await _checkHisManager.GetHisByIdAsync(checkHisId);
+            }
+
+            check.CheckStatus = CheckStatus.Complete;
+            check.IsDeleted = true;
+            await _checkManagement.UpdateAsync(check, true);
+
+            if (checkHis != null)
+            {
+                checkHis.FinishTime = DateTime.Now.ToString();
+                checkHis.CheckStatus = CheckStatus.Complete.ToString();
+                await _checkHisManager.UpdateAsync(checkHis);
+            }
+
+            return true;
         }
 
         //创建盘点任务历史记录
@@ -526,7 +563,7 @@ namespace WarehouseManagement.Checks
                 checkHisDto.CreateTime = check.CreateTime;
                 checkHisDto.BeginTime = check.BeginTime;
                 checkHisDto.FinishTime = check.FinishTime;
-                checkHisDto.GoodsCode = check.GoodsCode;
+                checkHisDto.MaterialCode = check.MaterialCode;
                 checkHisDto.BatchNo = check.BatchNo;
                 checkHisDto.AreaCode = check.AreaCode;
                 checkHisDto.Supplier = check.Supplier;
@@ -554,7 +591,7 @@ namespace WarehouseManagement.Checks
                 CheckDetailHisDto checkDetailHisDto = new()
                 {
                     CheckId = checkHisId,
-                    ManageId = checkDetail.ManageId,
+                    TaskId = checkDetail.ManageId,
                     Remark = checkDetail.Remark,
                     StockBarcode = checkDetail.StockBarcode,
                     CellName = checkDetail.CellName,

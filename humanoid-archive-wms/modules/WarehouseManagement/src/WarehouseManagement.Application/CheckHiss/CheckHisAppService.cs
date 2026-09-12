@@ -30,11 +30,13 @@ namespace WarehouseManagement.CheckHiss
                         where checkHis.CheckCode.Contains(input.Filter.IsNullOrEmpty() ? "" : input.Filter.Trim())
                         select new { checkHis };
 
+            var pageSize = input.PageSize > 0 ? input.PageSize : 10;
+            var skipCount = (input.PageIndex - 1) * pageSize;
 
             query = query
                 .OrderByDescending(f => f.checkHis.Id)
-                .Skip(input.SkipCount)
-                .Take(1000);
+                .Skip(skipCount)
+                .Take(pageSize);
 
             var queryResult = await AsyncExecuter.ToListAsync(query);
 
@@ -45,9 +47,9 @@ namespace WarehouseManagement.CheckHiss
                 //archiveBoxDtos.CellCode = x.cell.CellCode;
 
                 return checkHisDtos;
-            }).Take(input.PageSize).ToList();
+            }).ToList();
 
-            var totalCount = queryResult.Count() + input.SkipCount;
+            var totalCount = checkHisDtos.Count;
 
             return new PagedResultDto<CheckHisDto>(
                 totalCount,
@@ -59,16 +61,20 @@ namespace WarehouseManagement.CheckHiss
 
             var queryable = await _checkDetailHisRepository.GetQueryableAsync();
 
-            //Prepare a query to join books and authors
             var query = from checkDetailHis in queryable
-                        where (checkDetailHis.CheckId == input.CheckId)
+                        where (!input.StartCreationTime.HasValue ||
+                               checkDetailHis.CreationTime >= input.StartCreationTime.Value)
+                              && (!input.EndCreationTime.HasValue ||
+                                  checkDetailHis.CreationTime <= input.EndCreationTime.Value)
                         select new { checkDetailHis };
 
+            var pageSize = input.PageSize > 0 ? input.PageSize : 10;
+            var skipCount = (input.PageIndex - 1) * pageSize;
 
             query = query
                 .OrderByDescending(f => f.checkDetailHis.Id)
-                .Skip(input.SkipCount)
-                .Take(1000);
+                .Skip(skipCount)
+                .Take(pageSize);
 
             var queryResult = await AsyncExecuter.ToListAsync(query);
 
@@ -76,12 +82,15 @@ namespace WarehouseManagement.CheckHiss
             var checkHisDtos = queryResult.Select(x =>
             {
                 var checkHisDtos = ObjectMapper.Map<CheckDetailHis, CheckDetailHisDto>(x.checkDetailHis);
+                checkHisDtos.MaterialBoxBarcode = string.IsNullOrWhiteSpace(x.checkDetailHis.BoxBarcode)
+                    ? x.checkDetailHis.StockBarcode
+                    : x.checkDetailHis.BoxBarcode;
                 //archiveBoxDtos.CellCode = x.cell.CellCode;
 
                 return checkHisDtos;
-            }).Take(input.PageSize).ToList();
+            }).ToList();
 
-            var totalCount = queryResult.Count() + input.SkipCount;
+            var totalCount = checkHisDtos.Count;
 
             return new PagedResultDto<CheckDetailHisDto>(
                 totalCount,

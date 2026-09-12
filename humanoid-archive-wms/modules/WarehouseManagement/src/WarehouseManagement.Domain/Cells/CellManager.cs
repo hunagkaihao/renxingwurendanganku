@@ -261,7 +261,7 @@ namespace WarehouseManagement.Cells
         /// <exception cref="UserFriendlyException"></exception>
         public async Task<List<int>> GetCellidsByAreaCode(string areaCode)
         {
-            //areaCode 编码规则 与库位编码一致  不补位  z-x-y
+            // 区域码与库位编码统一为 x-y-z（排-列-层），不补位。
             List<int> iLists = null;
             if (areaCode == "0-0-0")
             {
@@ -293,32 +293,32 @@ namespace WarehouseManagement.Cells
                     {
                         if (areaCodes[1] == "0")
                         {
-                            iLists = (await _cellRepository.GetListAsync(x => x.CellType == CellType.Cell & x.Cell_z == Convert.ToInt32(areaCodes[0]) & x.Cell_y == Convert.ToInt32(areaCodes[2]))).OrderBy(y => y.Cell_x).Select(x => x.Id).ToList();
+                            iLists = (await _cellRepository.GetListAsync(x => x.CellType == CellType.Cell & x.Cell_x == Convert.ToInt32(areaCodes[0]) & x.Cell_z == Convert.ToInt32(areaCodes[2]))).OrderBy(y => y.Cell_y).Select(x => x.Id).ToList();
                         }
                         else
                         {
-                            iLists = (await _cellRepository.GetListAsync(x => x.CellType == CellType.Cell & x.Cell_z == Convert.ToInt32(areaCodes[0]) & x.Cell_x == Convert.ToInt32(areaCodes[1]) & x.Cell_y == Convert.ToInt32(areaCodes[2]))).Select(x => x.Id).ToList();
+                            iLists = (await _cellRepository.GetListAsync(x => x.CellType == CellType.Cell & x.Cell_x == Convert.ToInt32(areaCodes[0]) & x.Cell_y == Convert.ToInt32(areaCodes[1]) & x.Cell_z == Convert.ToInt32(areaCodes[2]))).Select(x => x.Id).ToList();
                         }
                     }
                     else
                     {
                         if (areaCodes[1] != "0")
                         {
-                            iLists = (await _cellRepository.GetListAsync(x => x.CellType == CellType.Cell & x.Cell_z == Convert.ToInt32(areaCodes[0]) & x.Cell_x == Convert.ToInt32(areaCodes[1]))).OrderBy(y => y.Cell_y).Select(x => x.Id).ToList();
+                            iLists = (await _cellRepository.GetListAsync(x => x.CellType == CellType.Cell & x.Cell_x == Convert.ToInt32(areaCodes[0]) & x.Cell_y == Convert.ToInt32(areaCodes[1]))).OrderBy(y => y.Cell_z).Select(x => x.Id).ToList();
                         }
                         else
                         {
-                            List<Cell> cells = await _cellRepository.GetListAsync(x => x.CellType == CellType.Cell & x.Cell_z == Convert.ToInt32(areaCodes[0]));
+                            List<Cell> cells = await _cellRepository.GetListAsync(x => x.CellType == CellType.Cell & x.Cell_x == Convert.ToInt32(areaCodes[0]));
                             iLists = new List<int>();
-                            for (int i = 1; i < cells.Max(x => x.Cell_y) + 1; i++)
+                            for (int i = 1; i < cells.Max(x => x.Cell_z) + 1; i++)
                             {
                                 if (Convert.ToBoolean(i % 2))
                                 {
-                                    iLists.AddRange(cells.Where(x => x.Cell_y == i).OrderBy(y => y.Cell_x).Select(x => x.Id).ToList());
+                                    iLists.AddRange(cells.Where(x => x.Cell_z == i).OrderBy(y => y.Cell_y).Select(x => x.Id).ToList());
                                 }
                                 else
                                 {
-                                    iLists.AddRange(cells.Where(x => x.Cell_y == i).OrderByDescending(y => y.Cell_x).Select(x => x.Id).ToList());
+                                    iLists.AddRange(cells.Where(x => x.Cell_z == i).OrderByDescending(y => y.Cell_y).Select(x => x.Id).ToList());
                                 }
                             }
                             //iLists = _cellRepository.GetAll().Where(x => x.CellType == "Cell" & x.Cell_z == Convert.ToInt32(areaCodes[0])).Select(x => x.Id).ToList();
@@ -350,7 +350,7 @@ namespace WarehouseManagement.Cells
         /// <exception cref="UserFriendlyException"></exception>
         public async Task<List<Cell>> GetCellsByAreaCode(string areaCode)
         {
-            //areaCode 编码规则 与库位编码一致  不补位  z-x-y
+            // 区域码与库位编码统一为 x-y-z（排-列-层），不补位。
             List<Cell> iLists = null;
             if (areaCode == "0-0-0")
             {
@@ -373,26 +373,28 @@ namespace WarehouseManagement.Cells
                     {
                         if (areaCodes[1] == "0")
                         {
-                            iLists = (await _cellRepository.GetListAsync(x => x.CellType == CellType.Cell & x.Cell_z == Convert.ToInt32(areaCodes[0]) & x.Cell_y == Convert.ToInt32(areaCodes[2]))).OrderBy(y => y.Cell_x).ToList();
+                            // 指定排和层、列通配：例如 01-000-01。
+                            iLists = (await _cellRepository.GetListAsync(x => x.CellType == CellType.Cell & x.Cell_x == Convert.ToInt32(areaCodes[0]) & x.Cell_z == Convert.ToInt32(areaCodes[2]))).OrderBy(y => y.Cell_y).ToList();
                         }
                         else
                         {
-                            iLists = (await _cellRepository.GetListAsync(x => x.CellType == CellType.Cell & x.Cell_z == Convert.ToInt32(areaCodes[0]) & x.Cell_x == Convert.ToInt32(areaCodes[1]) & x.Cell_y == Convert.ToInt32(areaCodes[2]))).ToList();
+                            iLists = (await _cellRepository.GetListAsync(x => x.CellType == CellType.Cell & x.Cell_x == Convert.ToInt32(areaCodes[0]) & x.Cell_y == Convert.ToInt32(areaCodes[1]) & x.Cell_z == Convert.ToInt32(areaCodes[2]))).ToList();
                         }
                     }
                     else
                     {
                         if (areaCodes[1] != "0")
                         {
-                            iLists = (await _cellRepository.GetListAsync(x => x.CellType == CellType.Cell & x.Cell_z == Convert.ToInt32(areaCodes[0]) & x.Cell_x == Convert.ToInt32(areaCodes[1]))).OrderBy(y => y.Cell_y).ToList();
+                            // 指定排和列、层通配：例如 01-002-00。
+                            iLists = (await _cellRepository.GetListAsync(x => x.CellType == CellType.Cell & x.Cell_x == Convert.ToInt32(areaCodes[0]) & x.Cell_y == Convert.ToInt32(areaCodes[1]))).OrderBy(y => y.Cell_z).ToList();
                         }
                         else
                         {
-                            List<Cell> cells = await _cellRepository.GetListAsync(x => x.CellType == CellType.Cell & x.Cell_z == Convert.ToInt32(areaCodes[0]));
+                            List<Cell> cells = await _cellRepository.GetListAsync(x => x.CellType == CellType.Cell & x.Cell_x == Convert.ToInt32(areaCodes[0]));
                             iLists = new List<Cell>();
-                            for (int i = 1; i < cells.Max(x => x.Cell_y) + 1; i++)
+                            for (int i = 1; i < cells.Max(x => x.Cell_z) + 1; i++)
                             {
-                                iLists.AddRange(cells.Where(x => x.Cell_y == i).OrderBy(y => y.Cell_x).ToList());
+                                iLists.AddRange(cells.Where(x => x.Cell_z == i).OrderBy(y => y.Cell_y).ToList());
                             }
                             //iLists = _cellRepository.GetAll().Where(x => x.CellType == "Cell" & x.Cell_z == Convert.ToInt32(areaCodes[0])).Select(x => x.Id).ToList();
                             //增加排序进行S扫描

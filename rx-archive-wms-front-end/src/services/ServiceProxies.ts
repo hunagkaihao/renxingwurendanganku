@@ -18031,26 +18031,17 @@ export class CheckDetailHisDto implements ICheckDetailHisDto {
     creatorId!: string | undefined;
     lastModificationTime!: moment.Moment | undefined;
     lastModifierId!: string | undefined;
-    tenantId!: string | undefined;
     checkId!: number;
-    manageId!: number;
+    taskId!: number;
     remark!: string | undefined;
-    stockBarcode!: string | undefined;
+    materialBoxBarcode!: string | undefined;
     cellName!: string | undefined;
-    goodsId!: number;
-    supplier!: string | undefined;
-    account!: number;
-    realAmount_1!: number;
-    realAmount_2!: number;
-    profitLossAmount!: number;
     checker!: string | undefined;
     beginTime!: string | undefined;
     finishTime!: string | undefined;
     verifyFinishTime!: string | undefined;
     completeFlag!: number;
-    boxBarcode!: string | undefined;
     verifyFlag!: number;
-    verifyAmount!: number;
     verifyUser!: string | undefined;
     lastModifierUserId!: number | undefined;
     deleterUserId!: number | undefined;
@@ -18072,26 +18063,17 @@ export class CheckDetailHisDto implements ICheckDetailHisDto {
             this.creatorId = _data["creatorId"];
             this.lastModificationTime = _data["lastModificationTime"] ? moment(_data["lastModificationTime"].toString()) : <any>undefined;
             this.lastModifierId = _data["lastModifierId"];
-            this.tenantId = _data["tenantId"];
             this.checkId = _data["checkId"];
-            this.manageId = _data["manageId"];
+            this.taskId = _data["taskId"];
             this.remark = _data["remark"];
-            this.stockBarcode = _data["stockBarcode"];
+            this.materialBoxBarcode = _data["materialBoxBarcode"];
             this.cellName = _data["cellName"];
-            this.goodsId = _data["goodsId"];
-            this.supplier = _data["supplier"];
-            this.account = _data["account"];
-            this.realAmount_1 = _data["realAmount_1"];
-            this.realAmount_2 = _data["realAmount_2"];
-            this.profitLossAmount = _data["profitLossAmount"];
             this.checker = _data["checker"];
             this.beginTime = _data["beginTime"];
             this.finishTime = _data["finishTime"];
             this.verifyFinishTime = _data["verifyFinishTime"];
             this.completeFlag = _data["completeFlag"];
-            this.boxBarcode = _data["boxBarcode"];
             this.verifyFlag = _data["verifyFlag"];
-            this.verifyAmount = _data["verifyAmount"];
             this.verifyUser = _data["verifyUser"];
             this.lastModifierUserId = _data["lastModifierUserId"];
             this.deleterUserId = _data["deleterUserId"];
@@ -18113,26 +18095,17 @@ export class CheckDetailHisDto implements ICheckDetailHisDto {
         data["creatorId"] = this.creatorId;
         data["lastModificationTime"] = this.lastModificationTime ? this.lastModificationTime.toISOString() : <any>undefined;
         data["lastModifierId"] = this.lastModifierId;
-        data["tenantId"] = this.tenantId;
         data["checkId"] = this.checkId;
-        data["manageId"] = this.manageId;
+        data["taskId"] = this.taskId;
         data["remark"] = this.remark;
-        data["stockBarcode"] = this.stockBarcode;
+        data["materialBoxBarcode"] = this.materialBoxBarcode;
         data["cellName"] = this.cellName;
-        data["goodsId"] = this.goodsId;
-        data["supplier"] = this.supplier;
-        data["account"] = this.account;
-        data["realAmount_1"] = this.realAmount_1;
-        data["realAmount_2"] = this.realAmount_2;
-        data["profitLossAmount"] = this.profitLossAmount;
         data["checker"] = this.checker;
         data["beginTime"] = this.beginTime;
         data["finishTime"] = this.finishTime;
         data["verifyFinishTime"] = this.verifyFinishTime;
         data["completeFlag"] = this.completeFlag;
-        data["boxBarcode"] = this.boxBarcode;
         data["verifyFlag"] = this.verifyFlag;
-        data["verifyAmount"] = this.verifyAmount;
         data["verifyUser"] = this.verifyUser;
         data["lastModifierUserId"] = this.lastModifierUserId;
         data["deleterUserId"] = this.deleterUserId;
@@ -18147,26 +18120,17 @@ export interface ICheckDetailHisDto {
     creatorId: string | undefined;
     lastModificationTime: moment.Moment | undefined;
     lastModifierId: string | undefined;
-    tenantId: string | undefined;
     checkId: number;
-    manageId: number;
+    taskId: number;
     remark: string | undefined;
-    stockBarcode: string | undefined;
+    materialBoxBarcode: string | undefined;
     cellName: string | undefined;
-    goodsId: number;
-    supplier: string | undefined;
-    account: number;
-    realAmount_1: number;
-    realAmount_2: number;
-    profitLossAmount: number;
     checker: string | undefined;
     beginTime: string | undefined;
     finishTime: string | undefined;
     verifyFinishTime: string | undefined;
     completeFlag: number;
-    boxBarcode: string | undefined;
     verifyFlag: number;
-    verifyAmount: number;
     verifyUser: string | undefined;
     lastModifierUserId: number | undefined;
     deleterUserId: number | undefined;
@@ -18229,7 +18193,7 @@ export class CheckDto implements ICheckDto {
     lastModifierId!: string | undefined;
     checkCode!: string | undefined;
     checkType!: CheckType;
-    goodsCode!: string | undefined;
+    materialCode!: string | undefined;
     batchNo!: string | undefined;
     areaCode!: string | undefined;
     supplier!: string | undefined;
@@ -18258,7 +18222,7 @@ export class CheckDto implements ICheckDto {
             this.lastModifierId = _data["lastModifierId"];
             this.checkCode = _data["checkCode"];
             this.checkType = _data["checkType"];
-            this.goodsCode = _data["goodsCode"];
+            this.materialCode = _data["materialCode"];
             this.batchNo = _data["batchNo"];
             this.areaCode = _data["areaCode"];
             this.supplier = _data["supplier"];
@@ -18287,7 +18251,7 @@ export class CheckDto implements ICheckDto {
         data["lastModifierId"] = this.lastModifierId;
         data["checkCode"] = this.checkCode;
         data["checkType"] = this.checkType;
-        data["goodsCode"] = this.goodsCode;
+        data["materialCode"] = this.materialCode;
         data["batchNo"] = this.batchNo;
         data["areaCode"] = this.areaCode;
         data["supplier"] = this.supplier;
@@ -18309,7 +18273,7 @@ export interface ICheckDto {
     lastModifierId: string | undefined;
     checkCode: string | undefined;
     checkType: CheckType;
-    goodsCode: string | undefined;
+    materialCode: string | undefined;
     batchNo: string | undefined;
     areaCode: string | undefined;
     supplier: string | undefined;
@@ -18378,7 +18342,7 @@ export class CheckHisDto implements ICheckHisDto {
     tenantId!: string | undefined;
     checkCode!: string | undefined;
     checkType!: string | undefined;
-    goodsCode!: string | undefined;
+    materialCode!: string | undefined;
     batchNo!: string | undefined;
     areaCode!: string | undefined;
     supplier!: string | undefined;
@@ -18411,7 +18375,7 @@ export class CheckHisDto implements ICheckHisDto {
             this.tenantId = _data["tenantId"];
             this.checkCode = _data["checkCode"];
             this.checkType = _data["checkType"];
-            this.goodsCode = _data["goodsCode"];
+            this.materialCode = _data["materialCode"];
             this.batchNo = _data["batchNo"];
             this.areaCode = _data["areaCode"];
             this.supplier = _data["supplier"];
@@ -18444,7 +18408,7 @@ export class CheckHisDto implements ICheckHisDto {
         data["tenantId"] = this.tenantId;
         data["checkCode"] = this.checkCode;
         data["checkType"] = this.checkType;
-        data["goodsCode"] = this.goodsCode;
+        data["materialCode"] = this.materialCode;
         data["batchNo"] = this.batchNo;
         data["areaCode"] = this.areaCode;
         data["supplier"] = this.supplier;
@@ -18470,7 +18434,7 @@ export interface ICheckHisDto {
     tenantId: string | undefined;
     checkCode: string | undefined;
     checkType: string | undefined;
-    goodsCode: string | undefined;
+    materialCode: string | undefined;
     batchNo: string | undefined;
     areaCode: string | undefined;
     supplier: string | undefined;
@@ -25522,7 +25486,8 @@ export class PagingCheckDetailHisDto implements IPagingCheckDetailHisDto {
     pageSize!: number;
     /** 跳过多少条 */
     readonly skipCount!: number;
-    checkId!: number;
+    startCreationTime!: moment.Moment | undefined;
+    endCreationTime!: moment.Moment | undefined;
 
     constructor(data?: IPagingCheckDetailHisDto) {
         if (data) {
@@ -25538,7 +25503,8 @@ export class PagingCheckDetailHisDto implements IPagingCheckDetailHisDto {
             this.pageIndex = _data["pageIndex"];
             this.pageSize = _data["pageSize"];
             (<any>this).skipCount = _data["skipCount"];
-            this.checkId = _data["checkId"];
+            this.startCreationTime = _data["startCreationTime"] ? moment(_data["startCreationTime"].toString()) : <any>undefined;
+            this.endCreationTime = _data["endCreationTime"] ? moment(_data["endCreationTime"].toString()) : <any>undefined;
         }
     }
 
@@ -25554,7 +25520,8 @@ export class PagingCheckDetailHisDto implements IPagingCheckDetailHisDto {
         data["pageIndex"] = this.pageIndex;
         data["pageSize"] = this.pageSize;
         data["skipCount"] = this.skipCount;
-        data["checkId"] = this.checkId;
+        data["startCreationTime"] = this.startCreationTime ? this.startCreationTime.toISOString() : <any>undefined;
+        data["endCreationTime"] = this.endCreationTime ? this.endCreationTime.toISOString() : <any>undefined;
         return data;
     }
 }
@@ -25566,7 +25533,8 @@ export interface IPagingCheckDetailHisDto {
     pageSize: number;
     /** 跳过多少条 */
     skipCount: number;
-    checkId: number;
+    startCreationTime: moment.Moment | undefined;
+    endCreationTime: moment.Moment | undefined;
 }
 
 export class PagingCheckDetailInput implements IPagingCheckDetailInput {

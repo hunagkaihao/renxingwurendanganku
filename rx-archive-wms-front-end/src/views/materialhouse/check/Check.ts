@@ -159,7 +159,7 @@ export const hisDetailColumns: BasicColumn[] = [
   // },
   {
     title: t('物料类型标签'),
-    dataIndex: 'stockBarcode',
+    dataIndex: 'materialBoxBarcode',
   },
   {
     title: t('盘点结果反馈'),
@@ -169,22 +169,6 @@ export const hisDetailColumns: BasicColumn[] = [
   //   title: t('档案标签'),
   //   dataIndex: 'boxBarcode',
   // },
-  {
-    title: t('账目数量'),
-    dataIndex: 'account',
-  },
-  {
-    title: t('实盘数量'),
-    dataIndex: 'realAmount_1',
-  },
-  {
-    title: t('差异数量'),
-    dataIndex: 'profitLossAmount',
-  },
-  {
-    title: t('审核数量'),
-    dataIndex: 'verifyAmount',
-  },
   {
     title: t('审核用户'),
     dataIndex: 'verifyUser',

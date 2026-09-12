@@ -72,18 +72,37 @@ namespace WarehouseManagement.WcsTasks
         /// <returns></returns>
         public async Task<ResultWcsTaskDto> CheckOrderCreate(CheckOrderCreateDto checkOrderCreate)
         {
-            if (!WCSEnable)
-            {
-                Log.Information("WCS服务配置为不可用");
-                return null;
-            }
-
             if (checkOrderCreate?.Orders == null || checkOrderCreate.Orders.Count == 0)
                 return new ResultWcsTaskDto(false, "盘点计划没有可下发的扫描段");
 
             string queryCode = string.IsNullOrWhiteSpace(checkOrderCreate.QueryCode)
                 ? $"CHECK-{DateTime.Now:yyyyMMddHHmmssfff}"
                 : checkOrderCreate.QueryCode;
+
+            if (WCSSimulation)
+            {
+                foreach (OrderDto segment in checkOrderCreate.Orders.OrderBy(x => x.Sequence))
+                {
+                    Log.Information(
+                        "WCS虚拟下发盘点扫描段成功：QueryCode={QueryCode}, OrderCode={OrderCode}, Start={Start}, End={End}, Sequence={Sequence}",
+                        queryCode,
+                        segment.OrderCode,
+                        string.IsNullOrWhiteSpace(segment.StartCellCode) ? segment.CellCode : segment.StartCellCode,
+                        string.IsNullOrWhiteSpace(segment.EndCellCode) ? segment.CellCode : segment.EndCellCode,
+                        segment.Sequence);
+                }
+
+                return new ResultWcsTaskDto(true, "WCS虚拟盘点任务下发成功")
+                {
+                    QueryCode = queryCode
+                };
+            }
+
+            if (!WCSEnable)
+            {
+                Log.Information("WCS服务配置为不可用");
+                return null;
+            }
 
             ResultWcsTaskDto lastResponse = null;
             foreach (OrderDto segment in checkOrderCreate.Orders.OrderBy(x => x.Sequence))
@@ -148,6 +167,9 @@ namespace WarehouseManagement.WcsTasks
                 Log.Information("WCS模拟查询盘点结果：QueryCode={QueryCode}, OrderCode={OrderCode}, CellCode={CellCode}",
                     checkOrderCreate.QueryCode, checkOrderCreate.OrderCode, checkOrderCreate.CellCode);
 
+                string plateCode = checkOrderCreate.SimulationExpectedPlateCode?.Trim() ?? string.Empty;
+                bool isEmpty = string.IsNullOrEmpty(plateCode);
+
                 return new ResultCheckDto
                 {
                     Cells = new List<WcsCheckCell>
@@ -156,8 +178,8 @@ namespace WarehouseManagement.WcsTasks
                         {
                             OrderCode = checkOrderCreate.OrderCode,
                             CellCode = checkOrderCreate.CellCode,
-                            Status = WcsCheckCellStatus.Empty,
-                            PlateCode = "empty"
+                            Status = isEmpty ? WcsCheckCellStatus.Empty : WcsCheckCellStatus.Scanned,
+                            PlateCode = isEmpty ? "empty" : plateCode
                         }
                     }
                 };

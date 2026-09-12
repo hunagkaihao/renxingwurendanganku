@@ -673,7 +673,11 @@ namespace WarehouseManagement.StockTasks
         }
 
 
-        //创建盘点任务
+        /// <summary>
+        /// 创建盘点任务
+        /// </summary>
+        /// <param name="stockTask"></param>
+        /// <returns></returns>
         public async Task<StockTask> CreateCheckAsync(StockTask stockTask)
         {
             return await _stockTaskRepository.InsertAsync(stockTask, true);

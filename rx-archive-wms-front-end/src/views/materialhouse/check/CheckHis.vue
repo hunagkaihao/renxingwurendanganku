@@ -129,13 +129,6 @@
         });
 
         async function GetDetailHis(params){
-            if (selectedBoxIdRef.value == "") {
-            return {
-              items: [],
-              totalCount: 0,
-            };
-          }
-          params.checkId = selectedBoxIdRef.value;
           return await GetTableDetailHis(params);
         }
   
@@ -185,7 +178,7 @@
           selectedDetailRef.value = rows[0].id;
           console.log(rows[0])
           cellName = rows[0].cellName;
-          boxRfid = rows[0].stockBarcode;
+          boxRfid = rows[0].materialBoxBarcode;
           remark = rows[0].remark;
         } else {
           selectedDetailRef.value = 0;
