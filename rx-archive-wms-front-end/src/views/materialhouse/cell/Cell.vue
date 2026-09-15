@@ -15,14 +15,14 @@
         >
           {{ t('common.createText') }}
         </a-button>
-        <a-button
+<!--        <a-button
           preIcon="ant-design:link-outlined"
           type="primary"
           @click="handleBindMaterial"
           v-auth="'WarehouseManagement.CellManagement.Update'"
         >
           物料绑定
-        </a-button>
+        </a-button>-->
         <a-button
           preIcon="ant-design:unlock-outlined"
           type="primary"
@@ -50,6 +50,7 @@
         <a-button
           preIcon="ant-design:export-outlined"
           type="primary"
+          @click="handleBorrowStockOut"
           v-auth="'WarehouseManagement.CellManagement.Create'"
         >
           借用出库
@@ -57,6 +58,7 @@
         <a-button
           preIcon="ant-design:import-outlined"
           type="primary"
+          @click="handleReturnStockIn"
           v-auth="'WarehouseManagement.CellManagement.Create'"
         >
           归还入库
@@ -124,6 +126,8 @@
     />
     <BindCellMaterial @register="registerBindMaterialModal" @reload="reload" />
     <CreateStockTask @register="registerCreateStockTaskModal" @reload="reload" />
+    <BorrowStockOut @register="registerBorrowStockOutModal" @reload="reload" />
+    <ReturnStockIn @register="registerReturnStockInModal" @reload="reload" />
   </div>
 </template>
 
@@ -140,6 +144,8 @@
     setCellEnable,
     createCellStockOutAsync,
     openCellDoorAsync,
+    borrowStockOutAsync,
+    returnStockInAsync,
   } from './Cell';
   import { useModal } from '/@/components/Modal';
   import CreateCell from './CreateCell.vue';
@@ -147,6 +153,8 @@
   import EditCell from './EditCell.vue';
   import BindCellMaterial from './BindCellMaterial.vue';
   import CreateStockTask from '../stock/CreateStockTask.vue';
+  import BorrowStockOut from './BorrowStockOut.vue';
+  import ReturnStockIn from './ReturnStockIn.vue';
   import { message } from 'ant-design-vue';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { Tag } from 'ant-design-vue';
@@ -166,6 +174,8 @@
       EditCell,
       BindCellMaterial,
       CreateStockTask,
+      BorrowStockOut,
+      ReturnStockIn,
       Tag,
     },
     setup() {
@@ -176,6 +186,8 @@
       const [registerEditCellModal, { openModal: openEditCellModal }] = useModal();
       const [registerBindMaterialModal, { openModal: openBindMaterialModal }] = useModal();
       const [registerCreateStockTaskModal, { openModal: openCreateStockTaskModal }] = useModal();
+      const [registerBorrowStockOutModal, { openModal: openBorrowStockOutModal }] = useModal();
+      const [registerReturnStockInModal, { openModal: openReturnStockInModal }] = useModal();
       const selectedCell = ref<CellStockRecord>();
       //console.log(cellStore.getWare)
 
@@ -367,12 +379,29 @@
         });
       };
 
+      const handleBorrowStockOut = () => {
+        const cell = selectedCell.value;
+        const error = validateCellStockAction(cell, 'out');
+        if (error || !cell) {
+          if (error) message.error(error);
+          return;
+        }
+
+        openBorrowStockOutModal(true, { record: cell });
+      };
+
+      const handleReturnStockIn = () => {
+        openReturnStockInModal(true, { record: selectedCell.value });
+      };
+
       return {
         onSelectChange,
         handleBindMaterial,
         handleOpenDoor,
         handleStockIn,
         handleStockOut,
+        handleBorrowStockOut,
+        handleReturnStockIn,
         registerTable,
         handleEdit,
         handleDelete,
@@ -385,6 +414,8 @@
         registerEditCellModal,
         registerBindMaterialModal,
         registerCreateStockTaskModal,
+        registerBorrowStockOutModal,
+        registerReturnStockInModal,
         t,
         reload,
       };

@@ -135,6 +135,14 @@ namespace WarehouseManagement.Cells
                 throw new UserFriendlyException("该库位已有物料，无法入库");
             }
         }
+        public void EnsureCanStockIn(string materialCode)
+        {
+            if (!string.IsNullOrWhiteSpace(MaterialCode) &&
+                !string.Equals(MaterialCode, materialCode?.Trim(), StringComparison.Ordinal))
+            {
+                throw new UserFriendlyException("该库位已有其他物料，无法入库");
+            }
+        }
         public void EnsureCanStockOut()
         {
             if (string.IsNullOrWhiteSpace(MaterialCode))

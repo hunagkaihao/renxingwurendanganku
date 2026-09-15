@@ -79,7 +79,7 @@
         const [registerImportGoodssModal, { openModal: openImportGoodssModal }] = useModal();
         const selectedBoxIdRef = ref('');
         // table配置
-        const [registerTable, { reload }] = useTable({
+        const [registerTable, { reload, clearSelectedRowKeys }] = useTable({
           columns: tableColumns,
           formConfig: {
             labelWidth: 70,
@@ -125,7 +125,11 @@
               title: t('common.tip'),
               content: msg,
               onOk: async () => {
-                await wcsInSetCell({ id, reload });
+                const success = await wcsInSetCell({ id, reload });
+                if (success) {
+                  clearSelectedRowKeys();
+                  selectedBoxIdRef.value = '';
+                }
               },
             });
         };

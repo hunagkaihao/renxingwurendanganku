@@ -5,6 +5,7 @@ import {
   // PagingUserListInput,
   // UsersServiceProxy,
   CellsServiceProxy,
+  BindMaterialToCellDto,
   PagingCellListInput,
   CellDtoPagedResultDto,
   CellDtoListResultDto,
@@ -24,7 +25,6 @@ import { useI18n } from '/@/hooks/web/useI18n';
 import { SelectItem } from '/@/utils/SelectItem';
 import{ useUserStore } from '/@/store/modules/user'
 import { reactive } from 'vue';
-import { defHttp } from '/@/utils/http/axios';
 
 const { t } = useI18n();
 const cellStore = useUserStore()
@@ -628,6 +628,34 @@ export async function createCellStockOutAsync({ request, reload }) {
   }
 }
 
+export async function borrowStockOutAsync({ request, changeOkLoading, validate, closeModal, resetFields }) {
+  changeOkLoading(true);
+  try {
+    await validate();
+    const stockTasksServiceProxy = new StockTasksServiceProxy();
+    await stockTasksServiceProxy.borrowStockOut(request);
+    message.success(t('common.operationSuccess'));
+    resetFields();
+    closeModal();
+  } finally {
+    changeOkLoading(false);
+  }
+}
+
+export async function returnStockInAsync({ request, changeOkLoading, validate, closeModal, resetFields }) {
+  changeOkLoading(true);
+  try {
+    await validate();
+    const stockTasksServiceProxy = new StockTasksServiceProxy();
+    await stockTasksServiceProxy.returnStockIn(request);
+    message.success(t('common.operationSuccess'));
+    resetFields();
+    closeModal();
+  } finally {
+    changeOkLoading(false);
+  }
+}
+
 export async function openCellDoorAsync({ cellCode, reload }) {
   try {
     openFullLoading();
@@ -657,7 +685,8 @@ export async function bindCellMaterialAsync({
   changeOkLoading(true);
   try {
     await validate();
-    await defHttp.post({ url: '/Cells/bindMaterial', params: request });
+    const _cellsServiceProxy = new CellsServiceProxy();
+    await _cellsServiceProxy.bindMaterial(new BindMaterialToCellDto(request));
     message.success(t('common.operationSuccess'));
     resetFields();
     closeModal();

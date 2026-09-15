@@ -65,6 +65,16 @@ namespace WarehouseManagement.StockTasks
         Task<StockTaskDto> CreateWCSOut(CreateStockTaskDto input);
 
         /// <summary>
+        /// 创建临时借用出库任务，并下发至存取一体机窗口。
+        /// </summary>
+        Task<StockTaskDto> BorrowStockOutAsync(BorrowStockOutInput input);
+
+        /// <summary>
+        /// 创建临时借用物料的归还入库任务，并自动分配目标库位。
+        /// </summary>
+        Task<StockTaskDto> ReturnStockInAsync(ReturnStockInInput input);
+
+        /// <summary>
         /// 批量入库任务
         /// </summary>
         /// <param name="areaCode"></param>

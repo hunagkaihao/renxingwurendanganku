@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Lion.AbpPro.Extension.Customs.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Serilog;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -19,6 +20,7 @@ using WarehouseManagement.Goodss;
 using WarehouseManagement.Plans;
 using WarehouseManagement.Plans.Aggregates;
 using WarehouseManagement.Plans.Dto;
+using WarehouseManagement.Permissions;
 using WarehouseManagement.RfidCodes.Aggregates;
 using WarehouseManagement.StockTasks.Aggregates;
 using WarehouseManagement.StockTasks.Dto;
@@ -293,7 +295,7 @@ namespace WarehouseManagement.StockTasks
                     throw new UserFriendlyException("目标库位不存在");
                 }
 
-                targetCell.EnsureCanStockIn();
+                targetCell.EnsureCanStockIn(input.MaterialCode);
                 if (!string.Equals(targetCell.CellModel?.Trim(), input.MaterialType?.Trim(), StringComparison.Ordinal))
                 {
                     throw new UserFriendlyException("目标库位规格与物料类型不一致");
@@ -504,6 +506,78 @@ namespace WarehouseManagement.StockTasks
             var stockTask = await _stockTaskManagement.CreateWCSOut(input.TaskTypeCode, materialBoxObj);
             return base.ObjectMapper.Map<StockTask, StockTaskDto>(stockTask);
         }
+
+        [Authorize(WarehouseManagementPermissions.StockTaskManagement.Create)]
+        [UnitOfWork]
+        public async Task<StockTaskDto> BorrowStockOutAsync(BorrowStockOutInput input)
+        {
+            if (input == null || string.IsNullOrWhiteSpace(input.MaterialCode))
+            {
+                throw new UserFriendlyException("物料码不能为空");
+            }
+
+            if (string.IsNullOrWhiteSpace(input.BorrowPurpose))
+            {
+                throw new UserFriendlyException("借用用途不能为空");
+            }
+
+            if (input.BorrowDurationHours <= 0)
+            {
+                throw new UserFriendlyException("借用时长必须大于 0 小时");
+            }
+
+            var materialCode = input.MaterialCode.Trim();
+            var materialBox = await _materialBoxRepository.FindByMaterialBoxcodeAsync(materialCode);
+            if (materialBox == null)
+            {
+                throw new UserFriendlyException("物料不存在");
+            }
+
+            var stockTask = await _stockTaskManagement.CreateWCSOut(
+                TaskType.HPSortStockOut.ToString(),
+                materialBox);
+            stockTask.TaskOperator = CurrentUser.UserName;
+            stockTask.TaskRemark = $"临时借用；用途：{input.BorrowPurpose.Trim()}；时长：{input.BorrowDurationHours}小时";
+            stockTask = await _stockTaskRepository.UpdateAsync(stockTask, true);
+
+            await WCSSetCell(stockTask.Id);
+
+            var assignedTask = await _stockTaskManagement.FindByIdAsync(stockTask.Id);
+            return base.ObjectMapper.Map<StockTask, StockTaskDto>(assignedTask);
+        }
+
+        [Authorize(WarehouseManagementPermissions.StockTaskManagement.Create)]
+        [UnitOfWork]
+        public async Task<StockTaskDto> ReturnStockInAsync(ReturnStockInInput input)
+        {
+            if (input == null || string.IsNullOrWhiteSpace(input.MaterialCode))
+            {
+                throw new UserFriendlyException("物料码不能为空");
+            }
+
+            var materialBox = await _materialBoxRepository.FindByMaterialBoxcodeAsync(input.MaterialCode.Trim());
+            if (materialBox == null)
+            {
+                throw new UserFriendlyException("物料不存在");
+            }
+
+            if (materialBox.CellId > 0)
+            {
+                throw new UserFriendlyException("物料已在库位中，无法重复归还入库");
+            }
+
+            var stockTask = await _stockTaskManagement.CreateWCSIn(
+                TaskType.NPFullStockIn.ToString(),
+                materialBox);
+            stockTask.TaskOperator = CurrentUser.UserName;
+            stockTask.TaskRemark = "临时借用归还入库";
+            stockTask = await _stockTaskRepository.UpdateAsync(stockTask, true);
+
+            await WCSSetCell(stockTask.Id);
+
+            var assignedTask = await _stockTaskManagement.FindByIdAsync(stockTask.Id);
+            return base.ObjectMapper.Map<StockTask, StockTaskDto>(assignedTask);
+        }
         
         public async Task<bool> BatBoxInByArea(string areaCode)
         {
@@ -585,7 +659,10 @@ namespace WarehouseManagement.StockTasks
         [UnitOfWork]
         public async Task<List<StockTaskDto>> GetInOutTask()
         {
-            var manageMainlist =await _stockTaskRepository.GetListAsync(a => a.TaskTypeCode == TaskType.NPFullStockIn || a.TaskTypeCode == TaskType.NPSortStockOut);
+            var manageMainlist =await _stockTaskRepository.GetListAsync(a =>
+                a.TaskTypeCode == TaskType.NPFullStockIn ||
+                a.TaskTypeCode == TaskType.NPSortStockOut ||
+                a.TaskTypeCode == TaskType.HPSortStockOut);
             List<StockTaskDto> listResultDtos = new();
             foreach (var item in manageMainlist)
             {

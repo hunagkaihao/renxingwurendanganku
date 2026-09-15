@@ -541,10 +541,12 @@ export async function wcsInSetCell({ id, reload }){
     const _stockTasksServiceProxy = new StockTasksServiceProxy();
     openFullLoading();
     await _stockTasksServiceProxy.wcsInSetCell(id);
-    closeFullLoading();
     message.success(t('common.operationSuccess'));
-    reload();
+    await reload();
+    closeFullLoading();
+    return true;
   } catch (error) {
     closeFullLoading();
+    return false;
   }
 }

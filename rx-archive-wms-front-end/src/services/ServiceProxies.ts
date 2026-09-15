@@ -3022,6 +3022,112 @@ export class CellsServiceProxy extends ServiceProxyBase {
     }
 
     /**
+     * Binds material to a cell.
+     * @param body (optional)
+     * @return Success
+     */
+    bindMaterial(body: BindMaterialToCellDto | undefined , cancelToken?: CancelToken | undefined): Promise<CellDto> {
+        let url_ = this.baseUrl + "/Cells/bindMaterial";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        const transformedOptions = this.transformOptions(options_);
+        if (!transformedOptions) {
+            return Promise.reject(new Error("Session expired"));
+        }
+
+        return transformedOptions.then(transformedOptions_ => {
+            return this.instance.request(transformedOptions_);
+        }).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processBindMaterial(_response));
+        });
+    }
+
+    protected processBindMaterial(response: AxiosResponse): Promise<CellDto> {
+        const status = response.status;
+        let _headers: any = {};
+        if (response.headers && typeof response.headers === "object") {
+            for (let k in response.headers) {
+                if (response.headers.hasOwnProperty(k)) {
+                    _headers[k] = response.headers[k];
+                }
+            }
+        }
+        if (status === 200) {
+            const _responseText = response.data;
+            let result200: any = null;
+            let resultData200  = _responseText;
+            result200 = CellDto.fromJS(resultData200);
+            return Promise.resolve<CellDto>(result200);
+
+        } else if (status === 403) {
+            const _responseText = response.data;
+            let result403: any = null;
+            let resultData403  = _responseText;
+            result403 = RemoteServiceErrorResponse.fromJS(resultData403);
+            return throwException("Forbidden", status, _responseText, _headers, result403);
+
+        } else if (status === 401) {
+            const _responseText = response.data;
+            let result401: any = null;
+            let resultData401  = _responseText;
+            result401 = RemoteServiceErrorResponse.fromJS(resultData401);
+            return throwException("Unauthorized", status, _responseText, _headers, result401);
+
+        } else if (status === 400) {
+            const _responseText = response.data;
+            let result400: any = null;
+            let resultData400  = _responseText;
+            result400 = RemoteServiceErrorResponse.fromJS(resultData400);
+            return throwException("Bad Request", status, _responseText, _headers, result400);
+
+        } else if (status === 404) {
+            const _responseText = response.data;
+            let result404: any = null;
+            let resultData404  = _responseText;
+            result404 = RemoteServiceErrorResponse.fromJS(resultData404);
+            return throwException("Not Found", status, _responseText, _headers, result404);
+
+        } else if (status === 501) {
+            const _responseText = response.data;
+            let result501: any = null;
+            let resultData501  = _responseText;
+            result501 = RemoteServiceErrorResponse.fromJS(resultData501);
+            return throwException("Server Error", status, _responseText, _headers, result501);
+
+        } else if (status === 500) {
+            const _responseText = response.data;
+            let result500: any = null;
+            let resultData500  = _responseText;
+            result500 = RemoteServiceErrorResponse.fromJS(resultData500);
+            return throwException("Server Error", status, _responseText, _headers, result500);
+
+        } else if (status !== 200 && status !== 204) {
+            const _responseText = response.data;
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+        }
+        return Promise.resolve<CellDto>(null as any);
+    }
+
+    /**
      * 创建库位
      * @param body (optional) 
      * @return Success
@@ -11939,6 +12045,41 @@ export class StockTasksServiceProxy extends ServiceProxyBase {
      * @param cellCode (optional)
      * @return Success
      */
+    borrowStockOut(body: any, cancelToken?: CancelToken | undefined): Promise<StockTaskDto> {
+        return this.postStockTask("/StockTasks/borrowStockOut", body, cancelToken);
+    }
+
+    returnStockIn(body: any, cancelToken?: CancelToken | undefined): Promise<StockTaskDto> {
+        return this.postStockTask("/StockTasks/returnStockIn", body, cancelToken);
+    }
+
+    private postStockTask(url_: string, body: any, cancelToken?: CancelToken | undefined): Promise<StockTaskDto> {
+        url_ = this.baseUrl + url_;
+        url_ = url_.replace(/[?&]$/, "");
+        const content_ = JSON.stringify(body);
+        const options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.instance.request(transformedOptions_);
+        }).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            }
+            throw _error;
+        }).then((_response: AxiosResponse) => {
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processClientOutCell(_response));
+        });
+    }
+
     clientOutCell(body: ClientOutCellInput | undefined, cancelToken?: CancelToken | undefined): Promise<StockTaskDto> {
         let url_ = this.baseUrl + "/StockTasks/clientOutCell";
         url_ = url_.replace(/[?&]$/, "");
@@ -17579,6 +17720,46 @@ export class ArchiveDtoPagedResultDto implements IArchiveDtoPagedResultDto {
 export interface IArchiveDtoPagedResultDto {
     items: ArchiveDto[] | undefined;
     totalCount: number;
+}
+
+export class BindMaterialToCellDto implements IBindMaterialToCellDto {
+    cellId!: number;
+    materialCode!: string;
+
+    constructor(data?: IBindMaterialToCellDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.cellId = _data["cellId"];
+            this.materialCode = _data["materialCode"];
+        }
+    }
+
+    static fromJS(data: any): BindMaterialToCellDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new BindMaterialToCellDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["cellId"] = this.cellId;
+        data["materialCode"] = this.materialCode;
+        return data;
+    }
+}
+
+export interface IBindMaterialToCellDto {
+    cellId: number;
+    materialCode: string;
 }
 
 export class CellDto implements ICellDto {

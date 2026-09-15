@@ -105,6 +105,18 @@ namespace WarehouseManagement.StockTasks
         {
             return await _stockTaskAppService.CreateWCSOut(input);
         }
+        [HttpPost("borrowStockOut")]
+        [SwaggerOperation(summary: "创建临时借用出库任务", Tags = new[] { "StockTasks" })]
+        public async Task<StockTaskDto> BorrowStockOutAsync(BorrowStockOutInput input)
+        {
+            return await _stockTaskAppService.BorrowStockOutAsync(input);
+        }
+        [HttpPost("returnStockIn")]
+        [SwaggerOperation(summary: "创建临时借用归还入库任务", Tags = new[] { "StockTasks" })]
+        public async Task<StockTaskDto> ReturnStockInAsync(ReturnStockInInput input)
+        {
+            return await _stockTaskAppService.ReturnStockInAsync(input);
+        }
         [HttpPost("clientOutCell")]
         [SwaggerOperation(summary: "一体机创建物料出库任务", Tags = new[] { "StockTasks" })]
         public async Task<StockTaskDto> ClientOutCell(ClientOutCellInput input)

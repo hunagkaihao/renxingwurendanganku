@@ -384,6 +384,17 @@ namespace WarehouseManagement.StockTasks
             try
             {
                 entity = new StockTask(manageTypeCode, materialBox.MaterialBoxBarcode);
+                if (materialBox.CellId > 0)
+                {
+                    var boundCell = await _cellManager.GetByIdAsync(materialBox.CellId);
+                    if (boundCell == null)
+                    {
+                        throw new UserFriendlyException("物料绑定的库位不存在");
+                    }
+
+                    entity.StartCellId = boundCell.Id;
+                    entity.StartCellCode = boundCell.CellCode;
+                }
                 entity = await _stockTaskRepository.InsertAsync(entity, true);
                 Log.Debug($"任务号:[{entity.Id}] 物料码:[{materialBox.MaterialBoxBarcode}] " +
                           $"创建入库任务成功,物料信息: {JsonConvert.SerializeObject(entity)}");
@@ -452,7 +463,8 @@ namespace WarehouseManagement.StockTasks
                     if (stockTask.EndCellId == 0 || stockTask.EndCellId == null)
                     {
                         //优先分配上一个出库库位
-                        if(stockTask.TaskTypeCode != TaskType.NPSortStockOut)
+                        if(stockTask.TaskTypeCode != TaskType.NPSortStockOut &&
+                           stockTask.TaskTypeCode != TaskType.HPSortStockOut)
                         {
                             StockTask last = (await _stockTaskRepository.GetListAsync(x => 
                                  x.MaterialBoxBarcode == stockTask.MaterialBoxBarcode & 
@@ -488,7 +500,7 @@ namespace WarehouseManagement.StockTasks
                             throw new UserFriendlyException("目标库位不存在");
                         }
 
-                        endCell.EnsureCanStockIn();
+                        endCell.EnsureCanStockIn(box.MaterialBoxBarcode);
                         if (!string.Equals(endCell.CellModel?.Trim(), cellModel, StringComparison.Ordinal))
                         {
                             throw new UserFriendlyException("目标库位规格与物料类型不一致");
@@ -639,7 +651,8 @@ namespace WarehouseManagement.StockTasks
 
                     case WcsTaskStatus.Completed:
                         // WCS 正常完成，按 WMS 任务类型提交库存变化。
-                        if (entity.TaskTypeCode == TaskType.NPSortStockOut)
+                        if (entity.TaskTypeCode == TaskType.NPSortStockOut ||
+                            entity.TaskTypeCode == TaskType.HPSortStockOut)
                         {
                             // 出库完成：释放起终点库位并将档案盒标记为出库。
                             await _cellManager.SetAsStockOutAsync((int)entity.EndCellId);

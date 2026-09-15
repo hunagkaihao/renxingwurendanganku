@@ -17,7 +17,7 @@ export function validateCellStockAction(
   }
 
   const hasMaterial = Boolean(cell.materialCode && cell.materialCode.trim());
-  if (action === 'in' && hasMaterial) {
+  if (action === 'in' && cell.cellType !== 'Station' && hasMaterial) {
     return '该库位已有物料，无法入库';
   }
   if (action === 'out' && !hasMaterial) {
