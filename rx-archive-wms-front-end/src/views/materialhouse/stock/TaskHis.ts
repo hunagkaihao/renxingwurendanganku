@@ -127,26 +127,34 @@ export const tableColumns: BasicColumn[] = [
 
 export const tableDetailColumns: BasicColumn[] = [
   {
-    title: t('物料标签'),
+    title: t('物料编号'),
     dataIndex: 'goodsCode',
   },
   {
-    title: t('物料题名'),
+    title: t('物料名称'),
     dataIndex: 'goodsName',
   },
-  // {
-  //   title: t('档案'),
-  //   dataIndex: 'goodsProperty1',
-  // },
-
-  
-  // {
-  //   title: t('routes.stockTask.stockTaskManagement_creationTime'),
-  //   dataIndex: 'creationTime',
-  //   customRender: ({ text }) => {
-  //     return moment(text).format('YYYY-MM-DD HH:mm:ss');
-  //   },
-  // },
+  {
+    title: t('物料类型'),
+    dataIndex: 'goodsSpec',
+  },
+  {
+    title: t('单位'),
+    dataIndex: 'goodsUnits',
+  },
+  {
+    title: t('有效期'),
+    dataIndex: 'goodsBand',
+  },
+  {
+    title: t('创建用户'),
+    dataIndex: 'goodsBatchNo',
+  },
+  {
+    title: t('创建时间'),
+    dataIndex: 'creationTime',
+    customRender: ({ text }) => (text ? moment(text).format('YYYY-MM-DD HH:mm:ss') : '-'),
+  },
 ];
 
 export const searchFormSchema: FormSchema[] = [

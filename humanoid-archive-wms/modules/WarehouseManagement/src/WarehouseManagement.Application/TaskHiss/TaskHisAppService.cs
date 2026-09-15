@@ -16,6 +16,7 @@ using WarehouseManagement.Goodss;
 using WarehouseManagement.Cells;
 using WarehouseManagement.StockTasks;
 using WarehouseManagement.Material;
+using WarehouseManagement.MaterialBoxs;
 using TaskStatus = WarehouseManagement.StockTasks.TaskStatus;
 
 namespace WarehouseManagement.TaskHiss
@@ -37,9 +38,11 @@ namespace WarehouseManagement.TaskHiss
         private readonly IStockTaskRepository _stockTaskRepository;
         private readonly ICellRepository _cellRepository;
         private readonly IMaterialRepository _archiveRepository;
+        private readonly IMaterialBoxRepository _materialBoxRepository;
         public TaskHisAppService(ITaskHisRepository taskHisRepository, TaskHisManager taskHisManagement,
             ITaskHisDetailRepository taskHisDetailRepository, IGoodsRepository goodsRepository,
-            IStockTaskRepository stockTaskRepository, ICellRepository cellRepository, IMaterialRepository archiveRepository)
+            IStockTaskRepository stockTaskRepository, ICellRepository cellRepository, IMaterialRepository archiveRepository,
+            IMaterialBoxRepository materialBoxRepository)
         {
             _taskHisRepository = taskHisRepository;
             _taskHisManagement = taskHisManagement;
@@ -48,6 +51,7 @@ namespace WarehouseManagement.TaskHiss
             _stockTaskRepository = stockTaskRepository;
             _cellRepository = cellRepository;
             _archiveRepository = archiveRepository;
+            _materialBoxRepository = materialBoxRepository;
         }
         //[Authorize(WarehouseManagementPermissions.TaskHisManagement.Create)]
         //public async Task<TaskHisDto> CreateAsync(CreateTaskHisDto input)
@@ -101,42 +105,29 @@ namespace WarehouseManagement.TaskHiss
         public async Task<PagedResultDto<TaskHisDetailDto>> GetPagingDetailListAsync(
     PagingTaskHisDetailInput input)
         {
-            //Get the IQueryable<Book> from the repository
-            var queryable = await _taskHisDetailRepository.GetQueryableAsync();
+            var taskHisQueryable = await _taskHisRepository.GetQueryableAsync();
+            var materialBoxQueryable = await _materialBoxRepository.GetQueryableAsync();
+            var query = from taskHis in taskHisQueryable
+                        join materialBox in materialBoxQueryable
+                            on taskHis.MaterialBarcode equals materialBox.MaterialBoxBarcode
+                        where taskHis.Id == input.TaskHisId
+                        select new { taskHis, materialBox };
 
-            //Prepare a query to join books and authors
-            var query = from taskHisDetail in queryable
-                        join material in await _archiveRepository.GetQueryableAsync() on taskHisDetail.GoodsId equals material.Id
-                        join taskHis in await _taskHisRepository.GetQueryableAsync() on taskHisDetail.TaskHisId equals taskHis.Id
-                        where taskHisDetail.TaskHisId == input.TaskHisId
-                        select new { taskHisDetail, material, taskHis };
-
-            //Paging
-            query = query
-                //.OrderBy(NormalizeSorting(input.Sorting))
-                .OrderBy(f => f.taskHisDetail.Id)
-                .Skip(input.SkipCount)
-                .Take(1000);
-            //.Take(input.MaxResultCount);
-
-            //Execute the query and get a list
             var queryResult = await AsyncExecuter.ToListAsync(query);
-
-            //Convert the query result to a list of BookDto objects
-            var taskHisDetailDtos = queryResult.Select(x =>
+            var taskHisDetailDtos = queryResult.Select(x => new TaskHisDetailDto
             {
-                var taskHisDetailDtos = ObjectMapper.Map<TaskHisDetail, TaskHisDetailDto>(x.taskHisDetail);
-                taskHisDetailDtos.StockBarcode = x.taskHis.MaterialBarcode;
-                taskHisDetailDtos.GoodsCode = x.material.MaterialCode;
-                taskHisDetailDtos.GoodsName = x.material.MaterialName;
-                taskHisDetailDtos.GoodsSpec = x.material.GoodsSpec;
-                taskHisDetailDtos.Quantity = x.taskHisDetail.TaskHisDetailQuantity;                
-                return taskHisDetailDtos;
+                Id = x.taskHis.Id,
+                StockBarcode = x.taskHis.MaterialBarcode,
+                GoodsCode = x.materialBox.MaterialBoxBarcode,
+                GoodsName = x.materialBox.MaterialBoxName,
+                GoodsSpec = x.materialBox.CellModel,
+                GoodsUnits = x.materialBox.MaterialUnit,
+                GoodsBand = x.materialBox.RetentionPeriod,
+                GoodsBatchNo = x.materialBox.MaterialPeople,
+                CreationTime = x.materialBox.CreationTime
             }).ToList();
 
-            //Get the total count with another query
-            //var totalCount = await _taskHisDetailRepository.GetCountAsync();
-            var totalCount = queryResult.Count();
+            var totalCount = taskHisDetailDtos.Count;
 
             return new PagedResultDto<TaskHisDetailDto>(
                 totalCount,
