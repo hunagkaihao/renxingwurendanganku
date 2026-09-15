@@ -23,13 +23,6 @@
           </a-button> -->
           <a-button
             type="primary"
-            @click="OpenDoor"
-            v-auth="'WarehouseManagement.GoodsManagement.Create'"
-          >
-            {{ t('开门指令') }}
-          </a-button>
-          <a-button
-            type="primary"
             @click="cancalTask"
             v-auth="'WarehouseManagement.GoodsManagement.Create'"
           >
@@ -59,7 +52,7 @@
     import { defineComponent,ref } from 'vue';
     import { useMessage } from '/@/hooks/web/useMessage';
     import { BasicTable, useTable, TableAction } from '/@/components/Table';
-    import { tableColumns, searchFormSchema, getTableListAsync, wcsInSetCell,cancelTaskAsync,wcsOpenDoor } from './StockTask';
+    import { tableColumns, searchFormSchema, getTableListAsync, wcsInSetCell,cancelTaskAsync } from './StockTask';
     import { useModal } from '/@/components/Modal';
     import { message } from 'ant-design-vue';
     import { useI18n } from '/@/hooks/web/useI18n';
@@ -136,23 +129,6 @@
               },
             });
         };
-        const OpenDoor = async()=>{
-          if(selectedBoxIdRef.value == ''){
-            message.error("请先选择档案盒")
-            return
-          }
-          let msg = t('确认手动下达开门指令？');
-            let id = selectedBoxIdRef.value
-            createConfirm({
-              iconType: 'warning',
-              title: t('common.tip'),
-              content: msg,
-              onOk: async () => {
-                await wcsOpenDoor({ id, reload });
-              },
-            });
-        }
-
         const cancalTask = async () => {
           if(selectedBoxIdRef.value == ''){
             message.error("请先选择要取消的任务")
@@ -202,7 +178,6 @@
           wcspage,
           cancalTask,
           reload,
-          OpenDoor,
         };
       },
     });

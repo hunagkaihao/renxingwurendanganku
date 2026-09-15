@@ -480,6 +480,22 @@ namespace WarehouseManagement.StockTasks
                         stockTask.EndCellId = endCell.Id;
                         stockTask.EndCellCode = endCell.CellCode;
                     }
+                    else
+                    {
+                        endCell = await _cellManager.GetByIdAsync((int)stockTask.EndCellId);
+                        if (endCell == null)
+                        {
+                            throw new UserFriendlyException("目标库位不存在");
+                        }
+
+                        endCell.EnsureCanStockIn();
+                        if (!string.Equals(endCell.CellModel?.Trim(), cellModel, StringComparison.Ordinal))
+                        {
+                            throw new UserFriendlyException("目标库位规格与物料类型不一致");
+                        }
+
+                        stockTask.EndCellCode = endCell.CellCode;
+                    }
 
                     stockTask.TaskStatus = TaskStatus.OrderCatched;
                     stockTask.TaskBeginTime = DateTime.Now.ToString();

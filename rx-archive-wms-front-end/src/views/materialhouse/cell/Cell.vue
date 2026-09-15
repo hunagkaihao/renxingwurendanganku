@@ -1,6 +1,11 @@
 <template>
   <div>
-    <BasicTable @register="registerTable" size="small">
+    <BasicTable
+      @register="registerTable"
+      @selection-change="onSelectChange"
+      :clickToRowSelect="true"
+      size="small"
+    >
       <template #toolbar>
         <a-button
           preIcon="ant-design:plus-circle-outlined"
@@ -9,6 +14,52 @@
           v-auth="'WarehouseManagement.CellManagement.Create'"
         >
           {{ t('common.createText') }}
+        </a-button>
+        <a-button
+          preIcon="ant-design:link-outlined"
+          type="primary"
+          @click="handleBindMaterial"
+          v-auth="'WarehouseManagement.CellManagement.Update'"
+        >
+          物料绑定
+        </a-button>
+        <a-button
+          preIcon="ant-design:unlock-outlined"
+          type="primary"
+          @click="handleOpenDoor"
+          v-auth="'WarehouseManagement.CellManagement.Create'"
+        >
+          开柜门
+        </a-button>
+        <a-button
+          preIcon="ant-design:import-outlined"
+          type="primary"
+          @click="handleStockIn"
+          v-auth="'WarehouseManagement.CellManagement.Create'"
+        >
+          入库
+        </a-button>
+        <a-button
+          preIcon="ant-design:export-outlined"
+          type="primary"
+          @click="handleStockOut"
+          v-auth="'WarehouseManagement.CellManagement.Create'"
+        >
+          出库
+        </a-button>
+        <a-button
+          preIcon="ant-design:export-outlined"
+          type="primary"
+          v-auth="'WarehouseManagement.CellManagement.Create'"
+        >
+          借用出库
+        </a-button>
+        <a-button
+          preIcon="ant-design:import-outlined"
+          type="primary"
+          v-auth="'WarehouseManagement.CellManagement.Create'"
+        >
+          归还入库
         </a-button>
       
 <!--        <a-button
@@ -71,21 +122,39 @@
       @reload="reload"
       :bodyStyle="{ 'padding-top': '0' }"
     />
+    <BindCellMaterial @register="registerBindMaterialModal" @reload="reload" />
+    <CreateStockTask @register="registerCreateStockTaskModal" @reload="reload" />
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent, reactive } from 'vue';
+  import { defineComponent, ref } from 'vue';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
-  import { tableColumns, searchFormSchema, getTableListAsync, deleteCellAsync,setCellDisable,setCellEnable } from './Cell';
+  import {
+    tableColumns,
+    searchFormSchema,
+    getTableListAsync,
+    deleteCellAsync,
+    setCellDisable,
+    setCellEnable,
+    createCellStockOutAsync,
+    openCellDoorAsync,
+  } from './Cell';
   import { useModal } from '/@/components/Modal';
   import CreateCell from './CreateCell.vue';
   import CreateCellBat from './CreateCellBat.vue';
   import EditCell from './EditCell.vue';
+  import BindCellMaterial from './BindCellMaterial.vue';
+  import CreateStockTask from '../stock/CreateStockTask.vue';
   import { message } from 'ant-design-vue';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { Tag } from 'ant-design-vue';
+  import {
+    buildCellOutboundInput,
+    CellStockRecord,
+    validateCellStockAction,
+  } from './CellStockAction';
   
   export default defineComponent({
     name: 'Cell',
@@ -95,6 +164,8 @@
       CreateCell,
       CreateCellBat,
       EditCell,
+      BindCellMaterial,
+      CreateStockTask,
       Tag,
     },
     setup() {
@@ -103,6 +174,9 @@
       const [registerCreateCellModal, { openModal: openCreateCellModal }] = useModal();
       const [registercreateCellBatModal, { openModal: createCellBat }] = useModal();
       const [registerEditCellModal, { openModal: openEditCellModal }] = useModal();
+      const [registerBindMaterialModal, { openModal: openBindMaterialModal }] = useModal();
+      const [registerCreateStockTaskModal, { openModal: openCreateStockTaskModal }] = useModal();
+      const selectedCell = ref<CellStockRecord>();
       //console.log(cellStore.getWare)
 
     //   const searchFormSchema: FormSchema[] = reactive([
@@ -149,6 +223,9 @@
         bordered: true,
         canResize: true,
         showIndexColumn: true,
+        rowSelection: { type: 'radio' },
+        rowKey: 'id',
+        clearSelectOnPageChange: true,
         actionColumn: {
           width: 120,
           title: t('common.action'),
@@ -219,7 +296,83 @@
         }
       };
 
+      const onSelectChange = ({ rows }) => {
+        selectedCell.value = rows.length > 0 ? rows[0] : undefined;
+      };
+
+      const handleStockIn = () => {
+        const cell = selectedCell.value;
+        const error = validateCellStockAction(cell, 'in');
+        if (error || !cell) {
+          if (error) message.error(error);
+          return;
+        }
+
+        openCreateStockTaskModal(true, { record: cell });
+      };
+
+      const handleBindMaterial = () => {
+        const cell = selectedCell.value;
+        if (!cell) {
+          message.error('请先选择库位');
+          return;
+        }
+        if (cell.materialCode && cell.materialCode.trim()) {
+          message.error('该库位已有物料，无法绑定');
+          return;
+        }
+
+        openBindMaterialModal(true, { record: cell });
+      };
+
+      const handleOpenDoor = () => {
+        const cell = selectedCell.value;
+        if (!cell) {
+          message.error('请先选择柜门库位');
+          return;
+        }
+        if (cell.cellType !== 'Station') {
+          message.error('选中的库位不是柜门类型，无法执行开门指令');
+          return;
+        }
+
+        createConfirm({
+          iconType: 'warning',
+          title: t('common.tip'),
+          content: t('确认打开选中的柜门？'),
+          onOk: async () => {
+            await openCellDoorAsync({ cellCode: cell.cellCode, reload });
+          },
+        });
+      };
+
+      const handleStockOut = () => {
+        const cell = selectedCell.value;
+        const error = validateCellStockAction(cell, 'out');
+        if (error || !cell) {
+          if (error) message.error(error);
+          return;
+        }
+
+        createConfirm({
+          iconType: 'warning',
+          title: t('common.tip'),
+          content: t('确认出库？'),
+          onOk: async () => {
+            await createCellStockOutAsync({
+              request: buildCellOutboundInput(cell),
+              reload,
+            });
+          },
+        });
+      };
+
       return {
+        onSelectChange,
+        handleBindMaterial,
+        handleOpenDoor,
+        handleStockIn,
+        handleStockOut,
         registerTable,
         handleEdit,
         handleDelete,
@@ -230,6 +383,8 @@
         openCreateCellModal,
         createCellBat,
         registerEditCellModal,
+        registerBindMaterialModal,
+        registerCreateStockTaskModal,
         t,
         reload,
       };

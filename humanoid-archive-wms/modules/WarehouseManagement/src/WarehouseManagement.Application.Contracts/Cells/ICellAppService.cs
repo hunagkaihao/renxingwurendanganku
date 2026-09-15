@@ -65,6 +65,11 @@ namespace WarehouseManagement.Cells
         Task<CellDto> UpdateAsync(UpdateCellDto input);
 
         /// <summary>
+        /// 将已录入的物料绑定到空库位。
+        /// </summary>
+        Task<CellDto> BindMaterialAsync(BindMaterialToCellDto input);
+
+        /// <summary>
         /// 删除书籍
         /// </summary>
         Task DeleteAsync(IdIntInput input);

@@ -14,8 +14,6 @@ import {
   IdIntInput,
   TaskType,
   TaskStatus,
-  WcsTasksServiceProxy,
-  OpenDoorDto,
   CreateStockTaskDto,
 } from '/@/services/ServiceProxies';
 import { message } from 'ant-design-vue';
@@ -261,6 +259,18 @@ export const searchFormSchema: FormSchema[] = [
 ];
 
 export const createFormSchema: FormSchema[] = [
+  {
+    field: 'endCellId',
+    component: 'InputNumber',
+    label: '',
+    ifShow: false,
+  },
+  {
+    field: 'endCellCode',
+    component: 'Input',
+    label: '',
+    ifShow: false,
+  },
   {
     field: 'materialCode',
     component: 'Input',
@@ -531,21 +541,6 @@ export async function wcsInSetCell({ id, reload }){
     const _stockTasksServiceProxy = new StockTasksServiceProxy();
     openFullLoading();
     await _stockTasksServiceProxy.wcsInSetCell(id);
-    closeFullLoading();
-    message.success(t('common.operationSuccess'));
-    reload();
-  } catch (error) {
-    closeFullLoading();
-  }
-}
-//手动下达开门指令
-export async function wcsOpenDoor({ id, reload }){
-  try {
-    const _wcsTasksServiceProxy = new WcsTasksServiceProxy();
-    openFullLoading();
-    const param = new OpenDoorDto()
-    param.orderCode = id.toString();
-    await _wcsTasksServiceProxy.openDoorForOrder(param);
     closeFullLoading();
     message.success(t('common.operationSuccess'));
     reload();

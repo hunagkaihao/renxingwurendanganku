@@ -12,6 +12,7 @@ using Volo.Abp.Domain.Repositories;
 using WarehouseManagement.Cells;
 using System.Net.Http;
 using Lion.AbpPro.Extension.Customs.Http;
+using WarehouseManagement.MaterialBoxs;
 
 namespace WarehouseManagement.Cells
 {
@@ -27,12 +28,18 @@ namespace WarehouseManagement.Cells
         /// </summary>
         private readonly ICellRepository _cellRepository;
         private readonly CellManager _cellManagement;
+        private readonly IMaterialBoxRepository _materialBoxRepository;
+        private readonly MaterialBoxManager _materialBoxManager;
         //private readonly IHttpClientFactory _httpClientFactory;
         public CellAppService(ICellRepository cellRepository,
-            CellManager cellManagement)
+            CellManager cellManagement,
+            IMaterialBoxRepository materialBoxRepository,
+            MaterialBoxManager materialBoxManager)
         {
             _cellRepository = cellRepository;
             _cellManagement = cellManagement;
+            _materialBoxRepository = materialBoxRepository;
+            _materialBoxManager = materialBoxManager;
             //_cellManager = cellManager;
             //GetPolicyName = CellStorePermissions.Cells.Default;
             //GetListPolicyName = CellStorePermissions.Cells.Default;
@@ -169,13 +176,49 @@ namespace WarehouseManagement.Cells
         /// <param name="input"></param>
         /// <returns></returns>
         [Authorize(WarehouseManagementPermissions.CellManagement.Update)]
-        public virtual async Task<CellDto> UpdateAsync(UpdateCellDto input)
+    public virtual async Task<CellDto> UpdateAsync(UpdateCellDto input)
+    {
+    var cell= await _cellManagement.UpdateAsync(input.Id, input.CellName, input.CellCode, input.CellType, input.CellModel);
+        return base.ObjectMapper.Map<Cell, CellDto>(cell);
+    }
+
+    [Authorize(WarehouseManagementPermissions.CellManagement.Update)]
+    public async Task<CellDto> BindMaterialAsync(BindMaterialToCellDto input)
+    {
+        if (input == null || string.IsNullOrWhiteSpace(input.MaterialCode))
         {
-        var cell= await _cellManagement.UpdateAsync(input.Id, input.CellName, input.CellCode, input.CellType, input.CellModel);
-            return base.ObjectMapper.Map<Cell, CellDto>(cell);
+            throw new UserFriendlyException("请输入物料码");
         }
 
-        /// <summary>
+        var cell = await _cellRepository.FindByIdAsync(input.CellId);
+        if (cell == null)
+        {
+            throw new UserFriendlyException("库位不存在");
+        }
+        cell.EnsureCanStockIn();
+
+        var materialCode = input.MaterialCode.Trim();
+        var materialBox = await _materialBoxRepository.FindByMaterialBoxcodeAsync(materialCode);
+        if (materialBox == null)
+        {
+            throw new UserFriendlyException("物料码未录入，无法绑定");
+        }
+
+        var occupiedCells = await _cellRepository.GetListAsync(x =>
+            x.Id != cell.Id && x.MaterialCode == materialCode);
+        if (occupiedCells.Count > 0 || (materialBox.CellId > 0 && materialBox.CellId != cell.Id))
+        {
+            throw new UserFriendlyException("该物料码已绑定到其他库位");
+        }
+
+        var updatedCell = await _cellManagement.SetMaterialCodeAsync(cell.Id, materialCode);
+        updatedCell = await _cellManagement.SetAsStockInAsync(cell.Id);
+        await _materialBoxManager.UpdateStockCellAsync(materialCode, cell.Id);
+
+        return base.ObjectMapper.Map<Cell, CellDto>(updatedCell);
+    }
+
+    /// <summary>
         /// 删除用户
         /// </summary>
         [Authorize(WarehouseManagementPermissions.CellManagement.Delete)]

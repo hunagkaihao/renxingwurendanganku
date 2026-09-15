@@ -284,6 +284,22 @@ namespace WarehouseManagement.StockTasks
                 throw new UserFriendlyException("创建时间格式必须为 yyyy-MM-dd HH:mm:ss");
             }
 
+            Cell targetCell = null;
+            if (input.EndCellId > 0)
+            {
+                targetCell = await _cellRepository.FindByIdAsync(input.EndCellId);
+                if (targetCell == null)
+                {
+                    throw new UserFriendlyException("目标库位不存在");
+                }
+
+                targetCell.EnsureCanStockIn();
+                if (!string.Equals(targetCell.CellModel?.Trim(), input.MaterialType?.Trim(), StringComparison.Ordinal))
+                {
+                    throw new UserFriendlyException("目标库位规格与物料类型不一致");
+                }
+            }
+
             // 每次预约均按传入物料创建容器记录；不查询或校验既有容器状态。
             var materialBoxObj = new MaterialBox(input.MaterialName, input.MaterialCode)
             {
@@ -302,6 +318,12 @@ namespace WarehouseManagement.StockTasks
             
             // 创建入库任务
             var stockTask = await _stockTaskManagement.CreateWCSIn(input.TaskTypeCode, materialBoxObj);
+            if (targetCell != null)
+            {
+                stockTask.EndCellId = targetCell.Id;
+                stockTask.EndCellCode = targetCell.CellCode;
+                stockTask = await _stockTaskRepository.UpdateAsync(stockTask, true);
+            }
             
             // 放回结果给前端
             return base.ObjectMapper.Map<StockTask, StockTaskDto>(stockTask);
@@ -419,10 +441,7 @@ namespace WarehouseManagement.StockTasks
                     throw new UserFriendlyException(message: "库位不存在!");
                 }
 
-                if (string.IsNullOrWhiteSpace(cell.MaterialCode))
-                {
-                    throw new UserFriendlyException(message: "库位无货，无法创建出库任务!");
-                }
+                cell.EnsureCanStockOut();
 
                 if (!string.IsNullOrWhiteSpace(materialCode) &&
                     !string.Equals(cell.MaterialCode, materialCode.Trim(), StringComparison.Ordinal))

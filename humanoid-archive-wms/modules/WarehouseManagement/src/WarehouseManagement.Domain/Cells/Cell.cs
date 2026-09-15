@@ -128,6 +128,20 @@ namespace WarehouseManagement.Cells
             Log.Debug($"Cell:{CellCode} CellStatus is set {cellStatus} Method:{System.Reflection.MethodBase.GetCurrentMethod().Name}");
             //Log.Warning($"库位:{CellCode}的库位状态设置为{cellStatus}。方法名：{System.Reflection.MethodBase.GetCurrentMethod().Name}");
         }
+        public void EnsureCanStockIn()
+        {
+            if (!string.IsNullOrWhiteSpace(MaterialCode))
+            {
+                throw new UserFriendlyException("该库位已有物料，无法入库");
+            }
+        }
+        public void EnsureCanStockOut()
+        {
+            if (string.IsNullOrWhiteSpace(MaterialCode))
+            {
+                throw new UserFriendlyException("该库位无物料，无法出库");
+            }
+        }
         public int WarehouseId { get; set; }
         public int? AreaId { get; set; }
         public int? LogicId { get; set; }

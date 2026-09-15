@@ -13,6 +13,10 @@ import {
   PagingWarehouseListInput,
   WarehouseDtoPagedResultDto,
   UpdateCellDto,
+  StockTasksServiceProxy,
+  ClientOutCellInput,
+  WcsTasksServiceProxy,
+  OpenDoorDto,
 } from '/@/services/ServiceProxies';
 import { message } from 'ant-design-vue';
 import { useLoading } from '/@/components/Loading';
@@ -20,6 +24,7 @@ import { useI18n } from '/@/hooks/web/useI18n';
 import { SelectItem } from '/@/utils/SelectItem';
 import{ useUserStore } from '/@/store/modules/user'
 import { reactive } from 'vue';
+import { defHttp } from '/@/utils/http/axios';
 
 const { t } = useI18n();
 const cellStore = useUserStore()
@@ -218,7 +223,7 @@ export const searchFormSchema: FormSchema[] = reactive([
     component: 'Input',
     colProps: { span: 8 },
   },
-  {
+/*  {
     field: 'Warehouseld',
     label: t('所属仓库:'),
     component: 'Select',
@@ -227,7 +232,7 @@ export const searchFormSchema: FormSchema[] = reactive([
     componentProps:{
       options:warehouseSelectItem
     }
-  },
+  },*/
 ]);
 export const WareFormSchema: FormSchema[] = [
     {
@@ -608,6 +613,56 @@ export async function setCellDisable({ id, reload }) {
     reload();
   } catch (error) {
     closeFullLoading();
+  }
+}
+
+export async function createCellStockOutAsync({ request, reload }) {
+  try {
+    openFullLoading();
+    const stockTasksServiceProxy = new StockTasksServiceProxy();
+    await stockTasksServiceProxy.clientOutCell(new ClientOutCellInput(request));
+    message.success(t('common.operationSuccess'));
+    reload();
+  } finally {
+    closeFullLoading();
+  }
+}
+
+export async function openCellDoorAsync({ cellCode, reload }) {
+  try {
+    openFullLoading();
+    const wcsTasksServiceProxy = new WcsTasksServiceProxy();
+    const request = new OpenDoorDto();
+    request.orderCode = cellCode;
+    await wcsTasksServiceProxy.openDoor(request);
+    message.success(t('common.operationSuccess'));
+    reload();
+  } finally {
+    closeFullLoading();
+  }
+}
+
+export interface BindCellMaterialInput {
+  cellId: number;
+  materialCode: string;
+}
+
+export async function bindCellMaterialAsync({
+  request,
+  changeOkLoading,
+  validate,
+  closeModal,
+  resetFields,
+}) {
+  changeOkLoading(true);
+  try {
+    await validate();
+    await defHttp.post({ url: '/Cells/bindMaterial', params: request });
+    message.success(t('common.operationSuccess'));
+    resetFields();
+    closeModal();
+  } finally {
+    changeOkLoading(false);
   }
 }
 

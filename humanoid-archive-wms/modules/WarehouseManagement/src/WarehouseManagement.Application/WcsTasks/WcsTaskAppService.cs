@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Volo.Abp;
+using WarehouseManagement.Cells;
 using WarehouseManagement.WcsTasks.Dto;
 
 namespace WarehouseManagement.WcsTasks
@@ -10,10 +12,12 @@ namespace WarehouseManagement.WcsTasks
     public class WcsTaskAppService : WarehouseManagementAppService, IWcsTaskAppService
     {
         private readonly WcsApiManager _wcsApiManager;
+        private readonly ICellRepository _cellRepository;
 
-        public WcsTaskAppService(WcsApiManager wcsApiManager)
+        public WcsTaskAppService(WcsApiManager wcsApiManager, ICellRepository cellRepository)
         {
             _wcsApiManager = wcsApiManager;
+            _cellRepository = cellRepository;
         }
         public async Task<bool> CancelTask()
         {
@@ -38,6 +42,22 @@ namespace WarehouseManagement.WcsTasks
 
         public async Task<ResultWcsTaskDto> OpenDoor(OpenDoorDto openDoor)
         {
+            if (openDoor == null || string.IsNullOrWhiteSpace(openDoor.OrderCode))
+            {
+                throw new UserFriendlyException("请选择柜门库位");
+            }
+
+            var cell = await _cellRepository.FindByCodeAsync(openDoor.OrderCode.Trim());
+            if (cell == null)
+            {
+                throw new UserFriendlyException("柜门库位不存在");
+            }
+            if (cell.CellType != CellType.Station)
+            {
+                throw new UserFriendlyException("选中的库位不是柜门类型，无法执行开门指令");
+            }
+
+            openDoor.OrderCode = cell.CellCode;
             return await _wcsApiManager.OpenDoor(openDoor);
         }
 

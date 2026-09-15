@@ -33,36 +33,16 @@ const basedata: AppRouteModule = {
     //     icon: 'ant-design:file-search-outlined',
     //   },
     // },
-    {
-      path: 'archiveType',
-      name: 'ArchiveType',
-      component: () => import('/@/views/materialhouse/materialtype/MaterialType.vue'),
+/*    {
+      path: 'batch',
+      name: 'Batch',
+      component: () => import('/@/views/archivehouse/Batch/Batch.vue'),
       meta: {
-        title: t('物品类型'),
+        title: t('批量管理'),
         policy: 'WarehouseManagement.StorageBoxManagement',
-        icon: 'fluent:archive-16-regular',
+        icon: 'ant-design:file-search-outlined',
       },
-    },
-    {
-      path: 'rfid',
-      name: 'Rfid',
-      component: () => import('/@/views/materialhouse/rfid/Rfid.vue'),
-      meta: {
-        title: t('标签管理'),
-        policy: 'WarehouseManagement.StorageBoxManagement',
-        icon: 'material-symbols:barcode',
-      },
-    },
-    // {
-    //   path: 'batch',
-    //   name: 'Batch',
-    //   component: () => import('/@/views/archivehouse/Batch/Batch.vue'),
-    //   meta: {
-    //     title: t('批量管理'),
-    //     policy: 'WarehouseManagement.StorageBoxManagement',
-    //     icon: 'ant-design:file-search-outlined',
-    //   },
-    // },
+    },*/
     
   ],
 };

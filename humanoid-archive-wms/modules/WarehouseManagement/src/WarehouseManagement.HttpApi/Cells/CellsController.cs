@@ -88,6 +88,12 @@ namespace WarehouseManagement.Cells
         {
             return await _cellAppService.UpdateAsync(input);
         }
+        [HttpPost("bindMaterial")]
+        [SwaggerOperation(summary: "将已录入物料绑定到空库位", Tags = new[] { "Cells" })]
+        public async Task<CellDto> BindMaterialAsync(BindMaterialToCellDto input)
+        {
+            return await _cellAppService.BindMaterialAsync(input);
+        }
         [HttpPost("setCellEnable")]
         [SwaggerOperation(summary: "设置库位可用", Tags = new[] { "Cells" })]
         public async Task SetCellEnable(UpdateCellDto input)

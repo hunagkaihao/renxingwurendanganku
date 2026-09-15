@@ -23,7 +23,7 @@ const check: AppRouteModule = {
         icon: 'material-symbols:inventory-rounded',
       },
     },
-    {
+/*    {
       path: 'checktask',
       name: 'Checktask',
       component: () => import('/@/views/materialhouse/check/Checktask.vue'),
@@ -32,7 +32,7 @@ const check: AppRouteModule = {
         policy: 'WarehouseManagement.StorageBoxManagement',
         icon: 'ant-design:file-search-outlined',
       },
-    },
+    },*/
     {
       path: 'checkHis',
       name: 'CheckHis',
