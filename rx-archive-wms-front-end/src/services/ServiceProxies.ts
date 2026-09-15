@@ -17176,6 +17176,7 @@ export class MaterialBoxDto implements IArchiveBoxDto {
     retentionPeriod!: string | undefined;
     classType!: string | undefined;
     cellModel!: string | undefined;
+    materialUnit!: string | undefined;
 
     constructor(data?: IArchiveBoxDto) {
         if (data) {
@@ -17218,6 +17219,7 @@ export class MaterialBoxDto implements IArchiveBoxDto {
             this.retentionPeriod = _data["retentionPeriod"];
             this.classType = _data["classType"];
             this.cellModel = _data["cellModel"];
+            this.materialUnit = _data["materialUnit"];
         }
     }
 
@@ -17260,6 +17262,7 @@ export class MaterialBoxDto implements IArchiveBoxDto {
         data["retentionPeriod"] = this.retentionPeriod;
         data["classType"] = this.classType;
         data["cellModel"] = this.cellModel;
+        data["materialUnit"] = this.materialUnit;
         return data;
     }
 }
@@ -17295,6 +17298,7 @@ export interface IArchiveBoxDto {
     retentionPeriod: string | undefined;
     classType: string | undefined;
     cellModel: string | undefined;
+    materialUnit: string | undefined;
 }
 
 export class ArchiveBoxDtoPagedResultDto implements IArchiveBoxDtoPagedResultDto {

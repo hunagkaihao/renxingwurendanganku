@@ -15,20 +15,6 @@
         >
           {{ t('common.createText') }}
         </a-button>
-        <a-button
-          type="primary"
-          @click="message.info('请在物料出入库管理页面创建入库预约')"
-          v-auth="'WarehouseManagement.GoodsManagement.Create'"
-        >
-          {{ t('入库') }}
-        </a-button>
-        <a-button
-          type="primary"
-          @click="createOut"
-          v-auth="'WarehouseManagement.GoodsManagement.Create'"
-        >
-          {{ t('出库') }}
-        </a-button>
         <!-- <a-button
             type="primary"
             @click="openImportGoodssModal"
@@ -66,7 +52,7 @@
               label: t('删除'),
               onClick: handleDelete.bind(null, record),
             },
-            {
+     /*       {
               icon: 'eos-icons:cluster-role-binding',
               label: t('绑标签'),
               auth: 'WarehouseManagement.GoodsManagement.Update',
@@ -77,7 +63,7 @@
               label: t('绑物料'),
               auth: 'WarehouseManagement.GoodsManagement.Update',
               onClick: bindArchive.bind(null, record),
-            },
+            },*/
           ]"
         />
       </template>
@@ -126,18 +112,15 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref } from 'vue';
+  import { defineComponent } from 'vue';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import {
     tableColumns,
     searchFormSchema,
     getTableListAsync,
-    getDetaiTableListAsync,
     tableDetailColumns,
     deleteStorageBoxAsync,
-    createWCSIn,
-    createWCSOut,
   } from './MaterialBox';
   import { useModal } from '/@/components/Modal';
   import CreateArchive from './CreateMaterialBox.vue';
@@ -170,7 +153,6 @@
       const [registerBindModal, { openModal: openBindModal }] = useModal();
       const [registerBindArchiveModal, { openModal: openBindArchiveModal }] = useModal();
       const [registerImportGoodssModal, { openModal: openImportGoodssModal }] = useModal();
-      let selectedBoxIdRef = ref('');
       // table配置
       const [registerTable, { reload }] = useTable({
         columns: tableColumns,
@@ -199,23 +181,14 @@
         },
       });
 
-      const [registerDetailTable, { reload: reloadDetail }] = useTable({
+      const [registerDetailTable, { setTableData: setDetailTableData }] = useTable({
         columns: tableDetailColumns,
-        api: getPageDetaiTableListAsync,
         showTableSetting: false,
         showIndexColumn: true,
         bordered: true,
         canResize: false,
         maxHeight: 300,
       });
-
-      async function getPageDetaiTableListAsync(params) {
-        if (selectedBoxIdRef.value == '') {
-          return [];
-        }
-        params.archiveBoxId = selectedBoxIdRef.value;
-        return await getDetaiTableListAsync(params);
-      }
 
       // 编辑档案盒
       const handleEdit = (record: Recordable) => {
@@ -254,54 +227,30 @@
           record: record,
         });
       };
-      //
-      const createIn = async () => {
-        if (selectedBoxIdRef.value == '') {
-          message.error('请先选择档案盒');
-          return;
-        }
-        let msg = t('确认入库？');
-        let id = selectedBoxIdRef.value;
-        createConfirm({
-          iconType: 'warning',
-          title: t('common.tip'),
-          content: msg,
-          onOk: async () => {
-            await createWCSIn({ id, reload });
-          },
-        });
-      };
-
-      const createOut = async () => {
-        if (selectedBoxIdRef.value == '') {
-          message.error('请先选择档案盒');
-          return;
-        }
-        let msg = t('确认出库？');
-        let id = selectedBoxIdRef.value;
-        createConfirm({
-          iconType: 'warning',
-          title: t('common.tip'),
-          content: msg,
-          onOk: async () => {
-            await createWCSOut({ id, reload });
-          },
-        });
-      };
       //勾选事件
       const onSelectChange = async ({ rows }) => {
         if (rows.length > 0) {
-          selectedBoxIdRef.value = rows[0].id;
+          const selectedMaterial = rows[0];
+          setDetailTableData([
+            {
+              id: selectedMaterial.id,
+              materialCode:
+                selectedMaterial.materialBoxBarcode || selectedMaterial.stockBarcode,
+              materialName: selectedMaterial.materialBoxName,
+              materialType: selectedMaterial.cellModel,
+              materialUnits: selectedMaterial.materialUnit,
+              validityPeriod: selectedMaterial.retentionPeriod,
+              materialPeople: selectedMaterial.materialPeople,
+              creationTime: selectedMaterial.creationTime,
+            },
+          ]);
         } else {
-          selectedBoxIdRef.value = '';
+          setDetailTableData([]);
         }
-        reloadDetail();
       };
 
       return {
         onSelectChange,
-        createIn,
-        createOut,
         registerTable,
         handleEdit,
         handleDelete,

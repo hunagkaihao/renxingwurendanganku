@@ -71,32 +71,45 @@ namespace WarehouseManagement.MaterialBoxs
         }
         public async Task<MaterialBoxDto> UpdateAsync(CreateMaterialBoxDto input)
         {
-            //检查标签是否存在
+            /*//检查标签是否存在
             if (!input.MaterialBoxRfid.IsNullOrEmpty() && !await _rfidManager.CheckExistRfidCode(input.MaterialBoxRfid, 2))
             {
                 throw new UserFriendlyException("数据库中不存在标签" + input.MaterialBoxRfid);
-            }
+            }*/
             //检查标签是否绑定
             //if (!input.MaterialBoxRfid.IsNullOrEmpty() && await _archiveBoxManager.CheckUsedBoxRfid(input.MaterialBoxRfid))
             //{
             //    throw new UserFriendlyException(input.MaterialBoxRfid + "标签已被绑定");
             //}
-            //检查档号不能为空
+            //检查物料码不能为空
             if (input.StockBarcode.IsNullOrEmpty())
             {
-                throw new UserFriendlyException("档号不能为空");
+                throw new UserFriendlyException("物料码不能为空");
             }
-            //检查档案盒尺寸不能为空
+            //检查物料容器类型不能为空
             if (input.CellModel.IsNullOrEmpty())
             {
-                throw new UserFriendlyException("档号不能为空");
+                throw new UserFriendlyException("物料类型不能为空");
             }
             var entity = await _materialBoxRepository.FindByIdAsync(input.Id);
             if (entity == null)
-                throw new UserFriendlyException(message: "档案盒不存在");
+                throw new UserFriendlyException(message: "物料不存在");
+            var originalMaterialCode = entity.MaterialBoxBarcode;
+            input.StockBarcode = input.StockBarcode.Trim();
             entity = base.ObjectMapper.Map<CreateMaterialBoxDto, MaterialBox>(input,entity);
 
             var archivebox = await _materialBoxRepository.UpdateAsync(entity);
+
+            // 库位保存了一份在库物料码，编辑物料码时需要保持两处数据一致。
+            if (entity.CellId > 0 && !string.Equals(originalMaterialCode, entity.MaterialBoxBarcode, StringComparison.Ordinal))
+            {
+                var cell = await _cellRepository.FindByIdAsync(entity.CellId);
+                if (cell != null && string.Equals(cell.MaterialCode, originalMaterialCode, StringComparison.Ordinal))
+                {
+                    cell.MaterialCode = entity.MaterialBoxBarcode;
+                    await _cellRepository.UpdateAsync(cell);
+                }
+            }
 
             return base.ObjectMapper.Map<MaterialBox, MaterialBoxDto>(archivebox);
         }

@@ -41,7 +41,7 @@
         setFieldsValue({
           materialBoxRfid: data.record.materialBoxRfid,
           materialBoxName: data.record.materialBoxName,
-          stockBarcode: data.record.stockBarcode,
+          stockBarcode: data.record.stockBarcode || data.record.materialBoxBarcode,
           cellModel: data.record.cellModel,
           year: data.record.year,
           // secretLevel: [data.record.secretLevel],

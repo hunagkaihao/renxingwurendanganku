@@ -104,6 +104,29 @@ export const tableDetailColumns: BasicColumn[] = [
     title: t('物料名称'),
     dataIndex: 'materialName',
   },
+  {
+    title: t('物料类型'),
+    dataIndex: 'materialType',
+  },
+  {
+    title: t('单位'),
+    dataIndex: 'materialUnits',
+  },
+  {
+    title: t('有效期'),
+    dataIndex: 'validityPeriod',
+  },
+  {
+    title: t('创建用户'),
+    dataIndex: 'materialPeople',
+  },
+  {
+    title: t('创建时间'),
+    dataIndex: 'creationTime',
+    customRender: ({ text }) => {
+      return text ? moment(text).format('YYYY-MM-DD HH:mm:ss') : '-';
+    },
+  },
 ];
 
 export const searchFormSchema: FormSchema[] = [
@@ -116,11 +139,24 @@ export const searchFormSchema: FormSchema[] = [
 ];
 
 export const createFormSchema: FormSchema[] = [
-  {
+/*  {
     field: 'materialBoxRfid',
     component: 'Input',
     label: t('物料条码'),
     labelWidth: 85,
+    colProps: {
+      span: 12,
+    },
+    componentProps: {
+      autocomplete: 'off',
+    },
+  },*/
+  {
+    field: 'stockBarcode',
+    component: 'Input',
+    label: t('物料码'),
+    labelWidth: 85,
+    required: true,
     colProps: {
       span: 12,
     },
@@ -132,19 +168,6 @@ export const createFormSchema: FormSchema[] = [
     field: 'materialBoxName',
     component: 'Input',
     label: t('物料名称'),
-    labelWidth: 85,
-    required: true,
-    colProps: {
-      span: 12,
-    },
-    componentProps: {
-      autocomplete: 'off',
-    },
-  },
-  {
-    field: 'stockBarcode',
-    component: 'Input',
-    label: t('物料号'),
     labelWidth: 85,
     required: true,
     colProps: {
@@ -220,7 +243,7 @@ export const createFormSchema: FormSchema[] = [
 ];
 
 export const editFormSchema: FormSchema[] = [
-  {
+/*  {
     field: 'materialBoxRfid',
     component: 'Input',
     label: t('物料条码'),
@@ -233,13 +256,13 @@ export const editFormSchema: FormSchema[] = [
       autocomplete: 'off',
       disabled: true,
     },
-  },
+  },*/
   {
-    field: 'materialBoxName',
+    field: 'stockBarcode',
     component: 'Input',
-    label: t('物料名称'),
+    label: t('物料码'),
     labelWidth: 85,
-    required: true,
+    required: false,
     colProps: {
       span: 12,
     },
@@ -248,11 +271,11 @@ export const editFormSchema: FormSchema[] = [
     },
   },
   {
-    field: 'stockBarcode',
+    field: 'materialBoxName',
     component: 'Input',
-    label: t('物料编号'),
+    label: t('物料名称'),
     labelWidth: 85,
-    required: true,
+    required: false,
     colProps: {
       span: 12,
     },
@@ -265,7 +288,7 @@ export const editFormSchema: FormSchema[] = [
     component: 'Select',
     label: t('类型'),
     labelWidth: 85,
-    required: true,
+    required: false,
     colProps: {
       span: 12,
     },
