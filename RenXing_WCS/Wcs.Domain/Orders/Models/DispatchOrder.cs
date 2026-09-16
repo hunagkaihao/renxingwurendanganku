@@ -41,8 +41,8 @@ public class DispatchOrder : Entity<int>
     {
         if (OrderType == EnumDispatchOrderType.CheckDown) //盘点订单不需要指定档案盒
             return;
-        if (!int.TryParse(plateCode, out int iPlateCode))
-            throw new Exception($"档案盒条码为{PlateCode}，包含非数字字符，应只包含数字字符");
+        if (string.IsNullOrWhiteSpace(plateCode))
+            throw new Exception("档案盒条码不能为空");
 
         if (string.IsNullOrEmpty(plateSpecs))
             throw new Exception($"档案盒规格不能为空");
@@ -202,9 +202,9 @@ public class DispatchOrder : Entity<int>
                 return false;
             }
 
-            if (!int.TryParse(PlateCode, out int iPlateCode))
+            if (string.IsNullOrWhiteSpace(PlateCode))
             {
-                failedReason = $"当前类型为StockIn的订单的档案盒条码为{PlateCode}，包含非数字字符，应只包含数字字符";
+                failedReason = "当前类型为StockIn的订单的档案盒条码不能为空";
                 return false;
             }
 
@@ -265,9 +265,9 @@ public class DispatchOrder : Entity<int>
                 return false;
             }            
 
-            if (!int.TryParse(PlateCode, out int iPlateCode))
+            if (string.IsNullOrWhiteSpace(PlateCode))
             {
-                failedReason = $"当前类型为StockOut的订单的档案盒条码为{PlateCode}，包含非数字字符，应只包含数字字符";
+                failedReason = "当前类型为StockOut的订单的档案盒条码不能为空";
                 return false;
             }
 
@@ -365,9 +365,9 @@ public class DispatchOrder : Entity<int>
                 return false;
             }
 
-            if (!int.TryParse(PlateCode, out int iPlateCode))
+            if (string.IsNullOrWhiteSpace(PlateCode))
             {
-                failedReason = $"当前类型为Move的订单的档案盒条码为{PlateCode}，包含非数字字符，应只包含数字字符";
+                failedReason = "当前类型为Move的订单的档案盒条码不能为空";
                 return false;
             }
 
