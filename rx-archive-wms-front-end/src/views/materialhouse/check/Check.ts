@@ -62,6 +62,23 @@ export const planColumns: BasicColumn[] = [
     },
   },
   {
+    title: t('任务状态'),
+    dataIndex: 'checkStatus',
+    customRender: ({ text }) => {
+      const statusMap: Record<string, string> = {
+        '0': '等待执行',
+        Waiting: '等待执行',
+        '1': '执行中',
+        Executing: '执行中',
+        '2': '盘点完成',
+        Complete: '盘点完成',
+        '3': '已结束',
+        Finish: '已结束',
+      };
+      return statusMap[String(text)] || String(text ?? '');
+    },
+  },
+  {
     title: t('区域'),
     dataIndex: 'areaCode',
   },
