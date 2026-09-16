@@ -42,11 +42,11 @@ Wcs:
     # WMS 接口登录用户名。
     Name: "admin"
     # WMS 接口登录密码；请勿提交或公开。
-    Password: "FrDDHQx4qJmOZml4nf8+FA=="
+    Password: "1q2w3E*" # 原密码: FrDDHQx4qJmOZml4nf8+FA==
   # 盘点后台 ChkBgJob 循环的休眠时间，单位：毫秒（Thread.Sleep）。
   ChkTime: 25
   # WMS API 根地址；登录使用 /api/app/account/login，其余业务路径由 WMSService 拼接。
-  WMSUrl: "http://127.0.0.1:5100"
+  WMSUrl: "http://127.0.0.1:5000"
   # SignalR 客户端接收密集架状态更新的方法名，须与前端监听名称一致。
   HubCliMethod_UpdateMjjStatus: "UpdateMjjStatus"
   # SignalR 客户端接收 PLC 监控变量及心跳状态更新的方法名。
