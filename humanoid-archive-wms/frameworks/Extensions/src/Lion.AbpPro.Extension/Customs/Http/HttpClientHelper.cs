@@ -13,6 +13,7 @@ namespace Lion.AbpPro.Extension.Customs.Http
     /// </summary>
     public static class HttpClientHelper
     {
+        private static readonly TimeSpan DefaultRequestTimeout = TimeSpan.FromSeconds(30);
         public static async Task<TResult> GetAsync<TResult>(this IHttpClientFactory _httpClientFactory, string clientName, string url, Dictionary<string, string> headers = null) where TResult : class
         {
             try
@@ -57,7 +58,7 @@ namespace Lion.AbpPro.Extension.Customs.Http
             var data = typeof(T).Name.ToLower() == "string" ? obj.ToString() : JsonConvert.SerializeObject(obj);
             var client = _httpClientFactory.CreateClient(clientName);
             //设置超时时间5秒
-            client.Timeout = new TimeSpan(50000000);
+            client.Timeout = DefaultRequestTimeout;
             if (headers != null && headers.Count > 0)
             {
                 foreach (var item in headers)
@@ -93,7 +94,7 @@ namespace Lion.AbpPro.Extension.Customs.Http
             var data = typeof(T).Name.ToLower() == "string" ? obj.ToString() : JsonConvert.SerializeObject(obj);
             var client = _httpClientFactory.CreateClient(clientName);
             //设置超时时间5秒
-            client.Timeout = new TimeSpan(50000000);
+            client.Timeout = DefaultRequestTimeout;
             if (headers != null && headers.Count > 0)
             {
                 foreach (var item in headers)
@@ -136,7 +137,7 @@ namespace Lion.AbpPro.Extension.Customs.Http
             //var data = typeof(T).Name.ToLower() == "string" ? obj.ToString() : JsonConvert.SerializeObject(obj);
             var client = _httpClientFactory.CreateClient(clientName);
             //设置超时时间5秒
-            client.Timeout = new TimeSpan(50000000);
+            client.Timeout = DefaultRequestTimeout;
             if (headers != null && headers.Count > 0)
             {
                 foreach (var item in headers)
@@ -255,7 +256,7 @@ namespace Lion.AbpPro.Extension.Customs.Http
             var data = typeof(T).Name.ToLower() == "string" ? obj.ToString() : JsonConvert.SerializeObject(obj);
             HttpClient client =   new HttpClient();
             //设置超时时间5秒
-            client.Timeout = new TimeSpan(50000000);
+            client.Timeout = DefaultRequestTimeout;
             if (headers != null && headers.Count > 0)
             {
                 foreach (var item in headers)
