@@ -9,7 +9,10 @@ namespace Lion.AbpPro.Jobs
     {
         public static void CreateRecurringJob(this ApplicationInitializationContext context)
         {
-            //using var scope = context.ServiceProvider.CreateScope();
+            RecurringJob.AddOrUpdate<ExpiredMaterialStockOutJob>(
+                "expired-material-stock-out",
+                job => job.ExecuteAsync(),
+                Cron.Minutely);
             //var testJob =
             //    scope.ServiceProvider.GetService<TestJob>();
             //RecurringJob.AddOrUpdate("测试Job", () => testJob.ExecuteAsync(), CronType.Minute(1));

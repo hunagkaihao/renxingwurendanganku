@@ -68,6 +68,7 @@ namespace Lion.AbpPro
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            context.Services.AddTransient<ExpiredMaterialStockOutJob>();
             var configuration = context.Services.GetConfiguration();
             ConfigureCache(context);//leixd 屏蔽redis
             ConfigureSwaggerServices(context, configuration);

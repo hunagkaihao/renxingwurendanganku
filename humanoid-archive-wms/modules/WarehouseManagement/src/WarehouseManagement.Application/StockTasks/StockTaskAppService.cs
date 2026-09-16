@@ -405,6 +405,52 @@ namespace WarehouseManagement.StockTasks
             var stockTask = await _stockTaskManagement.WCSSetCell(StockTaskId);
             return stockTask;
         }
+
+        /// <summary>
+        /// 下发已到期物料的自动出库任务。没有空闲柜门或系统存在活动任务时保留到下一轮调度。
+        /// </summary>
+        [UnitOfWork]
+        public async Task<int> DispatchExpiredStockOutTasksAsync()
+        {
+            var activeTasks = await _stockTaskRepository.GetListAsync(task =>
+                task.TaskStatus != TaskStatus.Complete &&
+                task.TaskStatus != TaskStatus.Cancel &&
+                task.TaskStatus != TaskStatus.ExceptionComplete);
+            if (activeTasks.Count > 0)
+                return 0;
+
+            var materialBoxes = await _materialBoxRepository.GetListAsync(box => box.CellId > 0);
+            var now = DateTime.Now;
+            var dispatchedCount = 0;
+
+            foreach (var materialBox in materialBoxes
+                .OrderBy(box => box.MaterialInDate))
+            {
+                if (!DateTime.TryParse(materialBox.MaterialInDate, out var materialInTime) ||
+                    !int.TryParse(materialBox.RetentionPeriod, out var validityDays) ||
+                    validityDays < 0 || materialInTime.AddDays(validityDays) > now)
+                {
+                    continue;
+                }
+
+                var cabinetDoor = await _cellManager.GetEmptyStation(1, materialBox.CellModel);
+                if (cabinetDoor == null)
+                    continue;
+
+                var stockTask = await _stockTaskManagement.CreateWCSOut(
+                    TaskType.NPSortStockOut.ToString(), materialBox);
+                stockTask.SetEndCell(cabinetDoor.Id, cabinetDoor.CellCode);
+                stockTask.TaskRemark = "物料有效期到期自动出库";
+                await _stockTaskRepository.UpdateAsync(stockTask, true);
+                await WCSSetCell(stockTask.Id);
+                dispatchedCount++;
+
+                // 每轮只下发一个任务，后续任务等待该柜门重新空闲。
+                break;
+            }
+
+            return dispatchedCount;
+        }
         
         //扫码打开柜门,创建任务
         public async Task<StockTaskDto> OpenDoorAndWCSInExcute(int input)
