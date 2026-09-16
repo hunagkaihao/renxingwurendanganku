@@ -62,14 +62,17 @@ namespace WarehouseManagement.CheckHiss
             var queryable = await _checkDetailHisRepository.GetQueryableAsync();
 
             var query = from checkDetailHis in queryable
-                        where (!input.StartCreationTime.HasValue ||
+                        where checkDetailHis.CheckId == input.CheckHisId
+                              && (!input.StartCreationTime.HasValue ||
                                checkDetailHis.CreationTime >= input.StartCreationTime.Value)
                               && (!input.EndCreationTime.HasValue ||
                                   checkDetailHis.CreationTime <= input.EndCreationTime.Value)
                         select new { checkDetailHis };
 
             var pageSize = input.PageSize > 0 ? input.PageSize : 10;
-            var skipCount = (input.PageIndex - 1) * pageSize;
+            var pageIndex = input.PageIndex > 0 ? input.PageIndex : 1;
+            var skipCount = (pageIndex - 1) * pageSize;
+            var totalCount = await AsyncExecuter.CountAsync(query);
 
             query = query
                 .OrderByDescending(f => f.checkDetailHis.Id)
@@ -89,8 +92,6 @@ namespace WarehouseManagement.CheckHiss
 
                 return checkHisDtos;
             }).ToList();
-
-            var totalCount = checkHisDtos.Count;
 
             return new PagedResultDto<CheckDetailHisDto>(
                 totalCount,

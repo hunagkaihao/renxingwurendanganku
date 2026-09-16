@@ -5213,6 +5213,40 @@ export class ChecksServiceProxy extends ServiceProxyBase {
         });
     }
 
+    /**
+     * 盘盈确认
+     * @param body (optional)
+     * @return Success
+     */
+    inventorySurplusConfirm(body: IdIntInput | undefined , cancelToken?: CancelToken | undefined): Promise<boolean> {
+        let url_ = this.baseUrl + "/Checks/inventorySurplusConfirm";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+        let options_ = <AxiosRequestConfig>{
+            data: content_,
+            method: "POST",
+            url: url_,
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.instance.request(transformedOptions_);
+        }).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processInventoryConfirm(_response));
+        });
+    }
+
     protected processInventoryConfirm(response: AxiosResponse): Promise<boolean> {
         const status = response.status;
         let _headers: any = {};
@@ -25679,6 +25713,7 @@ export class PagingCheckDetailHisDto implements IPagingCheckDetailHisDto {
     pageSize!: number;
     /** 跳过多少条 */
     readonly skipCount!: number;
+    checkHisId!: number;
     startCreationTime!: moment.Moment | undefined;
     endCreationTime!: moment.Moment | undefined;
 
@@ -25696,6 +25731,7 @@ export class PagingCheckDetailHisDto implements IPagingCheckDetailHisDto {
             this.pageIndex = _data["pageIndex"];
             this.pageSize = _data["pageSize"];
             (<any>this).skipCount = _data["skipCount"];
+            this.checkHisId = _data["checkHisId"];
             this.startCreationTime = _data["startCreationTime"] ? moment(_data["startCreationTime"].toString()) : <any>undefined;
             this.endCreationTime = _data["endCreationTime"] ? moment(_data["endCreationTime"].toString()) : <any>undefined;
         }
@@ -25713,6 +25749,7 @@ export class PagingCheckDetailHisDto implements IPagingCheckDetailHisDto {
         data["pageIndex"] = this.pageIndex;
         data["pageSize"] = this.pageSize;
         data["skipCount"] = this.skipCount;
+        data["checkHisId"] = this.checkHisId;
         data["startCreationTime"] = this.startCreationTime ? this.startCreationTime.toISOString() : <any>undefined;
         data["endCreationTime"] = this.endCreationTime ? this.endCreationTime.toISOString() : <any>undefined;
         return data;
@@ -25726,6 +25763,7 @@ export interface IPagingCheckDetailHisDto {
     pageSize: number;
     /** 跳过多少条 */
     skipCount: number;
+    checkHisId: number;
     startCreationTime: moment.Moment | undefined;
     endCreationTime: moment.Moment | undefined;
 }

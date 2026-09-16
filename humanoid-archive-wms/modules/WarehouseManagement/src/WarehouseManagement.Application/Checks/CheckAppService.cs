@@ -569,6 +569,10 @@ namespace WarehouseManagement.Checks
                 checkHisDto.Supplier = check.Supplier;
                 var entity = base.ObjectMapper.Map<CheckHisDto, CheckHis>(checkHisDto);
                 var checkHis = await _checkHisManager.CreateAsync(entity);
+                if (checkHis.Id <= 0)
+                {
+                    throw new UserFriendlyException("盘点历史主记录创建失败，未获取有效历史编号");
+                }
                 return checkHis.Id;
             }
             catch (Exception ex)
@@ -769,6 +773,26 @@ PagingCheckDetailInput input)
             {
                 throw new UserFriendlyException("该条盘点记录已确认，不需要重复确认");
             }
+            checkDetailHis.VerifyUser = _currentUser.UserName;
+            checkDetailHis.VerifyAmount = 1;
+            checkDetailHis.VerifyFinishTime = DateTime.Now.ToString();
+            checkDetailHis.VerifyFlag = 1;
+            await _checkDetailHisManager.UpdateAsync(checkDetailHis);
+            return true;
+        }
+        //盘点历史结果盘盈确认
+        public async Task<bool> InventorySurplusConfirm(IdIntInput input)
+        {
+            CheckDetailHis checkDetailHis = await _checkDetailHisManager.GetById(input.Id);
+            if (checkDetailHis.VerifyFlag == 1)
+            {
+                throw new UserFriendlyException("该条盘点记录已确认，不需要重复确认");
+            }
+            if (checkDetailHis.ProfitLossAmount >= 0)
+            {
+                throw new UserFriendlyException("该条盘点记录不是盘盈结果，无法进行盘盈确认");
+            }
+
             checkDetailHis.VerifyUser = _currentUser.UserName;
             checkDetailHis.VerifyAmount = 1;
             checkDetailHis.VerifyFinishTime = DateTime.Now.ToString();

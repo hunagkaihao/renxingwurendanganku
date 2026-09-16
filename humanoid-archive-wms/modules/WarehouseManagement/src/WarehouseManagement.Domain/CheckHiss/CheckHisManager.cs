@@ -16,7 +16,8 @@ namespace WarehouseManagement.CheckHiss
         }
         public async Task<CheckHis> CreateAsync(CheckHis check)
         {
-            return await _checkHisRepository.InsertAsync(check);
+            // 明细历史需要立即使用主记录的自增 ID，必须在返回前保存。
+            return await _checkHisRepository.InsertAsync(check, true);
         }
         public async Task<List<CheckHis>> GetHisAsync(string checkCode)
         {

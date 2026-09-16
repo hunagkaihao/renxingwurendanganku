@@ -398,6 +398,30 @@ namespace WarehouseManagement.Cells
             try
             {
                 string[] areaCodes = areaCode.Split('-');
+                if (areaCodes.Length != 3 ||
+                    !int.TryParse(areaCodes[0], out var row) ||
+                    !int.TryParse(areaCodes[1], out var column) ||
+                    !int.TryParse(areaCodes[2], out var layer))
+                {
+                    throw new UserFriendlyException("区域编码格式错误");
+                }
+
+                // 排为 0 表示全部排。与批量出库的区域规则保持一致，
+                // 例如 0-1-1 应匹配第 1 列、第 1 层的所有排。
+                if (row == 0)
+                {
+                    var cells = await _cellRepository.GetListAsync(cell =>
+                        cell.CellType == CellType.Cell &&
+                        (column == 0 || cell.Cell_y == column) &&
+                        (layer == 0 || cell.Cell_z == layer));
+
+                    return cells
+                        .OrderBy(cell => cell.Cell_x)
+                        .ThenBy(cell => cell.Cell_y)
+                        .ThenBy(cell => cell.Cell_z)
+                        .ToList();
+                }
+
                 if (areaCodes[0] != "0")
                 {
                     if (areaCodes[2] != "0")

@@ -57,7 +57,7 @@
   </template>
   
   <script lang="ts">
-    import { defineComponent,ref } from 'vue';
+    import { defineComponent, ref, onActivated } from 'vue';
     import { useMessage } from '/@/hooks/web/useMessage';
     import { BasicTable, useTable, TableAction } from '/@/components/Table';
     import { planColumns, searchFormSchema, getTableListAsync, planDetailColumns, Executing, getTableDetailListAsync,Delete } from './Check';
@@ -95,6 +95,11 @@
           rowSelection: { type: 'radio' },
           rowKey: 'id',
           clearSelectOnPageChange: true,
+          pagination: {
+            pageSize: 10,
+            showSizeChanger: true,
+            showQuickJumper: true,
+          },
           maxHeight: 300,
         });
 
@@ -148,9 +153,16 @@
               content: msg,
               onOk: async () => {
                 await Executing(id);
+                await reload();
+                await reloadDetail();
               },
           })
         }
+
+        onActivated(async () => {
+          await reload();
+          await reloadDetail();
+        });
         //取消盘点计划
         async function cancelCheck(){
           if(selectedBoxIdRef.value == 0){

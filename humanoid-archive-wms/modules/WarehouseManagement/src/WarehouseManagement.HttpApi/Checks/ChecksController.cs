@@ -59,6 +59,12 @@ namespace WarehouseManagement.Checks
         {
             return await _checkAppService.InventoryConfirm(input);
         }
+        [HttpPost("inventorySurplusConfirm")]
+        [SwaggerOperation(summary: "盘盈确认", Tags = new[] { "Checks" })]
+        public async Task<bool> InventorySurplusConfirm(IdIntInput input)
+        {
+            return await _checkAppService.InventorySurplusConfirm(input);
+        }
         [HttpPost("inventoryLossConfirm")]
         [SwaggerOperation(summary: "盘亏确认", Tags = new[] { "Checks" })]
         public async Task<bool> InventoryLossConfirm(IdIntInput input)

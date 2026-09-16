@@ -10,6 +10,11 @@ namespace WarehouseManagement.CheckHiss.Dto
     public class PagingCheckDetailHisDto : PagingBase
     {
         /// <summary>
+        /// 盘点历史主记录 ID。
+        /// </summary>
+        public int CheckHisId { get; set; }
+
+        /// <summary>
         /// 盘点历史明细创建时间筛选起点（含）。
         /// </summary>
         public DateTime? StartCreationTime { get; set; }

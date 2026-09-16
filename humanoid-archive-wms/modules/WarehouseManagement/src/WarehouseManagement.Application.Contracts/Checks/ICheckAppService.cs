@@ -36,6 +36,8 @@ namespace WarehouseManagement.Checks
 
         //账实一致确认
         Task<bool> InventoryConfirm(IdIntInput input);
+        //盘盈确认
+        Task<bool> InventorySurplusConfirm(IdIntInput input);
         //盘亏
         Task<bool> InventoryLossConfirm(IdIntInput input);
 

@@ -35,6 +35,13 @@
           </a-button>
           <a-button
             type="primary"
+            @click="checkSurplusConfirm"
+            v-auth="'WarehouseManagement.GoodsManagement.Create'"
+          >
+            盘盈确认
+          </a-button>
+          <a-button
+            type="primary"
             @click="checklossConfirm"
             v-auth="'WarehouseManagement.GoodsManagement.Create'"
           >
@@ -69,10 +76,10 @@
   </template>
   
   <script lang="ts">
-    import { defineComponent,ref } from 'vue';
+    import { defineComponent, ref, onActivated } from 'vue';
     import { useMessage } from '/@/hooks/web/useMessage';
     import { BasicTable, useTable, TableAction } from '/@/components/Table';
-    import { hisColumns, checkhissearchFormSchema, hisDetailColumns, deleteGoodsAsync,GetTableDetailHis,GetTableHis,Confirm,LossConfirm,createSurplusIn,createLossOut,Complete } from './Check';
+    import { hisColumns, checkhissearchFormSchema, hisDetailColumns, deleteGoodsAsync,GetTableDetailHis,GetTableHis,Confirm,SurplusConfirm,LossConfirm,createSurplusIn,createLossOut,Complete } from './Check';
     import { useModal } from '/@/components/Modal';
     import { message } from 'ant-design-vue';
     import { useI18n } from '/@/hooks/web/useI18n';
@@ -129,6 +136,13 @@
         });
 
         async function GetDetailHis(params){
+          if (!selectedBoxIdRef.value) {
+            return {
+              items: [],
+              totalCount: 0,
+            };
+          }
+          params.checkHisId = Number(selectedBoxIdRef.value);
           return await GetTableDetailHis(params);
         }
   
@@ -188,6 +202,18 @@
         }
       };
 
+      onActivated(async () => {
+        selectedBoxIdRef.value = '';
+        selectedDetailRef.value = 0;
+        await reload();
+        await reloadDetail();
+      });
+
+      async function refreshInventoryData() {
+        await reload();
+        await reloadDetail();
+      }
+
       async function checkComplete(){
         if(selectedBoxIdRef.value == ""){
             message.error("请先选择盘点计划")
@@ -218,6 +244,23 @@
               content: msg,
               onOk: async () => {
                 await Confirm(id);
+                await refreshInventoryData();
+              },
+          })
+      }
+      async function checkSurplusConfirm(){
+        if(selectedDetailRef.value == 0){
+            message.error("请先选择盘点结果")
+            return
+          }
+          let id = selectedDetailRef.value
+            createConfirm({
+              iconType: 'warning',
+              title: t('common.tip'),
+              content: '确认盘盈处理？',
+              onOk: async () => {
+                await SurplusConfirm(id);
+                await refreshInventoryData();
               },
           })
       }
@@ -234,6 +277,7 @@
               content: msg,
               onOk: async () => {
                 await LossConfirm(id);
+                await refreshInventoryData();
               },
           })
       }
@@ -249,6 +293,7 @@
               content: msg,
               onOk: async () => {
                 await createSurplusIn(remark,cellName);
+                await refreshInventoryData();
               },
           })
       }
@@ -264,6 +309,7 @@
               content: msg,
               onOk: async () => {
                 await createLossOut(boxRfid,cellName);
+                await refreshInventoryData();
               },
           })
       }
@@ -286,6 +332,7 @@
           onSelectChange,
           checkComplete,
           checkConfirm,
+          checkSurplusConfirm,
           checklossConfirm,
           checkIn,
           checkout,

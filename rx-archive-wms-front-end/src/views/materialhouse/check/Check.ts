@@ -149,6 +149,19 @@ export const hisColumns: BasicColumn[] = [
   {
     title: t('盘点状态'),
     dataIndex: 'checkStatus',
+    customRender: ({ text }) => {
+      const statusMap: Record<string, string> = {
+        '0': '等待执行',
+        Waiting: '等待执行',
+        '1': '执行中',
+        Executing: '执行中',
+        '2': '盘点完成',
+        Complete: '盘点完成',
+        '3': '审核完成',
+        Finish: '审核完成',
+      };
+      return statusMap[String(text)] || String(text ?? '');
+    },
   },
   {
     title: t('状态改变时间'),
@@ -723,6 +736,15 @@ export async function Confirm(
     var params = new IdIntInput()
     params.id = id
   await _checksServiceProxy.inventoryConfirm(params);
+  message.success(t('common.operationSuccess'));
+}
+//盘点结果处理盘盈确认
+export async function SurplusConfirm(
+  id:number
+  ): Promise<any> {
+    var params = new IdIntInput()
+    params.id = id
+  await _checksServiceProxy.inventorySurplusConfirm(params);
   message.success(t('common.operationSuccess'));
 }
 //盘点结果处理盘亏
