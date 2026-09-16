@@ -121,11 +121,14 @@ export const tableDetailColumns: BasicColumn[] = [
     dataIndex: 'materialPeople',
   },
   {
-    title: t('创建时间'),
-    dataIndex: 'creationTime',
-    customRender: ({ text }) => {
-      return text ? moment(text).format('YYYY-MM-DD HH:mm:ss') : '-';
-    },
+    title: t('入库时间'),
+    dataIndex: 'materialInDate',
+    customRender: ({ text }) => text || '-',
+  },
+  {
+    title: t('出库时间'),
+    dataIndex: 'materialOutTime',
+    customRender: ({ text }) => (text ? moment(text).format('YYYY-MM-DD HH:mm:ss') : '-'),
   },
 ];
 

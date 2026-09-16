@@ -103,9 +103,14 @@
           api: getPageDetaiTableListAsync,
           showTableSetting: false,
           showIndexColumn: true,
-          bordered: true,
-          canResize: false,
-          maxHeight: 300,
+        bordered: true,
+        canResize: false,
+        pagination: {
+          pageSize: 10,
+          showSizeChanger: true,
+          showQuickJumper: true,
+        },
+        maxHeight: 300,
         });
 
         async function getPageDetaiTableListAsync(params) {

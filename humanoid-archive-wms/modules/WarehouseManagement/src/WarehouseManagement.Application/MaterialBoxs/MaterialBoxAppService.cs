@@ -136,7 +136,9 @@ namespace WarehouseManagement.MaterialBoxs
             }
 
             var pageSize = input.PageSize > 0 ? input.PageSize : 10;
-            var skipCount = (input.PageIndex - 1) * pageSize;
+            var pageIndex = input.PageIndex > 0 ? input.PageIndex : 1;
+            var skipCount = (pageIndex - 1) * pageSize;
+            var totalCount = await AsyncExecuter.CountAsync(query);
             var items = await AsyncExecuter.ToListAsync(query
                 .OrderByDescending(archiveBox => archiveBox.Id)
                 .Skip(skipCount)
@@ -150,9 +152,11 @@ namespace WarehouseManagement.MaterialBoxs
                 MaterialUnit = archiveBox.MaterialUnit,
                 RetentionPeriod = archiveBox.RetentionPeriod,
                 MaterialPeople = archiveBox.MaterialPeople,
+                MaterialInDate = archiveBox.MaterialInDate,
+                MaterialOutTime = archiveBox.MaterialOutTime,
                 CreationTime = archiveBox.CreationTime
             }).ToList();
-            return new PagedResultDto<MaterialBoxPageDto>(pageItems.Count, pageItems);
+            return new PagedResultDto<MaterialBoxPageDto>(totalCount, pageItems);
         }
         public async Task<PagedResultDto<MaterialBoxDetailDto>> DetailAsync(PagingMaterialBoxDetailInput input)
         {

@@ -95,12 +95,12 @@ namespace WarehouseManagement.MaterialBoxs
             return await _materialBoxRepository.UpdateAsync(entity);
         }
         //出库档案盒所在库位
-        public async Task<MaterialBox> UpdateStockOutCellAsync(string archiveBoxcode)
+        public async Task<MaterialBox> UpdateStockOutCellAsync(string archiveBoxcode, bool isBorrowStockOut = false)
         {
             var entity = await _materialBoxRepository.FindByMaterialBoxcodeAsync(archiveBoxcode);
             if (entity == null)
                 throw new UserFriendlyException(message: "档案盒不存在");
-            entity.SetCell(0);
+            entity.SetStockOut(isBorrowStockOut);
             return await _materialBoxRepository.UpdateAsync(entity);
         }
     }
