@@ -713,13 +713,16 @@ namespace WarehouseManagement.StockTasks
                         // WCS 正常完成，按 WMS 任务类型提交库存变化。
                         if (entity.TaskTypeCode == TaskType.NPSortStockOut ||
                             entity.TaskTypeCode == TaskType.HPSortStockOut ||
+                            entity.TaskTypeCode == TaskType.NpFullStockOut ||
                             entity.TaskTypeCode == TaskType.HPBatchStockOut)
                         {
                             // 出库完成：释放起终点库位并将档案盒标记为出库。
                             await _cellManager.SetAsStockOutAsync((int)entity.EndCellId);
                             await _cellManager.SetAsStockOutAsync((int)entity.StartCellId);
                             await _cellManager.SetMaterialCodeAsync((int)entity.StartCellId, null);
-                            await _materialBoxManager.UpdateStockOutCellAsync(entity.MaterialBoxBarcode);
+                            await _materialBoxManager.UpdateStockOutCellAsync(
+                                entity.MaterialBoxBarcode,
+                                entity.TaskTypeCode == TaskType.HPSortStockOut);
                             entity.SetAsCompleted();
                         }
                         else if (entity.TaskTypeCode == TaskType.NPFullStockIn)

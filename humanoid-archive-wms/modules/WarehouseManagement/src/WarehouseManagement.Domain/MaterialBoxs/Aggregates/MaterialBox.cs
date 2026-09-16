@@ -31,7 +31,20 @@ namespace WarehouseManagement.MaterialBoxs.Aggregates
         public void SetCell(int cellId)
         {
             CellId = cellId;
+            if (cellId > 0)
+            {
+                MaterialInDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                MaterialOutTime = null;
+                BorrowFlag = 0;
+            }
             Log.Warning($"Box:{this.MaterialBoxBarcode} is SetCell Cell:{cellId}。Method：{System.Reflection.MethodBase.GetCurrentMethod().Name}");
+        }
+        public void SetStockOut(bool isBorrowStockOut)
+        {
+            CellId = 0;
+            MaterialOutTime = DateTime.Now;
+            BorrowFlag = isBorrowStockOut ? 1 : 0;
+            Log.Warning($"Box:{this.MaterialBoxBarcode} is stock out. BorrowFlag:{BorrowFlag}。Method：{System.Reflection.MethodBase.GetCurrentMethod().Name}");
         }
         public void AddDetail(int boxId,int archiveId)
         {
@@ -141,6 +154,14 @@ namespace WarehouseManagement.MaterialBoxs.Aggregates
         /// 归档日期
         /// </summary>
         public string MaterialInDate { get; set; }
+        /// <summary>
+        /// 最近一次出库时间
+        /// </summary>
+        public DateTime? MaterialOutTime { get; set; }
+        /// <summary>
+        /// 借用出库标志：0普通出库，1借用出库
+        /// </summary>
+        public int BorrowFlag { get; set; } = 0;
         /// <summary>
         /// 归档部门
         /// </summary>

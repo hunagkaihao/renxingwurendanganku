@@ -169,6 +169,11 @@
         rowSelection: { type: 'radio' },
         rowKey: 'id',
         clearSelectOnPageChange: true,
+        pagination: {
+          pageSize: 10,
+          showSizeChanger: true,
+          showQuickJumper: true,
+        },
         maxHeight: 300,
         actionColumn: {
           width: 150,
@@ -241,7 +246,8 @@
               materialUnits: selectedMaterial.materialUnit,
               validityPeriod: selectedMaterial.retentionPeriod,
               materialPeople: selectedMaterial.materialPeople,
-              creationTime: selectedMaterial.creationTime,
+              materialInDate: selectedMaterial.materialInDate,
+              materialOutTime: selectedMaterial.materialOutTime,
             },
           ]);
         } else {

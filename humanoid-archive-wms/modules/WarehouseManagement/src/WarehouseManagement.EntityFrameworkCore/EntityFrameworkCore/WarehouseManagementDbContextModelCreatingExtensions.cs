@@ -65,6 +65,7 @@ public static class WarehouseManagementDbContextModelCreatingExtensions
         {
             b.ToTable(WarehouseManagementDbProperties.DbTablePrefix + nameof(MaterialBox), WarehouseManagementDbProperties.DbSchema);
             b.HasIndex(q => q.CreationTime);
+            b.Property(q => q.MaterialOutTime).HasColumnType("datetime");
             b.ConfigureByConvention();
         });
         builder.Entity<Cell>(b =>

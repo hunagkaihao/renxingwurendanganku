@@ -14,6 +14,8 @@ namespace WarehouseManagement.MaterialBoxs.Dto
         public string MaterialUnit { get; set; }
         public string RetentionPeriod { get; set; }
         public string MaterialPeople { get; set; }
+        public string MaterialInDate { get; set; }
+        public DateTime? MaterialOutTime { get; set; }
         public DateTime CreationTime { get; set; }
     }
 }

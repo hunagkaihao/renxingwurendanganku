@@ -57,6 +57,14 @@ namespace WarehouseManagement.MaterialBoxs.Dto
         /// </summary>
         public string MaterialInDate { get; set; }
         /// <summary>
+        /// 最近一次出库时间
+        /// </summary>
+        public DateTime? MaterialOutTime { get; set; }
+        /// <summary>
+        /// 借用出库标志：0普通出库，1借用出库
+        /// </summary>
+        public int BorrowFlag { get; set; }
+        /// <summary>
         /// 归档部门
         /// </summary>
         public string MaterialInDept { get; set; }

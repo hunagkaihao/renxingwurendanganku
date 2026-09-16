@@ -17311,6 +17311,8 @@ export class MaterialBoxDto implements IArchiveBoxDto {
     classCode!: string | undefined;
     className!: string | undefined;
     materialInDate!: string | undefined;
+    materialOutTime!: moment.Moment | undefined;
+    borrowFlag!: number;
     materialInDept!: string | undefined;
     materialPeople!: string | undefined;
     director!: string | undefined;
@@ -17354,6 +17356,8 @@ export class MaterialBoxDto implements IArchiveBoxDto {
             this.classCode = _data["classCode"];
             this.className = _data["className"];
             this.materialInDate = _data["materialInDate"];
+            this.materialOutTime = _data["materialOutTime"] ? moment(_data["materialOutTime"].toString()) : <any>undefined;
+            this.borrowFlag = _data["borrowFlag"];
             this.materialInDept = _data["materialInDept"];
             this.materialPeople = _data["materialPeople"];
             this.director = _data["director"];
@@ -17397,6 +17401,8 @@ export class MaterialBoxDto implements IArchiveBoxDto {
         data["classCode"] = this.classCode;
         data["className"] = this.className;
         data["materialInDate"] = this.materialInDate;
+        data["materialOutTime"] = this.materialOutTime ? this.materialOutTime.toISOString() : <any>undefined;
+        data["borrowFlag"] = this.borrowFlag;
         data["materialInDept"] = this.materialInDept;
         data["materialPeople"] = this.materialPeople;
         data["director"] = this.director;
@@ -17433,6 +17439,8 @@ export interface IArchiveBoxDto {
     classCode: string | undefined;
     className: string | undefined;
     materialInDate: string | undefined;
+    materialOutTime: moment.Moment | undefined;
+    borrowFlag: number;
     materialInDept: string | undefined;
     materialPeople: string | undefined;
     director: string | undefined;
