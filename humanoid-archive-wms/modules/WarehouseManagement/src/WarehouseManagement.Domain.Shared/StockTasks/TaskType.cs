@@ -61,6 +61,10 @@ namespace WarehouseManagement.StockTasks
         /// </summary>
         HPBatchStockIn,
         /// <summary>
+        /// 批量出库
+        /// </summary>
+        HPBatchStockOut,
+        /// <summary>
         /// 自动盘点下架
         /// </summary>
         HpAnnualCheckDown,

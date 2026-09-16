@@ -88,7 +88,7 @@ namespace WarehouseManagement.StockTasks
             return await _stockTaskAppService.OpenDoorAndWCSInExcute(input);
         }
         [HttpPost("batBoxInByArea")]
-        [SwaggerOperation(summary: "创建物料批量入库任务", Tags = new[] { "StockTasks" })]
+        [SwaggerOperation(summary: "创建物料批量出库任务", Tags = new[] { "StockTasks" })]
         public async Task<bool> BatBoxInByArea(string input)
         {
             return await _stockTaskAppService.BatBoxInByArea(input);

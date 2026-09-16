@@ -287,6 +287,32 @@ namespace WarehouseManagement.Cells
             try
             {
                 string[] areaCodes = areaCode.Split('-');
+                if (areaCodes.Length != 3 ||
+                    !int.TryParse(areaCodes[0], out var row) ||
+                    !int.TryParse(areaCodes[1], out var column) ||
+                    !int.TryParse(areaCodes[2], out var layer))
+                {
+                    throw new UserFriendlyException("区域编码格式错误");
+                }
+
+                // 批量计划页面按“排-列-层”传参；库位编码与实体字段对应为
+                // Cell_x=排、Cell_y=列、Cell_z=层。排为 0 表示全部排，
+                // 例如 0-2-1 表示第 2 列、第 1 层的全部库位。
+                if (row == 0)
+                {
+                    var cells = await _cellRepository.GetListAsync(cell =>
+                        cell.CellType == CellType.Cell &&
+                        (column == 0 || cell.Cell_y == column) &&
+                        (layer == 0 || cell.Cell_z == layer));
+
+                    return cells
+                        .OrderBy(cell => cell.Cell_x)
+                        .ThenBy(cell => cell.Cell_y)
+                        .ThenBy(cell => cell.Cell_z)
+                        .Select(cell => cell.Id)
+                        .ToList();
+                }
+
                 if (areaCodes[0] != "0")
                 {
                     if (areaCodes[2] != "0")
@@ -339,6 +365,11 @@ namespace WarehouseManagement.Cells
 
         public async Task<List<int>> OrderCellidsByIds(List<int> ids)
         {
+            if (ids == null || ids.Count == 0)
+            {
+                return new List<int>();
+            }
+
             List<int> iLists = (await _cellRepository.GetListAsync(x => ids.Contains(x.Id) && x.CellType == CellType.Cell)).OrderBy(o => o.Cell_z).ThenBy(o => o.Cell_y).ThenBy(o => o.Cell_x).Select(x => x.Id).ToList();
             return iLists;
         }

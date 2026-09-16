@@ -8,6 +8,11 @@ namespace WarehouseManagement.StockTasks.Dto
     public class PagingStockTaskListInput : PagingBase
     {
         /// <summary>
+        /// 计划 ID；传入后仅查询该计划生成的任务。
+        /// </summary>
+        public int? PlanId { get; set; }
+
+        /// <summary>
         /// 关键字
         /// </summary>
         public string Filter { get; set; }

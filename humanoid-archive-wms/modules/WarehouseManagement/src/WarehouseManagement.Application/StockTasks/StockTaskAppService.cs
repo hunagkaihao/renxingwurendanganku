@@ -86,37 +86,64 @@ namespace WarehouseManagement.StockTasks
         {
             using var disableSoftDeleteFilter = _dataFilter.Disable<ISoftDelete>();
 
-            // 获取任务表
             var queryable = await _stockTaskRepository.GetQueryableAsync();
+            var query = queryable.AsQueryable();
 
-            // 筛选满足条件项
-            var query = from stockTask in queryable
-                        where stockTask.CreationTime >= input.StartCreationTime & 
-                              stockTask.CreationTime <= input.EndCreationTime & 
-                              stockTask.MaterialBoxBarcode.Contains(input.Filter.IsNullOrEmpty() ? "" : input.Filter.Trim()) &
-                              (!input.HideCompletedTasks ||
-                               (stockTask.TaskStatus != TaskStatus.Cancel &
-                                stockTask.TaskStatus != TaskStatus.Complete &
-                                stockTask.TaskStatus != TaskStatus.ExceptionComplete)) &
-                              (input.TaskStatus == "All" ? 1 == 1 : stockTask.TaskStatus == Enum.Parse<TaskStatus>(input.TaskStatus))
-                              select new { stockTask };
+            if (input.PlanId.HasValue)
+            {
+                query = query.Where(stockTask => stockTask.PlanId == input.PlanId.Value);
+            }
 
-            // 降序排序
-            query = query .OrderByDescending(f => f.stockTask.Id)
+            if (input.StartCreationTime != default)
+            {
+                query = query.Where(stockTask => stockTask.CreationTime >= input.StartCreationTime);
+            }
+
+            if (input.EndCreationTime != default)
+            {
+                query = query.Where(stockTask => stockTask.CreationTime <= input.EndCreationTime);
+            }
+
+            if (!input.Filter.IsNullOrEmpty())
+            {
+                var filter = input.Filter.Trim();
+                query = query.Where(stockTask => stockTask.MaterialBoxBarcode.Contains(filter));
+            }
+
+            if (input.HideCompletedTasks)
+            {
+                query = query.Where(stockTask =>
+                    stockTask.TaskStatus != TaskStatus.Cancel &&
+                    stockTask.TaskStatus != TaskStatus.Complete &&
+                    stockTask.TaskStatus != TaskStatus.ExceptionComplete);
+            }
+
+            TaskStatus? taskStatusFilter = null;
+            var taskStatusText = input.TaskStatus;
+            if (!string.IsNullOrWhiteSpace(taskStatusText) &&
+                !string.Equals(taskStatusText, "All", StringComparison.OrdinalIgnoreCase) &&
+                Enum.TryParse<TaskStatus>(taskStatusText, out var parsedTaskStatus))
+            {
+                taskStatusFilter = parsedTaskStatus;
+            }
+
+            if (taskStatusFilter.HasValue)
+            {
+                var taskStatus = taskStatusFilter.Value;
+                query = query.Where(stockTask => stockTask.TaskStatus == taskStatus);
+            }
+
+            var totalCount = await AsyncExecuter.CountAsync(query);
+
+            var pagedQuery = query.OrderByDescending(stockTask => stockTask.Id)
                           .Skip(input.SkipCount)
                           .Take(input.PageSize);
 
-            // 执行查询获取列表
-            var queryResult = await AsyncExecuter.ToListAsync(query);
+            var queryResult = await AsyncExecuter.ToListAsync(pagedQuery);
 
-            // 转换查询结构为列表对象
-            var stockTaskDtos = queryResult.Select(x =>
-            {
-                var stockTaskDtos = ObjectMapper.Map<StockTask, StockTaskDto>(x.stockTask);
-                return stockTaskDtos;
-            }).ToList();
-            
-            var totalCount = queryResult.Count() + input.SkipCount;
+            var stockTaskDtos = queryResult
+                .Select(stockTask => ObjectMapper.Map<StockTask, StockTaskDto>(stockTask))
+                .ToList();
 
             return new PagedResultDto<StockTaskDto>(totalCount, stockTaskDtos);
         }
@@ -582,77 +609,84 @@ namespace WarehouseManagement.StockTasks
         public async Task<bool> BatBoxInByArea(string areaCode)
         {
             List<int> cellIds = await _cellManager.GetCellidsByAreaCode(areaCode);
-            //增加了对CELL进行排序
+            if (cellIds == null || cellIds.Count == 0)
+            {
+                throw new UserFriendlyException("所选区域未配置库位。");
+            }
+
+            // 按库位顺序创建批量出库任务。
             List<int> newcellIds = await _cellManager.OrderCellidsByIds(cellIds);
-            return await ManageCreateBatIn(newcellIds);
+            return await ManageCreateBatIn(newcellIds, areaCode);
         }
 
         [UnitOfWork]
-        public async Task<bool> ManageCreateBatIn(List<int> cellIds)
+        public async Task<bool> ManageCreateBatIn(List<int> cellIds, string areaCode)
         {
-            //step1 该是否存在任务
-            var stockCount = await _stockTaskRepository.GetListAsync();
-            if (stockCount.Count > 0)
+            // 批量任务不能与尚未结束的出入库任务并行，已完成任务不影响新计划创建。
+            var activeTasks = await _stockTaskRepository.GetListAsync(task =>
+                task.TaskStatus != TaskStatus.Cancel &&
+                task.TaskStatus != TaskStatus.Complete &&
+                task.TaskStatus != TaskStatus.ExceptionComplete);
+            if (activeTasks.Count > 0)
             {
                 throw new UserFriendlyException("存在出入库任务，请先执行完其它任务。");
             }
 
-            //step2创建计划
+            // 创建批量出库计划。
             PlanDto planMain = new PlanDto();
             DateTime.Now.Ticks.ToString();
-            planMain.PlanCode = "批量入库" + DateTime.Now.Ticks.ToString();
+            planMain.PlanCode = "批量出库" + DateTime.Now.Ticks.ToString();
             planMain.PlanExecuteType = PlanExecuteType.Automatic;
             planMain.PlanStatus = PlanStatus.Waiting;
-            planMain.PlanTypeCode = PlanTypeInout.In.ToString();
+            planMain.PlanTypeCode = PlanTypeInout.Out.ToString();
+            planMain.AreaCode = areaCode;
             var entity = base.ObjectMapper.Map<PlanDto, Plan>(planMain);
-            var plan =await _planRepository.InsertAsync(entity);
-            //step3 检查库位是否存在货物 、创建入库任务
-            CheckOrderCreateDto checkOrderCreate = new()
-            {
-                Priority = 1,
-                Orders = new(),
-            };
+            var plan = await _planRepository.InsertAsync(entity, true);
+
+            var createdCount = 0;
             foreach (int cId in cellIds)
             {
                 Cell cell = await _cellManager.GetByIdAsync(cId);
                 if (cell is null)
                 {
-                    throw new UserFriendlyException(cell.CellCode + "库位数据错误，请校核。");
+                    throw new UserFriendlyException("库位数据错误，请校核。");
                 }
-                else if (cell.CellStatus == CellStatus.Full)
+
+                var materialBox = await _materialBoxRepository.FindByCellIdAsync(cId);
+                if (materialBox == null)
                 {
-                    throw new UserFriendlyException(cell.CellCode + "库位错误，已存在档案，请校核。");
+                    continue;
                 }
-                else
+
+                if (string.IsNullOrWhiteSpace(materialBox.CellModel))
                 {
-                    StockTaskDto mainObj = new StockTaskDto();
-                    mainObj.StartCellId = cId;
-                    mainObj.EndCellId = cId;
-                    mainObj.EndCellCode = cell.CellCode;
-                    mainObj.PlanId = plan.Id;
-                    mainObj.TaskTypeCode = TaskType.HPBatchStockIn;
-                    mainObj.TaskStatus = TaskStatus.Executing;
-                    var st = base.ObjectMapper.Map<StockTaskDto, StockTask>(mainObj);
-                    var stock = await _stockTaskManagement.CreateCheckAsync(st);
-
-                    //锁库位
-                    await _cellManager.SetSelectedAsync(cId);
-
-                    OrderDto order = new();
-                    order.OrderCode = stock.Id.ToString();
-                    order.CellCode = stock.EndCellCode;
-                    checkOrderCreate.Orders.Add(order);
+                    throw new UserFriendlyException($"物料 {materialBox.MaterialBoxBarcode} 未设置物料类型，无法创建批量出库任务。");
                 }
 
+                var stockTask = new StockTask(
+                    TaskType.HPBatchStockOut,
+                    plan.Id,
+                    PlanTypeInout.Out.ToString(),
+                    materialBox.MaterialBoxBarcode,
+                    cell.Id,
+                    0,
+                    cell.CellCode,
+                    null)
+                {
+                    CellModel = materialBox.CellModel.Trim(),
+                    TaskRemark = "批量出库"
+                };
+                await _stockTaskManagement.CreateCheckAsync(stockTask);
+                createdCount++;
             }
-            var req = await _wcsApiManager.CheckOrderCreate(checkOrderCreate);
-            plan.HdDefineStr1 = req.QueryCode;
-            await _planRepository.UpdateAsync(plan);
 
-            //添加工作单元、事务处理
+            if (createdCount == 0)
+            {
+                throw new UserFriendlyException("所选区域没有可出库的物料。");
+            }
+
             await CurrentUnitOfWork.SaveChangesAsync();
-            //20240122记录日志
-            Log.Debug("用户创建了批量入库计划，ID:" + plan.ToString() + "  方法名:" + System.Reflection.MethodBase.GetCurrentMethod().Name);
+            Log.Debug("用户创建了等待执行的批量出库计划，ID:" + plan.Id + "  方法名:" + System.Reflection.MethodBase.GetCurrentMethod().Name);
             return true;
         }
 

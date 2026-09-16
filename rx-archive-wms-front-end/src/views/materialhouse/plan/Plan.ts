@@ -9,13 +9,12 @@ import {
   CheckHissServiceProxy,
   PagingPlanListInput,
   PlanDtoPagedResultDto,
+  PagingStockTaskListInput,
+  StockTaskDtoPagedResultDto,
   CheckHisDtoPagedResultDto,
   PagingCheckHisDto,
-  CreateCheckDto,
   CheckDto,
   CheckType,
-  PagingCheckDetailInput,
-  CheckDetailDtoPagedResultDto,
   PagingCheckDetailHisDto,
   CheckDetailHisDtoPagedResultDto,
   IdIntInput,
@@ -65,6 +64,26 @@ export const planColumns: BasicColumn[] = [
     // },
   },
   {
+    title: t('任务状态'),
+    dataIndex: 'planStatus',
+    customRender: ({ text }) => {
+      const statusText = String(text);
+      const statusMap: Record<string, string> = {
+        '0': '等待执行',
+        Waiting: '等待执行',
+        '1': '执行中',
+        Executing: '执行中',
+        '2': '已完成',
+        Finish: '已完成',
+        '3': '暂停',
+        Pause: '暂停',
+        '4': '已取消',
+        Cancel: '已取消',
+      };
+      return statusMap[statusText] || statusText;
+    },
+  },
+  {
     title: t('区域'),
     dataIndex: 'areaCode',
   },
@@ -77,25 +96,21 @@ export const planColumns: BasicColumn[] = [
   },
 ]
 export const planDetailColumns: BasicColumn[] = [
-  // {
-  //   title: t('盘点编号'),
-  //   dataIndex: 'checkId',
-  // },
   {
     title: t('任务编号'),
-    dataIndex: 'manageId',
+    dataIndex: 'id',
   },
   {
-    title: t('物料标签'),
-    dataIndex: 'stockBarcode',
+    title: t('物料码'),
+    dataIndex: 'materialBoxBarcode',
   },
   {
-    title: t('库位'),
-    dataIndex: 'cellName',
+    title: t('起始库位'),
+    dataIndex: 'startCellCode',
   },
   {
-    title: t('数量'),
-    dataIndex: 'account',
+    title: t('目标库位'),
+    dataIndex: 'endCellCode',
   },
   {
     title: t('创建时间'),
@@ -718,11 +733,12 @@ export async function getTableListAsync(
 ): Promise<PlanDtoPagedResultDto> {
   return _plansServiceProxy.page(params);
 }
-//获取盘点计划明细
-export async function getTableDetailListAsync(
-  params: PagingCheckDetailInput
-): Promise<CheckDetailDtoPagedResultDto> {
-  return _checksServiceProxy.pageDetail(params);
+// 获取批量计划对应的出入库任务明细。
+export async function getPlanTaskListAsync(
+  params: PagingStockTaskListInput,
+  planId: number,
+): Promise<StockTaskDtoPagedResultDto> {
+  return _stockTasksServiceProxy.page(new PagingStockTaskListInput({ ...params, planId }));
 }
 //盘点历史
 export async function GetTableHis(
@@ -736,13 +752,11 @@ export async function GetTableDetailHis(
 ): Promise<CheckDetailHisDtoPagedResultDto> {
   return _checkHissServiceProxy.pageDetail(params);
 }
-//执行盘点计划
-export async function Executing(
+// 执行计划
+export async function executePlanAsync(
     id:number
   ): Promise<boolean> {
-    const request = new IdIntInput();
-    request.id = id;
-  return _checksServiceProxy.checkExecute(request);
+  return _plansServiceProxy.setExecuting(id);
 }
 //取消盘点计划
 export async function Delete(
@@ -806,7 +820,7 @@ export async function createplanAsync({
   closeModal();
 }
 //批量创建cell
-export async function createCheckBatAsync({
+export async function createBatchStockOutAsync({
   request,
   changeOkLoading,
   validate,
@@ -815,9 +829,8 @@ export async function createCheckBatAsync({
 }) {
   changeOkLoading(true);
   await validate();
-  var param = new CreateCheckDto();
-  param.areaCode = request.cell_z+'-'+ request.cell_x +'-'+ request.cell_y
-  await _checksServiceProxy.createWithArea(param);
+  const areaCode = request.cell_z + '-' + request.cell_x + '-' + request.cell_y;
+  await _stockTasksServiceProxy.batBoxInByArea(areaCode);
   changeOkLoading(false);
   message.success(t('common.operationSuccess'));
   resetFields();

@@ -7,17 +7,10 @@
         <template #toolbar>
           <a-button
             type="primary"
-            @click="CreatePlan"
+            @click="openBatchStockOutTask"
             v-auth="'WarehouseManagement.GoodsManagement.Create'"
           >
-            {{ t('创建批量入库任务') }}
-          </a-button>
-          <a-button
-            type="primary"
-            @click="CreatePlan"
-            v-auth="'WarehouseManagement.GoodsManagement.Create'"
-          >
-            {{ t('创建计划') }}
+            {{ t('创建批量出库任务') }}
           </a-button>
           <a-button
             type="primary"
@@ -47,12 +40,8 @@
 
       </BasicTable>
       </a-row>
-      <CreateCheck
-      @register="registercreateCheckModal"
-      @reload="reload"
-      :bodyStyle="{ 'padding-top': '0' }"/>
-      <CreatePlan
-      @register="registercreatePlanModal"
+      <BatchStockOutTask
+      @register="registerBatchStockOutModal"
       @reload="reload"
       :bodyStyle="{ 'padding-top': '0' }"/>
     </div>
@@ -62,9 +51,8 @@
     import { defineComponent,ref } from 'vue';
     import { useMessage } from '/@/hooks/web/useMessage';
     import { BasicTable, useTable, TableAction } from '/@/components/Table';
-    import { planColumns, searchFormSchema, getTableListAsync, planDetailColumns, Executing, getTableDetailListAsync,Delete } from './Plan';
-    import CreateCheck from './BatInTask.vue';
-    import CreatePlan from './CreatePlan.vue';
+    import { planColumns, searchFormSchema, getTableListAsync, planDetailColumns, executePlanAsync, getPlanTaskListAsync,Delete } from './Plan';
+    import BatchStockOutTask from './BatInTask.vue';
     import { useI18n } from '/@/hooks/web/useI18n';
     import { Tag } from 'ant-design-vue';
     import { message } from 'ant-design-vue';
@@ -74,14 +62,12 @@
       components: {
         BasicTable,
         TableAction,
-        CreateCheck,
-        CreatePlan,
+        BatchStockOutTask,
         Tag,
       },
       setup() {
         const { createConfirm } = useMessage();
-        const [registercreateCheckModal, { openModal: CreateCheck }] = useModal();
-        const [registercreatePlanModal, { openModal: CreatePlan }] = useModal();
+        const [registerBatchStockOutModal, { openModal: openBatchStockOutTask }] = useModal();
         const { t } = useI18n();
         let selectedBoxIdRef = ref(0);
         // table配置
@@ -115,10 +101,9 @@
 
         async function getPageDetaiTableListAsync(params) {
         if (selectedBoxIdRef.value == 0) {
-          return [];
+          return { items: [], totalCount: 0 };
         }
-        params.checkId = selectedBoxIdRef.value;
-        return await getTableDetailListAsync(params);
+        return await getPlanTaskListAsync(params, selectedBoxIdRef.value);
       }
         //勾选事件
       const onSelectChange = async ({ rows }) => {
@@ -134,17 +119,19 @@
         //下达盘点计划
         async function executePlan(){
           if(selectedBoxIdRef.value == 0){
-            message.error("请先选择盘点计划")
+            message.error("请先选择计划")
             return
           }
-          let msg = t('确认下达盘点计划？');
+          let msg = t('确认执行计划？');
           let id = selectedBoxIdRef.value
             createConfirm({
               iconType: 'warning',
               title: t('common.tip'),
               content: msg,
               onOk: async () => {
-                await Executing(id);
+                await executePlanAsync(id);
+                reload();
+                reloadDetail();
               },
           })
         }
@@ -173,13 +160,10 @@
           cancelPlan,
           t,
           reload,
-          CreatePlan,
-          CreateCheck,
+          openBatchStockOutTask,
           onSelectChange,
-          registercreateCheckModal,
-          registercreatePlanModal,
+          registerBatchStockOutModal,
         };
       },
     });
   </script>
-  

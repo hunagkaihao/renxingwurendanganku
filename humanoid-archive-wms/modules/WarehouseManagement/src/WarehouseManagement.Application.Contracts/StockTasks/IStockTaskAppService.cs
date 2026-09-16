@@ -75,7 +75,7 @@ namespace WarehouseManagement.StockTasks
         Task<StockTaskDto> ReturnStockInAsync(ReturnStockInInput input);
 
         /// <summary>
-        /// 批量入库任务
+        /// 批量出库任务
         /// </summary>
         /// <param name="areaCode"></param>
         /// <returns></returns>

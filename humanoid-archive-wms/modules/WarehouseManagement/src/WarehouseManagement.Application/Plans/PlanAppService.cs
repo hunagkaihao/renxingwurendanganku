@@ -58,6 +58,7 @@ namespace WarehouseManagement.Plans
             var PlanDtos = queryResult.Select(x =>
             {
                 var PlanDtos = ObjectMapper.Map<Plan, PlanDto>(x.Plan);
+                PlanDtos.PlanStatus = x.Plan.PlanStatus;
                 return PlanDtos;
             }).ToList();
 
@@ -94,6 +95,11 @@ namespace WarehouseManagement.Plans
             var entity = await _planManager.FindByIdAsync(planId);
             if (entity == null)
                 throw new UserFriendlyException(message: "计划不存在");
+
+            if (entity.PlanTypeCode == PlanTypeInout.Out.ToString())
+            {
+                return await _StockTaskManager.ExecuteBatchStockOutPlan(entity);
+            }
 
             return await _StockTaskManager.ExecutePlan(entity);
 

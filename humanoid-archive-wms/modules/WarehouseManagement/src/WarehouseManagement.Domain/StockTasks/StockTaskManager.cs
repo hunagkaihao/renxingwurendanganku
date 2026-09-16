@@ -60,6 +60,7 @@ namespace WarehouseManagement.StockTasks
                 TaskType.EmptyStockOut or
                 TaskType.SealedGoodsDown or
                 TaskType.NpFullStockOut or
+                TaskType.HPBatchStockOut or
                 TaskType.LossOut => "StockOut",
 
                 TaskType.HpAnnualCheckDown => "CheckDown",
@@ -464,7 +465,8 @@ namespace WarehouseManagement.StockTasks
                     {
                         //优先分配上一个出库库位
                         if(stockTask.TaskTypeCode != TaskType.NPSortStockOut &&
-                           stockTask.TaskTypeCode != TaskType.HPSortStockOut)
+                           stockTask.TaskTypeCode != TaskType.HPSortStockOut &&
+                           stockTask.TaskTypeCode != TaskType.HPBatchStockOut)
                         {
                             StockTask last = (await _stockTaskRepository.GetListAsync(x => 
                                  x.MaterialBoxBarcode == stockTask.MaterialBoxBarcode & 
@@ -566,6 +568,64 @@ namespace WarehouseManagement.StockTasks
             }
         }
 
+        /// <summary>
+        /// 为批量出库计划中等待执行的任务分配同规格的空柜门并下发。
+        /// 柜门不可用时保留任务的等待状态，待已有任务完成后再次调用。
+        /// </summary>
+        public async Task DispatchPendingBatchStockOutTasks(int planId)
+        {
+            var pendingTasks = (await _stockTaskRepository.GetListAsync(task =>
+                    task.PlanId == planId &&
+                    task.TaskTypeCode == TaskType.HPBatchStockOut &&
+                    task.TaskStatus == TaskStatus.WaitingExecute))
+                .OrderBy(task => task.Id)
+                .ToList();
+
+            foreach (var pendingTask in pendingTasks)
+            {
+                var materialBox = await _materialBoxManager.GetMaterialBoxByRfidCode(pendingTask.MaterialBoxBarcode);
+                if (materialBox == null || string.IsNullOrWhiteSpace(materialBox.CellModel))
+                {
+                    Log.Warning($"批量出库任务 {pendingTask.Id} 的物料容器或物料类型不存在，保留等待状态。");
+                    continue;
+                }
+
+                // 先检查该物料类型的柜门是否空闲，避免无可用库位时把等待任务当作异常处理。
+                var station = await _cellManager.GetEmptyStation(1, materialBox.CellModel.Trim());
+                if (station == null)
+                {
+                    continue;
+                }
+
+                await WCSSetCell(pendingTask.Id);
+            }
+        }
+
+        /// <summary>
+        /// 执行已创建的批量出库计划，并开始下发其中等待执行的任务。
+        /// </summary>
+        public async Task<bool> ExecuteBatchStockOutPlan(Plan plan)
+        {
+            if (plan.PlanStatus != PlanStatus.Waiting)
+            {
+                throw new UserFriendlyException("计划不能重复下达!");
+            }
+
+            var tasks = await _stockTaskRepository.GetListAsync(task =>
+                task.PlanId == plan.Id && task.TaskTypeCode == TaskType.HPBatchStockOut);
+            if (tasks.Count == 0)
+            {
+                throw new UserFriendlyException("该计划没有批量出库任务。");
+            }
+
+            plan.PlanBeginTime = DateTime.Now.ToString();
+            plan.PlanStatus = PlanStatus.Executing;
+            await _planManager.Update(plan);
+
+            await DispatchPendingBatchStockOutTasks(plan.Id);
+            return true;
+        }
+
         //指定库位分配
         //public async
 
@@ -652,7 +712,8 @@ namespace WarehouseManagement.StockTasks
                     case WcsTaskStatus.Completed:
                         // WCS 正常完成，按 WMS 任务类型提交库存变化。
                         if (entity.TaskTypeCode == TaskType.NPSortStockOut ||
-                            entity.TaskTypeCode == TaskType.HPSortStockOut)
+                            entity.TaskTypeCode == TaskType.HPSortStockOut ||
+                            entity.TaskTypeCode == TaskType.HPBatchStockOut)
                         {
                             // 出库完成：释放起终点库位并将档案盒标记为出库。
                             await _cellManager.SetAsStockOutAsync((int)entity.EndCellId);
@@ -693,6 +754,27 @@ namespace WarehouseManagement.StockTasks
                 }
 
                 StockTask stockTaskRtn = await _stockTaskRepository.UpdateAsync(entity, true);
+                if (status == WcsTaskStatus.Completed &&
+                    (entity.TaskTypeCode == TaskType.NPSortStockOut ||
+                     entity.TaskTypeCode == TaskType.HPSortStockOut ||
+                     entity.TaskTypeCode == TaskType.HPBatchStockOut))
+                {
+                    // 任一出库完成都会释放柜门；据此重试所有执行中的批量出库计划。
+                    var executingPlans = await _planManager.GetExcetingPlan();
+                    foreach (var executingPlan in executingPlans)
+                    {
+                        await DispatchPendingBatchStockOutTasks(executingPlan.Id);
+                    }
+
+                    if (entity.TaskTypeCode == TaskType.HPBatchStockOut && entity.PlanId.HasValue)
+                    {
+                        var planTasks = await _stockTaskRepository.GetListAsync(task => task.PlanId == entity.PlanId);
+                        if (planTasks.Count > 0 && planTasks.All(task => task.TaskStatus == TaskStatus.Complete))
+                        {
+                            await _planManager.SetAsCompletedAsync(entity.PlanId.Value);
+                        }
+                    }
+                }
                 return stockTaskRtn;
             }
             catch(Exception ex)

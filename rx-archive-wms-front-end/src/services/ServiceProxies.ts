@@ -26945,6 +26945,7 @@ export class PagingStockTaskListInput implements IPagingStockTaskListInput {
     pageSize!: number;
     /** 跳过多少条 */
     readonly skipCount!: number;
+    planId!: number | undefined;
     filter!: string | undefined;
     startCreationTime!: moment.Moment;
     endCreationTime!: moment.Moment;
@@ -26965,6 +26966,7 @@ export class PagingStockTaskListInput implements IPagingStockTaskListInput {
             this.pageIndex = _data["pageIndex"];
             this.pageSize = _data["pageSize"];
             (<any>this).skipCount = _data["skipCount"];
+            this.planId = _data["planId"];
             this.filter = _data["filter"];
             this.startCreationTime = _data["startCreationTime"] ? moment(_data["startCreationTime"].toString()) : <any>undefined;
             this.endCreationTime = _data["endCreationTime"] ? moment(_data["endCreationTime"].toString()) : <any>undefined;
@@ -26985,6 +26987,7 @@ export class PagingStockTaskListInput implements IPagingStockTaskListInput {
         data["pageIndex"] = this.pageIndex;
         data["pageSize"] = this.pageSize;
         data["skipCount"] = this.skipCount;
+        data["planId"] = this.planId;
         data["filter"] = this.filter;
         data["startCreationTime"] = this.startCreationTime ? this.startCreationTime.toISOString() : <any>undefined;
         data["endCreationTime"] = this.endCreationTime ? this.endCreationTime.toISOString() : <any>undefined;
@@ -27001,6 +27004,7 @@ export interface IPagingStockTaskListInput {
     pageSize: number;
     /** 跳过多少条 */
     skipCount: number;
+    planId: number | undefined;
     filter: string | undefined;
     startCreationTime: moment.Moment;
     endCreationTime: moment.Moment;

@@ -1,7 +1,7 @@
 <template>
     <BasicModal
       :width="600"
-      :title="t('创建批量入库任务')"
+      :title="t('创建批量出库任务')"
       :canFullscreen="false"
       @ok="submit"
       @cancel="cancel"
@@ -12,18 +12,17 @@
     >
       <BasicForm @register="registerCellForm" />
     </BasicModal>
-    
-  </template>
+</template>
   
   <script lang="ts">
     import { defineComponent } from 'vue';
     import { BasicModal, useModalInner } from '/@/components/Modal';
     import { BasicForm, useForm } from '/@/components/Form/index';
-    import {  createCheckBatAsync , createCheckBatFormSchema } from './Plan';
+    import { createBatchStockOutAsync, createCheckBatFormSchema } from './Plan';
     import { CellInitDto } from '/@/services/ServiceProxies';
     import { useI18n } from '/@/hooks/web/useI18n';
     export default defineComponent({
-      name: 'CreateCkeck',
+      name: 'BatchStockOutTask',
       components: {
         BasicModal,
         BasicForm,
@@ -54,7 +53,7 @@
         const submit = async () => {
           try {
             let request = getFieldsValue() as CellInitDto;
-            await createCheckBatAsync({
+            await createBatchStockOutAsync({
               request,
               changeOkLoading,
               validate,
@@ -86,4 +85,3 @@
       margin-left: 0px;
     }
   </style>
-  
