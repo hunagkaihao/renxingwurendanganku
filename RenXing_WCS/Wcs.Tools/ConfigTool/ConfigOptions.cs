@@ -47,6 +47,10 @@ namespace Wcs.ConfigTool
         public int DefaultRedisNo { get; set; } = 0;
         public int PlcRedisNo { get; set; } = 0;
 
+        // 本地联调：WCS 内部模拟 PLCServer，默认关闭，修改后重启。
+        public bool PlcSimulation { get; set; } = false;
+        public int PlcSimulationDelayMs { get; set; } = 1000;
+
         public bool RemovePlcTagTempValueOnStart { get; set; }
         public List<PlcHeartBeatSet> HeartBeatsFromPlc { get; set; } = new List<PlcHeartBeatSet>();
         public List<PlcHeartBeatSet> HeartBeatsToPlc { get; set; } = new List<PlcHeartBeatSet>();

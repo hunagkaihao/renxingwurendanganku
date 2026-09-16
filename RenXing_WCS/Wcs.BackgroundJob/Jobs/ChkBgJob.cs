@@ -123,6 +123,8 @@ public class ChkBgJob : IHostedService, IDisposable
                             continue;
                         }
 
+                        _plcHelper.AcknowledgeSimulatedCheckCell();
+
                         _logger.Info($"收到PLC的单库位盘点完成信号，成功更新OrderCode为{msg.OrderCode}，CellCode为{cell.CellCode}的现场条码为{actualPlateCode}");
                     }
 
@@ -134,6 +136,7 @@ public class ChkBgJob : IHostedService, IDisposable
 
                     if (true == _notifierManager.IsNotifierValChanged(WcsConsts.StopCheckOrderNotifierName))
                     {
+                        _plcHelper.StopSimulatedCheck();
                         _logger.Info($"收到停止盘点通知，盘点订单{msg.OrderCode}盘点结束");
                         break;
                     }

@@ -1,4 +1,6 @@
 using Wcs.Dispatch;
+using Wcs.Cells;
+using System.Linq;
 using Wcs.Jobs.JobWorker;
 using Wcs.Jobs.Models;
 using Wcs.LogTool;
@@ -20,6 +22,7 @@ namespace Wcs.Jobs.JobCmds
 
         private readonly ILogger<LMReadCellCmd> _logger;
         private readonly PlcHelper _plcHelper;
+        private readonly ICellRepository _cellRepository;
         private readonly NodeManager _nodeManager;
         private readonly JobCmdHelper _jobCmdHelper;
         private readonly NotifierManager _notifierManager;
@@ -36,6 +39,7 @@ namespace Wcs.Jobs.JobCmds
         public LMReadCellCmd(
             ILogger<LMReadCellCmd> logger,
             PlcHelper plcHelper,
+            ICellRepository cellRepository,
             JobCmdHelper jobCmdHelper,
             NodeManager nodeManager,
             NotifierManager notifierManager,
@@ -43,6 +47,7 @@ namespace Wcs.Jobs.JobCmds
         {
             _logger = logger;
             _plcHelper = plcHelper;
+            _cellRepository = cellRepository;
             _jobCmdHelper = jobCmdHelper;
             _nodeManager = nodeManager;
             _notifierManager = notifierManager;
@@ -143,7 +148,23 @@ namespace Wcs.Jobs.JobCmds
                 _plcHelper.IsPlcTagValueChange("Plc1", "AllCheckFinished"); //预判断库位盘点是否全部完成，确保没有误触发
                 _notifierManager.IsNotifierValChanged(WcsConsts.StopCheckOrderNotifierName); //与判断有没有收到停止盘点通知，确保没有误通知
 
-                ret = _plcHelper.WritePlcTag(plcName, cmdTagName, command);
+                if (_plcHelper.IsSimulation)
+                {
+                    // 使用当前扫描段的实际 PLC 坐标；不从 WMS 账面复制扫描结果。
+                    int startSection = (mCmdValue[8] << 8) | mCmdValue[9];
+                    int startColumn = (mCmdValue[10] << 8) | mCmdValue[11];
+                    int endSection = (mCmdValue[18] << 8) | mCmdValue[19];
+                    int endColumn = (mCmdValue[20] << 8) | mCmdValue[21];
+                    var cells = _cellRepository.GetListAsync(c => c.RowForPlc == PlcRow && c.LayerForPlc == PlcLayer)
+                        .GetAwaiter().GetResult()
+                        .Where(c => (c.SectNoForPlc > startSection || c.SectNoForPlc == startSection && c.ColNoInSectForPlc >= startColumn)
+                            && (c.SectNoForPlc < endSection || c.SectNoForPlc == endSection && c.ColNoInSectForPlc <= endColumn))
+                        .OrderBy(c => c.SectNoForPlc).ThenBy(c => c.ColNoInSectForPlc)
+                        .Select(c => (c.SectNoForPlc, c.ColNoInSectForPlc)).ToList();
+                    ret = _plcHelper.WriteSimulatedCheck(plcName, cmdTagName, command, cells);
+                }
+                else
+                    ret = _plcHelper.WritePlcTag(plcName, cmdTagName, command);
                 if (!ret)
                     return new OpResultInDispatchSvc() { IsOK = false, Message = $"向{plcName}.{cmdTagName}发送指令{cmdForLog}失败" };
 

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Wcs.ConfigTool;
 using Wcs.RedisTool;
 using Wcs.LogTool;
@@ -13,8 +14,17 @@ using Volo.Abp.DependencyInjection;
 namespace Wcs.PlcTool;
     public delegate void PlcTagValueChanged(string plcName, string tagName, PlcTagValue tagNewValue);
 
-    public class PlcHelper : ISingletonDependency
+    public class PlcHelper : ISingletonDependency, IDisposable
     {
+        private readonly LocalPlcSimulation _simulation;
+        public bool IsSimulation => _simulation != null;
+
+        public bool WriteSimulatedCheck(string plcName, string tagName, string value,
+            IEnumerable<(int Section, int Column)> cells) => _simulation != null && _simulation.Write(plcName, tagName, value, cells);
+        public void AcknowledgeSimulatedCheckCell() => _simulation?.AcknowledgeCheckCell();
+        public void StopSimulatedCheck() => _simulation?.StopCheck();
+        public void Dispose() => _simulation?.Dispose();
+
         private readonly IRedisClient _ecsRedisClient;
         private readonly IRedisClient _plcRedisClient;
         private readonly ILogger<PlcHelper> _logger;
@@ -38,13 +48,20 @@ namespace Wcs.PlcTool;
                 _logger = logger;
                 _plcRedisClient = plcRedisClient;
                 _ecsRedisClient = WcsRedisClient;
-                _plcRedisClient.Build(_options.Value.RedisConnStr, _options.Value.PlcRedisNo);
+                if (_options.Value.PlcSimulation)
+                {
+                    _simulation = new LocalPlcSimulation(_options.Value.PlcSimulationDelayMs,
+                        ex => _logger.LogError(ex, "本地 PLC 模拟反馈失败"));
+                    _logger.LogWarning("PLC 模拟已启用：设备反馈由 WCS 内部生成，不连接 PLCServer；盘点默认返回空位。");
+                }
+                else
+                    _plcRedisClient.Build(_options.Value.RedisConnStr, _options.Value.PlcRedisNo);
                 _ecsRedisClient.Build(_options.Value.RedisConnStr, _options.Value.DefaultRedisNo);
                 
                 mPlcServerRegistered = false;
                 mPlcRedisClientName = Dns.GetHostName();
 
-                RegisterPlcServerClient(); //mPlcRedisClient注册到Plc服务器
+                if (!IsSimulation) RegisterPlcServerClient(); //真实模式才注册 PLCServer
                 if(_options.Value.RemovePlcTagTempValueOnStart)
                 {
                     string[] fields = _ecsRedisClient.GetHashFields(TagTempChannelName);
@@ -66,6 +83,7 @@ namespace Wcs.PlcTool;
         /// <returns>true：存在，false：不存在，null：发生错误</returns>
         public bool? IsPlcTagExist(string plcName, string tagName)
         {
+            if (IsSimulation) return _simulation.Exists(plcName, tagName);
             try
             {
                 return _plcRedisClient.IsKeyExist($"{plcName}.{tagName}");
@@ -85,6 +103,7 @@ namespace Wcs.PlcTool;
         /// <returns>发生错误返回null</returns>
         public PlcTagValue ReadPlcTag(string plcName, string tagName)
         {
+            if (IsSimulation) return _simulation.Read(plcName, tagName);
             try
             {
                 string val = _plcRedisClient.GetStringValue($"{plcName}.{tagName}");
@@ -111,6 +130,7 @@ namespace Wcs.PlcTool;
         /// <returns>发生错误返回null</returns>
         public async Task<PlcTagValue> ReadPlcTagAsync(string plcName, string tagName)
         {
+            if (IsSimulation) return _simulation.Read(plcName, tagName);
             try
             {
                 string val = await _plcRedisClient.GetStringValueAsync($"{plcName}.{tagName}");
@@ -137,7 +157,8 @@ namespace Wcs.PlcTool;
         /// <param name="tagValue"></param>
         /// <returns></returns>
         public bool WritePlcTag(string plcName, string tagName, string tagValue)
-        {         
+        {
+            if (IsSimulation) return _simulation.Write(plcName, tagName, tagValue);
             string tempChannel = Guid.NewGuid().ToString();//接收写PLC操作结果的临时频道
             try
             {
@@ -219,6 +240,7 @@ namespace Wcs.PlcTool;
         /// <returns></returns>
         public async Task<bool> WritePlcTagAsync(string plcName, string tagName, string tagValue)
         {
+            if (IsSimulation) return _simulation.Write(plcName, tagName, tagValue);
             string tempChannel = Guid.NewGuid().ToString();//接收写PLC操作结果的临时频道
             try
             {
@@ -332,6 +354,7 @@ namespace Wcs.PlcTool;
 
         public bool Subscribe(string plcName, string tagName, PlcTagValueChanged handle)
         {
+            if (IsSimulation) return _simulation.Subscribe(plcName, tagName, handle);
             if (true != IsPlcTagExist(plcName, tagName))
                 return false;
 
@@ -361,6 +384,7 @@ namespace Wcs.PlcTool;
 
         public async Task<bool> SubscribeAsync(string plcName, string tagName, PlcTagValueChanged handle)
         {
+            if (IsSimulation) return _simulation.Subscribe(plcName, tagName, handle);
             if (true != IsPlcTagExist(plcName, tagName))
                 return false;
 

@@ -69,6 +69,11 @@ Wcs:
   DefaultRedisNo: 0
   # PLC 标签数据使用的 Redis 逻辑数据库编号，需与 PLCServer 的配置一致。
   PlcRedisNo: 1
+  # 本地联调开关：true 时 WCS 内部模拟 PLC 反馈，无需启动 PLCServer；修改后重启。
+  # 保留任务校验、调度工步及 WMS 状态反馈；盘点模拟结果为 empty（空位）。
+  PlcSimulation: false
+  # 每个模拟动作/盘点库位的延迟（毫秒，最少 50）。
+  PlcSimulationDelayMs: 1000
 
   # true：PlcHelper 初始化时清除 WCS Redis 中 Plc.TriggerTemp 哈希的全部缓存字段。
   # false：保留原缓存；这不是清空整个 Redis 数据库的开关。
