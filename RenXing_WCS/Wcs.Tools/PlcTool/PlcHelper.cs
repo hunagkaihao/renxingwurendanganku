@@ -51,7 +51,7 @@ namespace Wcs.PlcTool;
                 if (_options.Value.PlcSimulation)
                 {
                     _simulation = new LocalPlcSimulation(_options.Value.PlcSimulationDelayMs,
-                        ex => _logger.LogError(ex, "本地 PLC 模拟反馈失败"));
+                        ex => _logger.LogError(ex, "本地 PLC 模拟反馈失败"), new DoorConfiguration(options).Codes);
                     _logger.LogWarning("PLC 模拟已启用：设备反馈由 WCS 内部生成，不连接 PLCServer；盘点默认返回空位。");
                 }
                 else

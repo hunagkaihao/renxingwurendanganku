@@ -18,17 +18,20 @@ public class NodeService : WcsAppService, INodeService
     private readonly NodeManager _nodeManager;
     private readonly ProcessManager _processManager;
     private readonly TemplateFactory _templateFactory;
+    private readonly DoorConfigurationInitializer _doorInitializer;
 
     public NodeService(
         ILogger<NodeService> logger,
         NodeManager nodeManager,
         ProcessManager processManager,
-        TemplateFactory templateFactory)
+        TemplateFactory templateFactory,
+        DoorConfigurationInitializer doorInitializer)
     {
         _logger = logger;
         _nodeManager = nodeManager;
         _processManager = processManager;
         _templateFactory = templateFactory;
+        _doorInitializer = doorInitializer;
     }
 
     public async Task<ResponseDto> ClearAllNodeCmdsAsync()
@@ -149,46 +152,6 @@ public class NodeService : WcsAppService, INodeService
     {
         try
         {
-            await _nodeManager.AddNodeAsync(new DispatchNode(1){
-                NodeCode = "12001", NodeName = "取档口1", NodeTypeCode = "12", DASpecs = "_5cm",
-                CmdTagName = "Plc1.Door1_Cmd", ResponseTagName = "Plc1.Door1_Response",
-                TaskIdOwnIt = -1, NodeState = EnumDispatchNodeState.Idle
-            });
-            await _nodeManager.AddNodeAsync(new DispatchNode(2){
-                NodeCode = "12002", NodeName = "取档口2", NodeTypeCode = "12", DASpecs = "_3cm",
-                CmdTagName = "Plc1.Door2_Cmd", ResponseTagName = "Plc1.Door2_Response",
-                TaskIdOwnIt = -1, NodeState = EnumDispatchNodeState.Idle
-            });
-            await _nodeManager.AddNodeAsync(new DispatchNode(3){
-                NodeCode = "12003", NodeName = "取档口3", NodeTypeCode = "12", DASpecs = "_2cm",
-                CmdTagName = "Plc1.Door3_Cmd", ResponseTagName = "Plc1.Door3_Response",
-                TaskIdOwnIt = -1, NodeState = EnumDispatchNodeState.Idle
-            });
-            await _nodeManager.AddNodeAsync(new DispatchNode(4){
-                NodeCode = "12004", NodeName = "取档口4", NodeTypeCode = "12", DASpecs = "_1cm",
-                CmdTagName = "Plc1.Door4_Cmd", ResponseTagName = "Plc1.Door4_Response",
-                TaskIdOwnIt = -1, NodeState = EnumDispatchNodeState.Idle
-            });
-            await _nodeManager.AddNodeAsync(new DispatchNode(5){
-                NodeCode = "12005", NodeName = "取档口5", NodeTypeCode = "12", DASpecs = "_1cm",
-                CmdTagName = "Plc1.Door5_Cmd", ResponseTagName = "Plc1.Door5_Response",
-                TaskIdOwnIt = -1, NodeState = EnumDispatchNodeState.Idle
-            });
-            await _nodeManager.AddNodeAsync(new DispatchNode(6){
-                NodeCode = "12006", NodeName = "取档口6", NodeTypeCode = "12", DASpecs = "_1cm",
-                CmdTagName = "Plc1.Door6_Cmd", ResponseTagName = "Plc1.Door6_Response",
-                TaskIdOwnIt = -1, NodeState = EnumDispatchNodeState.Idle
-            });
-            await _nodeManager.AddNodeAsync(new DispatchNode(7){
-                NodeCode = "12007", NodeName = "取档口7", NodeTypeCode = "12", DASpecs = "_1cm",
-                CmdTagName = "Plc1.Door7_Cmd", ResponseTagName = "Plc1.Door7_Response",
-                TaskIdOwnIt = -1, NodeState = EnumDispatchNodeState.Idle
-            });
-            await _nodeManager.AddNodeAsync(new DispatchNode(8){
-                NodeCode = "12008", NodeName = "取档口8", NodeTypeCode = "12", DASpecs = "_1cm",
-                CmdTagName = "Plc1.Door8_Cmd", ResponseTagName = "Plc1.Door8_Response",
-                TaskIdOwnIt = -1, NodeState = EnumDispatchNodeState.Idle
-            });
             await _nodeManager.AddNodeAsync(new DispatchNode(9){
                 NodeCode = "13001", NodeName = "龙门夹爪", NodeTypeCode = "13", DASpecs = "any",
                 CmdTagName = "Plc1.Lm_Cmd", ResponseTagName = "Plc1.Lm_Response",
@@ -310,6 +273,7 @@ public class NodeService : WcsAppService, INodeService
                 TaskIdOwnIt = -1, NodeState = EnumDispatchNodeState.Idle
             });
                         
+            await _doorInitializer.EnsureAsync();
             return new ResponseDto(){ success = true, message = "success" };           
         }
         catch(Exception e)

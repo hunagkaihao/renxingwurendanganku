@@ -1,4 +1,5 @@
 using Wcs.Dispatch.Device;
+using Wcs.ConfigTool;
 using Wcs.LogTool;
 using Wcs.Mjj;
 using Wcs.Nodes;
@@ -18,6 +19,7 @@ public class DeviceService : WcsAppService, IDeviceService
     private readonly MjjManager _mjjManager;
     private readonly NodeManager _nodeManager;
     private readonly PlcHelper _plcHelper;
+    private readonly DoorConfiguration _doorCodes;
     private readonly ILogger<DeviceService> _logger;
 
     public DeviceService(
@@ -25,13 +27,15 @@ public class DeviceService : WcsAppService, IDeviceService
         MjjManager mjjManager,
         NodeManager nodeManager,
         PlcHelper plcHelper,
-        ILogger<DeviceService> logger)
+        ILogger<DeviceService> logger,
+        DoorConfiguration doorCodes)
     {
         _plcMonitorManager = plcMonitorManager;
         _mjjManager = mjjManager;
         _nodeManager = nodeManager;
         _plcHelper = plcHelper;
         _logger = logger;
+        _doorCodes = doorCodes;
     }
 
     public async Task<DeviceConnStatesDto> GetDeviceConnStateAsync()
@@ -85,12 +89,13 @@ public class DeviceService : WcsAppService, IDeviceService
     {
         try
         {
+            doorCode = _doorCodes.RequireDoor(doorCode);
             bool ret = _plcHelper.WritePlcTag("Plc1", $"Cmd_{doorCode}", "True");
             if (!ret)
-                return new ResponseDto() { success = false, message = $"ÏòPlc1.Cmd_{doorCode}·¢ËÍ¿ªÃÅÖ¸ÁîÊ§°Ü" };
+                return new ResponseDto() { success = false, message = $"å‘ Plc1.Cmd_{doorCode} å‘é€å¼€é—¨æŒ‡ä»¤å¤±è´¥" };
 
-            _logger.Info($"³É¹¦·¢ËÍ·ÇÁ÷³ÌÄÚ¿ª¹ñÃÅÃüÁî");
-            return new ResponseDto() { success = true, message = $"ÏòPlc1.Cmd_{doorCode}·¢ËÍ¿ªÃÅÖ¸Áî³É¹¦" };
+            _logger.Info($"æˆåŠŸå‘é€æŸœé—¨ {doorCode} å¼€é—¨æŒ‡ä»¤");
+            return new ResponseDto() { success = true, message = $"å‘ Plc1.Cmd_{doorCode} å‘é€å¼€é—¨æŒ‡ä»¤æˆåŠŸ" };
         }
         catch (Exception ex)
         {
@@ -103,13 +108,14 @@ public class DeviceService : WcsAppService, IDeviceService
     {
         try
         {
+            doorCode = _doorCodes.RequireDoor(doorCode);
             PlcTagValue value = await _plcHelper.ReadPlcTagAsync("Plc1", $"Status_{doorCode}");
             if (value == null || value.Quality == EnumQuality.Bad)
-                return new DoorStateDto() { success = false, message = $"¶ÁÈ¡±äÁ¿Plc1.Status_{doorCode}Ê§°Ü", doorState = false };
+                return new DoorStateDto() { success = false, message = $"è¯»å–å˜é‡ Plc1.Status_{doorCode} å¤±è´¥", doorState = false };
             if (bool.TryParse(value.Value, out bool state))
                 return new DoorStateDto() { success = true, message = string.Empty, doorState = state };
             else
-                return new DoorStateDto() { success = false, message = $"¶ÁÈ¡µ½µÄ±äÁ¿Plc1.Status_{doorCode}µÄÖµÎŞĞ§", doorState = false };
+                return new DoorStateDto() { success = false, message = $"è¯»å–å˜é‡ Plc1.Status_{doorCode} å¤±è´¥", doorState = false };
         }
         catch (Exception ex)
         {

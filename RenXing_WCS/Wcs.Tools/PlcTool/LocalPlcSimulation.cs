@@ -1,4 +1,5 @@
 using System;
+using Wcs.ConfigTool;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,6 +20,7 @@ public sealed class LocalPlcSimulation : IDisposable
     private readonly int _delayMs;
     private readonly Action<Exception> _onError;
     private bool _disposed;
+    private readonly Dictionary<string, string> _doorStatusTags = new();
 
     private sealed class PendingCommand
     {
@@ -29,7 +31,7 @@ public sealed class LocalPlcSimulation : IDisposable
         public bool AwaitingCell;
     }
 
-    public LocalPlcSimulation(int delayMs, Action<Exception> onError)
+    public LocalPlcSimulation(int delayMs, Action<Exception> onError, IEnumerable<string> doorCodes)
     {
         _delayMs = Math.Max(50, delayMs);
         _onError = onError;
@@ -44,12 +46,14 @@ public sealed class LocalPlcSimulation : IDisposable
             Add(name, EnumPlcTagType.U32, "0");
         foreach (string name in new[] { "EmergencyStop", "HeartBeatFromPlc", "HeartBeatToPlc" })
             Add(name, EnumPlcTagType.Bit, "False");
-        for (int i = 1; i <= 8; i++)
+        foreach (string code in doorCodes)
         {
-            Add($"Door{i}_Cmd", EnumPlcTagType.U8Array, Frame(12));
-            Add($"Door{i}_Response", EnumPlcTagType.U8Array, Frame(12));
-            Add($"Cmd_1200{i}", EnumPlcTagType.Bit, "False");
-            Add($"Status_1200{i}", EnumPlcTagType.Bit, "False");
+            string command = DoorConfiguration.CommandTag(code);
+            Add(command, EnumPlcTagType.U8Array, Frame(12));
+            Add(DoorConfiguration.ResponseTag(code), EnumPlcTagType.U8Array, Frame(12));
+            Add($"Cmd_{code}", EnumPlcTagType.Bit, "False");
+            Add($"Status_{code}", EnumPlcTagType.Bit, "False");
+            _doorStatusTags.Add(command, $"Status_{code}");
         }
         _timer = new Timer(Tick, null, 50, 50);
     }
@@ -195,8 +199,8 @@ public sealed class LocalPlcSimulation : IDisposable
                             Set("AllCheckFinished", _tags["AllCheckFinished"].Value == "1" ? "2" : "1");
                     }
                     else if (command.Tag == "Mover_Cmd") Set("Mover_Pos", command.Frame[1] == 11 ? "1" : "2");
-                    else if (command.Tag.StartsWith("Door", StringComparison.Ordinal))
-                        Set($"Status_1200{command.Tag[4]}", "True");
+                    else if (_doorStatusTags.TryGetValue(command.Tag, out var statusTag))
+                        Set(statusTag, "True");
                     _pending.Remove(command.Tag);
                 }
             }

@@ -1,4 +1,4 @@
-﻿using Wcs.Conditions;
+using Wcs.Conditions;
 using Wcs.Dispatch;
 using Wcs.Jobs.CheckBgJob;
 using Wcs.Log;
@@ -19,6 +19,7 @@ public class WcsBackGroundJobModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         base.ConfigureServices(context);
+        context.Services.AddHostedService<DoorConfigurationJob>();
         context.Services.AddHostedService<DispatchCoreJob>();
         context.Services.AddHostedService<PlcMonitorJob>();
         context.Services.AddHostedService<MjjMonitorJob>();

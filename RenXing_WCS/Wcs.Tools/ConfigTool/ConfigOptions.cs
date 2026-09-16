@@ -51,6 +51,9 @@ namespace Wcs.ConfigTool
         public bool PlcSimulation { get; set; } = false;
         public int PlcSimulationDelayMs { get; set; } = 1000;
 
+        // 启用的柜门清单；默认 YAML 保留原 8 门，未配置或空列表不启用柜门。
+        public List<string> DoorCodes { get; set; } = new List<string>();
+
         public bool RemovePlcTagTempValueOnStart { get; set; }
         public List<PlcHeartBeatSet> HeartBeatsFromPlc { get; set; } = new List<PlcHeartBeatSet>();
         public List<PlcHeartBeatSet> HeartBeatsToPlc { get; set; } = new List<PlcHeartBeatSet>();

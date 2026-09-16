@@ -1,4 +1,5 @@
 using System;
+using Wcs.ConfigTool;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.AccessControl;
@@ -21,6 +22,7 @@ namespace Wcs.Dispatch;
 
 public class OrderService : WcsAppService, IOrderService
 {
+    private readonly DoorConfiguration _doorCodes;
     private readonly OrderManager _orderManager;
     private readonly ICellRepository _cellRepository;
     private readonly NodeManager _nodeManager;
@@ -73,9 +75,11 @@ public class OrderService : WcsAppService, IOrderService
         NotifierManager notifierManager,
         IDahSpecsRepository dahSpecsRepository,
         IWMSService wmsService,
-        BackupManager backupManager)
+        BackupManager backupManager,
+        DoorConfiguration doorCodes)
     {
         _logger = logger;
+        _doorCodes = doorCodes;
         _orderManager = orderManager;
         _cellRepository = cellRepository;
         _nodeManager = nodeManager;
@@ -103,6 +107,8 @@ public class OrderService : WcsAppService, IOrderService
             if (nodes == null || nodes.Count == 0)
                 return new ResponseDto() { success = false, message = "内部错误1" };
 
+            _doorCodes.ValidateEndpoint(para.startNode);
+            _doorCodes.ValidateEndpoint(para.endNode);
             List<string> nodeCodes = nodes.Keys.ToList();
             if (!nodeCodes.Contains(para.startNode) && para.startNode.Split("-").Length != 3)
             {
@@ -216,6 +222,8 @@ public class OrderService : WcsAppService, IOrderService
             if (nodes == null || nodes.Count == 0)
                 return new ResponseDto() { success = false, message = "内部错误1" };
 
+            _doorCodes.ValidateEndpoint(od.startNode);
+            _doorCodes.ValidateEndpoint(od.endNode);
             List<string> nodeCodes = nodes.Keys.ToList();
             if (!nodeCodes.Contains(od.startNode) && od.startNode.Split("-").Length != 3)
             {

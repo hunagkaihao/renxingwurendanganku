@@ -75,6 +75,19 @@ Wcs:
   # 每个模拟动作/盘点库位的延迟（毫秒，最少 50）。
   PlcSimulationDelayMs: 1000
 
+  # 启用的柜门清单（不是编号映射）；新增一行 "12009" 即增加第 9 门，修改后重启。
+  # 启动时只补齐缺失节点/入出库流程，不覆盖已有节点、规格或流程，也不删除历史数据。
+  # 新门默认 _1cm；真实 PLCServer 需有对应 Door9_Cmd/Response、Cmd_12009/Status_12009 点位。
+  DoorCodes:
+    - "12001"
+    - "12002"
+    - "12003"
+    - "12004"
+    - "12005"
+    - "12006"
+    - "12007"
+    - "12008"
+
   # true：PlcHelper 初始化时清除 WCS Redis 中 Plc.TriggerTemp 哈希的全部缓存字段。
   # false：保留原缓存；这不是清空整个 Redis 数据库的开关。
   RemovePlcTagTempValueOnStart: true
