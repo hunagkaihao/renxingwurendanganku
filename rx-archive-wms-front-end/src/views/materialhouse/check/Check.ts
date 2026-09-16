@@ -100,7 +100,7 @@ export const planDetailColumns: BasicColumn[] = [
     dataIndex: 'manageId',
   },
   {
-    title: t('物料标签'),
+    title: t('物料码'),
     dataIndex: 'stockBarcode',
   },
   {

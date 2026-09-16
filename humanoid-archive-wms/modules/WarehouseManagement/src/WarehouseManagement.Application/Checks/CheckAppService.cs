@@ -685,16 +685,15 @@ PagingCheckDetailInput input)
                         where checkDetail.CheckId == input.CheckId & checkDetail.StockBarcode.Contains(input.StockBarcode.IsNullOrEmpty() ? "" : input.StockBarcode.Trim())
                         select new { checkDetail};
 
-            //Paging
-            query = query
-                //.OrderBy(NormalizeSorting(input.Sorting))
-                .OrderBy(f => f.checkDetail.Id)
-                .Skip(input.SkipCount)
-                .Take(1000);
-            //.Take(input.MaxResultCount);
+            var totalCount = await AsyncExecuter.CountAsync(query);
+            var pageSize = input.PageSize > 0 ? input.PageSize : 10;
+            var pageIndex = input.PageIndex > 0 ? input.PageIndex : 1;
+            var skipCount = (pageIndex - 1) * pageSize;
 
-            //Execute the query and get a list
-            var queryResult = await AsyncExecuter.ToListAsync(query);
+            var queryResult = await AsyncExecuter.ToListAsync(query
+                .OrderBy(f => f.checkDetail.Id)
+                .Skip(skipCount)
+                .Take(pageSize));
 
             //Convert the query result to a list of BookDto objects
             var checkDetailDtos = queryResult.Select(x =>
@@ -704,11 +703,7 @@ PagingCheckDetailInput input)
                 //checkDetailDtos.GoodsCode = x.goods.GoodsCode;
                 //checkDetailDtos.GoodsName = x.goods.GoodsName;
                 return checkDetailDtos;
-            }).Take(input.PageSize).ToList();
-
-            //Get the total count with another query
-            //var totalCount = await _taskHisDetailRepository.GetCountAsync();
-            var totalCount = queryResult.Count();
+            }).ToList();
 
             return new PagedResultDto<CheckDetailDto>(
                 totalCount,
