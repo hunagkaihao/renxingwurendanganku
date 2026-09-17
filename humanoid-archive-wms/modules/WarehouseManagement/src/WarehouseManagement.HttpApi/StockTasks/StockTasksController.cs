@@ -101,7 +101,7 @@ namespace WarehouseManagement.StockTasks
         }
         [HttpPost("createWCSOut")]
         [SwaggerOperation(summary: "创建物料出库预约任务", Tags = new[] { "StockTasks" })]
-        public async Task<StockTaskDto> CreateWCSOut(CreateStockTaskDto input)
+        public async Task<StockTaskDto> CreateWCSOut(CreateStockOutTaskDto input)
         {
             return await _stockTaskAppService.CreateWCSOut(input);
         }

@@ -62,7 +62,7 @@ namespace WarehouseManagement.StockTasks
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task<StockTaskDto> CreateWCSOut(CreateStockTaskDto input);
+        Task<StockTaskDto> CreateWCSOut(CreateStockOutTaskDto input);
 
         /// <summary>
         /// 创建临时借用出库任务，并下发至存取一体机窗口。

@@ -11566,6 +11566,41 @@ export class StockTasksServiceProxy extends ServiceProxyBase {
     }
 
     /**
+     * 扫码确认入库并授权开门
+     * @param materialBoxBarcode (optional)
+     * @return Success
+     */
+    scanAndDispatchToWCS(materialBoxBarcode: string | undefined, cancelToken?: CancelToken | undefined): Promise<boolean> {
+        let url_ = this.baseUrl + "/StockTasks/scanAndDispatchToWCS?";
+        if (materialBoxBarcode === null)
+            throw new Error("The parameter 'materialBoxBarcode' cannot be null.");
+        else if (materialBoxBarcode !== undefined)
+            url_ += "materialBoxBarcode=" + encodeURIComponent("" + materialBoxBarcode) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ = <AxiosRequestConfig>{
+            method: "POST",
+            url: url_,
+            headers: {
+                "Accept": "text/plain"
+            },
+            cancelToken
+        };
+
+        return this.transformOptions(options_).then(transformedOptions_ => {
+            return this.instance.request(transformedOptions_);
+        }).catch((_error: any) => {
+            if (isAxiosError(_error) && _error.response) {
+                return _error.response;
+            } else {
+                throw _error;
+            }
+        }).then((_response: AxiosResponse) => {
+            return this.transformResult(url_, _response, (_response: AxiosResponse) => this.processWcsInSetCell(_response));
+        });
+    }
+
+    /**
      * 档案任务分配库位
      * @param input (optional) 
      * @return Success

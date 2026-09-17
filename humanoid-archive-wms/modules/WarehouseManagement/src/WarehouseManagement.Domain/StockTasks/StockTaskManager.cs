@@ -415,7 +415,7 @@ namespace WarehouseManagement.StockTasks
         /// <returns></returns>
         /// <exception cref="UserFriendlyException"></exception>
         [UnitOfWork]
-      public async Task<bool> WCSSetCell(int StockTaskId)
+      public async Task<StockOrderCreateDto> PrepareWcsStockOrderAsync(int StockTaskId)
         {
             // 查询任务
             var stockTask = await _stockTaskRepository.FindByIdAsync(StockTaskId);
@@ -520,42 +520,13 @@ namespace WarehouseManagement.StockTasks
                     await _stockTaskRepository.UpdateAsync(stockTask, true);
                     var reqCode = StockTaskId.ToString();
                     //创建WCS任务
-                    var result = await _wcsApiManager.StockOrderCreate(
-                                                     reqCode,
-                                            box.MaterialBoxBarcode,
-                                            stockTask.StartCellCode,
-                                             stockTask.EndCellCode,
-                                                     ToWcsTaskType(stockTask.TaskTypeCode),
-                                              1);
-                    //Log.Debug("请求结果：" + result.Success + result.Message);
-                    if(result == null)
-                    {
-                        //throw new UserFriendlyException("WCS服务未启用");
-                        return false;
-                    }
-                    if (result.Success == false)
-                    {
-                        throw new UserFriendlyException(result.Message);
-                    }
-
-                  //记录日志
-                  var taskAction = ToWcsTaskType(stockTask.TaskTypeCode) switch
-                  {
-                      "StockIn" => "入库",
-                      "StockOut" => "出库",
-                      _ => stockTask.TaskTypeCode.ToString()
-                  };
-
-                  try
-                  {
-                      Log.Warning($"用户下达了{taskAction}任务id:[{stockTask.Id}] 方法名:[{System.Reflection.MethodBase.GetCurrentMethod().Name}]");
-                      return true;
-                  }
-                  catch (Exception)
-                  {
-                      Log.Warning($"系统后台下达了{taskAction}任务id:[{stockTask.Id}] 方法名:[{System.Reflection.MethodBase.GetCurrentMethod().Name}]");
-                      return true;
-                  }
+                    return new StockOrderCreateDto(
+                        reqCode,
+                        box.MaterialBoxBarcode,
+                        stockTask.StartCellCode,
+                        stockTask.EndCellCode,
+                        ToWcsTaskType(stockTask.TaskTypeCode),
+                        1);
                 }
                 else
                 {
@@ -566,6 +537,39 @@ namespace WarehouseManagement.StockTasks
             {
                 throw new UserFriendlyException("任务不存在");
             }
+        }
+
+        /// <summary>
+        /// 提交任务状态和库位锁定后，再向 WCS 下发任务。
+        /// </summary>
+        public async Task<bool> WCSSetCell(int stockTaskId)
+        {
+            StockOrderCreateDto stockOrder;
+            using (var unitOfWork = UnitOfWorkManager.Begin(requiresNew: true))
+            {
+                stockOrder = await PrepareWcsStockOrderAsync(stockTaskId);
+                await unitOfWork.CompleteAsync();
+            }
+
+            var result = await _wcsApiManager.StockOrderCreate(
+                stockOrder.OrderCode,
+                stockOrder.PlateCode,
+                stockOrder.StartNode,
+                stockOrder.EndNode,
+                stockOrder.TaskType,
+                stockOrder.Priority);
+
+            if (result == null)
+            {
+                return false;
+            }
+
+            if (!result.Success)
+            {
+                throw new UserFriendlyException(result.Message);
+            }
+
+            return true;
         }
 
         /// <summary>

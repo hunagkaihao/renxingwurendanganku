@@ -33,9 +33,14 @@ export const manageTypeCodeSelectItem: SelectItem[] = [
     key: TaskType.NPFullStockIn,
   },
   {
-    label: '物料出库',
+    label: '无计划出库',
     value: TaskType[TaskType.NpFullStockOut],
     key: TaskType.NpFullStockOut,
+  },
+  {
+    label: '物料出库',
+    value: TaskType[TaskType.NPSortStockOut],
+    key: TaskType.NPSortStockOut,
   },
   {
     label: '借用出库',
@@ -53,9 +58,20 @@ export const manageTypeCodeSelectItem: SelectItem[] = [
     key: TaskType.HPBatchStockIn,
   },
   {
+    label: '批量出库',
+    // 当前前端代理枚举未生成 HPBatchStockOut，后端 TaskType 的值为 13。
+    value: 'HPBatchStockOut',
+    key: 13,
+  },
+  {
     label: '盘盈入库',
     value: TaskType[TaskType.SurplusIn],
     key: TaskType.SurplusIn,
+  },
+  {
+    label: '盘亏出库',
+    value: TaskType[TaskType.LossOut],
+    key: TaskType.LossOut,
   },
 ];
 
@@ -548,5 +564,21 @@ export async function wcsInSetCell({ id, reload }){
   } catch (error) {
     closeFullLoading();
     return false;
+  }
+}
+
+// 扫码确认入库：下发 WCS 入库任务并授权对应订单打开柜门。
+export async function scanAndDispatchToWCS({ materialBoxBarcode, reload }) {
+  try {
+    openFullLoading();
+    const stockTasksServiceProxy = new StockTasksServiceProxy();
+    await stockTasksServiceProxy.scanAndDispatchToWCS(materialBoxBarcode);
+    message.success(t('common.operationSuccess'));
+    await reload();
+    return true;
+  } catch (error) {
+    return false;
+  } finally {
+    closeFullLoading();
   }
 }

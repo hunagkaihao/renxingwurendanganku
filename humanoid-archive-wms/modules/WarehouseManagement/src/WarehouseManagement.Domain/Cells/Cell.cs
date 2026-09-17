@@ -56,7 +56,21 @@ namespace WarehouseManagement.Cells
             CellCode = cellCode;
             CellType = Enum.Parse<CellType>(cellType); 
             WarehouseId= warehouseId;
-            if (CellType == CellType.Cell || CellType == CellType.CTUCell || CellType == CellType.WallCell || CellType == CellType.Station)
+            // 柜门使用设备/柜门编码，不参与货架“排-列-层”坐标解析。
+            if (CellType == CellType.Station)
+            {
+                if (string.IsNullOrWhiteSpace(cellCode))
+                {
+                    throw new UserFriendlyException("柜门库位编码不能为空");
+                }
+
+                CellGroup = CellCode;
+                CellName = cellName;
+                DeviceCode = CellCode;
+                return;
+            }
+
+            if (CellType == CellType.Cell || CellType == CellType.CTUCell || CellType == CellType.WallCell)
             {
                 var cellXYZ =cellCode.Split('-');
                 if (cellXYZ.Length == 3)
@@ -75,10 +89,6 @@ namespace WarehouseManagement.Cells
 
                     CellGroup = CellCode;
                     CellName = cellName;
-                    if (CellType == CellType.Station)
-                    {
-                        DeviceCode = CellCode;
-                    }
                 }
                 else
                 {

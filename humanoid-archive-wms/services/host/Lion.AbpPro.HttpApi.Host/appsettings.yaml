@@ -28,11 +28,11 @@ Serilog:
 # 应用地址及跨域来源。
 App:
   SelfUrl: http://127.0.0.1:5000
-  CorsOrigins: 'https://*.AbpPro.com,http://127.0.0.1:4200,http://localhost:4200,http://192.168.0.129:4200,http://127.0.0.1:3100,http://localhost:3100,http://127.0.0.1:8080,http://localhost:8080'
+  CorsOrigins: 'https://*.AbpPro.com,http://127.0.0.1:4200,http://localhost:4200,http://192.168.0.129:4200,http://127.0.0.1:3100,http://localhost:3100,http://127.0.0.1:8080,http://localhost:8080,http://192.168.0.110:8080'
 
 # 数据库连接字符串。
 ConnectionStrings:
-  Default: 'Data Source=127.0.0.1;port=3306;Database=daktutatest;uid=root;pwd=root;charset=utf8mb4;Allow User Variables=true;AllowLoadLocalInfile=true;SslMode=None;AllowPublicKeyRetrieval=true'
+  Default: 'Data Source=127.0.0.1;port=3306;Database=renxingwurenku;uid=root;pwd=root;charset=utf8mb4;Allow User Variables=true;AllowLoadLocalInfile=true;SslMode=None;AllowPublicKeyRetrieval=true'
 
 # Redis 缓存及数据保护密钥配置。
 Redis:
@@ -95,13 +95,13 @@ Mes:
 # ERP 接口配置。
 ERP:
   Server: http://127.0.0.1:5000/
-  Enable: 'true'
+  Enable: 'false'
 
 # WCS 接口及仿真配置。
 WCS:
   Server: http://127.0.0.1:5200
   Enable: 'true'
-  WCSSimulation: 'false'
+  WCSSimulation: 'true'
 
 # AGV 任务类型配置。
 AGV:

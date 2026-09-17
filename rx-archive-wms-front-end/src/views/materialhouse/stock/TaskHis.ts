@@ -35,6 +35,17 @@ export const manageTypeCodeSelectItem: SelectItem[] = [
     key: TaskType.NPSortStockOut,
   },
   {
+    label: '批量出库',
+    // 当前前端代理枚举未生成 HPBatchStockOut，后端 TaskType 的值为 13。
+    value: 'HPBatchStockOut',
+    key: 13,
+  },
+  {
+    label: '盘亏出库',
+    value: TaskType[TaskType.LossOut],
+    key: TaskType.LossOut,
+  },
+  {
     label: '借用出库',
     value: TaskType[TaskType.HPSortStockOut],
     key: TaskType.HPSortStockOut,

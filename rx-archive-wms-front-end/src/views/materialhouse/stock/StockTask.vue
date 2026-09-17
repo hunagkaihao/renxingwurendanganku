@@ -12,7 +12,7 @@
             @click="wcsInCell"
             v-auth="'WarehouseManagement.GoodsManagement.Create'"
           >
-            {{ t('下达任务') }}
+            扫码确认入库
           </a-button>
           <!-- <a-button
             type="primary"
@@ -52,7 +52,7 @@
     import { defineComponent,ref } from 'vue';
     import { useMessage } from '/@/hooks/web/useMessage';
     import { BasicTable, useTable, TableAction } from '/@/components/Table';
-    import { tableColumns, searchFormSchema, getTableListAsync, wcsInSetCell,cancelTaskAsync } from './StockTask';
+    import { tableColumns, searchFormSchema, getTableListAsync, scanAndDispatchToWCS, cancelTaskAsync } from './StockTask';
     import { useModal } from '/@/components/Modal';
     import { message } from 'ant-design-vue';
     import { useI18n } from '/@/hooks/web/useI18n';
@@ -78,6 +78,7 @@
   
         const [registerImportGoodssModal, { openModal: openImportGoodssModal }] = useModal();
         const selectedBoxIdRef = ref('');
+        const selectedStockTaskRef = ref<Recordable | null>(null);
         // table配置
         const [registerTable, { reload, clearSelectedRowKeys }] = useTable({
           columns: tableColumns,
@@ -114,21 +115,33 @@
         
 
         const wcsInCell = async () => {
-          if(selectedBoxIdRef.value == ''){
-            message.error("请先选择档案盒")
+          const selectedTask = selectedStockTaskRef.value;
+          if (!selectedTask) {
+            message.error("请先选择入库任务")
             return
           }
-            let msg = t('确认下达任务？');
-            let id = selectedBoxIdRef.value
+          const isStockIn = selectedTask.taskTypeCode === 'NPFullStockIn' || selectedTask.taskTypeCode === 0;
+          const isWaiting = selectedTask.taskStatus === 'WaitingExecute' || selectedTask.taskStatus === 0;
+          if (!isStockIn || !isWaiting) {
+            message.error("请选择等待执行的入库任务")
+            return
+          }
+          const materialBoxBarcode = selectedTask.materialBoxBarcode;
+          if (!materialBoxBarcode) {
+            message.error("所选入库任务缺少物料码")
+            return
+          }
+            let msg = '确认扫码入库并下发开门授权？';
             createConfirm({
               iconType: 'warning',
               title: t('common.tip'),
               content: msg,
               onOk: async () => {
-                const success = await wcsInSetCell({ id, reload });
+                const success = await scanAndDispatchToWCS({ materialBoxBarcode, reload });
                 if (success) {
                   clearSelectedRowKeys();
                   selectedBoxIdRef.value = '';
+                  selectedStockTaskRef.value = null;
                 }
               },
             });
@@ -155,12 +168,14 @@
         }
 
         //勾选事件
-      const onSelectChange = async ({ rows }) => {
-        if (rows.length > 0) {
-          selectedBoxIdRef.value = rows[0].id;
-        } else {
-          selectedBoxIdRef.value = '';
-        }
+        const onSelectChange = async ({ rows }) => {
+          if (rows.length > 0) {
+            selectedBoxIdRef.value = rows[0].id;
+            selectedStockTaskRef.value = rows[0];
+          } else {
+            selectedBoxIdRef.value = '';
+            selectedStockTaskRef.value = null;
+          }
         //reloadDetail();
       };
   

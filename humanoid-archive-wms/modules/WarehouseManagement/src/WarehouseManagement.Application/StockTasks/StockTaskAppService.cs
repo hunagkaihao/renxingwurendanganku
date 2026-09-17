@@ -53,6 +53,7 @@ namespace WarehouseManagement.StockTasks
         private readonly IPlanRepository _planRepository;
         private readonly IMaterialRepository _materialRepository;
         private readonly IDataFilter _dataFilter;
+        private readonly IUnitOfWorkManager _unitOfWorkManager;
 
         public StockTaskAppService( IStockTaskRepository stockTaskRepository, StockTaskManager stockTaskManagement, 
                                     PlanManager planManager,IStockTaskDetailRepository stockTaskDetailRepository, 
@@ -60,7 +61,7 @@ namespace WarehouseManagement.StockTasks
                                     IMaterialBoxRepository materialBoxRepository, CellManager cellManager, 
                                     IPlanRepository planRepository,WcsApiManager wcsApiManager, 
                                     MaterialBoxManager materialBoxManager,IMaterialRepository materialRepository, 
-                                    UnitOfWorkManager unitOfWorkManager, IDataFilter dataFilter)
+                                    IUnitOfWorkManager unitOfWorkManager, IDataFilter dataFilter)
         {
             _stockTaskRepository = stockTaskRepository;
             _stockTaskManagement = stockTaskManagement;
@@ -74,6 +75,7 @@ namespace WarehouseManagement.StockTasks
             _wcsApiManager = wcsApiManager;
             _materialBoxManager = materialBoxManager;
             _materialRepository = materialRepository;
+            _unitOfWorkManager = unitOfWorkManager;
             _dataFilter = dataFilter;
         }
         
@@ -402,8 +404,7 @@ namespace WarehouseManagement.StockTasks
         /// <returns></returns>
         public async Task<Boolean> WCSSetCell(int StockTaskId)
         {
-            var stockTask = await _stockTaskManagement.WCSSetCell(StockTaskId);
-            return stockTask;
+            return await _stockTaskManagement.WCSSetCell(StockTaskId);
         }
 
         /// <summary>
@@ -513,21 +514,29 @@ namespace WarehouseManagement.StockTasks
                 cell = await _cellRepository.FindByCodeAsync(cellCode.Trim());
                 if (cell == null)
                 {
-                    throw new UserFriendlyException(message: "库位不存在!");
+                    // 同时传入物料码时，以物料当前绑定的实际库位为准继续出库。
+                    // 仅传库位码时仍需明确提示库位不存在。
+                    if (string.IsNullOrWhiteSpace(materialCode))
+                    {
+                        throw new UserFriendlyException(message: "库位不存在!");
+                    }
                 }
 
-                cell.EnsureCanStockOut();
-
-                if (!string.IsNullOrWhiteSpace(materialCode) &&
-                    !string.Equals(cell.MaterialCode, materialCode.Trim(), StringComparison.Ordinal))
+                if (cell != null)
                 {
-                    throw new UserFriendlyException(message: "输入库位中的物料码与输入物料码不一致，出库任务下发失败!");
-                }
+                    cell.EnsureCanStockOut();
 
-                materialCode = cell.MaterialCode;
+                    if (!string.IsNullOrWhiteSpace(materialCode) &&
+                        !string.Equals(cell.MaterialCode, materialCode.Trim(), StringComparison.Ordinal))
+                    {
+                        throw new UserFriendlyException(message: "输入库位中的物料码与输入物料码不一致，出库任务下发失败!");
+                    }
+
+                    materialCode = cell.MaterialCode;
+                }
             }
 
-            CreateStockTaskDto stockTaskDto = new();
+            CreateStockOutTaskDto stockTaskDto = new();
             var box = await _materialBoxRepository.FindByMaterialBoxcodeAsync(materialCode.Trim());
             if (box == null)
             {
@@ -546,16 +555,11 @@ namespace WarehouseManagement.StockTasks
             {
                 throw new UserFriendlyException(message: "创建任务失败");
             }
-            //分配库位
-            await WCSSetCell(stock.Id);
 
-            var updatedStockTask = await _stockTaskManagement.FindByIdAsync(stock.Id);
-            if (updatedStockTask == null)
-            {
-                throw new UserFriendlyException(message: "任务不存在");
-            }
-
-            return base.ObjectMapper.Map<StockTask, StockTaskDto>(updatedStockTask);
+            // CreateWCSOut 已在独立事务中提交任务并完成 WCS 下发。
+            // 当前 ClientOutCell 的外层事务在 MySQL 可重复读隔离级别下不可见该提交，
+            // 不再重复查询，以免将已下发的任务误判为不存在。
+            return stock;
         }
         
         /// <summary>
@@ -563,8 +567,13 @@ namespace WarehouseManagement.StockTasks
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<StockTaskDto> CreateWCSOut(CreateStockTaskDto input)
+        public async Task<StockTaskDto> CreateWCSOut(CreateStockOutTaskDto input)
         {
+            if (input == null || (input.MaterialBoxId <= 0 && string.IsNullOrWhiteSpace(input.MaterialCode)))
+            {
+                throw new UserFriendlyException("物料容器 ID 或物料码不能为空");
+            }
+
             MaterialBox materialBoxObj;
             if (input.MaterialBoxId != 0)
             {
@@ -572,11 +581,26 @@ namespace WarehouseManagement.StockTasks
             }
             else
             {
-                materialBoxObj = await _materialBoxRepository.FindByMaterialBoxcodeAsync(input.MaterialCode);
+                materialBoxObj = await _materialBoxRepository.FindByMaterialBoxcodeAsync(input.MaterialCode.Trim());
             }
-            input.TaskTypeCode = TaskType.NPSortStockOut.ToString();
 
-            var stockTask = await _stockTaskManagement.CreateWCSOut(input.TaskTypeCode, materialBoxObj);
+            if (materialBoxObj == null)
+            {
+                throw new UserFriendlyException("物料容器不存在");
+            }
+
+            // 先在独立事务中创建并提交普通出库任务，确保随后 WCSSetCell 的独立事务可读取任务。
+            // 批量出库使用 HPBatchStockOut，由执行计划时的专用调度流程下发，不经过此接口。
+            StockTask stockTask;
+            using (var unitOfWork = _unitOfWorkManager.Begin(requiresNew: true))
+            {
+                stockTask = await _stockTaskManagement.CreateWCSOut(
+                    TaskType.NPSortStockOut.ToString(),
+                    materialBoxObj);
+                await unitOfWork.CompleteAsync();
+            }
+
+            await WCSSetCell(stockTask.Id);
             return base.ObjectMapper.Map<StockTask, StockTaskDto>(stockTask);
         }
 
@@ -780,7 +804,7 @@ namespace WarehouseManagement.StockTasks
         //疲劳测试
         public async Task CreateBatTest()
         {
-            CreateStockTaskDto stockTaskDto = new();
+            CreateStockOutTaskDto stockTaskDto = new();
             //找到档案盒
             var box = await _materialBoxRepository.GetListAsync(x => x.CellId > 5);
             if (box.Count == 0)
@@ -797,8 +821,6 @@ namespace WarehouseManagement.StockTasks
             {
                 throw new UserFriendlyException(message: "创建任务失败");
             }
-            //分配库位
-            await WCSSetCell(stock.Id);
         }
         //任务异常强制完成
         public async Task ForceComplete(int stockId)
