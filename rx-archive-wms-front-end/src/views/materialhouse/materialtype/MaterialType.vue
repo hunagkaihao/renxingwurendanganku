@@ -10,6 +10,9 @@
           >
             {{ t('common.createText') }}
           </a-button>
+          <a-button type="primary" class="ml-2" @click="openImportMaterialModal">
+            Excel 导入
+          </a-button>
 
         </template>
         <template #isActive="{ record }">
@@ -48,6 +51,7 @@
         @reload="reload"
         :bodyStyle="{ 'padding-top': '0' }"
       />
+      <ImportMaterialExcel @register="registerImportMaterialModal" @reload="reload" />
     </div>
   </template>
   
@@ -55,10 +59,11 @@
     import { defineComponent } from 'vue';
     import { useMessage } from '/@/hooks/web/useMessage';
     import { BasicTable, useTable, TableAction } from '/@/components/Table';
-    import { tableColumns, searchFormSchema, getTableListAsync, deleteGoodsAsync } from './MaterialType';
+    import { tableColumns, searchFormSchema, getTableListAsync, deleteMaterialAsync } from './MaterialType';
     import { useModal } from '/@/components/Modal';
     import CreateArchive from './CreateMaterial.vue';
     import EditArchive from './EditMaterial.vue';
+    import ImportMaterialExcel from './ExcelImport.vue';
     import { message } from 'ant-design-vue';
     import { useI18n } from '/@/hooks/web/useI18n';
     import { Tag } from 'ant-design-vue';
@@ -69,6 +74,7 @@
         TableAction,
         CreateArchive,
         EditArchive,
+        ImportMaterialExcel,
         Tag,
       },
       setup() {
@@ -77,6 +83,7 @@
         const [registerCreateArchiveModal, { openModal: openCreateArchiveModal }] = useModal();
   
         const [registerEditArchiveModal, { openModal: openEditArchiveModal }] = useModal();
+        const [registerImportMaterialModal, { openModal: openImportMaterialModal }] = useModal();
   
         const [registerBlindBoxModal, { openModal: openBlindBoxModal }] = useModal();
   
@@ -132,7 +139,7 @@
               title: t('common.tip'),
               content: msg,
               onOk: async () => {
-                await deleteGoodsAsync({ id: record.id, reload });
+                await deleteMaterialAsync({ id: record.id, reload });
               },
             });
           }
@@ -145,6 +152,8 @@
           registerCreateArchiveModal,
           openCreateArchiveModal,
           registerEditArchiveModal,
+          registerImportMaterialModal,
+          openImportMaterialModal,
           registerBlindBoxModal,
           registerImportGoodssModal,
           openImportGoodssModal,

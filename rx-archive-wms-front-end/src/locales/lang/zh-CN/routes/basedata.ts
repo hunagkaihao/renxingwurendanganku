@@ -3,7 +3,7 @@ export default {
     goodsManagement: '物料管理',
     stockManagement: '库存管理',
     archivedataManagement: '物料数据管理',
-    archiveManagement: '物料管理1',
+    archiveManagement: '物料基础信息管理',
     archiveboxManagement: '物料管理',
     goodsManagement_name: '品名',
     goodsManagement_createTime: '创建时间',

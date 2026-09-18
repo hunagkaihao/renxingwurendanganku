@@ -15,12 +15,11 @@
   </template>
   
   <script lang="ts">
-    import moment from 'moment'; //leixd
     import { defineComponent } from 'vue';
     import { BasicModal, useModalInner } from '/@/components/Modal';
     import { BasicForm, useForm } from '/@/components/Form/index';
-    import { editFormSchema, updateGoodsAsync } from './MaterialType';
-    import { UpdateGoodsDto, GoodsDto } from '/@/services/ServiceProxies';
+    import { editFormSchema, updateMaterialAsync } from './MaterialType';
+    import type { CreateMaterialDto, MaterialDto } from '/@/api/material';
     import { useI18n } from '/@/hooks/web/useI18n';
     export default defineComponent({
       name: 'EditArchive',
@@ -37,18 +36,17 @@
             showActionButtonGroup: false,
           });
         const { t } = useI18n();
-        let currentGoodsInfo = new GoodsDto();
+        let currentMaterialInfo = {} as MaterialDto;
         const [registerModal, { changeOkLoading, closeModal }] = useModalInner((data) => {
-          currentGoodsInfo = data.record;
+          currentMaterialInfo = data.record;
           setFieldsValue({
-            goodsCode: data.record.goodsCode,
-            goodsName: data.record.goodsSpec,
-            goodsSpec: data.record.goodsSpec,
-            goodsUnits: data.record.goodsSpec,
-            goodsConstProperty1: data.record.goodsConstProperty1,
-            shapeType: [data.record.shapeType],
-            testdate: data.record.testdate,
-            customer: data.record.customer,
+            materialCode: data.record.materialCode,
+            materialName: data.record.materialName,
+            materialType: data.record.materialType,
+            materialUnit: data.record.materialUnit,
+            validityDays: data.record.validityDays,
+            creatorUserCode: data.record.creatorUserCode,
+            materialCreateTime: data.record.materialCreateTime,
           });
         });
   
@@ -60,12 +58,9 @@
   
         const submit = async () => {
           try {
-            let request = getFieldsValue() as UpdateGoodsDto;
-            // let updateGoodsInput = new UpdateGoodsInput();
-            request.id = currentGoodsInfo.id;
-            request.testdate = moment(request.testdate).format();
-            // request.publishDate = request.publishDate.format();
-            await updateGoodsAsync({
+            const request = getFieldsValue() as CreateMaterialDto;
+            request.id = currentMaterialInfo.id;
+            await updateMaterialAsync({
               request: request,
               changeOkLoading,
               validate,

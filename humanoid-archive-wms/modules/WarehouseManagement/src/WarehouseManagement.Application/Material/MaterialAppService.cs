@@ -70,20 +70,11 @@ namespace WarehouseManagement.Material
         public async Task<PagedResultDto<MaterialDto>> PageAsync(PagingMaterialListInput input)
         {
             var materialQueryable = await _materialRepository.GetQueryableAsync();
-            var boxDetailQueryable = await _materialBoxDetailRepository.GetQueryableAsync();
-            var boxQueryable = await _materialBoxRepository.GetQueryableAsync();
 
             // 左连接 Material 和 ArchiveBoxDetail
-            var query = from material in materialQueryable
-                        join materialBoxDetail in boxDetailQueryable
-                            on material.Id equals materialBoxDetail.MaterialId into materialBoxDetailGroup
-                        from abd in materialBoxDetailGroup.DefaultIfEmpty()  // LEFT JOIN
-                        join materialBox in boxQueryable
-                            on abd.MaterialBoxId equals materialBox.Id into materialBoxGroup
-                        from ab in materialBoxGroup.DefaultIfEmpty()  // LEFT JOIN
-                        where string.IsNullOrEmpty(input.Filter) ||
-                              material.MaterialName.Contains(input.Filter.Trim())
-                        select new { Material = material, MaterialBox = ab };
+            var query = materialQueryable
+                .Where(material => string.IsNullOrEmpty(input.Filter) || material.MaterialName.Contains(input.Filter.Trim()))
+                .Select(material => new { Material = material, MaterialBox = (MaterialBox)null });
 
             var totalCount = await AsyncExecuter.CountAsync(query);
 

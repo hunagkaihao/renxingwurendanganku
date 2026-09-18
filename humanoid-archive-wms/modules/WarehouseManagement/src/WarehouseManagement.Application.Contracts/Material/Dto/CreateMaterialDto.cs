@@ -12,6 +12,22 @@ namespace WarehouseManagement.Material.Dto
         public string MaterialName { get; set; }
         public string MaterialRfid { get; set; }
         public string MaterialCode { get; set; }
+        /// <summary>
+        /// 物料计量单位，例如 g、kg。
+        /// </summary>
+        public string MaterialUnit { get; set; }
+        /// <summary>
+        /// 有效期天数；历史数据允许为空，0 表示不设置有效期。
+        /// </summary>
+        public int? ValidityDays { get; set; }
+        /// <summary>
+        /// 创建物料的用户工号或外部系统用户标识。
+        /// </summary>
+        public string CreatorUserCode { get; set; }
+        /// <summary>
+        /// 物料创建时间；与数据库 datetime(6) 字段一致。
+        /// </summary>
+        public DateTime? MaterialCreateTime { get; set; }
         public string GoodsRemark { get; set; }
         public string GoodsConstProperty1 { get; set; }
         public string GoodsConstProperty2 { get; set; }
@@ -47,7 +63,10 @@ namespace WarehouseManagement.Material.Dto
         public string StorageRemark { get; set; }
         public string KuaiJiZhuTi { get; set; }
         public string Year { get; set; }
-        public string ClassType { get; set; }
+        /// <summary>
+        /// 物料类型。
+        /// </summary>
+        public string MaterialType { get; set; }
         /// <summary>
         /// 密级
         /// </summary>

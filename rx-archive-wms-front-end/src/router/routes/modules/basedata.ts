@@ -14,6 +14,16 @@ const basedata: AppRouteModule = {
   },
   children: [
     {
+      path: 'materialtype',
+      name: 'MaterialType',
+      component: () => import('/@/views/materialhouse/materialtype/MaterialType.vue'),
+      meta: {
+        title: t('routes.basedata.archiveManagement'),
+        policy: 'WarehouseManagement.StorageBoxManagement',
+        icon: 'material-symbols:category-outline',
+      },
+    },
+    {
         path: 'materialbox',
         name: 'Materialbox',
         component: () => import('/@/views/materialhouse/materialbox/MaterialBox.vue'),

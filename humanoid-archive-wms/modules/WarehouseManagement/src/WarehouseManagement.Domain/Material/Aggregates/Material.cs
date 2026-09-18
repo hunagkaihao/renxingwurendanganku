@@ -26,8 +26,22 @@ namespace WarehouseManagement.Material.Aggregates
         public string MaterialCode { get; set; }
         //物料名称
         public string MaterialName { get; set; }
-        //物料单位
-        public string MaterialUnits { get; set; }
+        /// <summary>
+        /// 物料计量单位，例如 g、kg。
+        /// </summary>
+        public string MaterialUnit { get; set; }
+        /// <summary>
+        /// 有效期天数；历史数据允许为空，0 表示不设置有效期。
+        /// </summary>
+        public int? ValidityDays { get; set; }
+        /// <summary>
+        /// 创建物料的用户工号或外部系统用户标识。
+        /// </summary>
+        public string CreatorUserCode { get; set; }
+        /// <summary>
+        /// 物料创建时间；与数据库 datetime(6) 字段一致。
+        /// </summary>
+        public DateTime? MaterialCreateTime { get; set; }
         //档案年份
         public string MaterialConstProperty1 { get; set; }
         //档案密级
@@ -80,7 +94,10 @@ namespace WarehouseManagement.Material.Aggregates
         public string StorageRemark { get; set; }
         public string KuaiJiZhuTi { get; set; }
         public string Year { get; set; }
-        public string ClassType { get; set; }
+        /// <summary>
+        /// 物料类型。
+        /// </summary>
+        public string MaterialType { get; set; }
         /// <summary>
         /// 密级
         /// </summary>

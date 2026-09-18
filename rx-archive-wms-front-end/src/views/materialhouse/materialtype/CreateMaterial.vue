@@ -19,8 +19,8 @@
   import { defineComponent } from 'vue';
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';
-  import { createFormSchema, CreateArchiveAsync } from './MaterialType';
-  import { CreateArchiveDto } from '/@/services/ServiceProxies';
+  import { createFormSchema, createMaterialAsync } from './MaterialType';
+  import type { CreateMaterialDto } from '/@/api/material';
   import { useI18n } from '/@/hooks/web/useI18n';
   export default defineComponent({
     name: 'CreateArchive',
@@ -52,9 +52,9 @@
       // 保存用户
       const submit = async () => {
         try {
-          let request = getFieldsValue() as CreateArchiveDto;
+          const request = getFieldsValue() as CreateMaterialDto;
           // request.testdate = moment(request.testdate).format();
-          await CreateArchiveAsync({
+          await createMaterialAsync({
             request,
             changeOkLoading,
             validate,
