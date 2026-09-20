@@ -5,7 +5,7 @@ using WarehouseManagement.WcsTasks.Dto;
 
 namespace WarehouseManagement.WcsTasks
 {
-    [Route("WcsTasks")]
+    [Route("api/WcsTasks")]
     public class WcsTasksController : WarehouseManagementController, IWcsTaskAppService
     {
 

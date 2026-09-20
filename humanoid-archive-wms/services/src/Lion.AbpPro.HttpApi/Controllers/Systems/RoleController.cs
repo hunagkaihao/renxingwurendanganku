@@ -11,7 +11,7 @@ using Volo.Abp.Identity;
 
 namespace Lion.AbpPro.Controllers.Systems
 {
-    [Route("Roles")]
+    [Route("api/Roles")]
     public class RoleController : AbpProController, IRoleAppService
     {
         private readonly IRoleAppService _roleAppService;

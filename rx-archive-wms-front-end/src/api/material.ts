@@ -32,10 +32,10 @@ export interface MaterialPagedResultDto {
 }
 
 enum Api {
-  Page = '/Material/page',
-  Create = '/Material/create',
-  Update = '/Material/update',
-  Delete = '/Material/delete',
+  Page = '/api/Material/page',
+  Create = '/api/Material/create',
+  Update = '/api/Material/update',
+  Delete = '/api/Material/delete',
 }
 
 /** 查询物料基础信息分页列表。 */

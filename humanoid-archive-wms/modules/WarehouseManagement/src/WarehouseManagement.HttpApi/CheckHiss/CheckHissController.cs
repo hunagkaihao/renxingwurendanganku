@@ -7,7 +7,7 @@ using WarehouseManagement.CheckHiss.Dto;
 
 namespace WarehouseManagement.CheckHiss
 {
-    [Route("CheckHiss")]
+    [Route("api/CheckHiss")]
     public class CheckHissController : WarehouseManagementController, ICheckHisAppService
     {
         private readonly ICheckHisAppService _checkHisAppService;

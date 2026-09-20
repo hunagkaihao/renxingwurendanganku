@@ -8,7 +8,7 @@ using Volo.Abp.Application.Dtos;
 
 namespace Lion.AbpPro.Controllers.Systems
 {
-    [Route("AuditLogs")]
+    [Route("api/AuditLogs")]
     public class AuditLogController : AbpProController,IAuditLogAppService
     {
         private readonly IAuditLogAppService _auditLogAppService;

@@ -11,7 +11,7 @@ using Volo.Abp.Application.Dtos;
 
 namespace Lion.AbpPro.Controllers.IdentityServers
 {
-    [Route("IdentityServer/IdentityResource")]
+    [Route("api/IdentityServer/IdentityResource")]
     public class IdentityResourceController : AbpProController, IIdentityResourceAppService
     {
         private readonly IIdentityResourceAppService _identityResourceAppService;

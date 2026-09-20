@@ -16,6 +16,10 @@ namespace Lion.AbpPro.Controllers.Systems
         }
 
 
+        /// <summary>
+        /// 使用账号和密码登录，并签发前端调用业务接口所需的访问令牌。
+        /// </summary>
+        [HttpPost("/api/app/account/login")]
         [SwaggerOperation(summary: "登录", Tags = new[] {"Account"})]
         public Task<LoginOutput> LoginAsync(LoginInput input)
         {

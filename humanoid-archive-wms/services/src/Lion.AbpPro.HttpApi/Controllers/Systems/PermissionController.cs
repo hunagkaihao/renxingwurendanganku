@@ -8,7 +8,7 @@ using Volo.Abp.Identity;
 
 namespace Lion.AbpPro.Controllers.Systems
 {
-    [Route("Permissions")]
+    [Route("api/Permissions")]
     public class PermissionController : AbpProController,IRolePermissionAppService
     {
         private readonly IRolePermissionAppService _rolePermissionAppService;

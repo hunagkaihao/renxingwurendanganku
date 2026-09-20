@@ -10,7 +10,7 @@ using Volo.Abp.Application.Dtos;
 using WarehouseManagement.LogFiles.Dto;
 namespace WarehouseManagement.LogFiles
 {
-    [Route("LogFiles")]
+    [Route("api/LogFiles")]
     public class LogFilesController : WarehouseManagementController, ILogFileAppService
     {
         private readonly ILogFileAppService _logFileAppService;

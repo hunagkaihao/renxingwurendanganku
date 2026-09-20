@@ -12,7 +12,7 @@ using WarehouseManagement.MaterialBoxs.Dto;
 
 namespace WarehouseManagement.MaterialBoxs
 {
-    [Route("MaterialBoxs")]
+    [Route("api/MaterialBoxs")]
     public class MaterialBoxsController : WarehouseManagementController, IMaterialBoxAppService
     {
         private readonly IMaterialBoxAppService _materialBoxAppService;

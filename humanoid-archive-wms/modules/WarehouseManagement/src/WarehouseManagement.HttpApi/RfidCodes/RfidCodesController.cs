@@ -11,7 +11,7 @@ using WarehouseManagement.RfidCodes.Dto;
 
 namespace WarehouseManagement.RfidCodes
 {
-    [Route("Rfid")]
+    [Route("api/Rfid")]
     public class RfidCodesController : WarehouseManagementController,IRfidCodeAppService
     {
         private readonly IRfidCodeAppService _rfidCodeAppService;

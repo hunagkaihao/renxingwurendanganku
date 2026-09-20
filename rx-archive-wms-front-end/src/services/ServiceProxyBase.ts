@@ -10,6 +10,11 @@ export class ServiceProxyBase {
   protected transformOptions(options: AxiosRequestConfig) {
     options.baseURL = import.meta.env.VITE_API_URL as string;
     const guard: boolean = this.urlGuard(options.url as string);
+    // 统一业务接口前缀：新旧生成的接口中，部分路径已包含 /api，部分未包含。
+    // 仅为未带前缀的相对路径补齐，避免登录等 ABP 接口出现 /api/api。
+    if (options.url && !options.url.startsWith('/api/')) {
+      options.url = `/api${options.url}`;
+    }
     const userStore = useUserStoreWithOut();
 
     if (!guard) {

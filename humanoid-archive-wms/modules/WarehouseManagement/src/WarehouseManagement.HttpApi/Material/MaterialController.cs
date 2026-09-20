@@ -10,7 +10,7 @@ using Volo.Abp.Application.Dtos;
 
 namespace WarehouseManagement.Material
 {
-    [Route("Material")]
+    [Route("api/Material")]
     public class MaterialController : WarehouseManagementController, IMaterialAppService
     {
         private readonly IMaterialAppService _materialAppService;

@@ -11,7 +11,7 @@ using Volo.Abp.Application.Dtos;
 
 namespace Lion.AbpPro.Controllers.IdentityServers
 {
-    [Route("IdentityServer/ApiScope")]
+    [Route("api/IdentityServer/ApiScope")]
     public class ApiScopeController : AbpProController, IApiScopeAppService
     {
         private readonly IApiScopeAppService _apiScopeAppService;

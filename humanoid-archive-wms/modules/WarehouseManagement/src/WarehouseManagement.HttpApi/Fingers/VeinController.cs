@@ -14,7 +14,7 @@ using WarehouseManagement.Fingers.Dto;
 
 namespace WarehouseManagement.Face
 {
-    [Route("Veins")]
+    [Route("api/Veins")]
     public class VeinController : WarehouseManagementController
     {
         private readonly IVeinAppService _veinAppService;

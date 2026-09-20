@@ -12,7 +12,7 @@ using WarehouseManagement.Warehouses.Dto;
 
 namespace WarehouseManagement.Warehouses
 {
-    [Route("Warehouses")]
+    [Route("api/Warehouses")]
     public class WarehousesController : WarehouseManagementController, IWarehouseAppService
     {
         private readonly IWarehouseAppService _warehouseAppService;

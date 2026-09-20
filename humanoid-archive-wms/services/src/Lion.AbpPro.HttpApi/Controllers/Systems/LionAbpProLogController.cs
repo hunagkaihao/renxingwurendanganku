@@ -9,7 +9,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace Lion.AbpPro.Controllers.Systems
 {
-    [Route("EsLog")]
+    [Route("api/EsLog")]
     public class LionAbpProLogController: AbpProController,ILionAbpProLogAppService
     {
         private readonly ILionAbpProLogAppService _companyNameAbpProLogAppService;

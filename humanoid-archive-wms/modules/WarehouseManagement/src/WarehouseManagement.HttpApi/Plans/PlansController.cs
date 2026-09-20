@@ -11,7 +11,7 @@ using WarehouseManagement.Plans.Dto;
 
 namespace WarehouseManagement.Plans
 {
-    [Route("Plans")]
+    [Route("api/Plans")]
     public class PlansController : WarehouseManagementController, IPlanAppService
     {
         private readonly IPlanAppService _PlanAppService;

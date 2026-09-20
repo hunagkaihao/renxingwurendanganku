@@ -12,7 +12,7 @@ using WarehouseManagement.WcsTasks.Dto;
 
 namespace WarehouseManagement.StockTasks
 {
-    [Route("StockTasks")]
+    [Route("api/StockTasks")]
     public class StockTasksController : WarehouseManagementController, IStockTaskAppService
     {
         private readonly IStockTaskAppService _stockTaskAppService;

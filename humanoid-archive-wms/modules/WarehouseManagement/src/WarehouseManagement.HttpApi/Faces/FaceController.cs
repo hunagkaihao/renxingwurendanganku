@@ -12,7 +12,7 @@ using WarehouseManagement.Faces;
 
 namespace WarehouseManagement.Face
 {
-    [Route("Faces")]
+    [Route("api/Faces")]
     public class FaceController : WarehouseManagementController
     {
         private readonly IFaceAppService _faceAppService;

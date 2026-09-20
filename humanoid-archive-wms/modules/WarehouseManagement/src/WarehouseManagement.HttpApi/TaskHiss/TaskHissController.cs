@@ -11,7 +11,7 @@ using WarehouseManagement.TaskHiss.Dto;
 
 namespace WarehouseManagement.TaskHiss
 {
-    [Route("TaskHiss")]
+    [Route("api/TaskHiss")]
     public class TaskHissController : WarehouseManagementController, ITaskHisAppService
     {
         private readonly ITaskHisAppService _taskHisAppService;

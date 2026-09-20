@@ -10,7 +10,7 @@ using Volo.Abp.Identity;
 
 namespace Lion.AbpPro.Controllers.Systems
 {
-    [Route("Users")]
+    [Route("api/Users")]
     public class UserContoller : AbpProController, IUserAppService
     {
         private readonly IUserAppService _userAppService;

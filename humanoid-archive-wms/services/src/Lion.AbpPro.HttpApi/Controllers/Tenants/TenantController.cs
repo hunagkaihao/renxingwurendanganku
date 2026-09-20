@@ -10,7 +10,7 @@ using Volo.Abp.TenantManagement;
 
 namespace Lion.AbpPro.Controllers.Tenants
 {
-    [Route("Tenants")]
+    [Route("api/Tenants")]
     public class TenantController : AbpProController, IVoloTenantAppService
     {
         private readonly IVoloTenantAppService _voloTenantAppService;

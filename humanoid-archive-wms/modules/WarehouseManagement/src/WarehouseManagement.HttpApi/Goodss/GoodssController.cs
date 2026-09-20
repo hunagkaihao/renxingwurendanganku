@@ -11,7 +11,7 @@ using WarehouseManagement.Goodss.Dto;
 
 namespace WarehouseManagement.Goodss
 {
-    [Route("Goodss")]
+    [Route("api/Goodss")]
     public class GoodssController : WarehouseManagementController, IGoodsAppService
     {
         private readonly IGoodsAppService _goodsAppService;

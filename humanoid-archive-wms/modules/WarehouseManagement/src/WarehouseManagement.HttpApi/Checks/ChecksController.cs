@@ -7,7 +7,7 @@ using WarehouseManagement.Checks.Dto;
 
 namespace WarehouseManagement.Checks
 {
-    [Route("Checks")]
+    [Route("api/Checks")]
     public class ChecksController : WarehouseManagementController, ICheckAppService
     {
         private readonly ICheckAppService _checkAppService;

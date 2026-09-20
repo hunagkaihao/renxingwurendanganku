@@ -10,7 +10,7 @@ using Volo.Abp.Application.Dtos;
 
 namespace Lion.AbpPro.Controllers.IdentityServers
 {
-    [Route("IdentityServer/Client")]
+    [Route("api/IdentityServer/Client")]
     public class ClientController : AbpProController, IIdentityServerClientAppService
     {
         private readonly IIdentityServerClientAppService _identityServerClientAppService;

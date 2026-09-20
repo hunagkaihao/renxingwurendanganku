@@ -12,7 +12,7 @@ using WarehouseManagement.Cells.Dto;
 
 namespace WarehouseManagement.Cells
 {
-    [Route("Cells")]
+    [Route("api/Cells")]
     public class CellsController : WarehouseManagementController, ICellAppService
     {
         private readonly ICellAppService _cellAppService;

@@ -7,7 +7,7 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace Lion.AbpPro.Controllers.Systems
 {
-    [Route("Settings")]
+    [Route("api/Settings")]
     public class SettingController : AbpProController,ISettingAppService
     {
         private readonly ISettingAppService _settingAppService;

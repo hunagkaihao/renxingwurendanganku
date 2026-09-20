@@ -11,7 +11,7 @@ using WarehouseManagement.Boards.Dto;
 
 namespace WarehouseManagement.Boards
 {
-    [Route("Boards")]
+    [Route("api/Boards")]
     public class BoardsController : WarehouseManagementController, IBoardAppService
     {
         public readonly IBoardAppService _boardAppService;
