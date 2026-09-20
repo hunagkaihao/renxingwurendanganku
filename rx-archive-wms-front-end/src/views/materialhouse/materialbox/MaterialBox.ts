@@ -46,6 +46,11 @@ export const tableColumns: BasicColumn[] = [
       if (text != undefined) return cellModelSelectItem.filter((f) => f.value == text)[0].label;
     },
   },
+  {
+    title: t('库位'),
+    dataIndex: 'cellCode',
+    customRender: ({ text }) => text || '-',
+  },
   /*{
     title: t('年度'),
     dataIndex: 'year',

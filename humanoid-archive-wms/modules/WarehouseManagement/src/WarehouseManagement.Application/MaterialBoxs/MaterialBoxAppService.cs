@@ -124,8 +124,9 @@ namespace WarehouseManagement.MaterialBoxs
             var queryable = await _materialBoxRepository.GetQueryableAsync();
             var filter = input.Filter.IsNullOrEmpty() ? "" : input.Filter.Trim();
             var query = queryable.Where(archiveBox =>
-                archiveBox.MaterialBoxBarcode.Contains(filter) ||
-                archiveBox.MaterialBoxName.Contains(filter));
+                archiveBox.CellId > 0 &&
+                (archiveBox.MaterialBoxBarcode.Contains(filter) ||
+                 archiveBox.MaterialBoxName.Contains(filter)));
             if (input.StartCreationTime.HasValue)
             {
                 query = query.Where(archiveBox => archiveBox.CreationTime >= input.StartCreationTime.Value);
@@ -143,12 +144,18 @@ namespace WarehouseManagement.MaterialBoxs
                 .OrderByDescending(archiveBox => archiveBox.Id)
                 .Skip(skipCount)
                 .Take(pageSize));
+            var cellIds = items.Select(archiveBox => archiveBox.CellId).Distinct().ToList();
+            var cells = cellIds.Count == 0
+                ? new List<Cell>()
+                : await _cellRepository.GetListAsync(cell => cellIds.Contains(cell.Id));
+            var cellCodeById = cells.ToDictionary(cell => cell.Id, cell => cell.CellCode);
             var pageItems = items.Select(archiveBox => new MaterialBoxPageDto
             {
                 Id = archiveBox.Id,
                 MaterialBoxBarcode = archiveBox.MaterialBoxBarcode,
                 MaterialBoxName = archiveBox.MaterialBoxName,
                 CellModel = archiveBox.CellModel,
+                CellCode = cellCodeById.TryGetValue(archiveBox.CellId, out var cellCode) ? cellCode : null,
                 MaterialUnit = archiveBox.MaterialUnit,
                 RetentionPeriod = archiveBox.RetentionPeriod,
                 MaterialPeople = archiveBox.MaterialPeople,

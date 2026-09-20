@@ -30,5 +30,11 @@ namespace WarehouseManagement.EntityFrameworkCore.Material
                 .OrderBy(t => t.CreationTime)
                 .FirstOrDefaultAsync(t => t.RfidId == rfidCode, GetCancellationToken(cancellationToken));
         }
+        public async Task<MaterialAggregate> FindByMaterialCodeAsync(string materialCode, bool includeDetails = true, CancellationToken cancellationToken = default)
+        {
+            return await (await GetDbSetAsync())
+                .OrderBy(t => t.CreationTime)
+                .FirstOrDefaultAsync(t => t.MaterialCode == materialCode, GetCancellationToken(cancellationToken));
+        }
     }
 }

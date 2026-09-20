@@ -11,6 +11,10 @@ namespace WarehouseManagement.MaterialBoxs.Dto
         public string MaterialBoxBarcode { get; set; }
         public string MaterialBoxName { get; set; }
         public string CellModel { get; set; }
+        /// <summary>
+        /// 当前在库库位编码；仅在物料容器已分配库位时返回。
+        /// </summary>
+        public string CellCode { get; set; }
         public string MaterialUnit { get; set; }
         public string RetentionPeriod { get; set; }
         public string MaterialPeople { get; set; }

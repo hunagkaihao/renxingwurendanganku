@@ -43,7 +43,7 @@ namespace WarehouseManagement.StockTasks
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        Task<StockTaskDto> CreateWCSIn(CreateStockTaskDto input);
+        Task<StockTaskDto> CreateWCSIn(CreateStockInTaskDto input);
         /// <summary>
         /// 扫码分配库位下发任务
         /// </summary>

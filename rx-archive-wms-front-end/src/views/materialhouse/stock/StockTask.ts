@@ -301,22 +301,6 @@ export const createFormSchema: FormSchema[] = [
     },
   },
   {
-    field: 'materialName', component: 'Input', label: '物料名称', labelWidth: 100, required: true,
-    colProps: { span: 12 }, componentProps: { autocomplete: 'off' },
-  },
-  {
-    field: 'materialType', component: 'Select', label: '物料类型', labelWidth: 100, required: true,
-    colProps: { span: 12 }, componentProps: { options: materialTypeSelectItem },
-  },
-  {
-    field: 'materialUnit', component: 'Input', label: '单位', labelWidth: 100, required: true,
-    colProps: { span: 12 }, componentProps: { autocomplete: 'off' },
-  },
-  {
-    field: 'validityDays', component: 'InputNumber', label: '有效期（天）', labelWidth: 100, required: true,
-    colProps: { span: 12 }, componentProps: { min: 0, precision: 0 },
-  },
-  {
     field: 'creatorUserCode', component: 'Input', label: '创建用户 ID', labelWidth: 100, required: true,
     colProps: { span: 12 }, componentProps: { autocomplete: 'off' },
   },

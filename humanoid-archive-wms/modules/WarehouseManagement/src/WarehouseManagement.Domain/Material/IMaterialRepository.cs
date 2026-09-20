@@ -19,5 +19,12 @@ namespace WarehouseManagement.Material
             string rfidCode,
             bool includeDetails = true,
             CancellationToken cancellationToken = default);
+        /// <summary>
+        /// 按基础物料编码查询物料信息。
+        /// </summary>
+        Task<MaterialAggregate> FindByMaterialCodeAsync(
+            string materialCode,
+            bool includeDetails = true,
+            CancellationToken cancellationToken = default);
     }
 }

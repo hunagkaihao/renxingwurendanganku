@@ -303,7 +303,7 @@ namespace WarehouseManagement.StockTasks
         /// <returns></returns>
         /// <exception cref="UserFriendlyException"></exception>
         [UnitOfWork]
-        public async Task<StockTaskDto> CreateWCSIn(CreateStockTaskDto input)
+        public async Task<StockTaskDto> CreateWCSIn(CreateStockInTaskDto input)
         {
             if (!DateTime.TryParseExact(
                     input.MaterialCreateTime,
@@ -315,6 +315,13 @@ namespace WarehouseManagement.StockTasks
                 throw new UserFriendlyException("创建时间格式必须为 yyyy-MM-dd HH:mm:ss");
             }
 
+            var materialCode = input.MaterialCode.Trim();
+            var material = await _materialRepository.FindByMaterialCodeAsync(materialCode);
+            if (material == null)
+            {
+                throw new UserFriendlyException("基础物料信息无此物料");
+            }
+
             Cell targetCell = null;
             if (input.EndCellId > 0)
             {
@@ -324,20 +331,20 @@ namespace WarehouseManagement.StockTasks
                     throw new UserFriendlyException("目标库位不存在");
                 }
 
-                targetCell.EnsureCanStockIn(input.MaterialCode);
-                if (!string.Equals(targetCell.CellModel?.Trim(), input.MaterialType?.Trim(), StringComparison.Ordinal))
+                targetCell.EnsureCanStockIn(materialCode);
+                if (!string.Equals(targetCell.CellModel?.Trim(), material.MaterialType?.Trim(), StringComparison.Ordinal))
                 {
                     throw new UserFriendlyException("目标库位规格与物料类型不一致");
                 }
             }
 
-            // 每次预约均按传入物料创建容器记录；不查询或校验既有容器状态。
-            var materialBoxObj = new MaterialBox(input.MaterialName, input.MaterialCode)
+            // 每次预约按基础物料信息创建容器记录，物料属性不接受客户端传入值。
+            var materialBoxObj = new MaterialBox(material.MaterialName, materialCode)
             {
-                MaterialBoxBarcode = input.MaterialCode,
-                CellModel = input.MaterialType,
-                MaterialUnit = input.MaterialUnit,
-                RetentionPeriod = input.ValidityDays.ToString(CultureInfo.InvariantCulture),
+                MaterialBoxBarcode = materialCode,
+                CellModel = material.MaterialType,
+                MaterialUnit = material.MaterialUnit,
+                RetentionPeriod = (material.ValidityDays ?? 0).ToString(CultureInfo.InvariantCulture),
                 MaterialPeople = input.CreatorUserCode,
                 MaterialInDate = materialCreateTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture),
                 CreationTime = materialCreateTime
@@ -345,10 +352,8 @@ namespace WarehouseManagement.StockTasks
             materialBoxObj = await _materialBoxRepository.InsertAsync(materialBoxObj, true);
 
             // 设置任务类型
-            input.TaskTypeCode = TaskType.NPFullStockIn.ToString();
-            
             // 创建入库任务
-            var stockTask = await _stockTaskManagement.CreateWCSIn(input.TaskTypeCode, materialBoxObj);
+            var stockTask = await _stockTaskManagement.CreateWCSIn(TaskType.NPFullStockIn.ToString(), materialBoxObj);
             if (targetCell != null)
             {
                 stockTask.EndCellId = targetCell.Id;
