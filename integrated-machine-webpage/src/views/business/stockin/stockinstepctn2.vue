@@ -2,8 +2,8 @@
     @import "../stocktask.less";
 </style>
 <template>
-    <div>
-        <div dis-hover style="height:800px" id='building'>
+    <div class="sample-retention-page" :class="{ 'is-wms-only': wmsOnly }">
+        <div dis-hover id='building'>
             <div class="page-body2">
                 <div class="margin-top-1">
                         <div class="main-header">
@@ -14,7 +14,7 @@
                                    <img class="xwblogo"   style="margin-top: 3px;" :src="smallLogoUrl"/>
                             <!-- <Icon type="md-archive" size="32" color="#57a3f3" style="margin-top: -8px;"/> -->
                             </div>
-                             <div class="header-middle-con" style="margin-left: -25px;margin-top: 1px;"><h1>存档</h1> </div>
+                             <div class="header-middle-con" style="margin-left: -25px;margin-top: 1px;"><h1>留样</h1> </div>
                             <div class="header-avator-con" style="margin-right: 10px;">     
 
                                 <div class="user-dropdown-menu-con">
@@ -32,7 +32,7 @@
                                         <Icon @click="openStatus" v-show="serviceConnect&&wcsStatusFlag&&mjgStatusFlag&&scadaStatusFlag&&plcStatusFlag" type="ios-wifi" size="30" style="margin-left: 10px;" color="LightSkyBlue" />
                                         <Icon @click="openStatus" v-show="!(serviceConnect&&wcsStatusFlag&&mjgStatusFlag&&scadaStatusFlag&&plcStatusFlag)" type="ios-wifi-outline" size="30" style="margin-left: 10px;" color="#ed4014" />
 
-                                        <Icon @click="logout" type="md-return-left" size="28" style="margin-left: 10px;margin-top: 5px;" color="LightSkyBlue" />
+                                        <Button @click="logout" class="sample-return-button" icon="md-arrow-back">返回首页</Button>
 
                                     </Row>
                                 </div>
@@ -41,6 +41,22 @@
                         </div>
 
                 </div>
+                <section v-show="current>=0" class="sample-progress" aria-label="留样进度">
+                    <header><h2>留样进度</h2><span>{{ wmsOnly ? '等待任务 · 设备尚未接入' : '请按步骤完成留样' }}</span></header>
+                    <div class="sample-progress-scroll" tabindex="0" aria-label="留样步骤，可左右滚动查看">
+                        <ol id="taskstep" class="sample-progress-list">
+                            <li v-for="(item, index) in stepdata" :key="item.id"
+                                :class="{ 'is-complete': !wmsOnly && index < current, 'is-current': !wmsOnly && index === current }"
+                                :aria-current="!wmsOnly && index === current ? 'step' : undefined">
+                                <span class="sample-progress-icon"><Icon :type="!wmsOnly && index < current ? 'md-checkmark' : item.icon" size="25" /></span>
+                                <strong>{{ item.title }}</strong>
+                                <small>{{ wmsOnly ? '等待任务' : (index < current ? '已完成' : (index === current ? '进行中' : '待开始')) }}</small>
+                            </li>
+                        </ol>
+                    </div>
+                </section>
+                <sample-cabinets v-if="wmsOnly"></sample-cabinets>
+                <template v-else>
                 <div v-show="current==1||continuousFlag" class="margin-top-cm">
                     <!-- <Form ref="queryForm" :label-width="80" label-position="left" inline> -->
                         <Row :gutter="24">
@@ -116,11 +132,6 @@
                             </Col>
                         </Row>
                 </div>
-                 <div v-show="current>=0"  class="margin-top-cm">
-                     <Steps :current="current" class="taskstep" id="taskstep">
-                        <Step v-for="(item) of stepdata" :key="item.id"  :title="item.title" :icon="item.icon"  :content="item.id<(current+1)?'已完成':item.content" ></Step>
-                    </Steps>
-                </div> 
                  <div   class="margin-top-cm">
                    <Row :gutter="136">
                         <Col span="4">
@@ -231,6 +242,7 @@
             </Row>
 
                 </div>              
+                </template>
             </div>
         </div>
          <achive-list v-model="createModalShow"  @save-success="getpage"></achive-list>
@@ -243,6 +255,8 @@
     import { Component, Vue,Inject, Prop,Watch } from 'vue-property-decorator';
     import Util from '@/lib/util'
     import AbpBase from '@/lib/abpbase'
+    import AppConsts from '@/lib/appconst';
+    import SampleCabinets from './sample-cabinets.vue';
     import PageRequest from '@/store/entities/page-request'
     import Stocktask from '@/store/entities/stocktask'
     import Stocktasklist from '@/store/entities/stocktasklist'
@@ -273,9 +287,11 @@ class TaskFaultDto {
   resolveMethod:string;
 }
     @Component({
-        components:{AchiveList,ServiceStatus,TaskException,PutboxTip}
+        components:{AchiveList,ServiceStatus,TaskException,PutboxTip,SampleCabinets}
     })
     export default class Stocktasks extends AbpBase{
+        /** 未接入设备时展示 22 门留样布局，不轮询旧柜门任务接口。 */
+        wmsOnly:boolean = AppConsts.wmsOnly;
         taskAssignDto:TaskAssignDto=new TaskAssignDto();
                lockScreenSize:number=0;
         //filters
@@ -285,7 +301,7 @@ class TaskFaultDto {
        statusModalShow:boolean=false;
        serviceConnect:boolean=true;//服务器连接状态
        taskExpModalShow:boolean=false;//异常任务组件
-       putTipModalShow:boolean=false;//放档案盒提示组件
+       putTipModalShow:boolean=false;//放样品盒提示组件
         wcsStatusFlag:boolean=true;//WCS服务器连接状态
         mjgStatusFlag:boolean=true;//密集架连接状态
         scadaStatusFlag:boolean=true;//SCADA连接状态
@@ -342,8 +358,8 @@ class TaskFaultDto {
         currentpg:number=0;//当前页
         continuousFlag:boolean=true;//连续入库标识
 
-            stepdata=[{ id:'1',title:'档案扫码',
-            content:'',icon:'md-barcode'},{ id:'2',title:'档案放入',
+            stepdata=[{ id:'1',title:'样品扫码',
+            content:'',icon:'md-barcode'},{ id:'2',title:'样品放入',
             content:'',icon:'md-log-in'},{ id:'3',title:'密集柜开启',
             content:'',icon:'ios-albums'},{ id:'4',title:'机械手抓取',
             content:'',icon:'md-download'},{ id:'5',title:'任务结束',
@@ -374,9 +390,9 @@ class TaskFaultDto {
             key:'CabinetWait'}
             ,{ value:'密集柜已打开',
             key:'CabinetComplete'}
-            ,{ value:'档案抓取中',
+            ,{ value:'样品抓取中',
             key:'RobotWait'},
-            { value:'档案抓取完成',
+            { value:'样品抓取完成',
             key:'RobotComplete'},
             { value:'任务完成',
             key:'Complete'},
@@ -439,7 +455,7 @@ class TaskFaultDto {
                         this.getStep(this.doorstatus[dd].taskstatus);
                         if(this.doorstatus[dd].taskstatus!="OrderCatched"&&this.doorstatus[dd].taskstatus!="Executing")
                         {
-                                this.$Message.info('档案盒已完成扫码，无须重复扫码');
+                                this.$Message.info('样品盒已完成扫码，无须重复扫码');
                                 return;
                         }
 
@@ -457,7 +473,7 @@ class TaskFaultDto {
                             // var slist= response.data.result.items as Stocktasklist[];
                             if(this.list2.length>0)
                             {
-                                //20220718 暂时屏蔽档案文件RFID校验
+                                //20220718 暂时屏蔽样品文件RFID校验
                                 // this.$store.commit('stocktask/edit',this.doorlist.filter(x=>x.id==this.currentID)[0]);
                                 // //this.createModalShow=true;
                                 // //设置演示，避免界面卡顿
@@ -475,7 +491,7 @@ class TaskFaultDto {
                                 // //  this.findRfid="";
 
                                 
-                                //20220718 暂时屏蔽档案文件RFID校验
+                                //20220718 暂时屏蔽样品文件RFID校验
                                 await   this.$store.dispatch({
                                     type:'stocktask/openDoor',
                                     mId:this.currentID
@@ -490,7 +506,7 @@ class TaskFaultDto {
                             else
                             {
                                 // this.$Message.info('开门命令已下达');
-                                //档案盒为空  直接执行开门程序
+                                //样品盒为空  直接执行开门程序
                               await   this.$store.dispatch({
                                     type:'stocktask/openDoor',
                                     mId:this.currentID
@@ -747,13 +763,14 @@ class TaskFaultDto {
             this.$store.commit('app/logout', this);
             Util.abp.auth.clearToken();
             Cookies.set('facing', '0');
+            Cookies.set('locking', '0');
             Cookies.set('userId', '0');
             //location.reload();
             //  this.$router.push({
             //     name: 'login'
             // });
             this.$router.push({
-                name: '/'
+                path: '/'
             });
 
         }
@@ -938,8 +955,8 @@ class TaskFaultDto {
                 if(status=="Executing"||status=="OrderCatched")
                 {
                     this.current=0;
-                    this.stepdata[0].content="请扫描档案盒上的二维码、开柜门";
-                    console.log("请扫描档案盒上的二维码。");
+                    this.stepdata[0].content="请扫描样品盒上的二维码、开柜门";
+                    console.log("请扫描样品盒上的二维码。");
                     if(this.temprfidScan!=this.currentRfid)
                     {
                         this.temprfidScan=this.currentRfid;
@@ -947,7 +964,7 @@ class TaskFaultDto {
                         // this.openPutTip();
                         try {
                             // @ts-ignore：无法被执行的代码的错误
-                            bound.speakmsg("请扫描档案盒上的二维码、开柜门");
+                            bound.speakmsg("请扫描样品盒上的二维码、开柜门");
                         } catch (error) {
                             
                         }
@@ -957,7 +974,7 @@ class TaskFaultDto {
                 {
                     this.current=1;
                     this.stepdata[0].content="已完成";
-                    this.stepdata[1].content="请放入档案盒[二维码向内]，关柜门";
+                    this.stepdata[1].content="请放入样品盒[二维码向内]，关柜门";
                     if(this.temprfidDoor!=this.currentRfid)
                     {
                         this.temprfidDoor=this.currentRfid;
@@ -965,7 +982,7 @@ class TaskFaultDto {
                         // this.openPutTip();
                         try {
                             // @ts-ignore：无法被执行的代码的错误
-                            bound.speakmsg("请把档案盒贴有二维码的方向朝内放置，并关闭柜门。");
+                            bound.speakmsg("请把样品盒贴有二维码的方向朝内放置，并关闭柜门。");
                         } catch (error) {
                             
                         }
@@ -996,7 +1013,7 @@ class TaskFaultDto {
                     this.stepdata[0].content="已完成";
                     this.stepdata[1].content="已完成";
                     this.stepdata[2].content="已完成";
-                    this.stepdata[3].content="等待机械手取档案";
+                    this.stepdata[3].content="等待机械手取样品";
                     this.closePutTip();
                 }
                 if(status=="RobotWait")
@@ -1198,6 +1215,8 @@ class TaskFaultDto {
             lockScreenBack.style.boxShadow = '0 0 0 0 #667aa6 inset';
                         }
 
+               // 柜门映射未接入时只展示布局，不调用旧的任务及设备服务。
+               if (this.wmsOnly) return;
                this.getpage();
                     //  await this.$store.dispatch({
                     //     type:'cell/getStations'
@@ -1503,4 +1522,7 @@ class TaskFaultDto {
 h1{
   color: #fff;
 }
+</style>
+<style lang="less">
+@import "./sample-retention.less";
 </style>

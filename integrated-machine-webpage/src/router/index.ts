@@ -55,7 +55,8 @@ router.beforeEach((to, from, next) => {
         // });
         //next(false);
     }
-    else if (to.name === 'client') {
+    // 根路径也是留样/取样操作台，已登录用户返回时不跳往旧后台首页。
+    else if (to.name === 'client' || to.name === 'login') {
         next();
     }
     else if (to.name === 'autol') {

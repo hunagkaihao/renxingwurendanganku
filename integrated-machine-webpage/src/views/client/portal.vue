@@ -39,7 +39,7 @@
           <span class="portal-card-title">留样</span>
           <span class="portal-card-description">样品入库 · 有序留存</span>
           <span class="portal-card-bottom">
-            <span>{{ wmsOnly ? '设备待接入' : '进入留样流程' }}</span>
+            <span>{{ wmsOnly ? (wmsPageDebug ? '进入留样调试' : '设备待接入') : '进入留样流程' }}</span>
             <span v-if="!wmsOnly && taskInCount > 0" class="portal-task-count">{{ taskInCount }} 项待处理</span>
             <span class="portal-card-arrow"><Icon type="ios-arrow-forward" size="24" /></span>
           </span>
@@ -53,7 +53,7 @@
           <span class="portal-card-title">取样</span>
           <span class="portal-card-description">样品出库 · 便捷取用</span>
           <span class="portal-card-bottom">
-            <span>{{ wmsOnly ? '设备待接入' : '进入取样流程' }}</span>
+            <span>{{ wmsOnly ? (wmsPageDebug ? '进入取样调试' : '设备待接入') : '进入取样流程' }}</span>
             <span v-if="!wmsOnly && taskOutCount > 0" class="portal-task-count">{{ taskOutCount }} 项待处理</span>
             <span class="portal-card-arrow"><Icon type="ios-arrow-forward" size="24" /></span>
           </span>
@@ -62,7 +62,7 @@
 
       <div v-if="wmsOnly" id="portal-device-notice" class="portal-notice" role="status">
         <span class="portal-notice-icon"><Icon type="ios-information-circle-outline" size="24" /></span>
-        <div><strong>设备尚未接入</strong><p>当前可查看 WMS 连接状态，设备接入后可办理留样、取样业务。</p></div>
+        <div><strong>{{ wmsPageDebug ? '页面调试模式' : '设备尚未接入' }}</strong><p>{{ wmsPageDebug ? 'WMS 连接后可通过账号密码进入留样、取样页面；设备业务尚未接入。' : '当前可查看 WMS 连接状态，设备接入后可办理留样、取样业务。' }}</p></div>
         <button type="button" @click="openStatus">查看状态 <Icon type="ios-arrow-forward" /></button>
       </div>
       <p v-else class="portal-guide"><Icon type="ios-hand-outline" size="20" /> 点击业务卡片，按照页面提示完成操作</p>
@@ -89,6 +89,8 @@ import AppConsts from '../../lib/appconst';
 export default class Login extends AbpBase {
   /** 仅 WMS 模式不调用旧任务统计及设备服务。 */
   wmsOnly:boolean = AppConsts.wmsOnly;
+  /** 仅开发环境开放无设备的页面调试，仍通过 WMS 账号密码验证。 */
+  wmsPageDebug:boolean = AppConsts.wmsOnly && process.env.NODE_ENV === 'development';
   /** 避免慢请求导致首页状态轮询重叠。 */
   wmsStatusPending:boolean = false;
   name:string= 'lockScreen';
@@ -205,8 +207,8 @@ export default class Login extends AbpBase {
       }
   }
      stockincnt() {
-      if (this.wmsOnly) {
-        this.$Message.info('设备服务未接入，暂不支持存档操作');
+      if (this.wmsOnly && (!this.wmsPageDebug || !this.serviceConnect)) {
+        this.$Message.info(this.wmsPageDebug ? 'WMS 尚未连接，请先检查服务状态' : '设备服务未接入，暂不支持留样操作');
         return;
       }
                    // bound.aa();//用于和我inform后台进行交互
@@ -229,6 +231,10 @@ export default class Login extends AbpBase {
       }
       else{
       Cookies.set('last_page_name', 'stockinstepctn');
+      }
+      if (this.wmsPageDebug) {
+        this.createModalShow = true;
+        return;
       }
       if(this.ClientVerifyMethod == "FaceAndVein" || this.ClientVerifyMethod == "FaceOnly"){
       
@@ -276,8 +282,8 @@ export default class Login extends AbpBase {
       }
   }
       stockoutcnt() {
-      if (this.wmsOnly) {
-        this.$Message.info('设备服务未接入，暂不支持取档操作');
+      if (this.wmsOnly && (!this.wmsPageDebug || !this.serviceConnect)) {
+        this.$Message.info(this.wmsPageDebug ? 'WMS 尚未连接，请先检查服务状态' : '设备服务未接入，暂不支持取样操作');
         return;
       }
   //            if(this.taskOutCount==0)
@@ -299,6 +305,10 @@ export default class Login extends AbpBase {
       }
       else{
         Cookies.set('last_page_name', 'stockoutstepctn');
+      }
+      if (this.wmsPageDebug) {
+        this.createModalShow = true;
+        return;
       }
       //console.log('lock'+name);
       Cookies.set('facing', '0')
