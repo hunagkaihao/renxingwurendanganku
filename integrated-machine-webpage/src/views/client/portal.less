@@ -1,0 +1,159 @@
+/* 首页样式限定在当前组件内，避免与后台 .main、.container 等通用类冲突。 */
+.sample-portal {
+  width: 100%; height: 100%; min-height: 100%; overflow-y: auto;
+  display: flex; flex-direction: column;
+  color: #23344d; font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+  background: radial-gradient(ellipse at 15% 35%, #e7f0ff 0, transparent 55%),
+    radial-gradient(ellipse at 95% 80%, #e3f3f0 0, transparent 45%), #f6f8fc;
+  -webkit-tap-highlight-color: transparent;
+}
+.sample-portal button { font: inherit; cursor: pointer; touch-action: manipulation; }
+.sample-portal button:focus { outline: 3px solid #819ee7; outline-offset: 5px; }
+.sample-portal button:focus:not(:focus-visible) { outline: none; }
+.portal-header {
+  display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+  padding: 25px 4.5%; border-bottom: 1px solid rgba(60, 83, 122, .08);
+  background: rgba(255, 255, 255, .7);
+}
+.portal-brand { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.portal-brand > div { min-width: 0; overflow-wrap: break-word; }
+.portal-brand strong { display: block; font-size: 23px; letter-spacing: 2px; }
+.portal-brand-caption { display: block; margin-top: 4px; color: #7d889b; font-size: 12px; letter-spacing: 2px; }
+.portal-brand-icon {
+  display: flex; align-items: center; justify-content: center; width: 50px; height: 50px;
+  color: #fff; border-radius: 15px; background: #3a6cda; box-shadow: 0 6px 14px rgba(58,108,218,.16);
+}
+.portal-logo { max-width: 125px; height: 46px; object-fit: contain; }
+.portal-tools { display: flex; align-items: center; gap: 13px; flex-wrap: wrap; }
+.portal-status {
+  display: flex; align-items: center; gap: 9px; border: 1px solid #d4e9e1;
+  background: #f0f9f5; color: #32735e; padding: 11px 15px; border-radius: 24px;
+  font-size: 13px !important; min-height: 44px;
+}
+.portal-status-dot { width: 7px; height: 7px; border-radius: 50%; background: #3fa77b; }
+.portal-status.is-offline { color: #a6662d; background: #fff5e9; border-color: #f2dbbe; }
+.portal-status.is-offline .portal-status-dot { background: #d48b3e; }
+.portal-tool {
+  display: flex; align-items: center; justify-content: center; gap: 7px; min-height: 44px;
+  padding: 9px 12px; border: 0; border-radius: 12px; background: transparent; color: #65738a;
+  transition: color .18s ease, background .18s ease;
+}
+.portal-tool:hover { color: #315fc3; background: #eaf0fc; }
+.portal-workspace {
+  width: 100%; max-width: 1040px; margin: auto; padding: 42px 50px;
+  box-sizing: border-box; flex-shrink: 0;
+  animation: portal-enter .4s ease-out both;
+}
+.portal-intro { text-align: center; margin-bottom: 35px; }
+.portal-eyebrow { color: #7790ad; font-size: 13px; letter-spacing: 4px; }
+.portal-intro h1 { margin: 12px 0 10px; font-size: 34px; font-weight: 600; letter-spacing: 2px; line-height: 1.4; }
+.portal-intro h1 { font-size: ~"clamp(24px, 3vw, 42px)"; overflow-wrap: break-word; }
+.portal-intro p { color: #8893a4; font-size: 16px; }
+.portal-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; }
+.portal-action {
+  display: flex; flex-direction: column; position: relative; overflow: hidden;
+  min-width: 0; text-align: left; padding: 31px 34px 25px;
+  border: 1px solid rgba(255,255,255,.5); border-radius: 24px; color: #fff;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.portal-action-in { background: linear-gradient(125deg, #497ee8, #3462c6); box-shadow: 0 12px 26px rgba(57,103,203,.17); }
+.portal-action-out { background: linear-gradient(125deg, #30a99c, #218b85); box-shadow: 0 12px 26px rgba(39,148,138,.15); }
+.portal-action::after {
+  content: ""; position: absolute; width: 240px; height: 240px; right: -100px; top: -110px;
+  border: 35px solid rgba(255,255,255,.05); border-radius: 50%; pointer-events: none;
+}
+.portal-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+.portal-card-symbol { display: flex; align-items: center; justify-content: center; width: 74px; height: 74px; border-radius: 21px; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.15); }
+.portal-card-number { font-size: 42px; font-weight: 300; color: rgba(255,255,255,.36); letter-spacing: 2px; }
+.portal-card-title { font-size: 38px; font-size: ~"clamp(30px, 3.3vw, 48px)"; font-weight: 600; line-height: 1.3; letter-spacing: 5px; }
+.portal-card-description { margin-top: 11px; color: rgba(255,255,255,.79); font-size: 15px; letter-spacing: 1px; }
+.portal-card-bottom {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 30px; padding-top: 18px;
+  border-top: 1px solid rgba(255,255,255,.2); font-size: 14px;
+}
+.portal-card-arrow { margin-left: auto; display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,.13); transition: transform .2s ease; }
+.portal-task-count { font-size: 12px; background: rgba(255,255,255,.15); border-radius: 15px; padding: 4px 8px; }
+@media (hover: hover) {
+  .portal-action:hover { transform: translateY(-5px); box-shadow: 0 18px 32px rgba(39,73,131,.23); }
+  .portal-action:hover .portal-card-arrow { transform: translateX(3px); }
+}
+.portal-action:active { transform: scale(.985); }
+.portal-notice {
+  display: flex; align-items: center; gap: 13px; margin-top: 26px; padding: 17px 20px;
+  border: 1px solid #dee6ee; border-radius: 15px; background: rgba(255,255,255,.72);
+}
+.portal-notice-icon { color: #7796bf; }
+.portal-notice strong { font-size: 14px; font-weight: 500; color: #5b6f88; }
+.portal-notice > div { min-width: 0; overflow-wrap: break-word; }
+.portal-notice p { margin-top: 5px; font-size: 12px; color: #8391a4; line-height: 1.7; }
+.portal-notice button { margin-left: auto; flex-shrink: 0; padding: 10px; border: 0; background: transparent; color: #4774bf; font-size: 13px; }
+.portal-guide { margin-top: 26px; text-align: center; color: #8897aa; font-size: 14px; }
+.portal-guide i { margin-right: 8px; vertical-align: middle; }
+.portal-footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding: 18px 4.5%; color: #95a1b2; font-size: 12px; letter-spacing: 1px; flex-shrink: 0; }
+@keyframes portal-enter { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+/* 小尺寸终端允许页面内部滚动，避免全局 overflow:hidden 裁切操作入口。 */
+@media (max-width: 800px) {
+  .portal-header { padding: 18px 24px; flex-wrap: wrap; gap: 18px; }
+  .portal-workspace { padding: 30px 24px; }
+  .portal-tools { gap: 6px; }
+  .portal-brand strong { font-size: 20px; }
+  .portal-tool span { display: none; }
+  .portal-action { padding: 25px; }
+  .portal-intro h1 { font-size: 28px; }
+  .portal-actions { gap: 18px; }
+}
+@media (max-width: 620px) {
+  .portal-tools { width: 100%; }
+  .portal-status { margin-right: auto; }
+  .portal-actions { grid-template-columns: 1fr; }
+  .portal-card-top { margin-bottom: 16px; }
+  .portal-card-symbol { width: 58px; height: 58px; }
+  .portal-card-title { font-size: 32px; }
+  .portal-card-bottom { margin-top: 18px; }
+  .portal-notice { align-items: flex-start; flex-wrap: wrap; }
+  .portal-notice > div { flex: 1; }
+  .portal-notice button { margin-left: 26px; }
+  .portal-footer { font-size: 10px; }
+}
+/* 大屏扩大内容区与触控目标，避免只放大背景、业务入口仍挤在中央。 */
+@media (min-width: 1600px) and (min-height: 900px) {
+  .portal-workspace { max-width: 1320px; padding: 50px 60px; }
+  .portal-intro { margin-bottom: 48px; }
+  .portal-intro p { font-size: 19px; }
+  .portal-actions { gap: 36px; }
+  .portal-action { padding: 42px 44px 32px; }
+  .portal-card-symbol { width: 90px; height: 90px; }
+  .portal-card-description { font-size: 18px; }
+  .portal-card-bottom { margin-top: 40px; font-size: 17px; }
+  .portal-notice { padding: 22px 26px; }
+  .portal-notice strong { font-size: 17px; }
+  .portal-notice p, .portal-notice button { font-size: 15px; }
+}
+/* 横屏小终端缩短纵向间距；保留可滚动内容，不用整体缩放压小文字。 */
+@media (max-height: 560px) {
+  .portal-header { padding-top: 10px; padding-bottom: 10px; }
+  .portal-workspace { padding-top: 20px; padding-bottom: 20px; }
+  .portal-intro { margin-bottom: 18px; }
+  .portal-intro h1 { margin-top: 6px; font-size: 25px; }
+  .portal-action { padding: 20px 24px; }
+  .portal-card-top { margin-bottom: 12px; }
+  .portal-card-symbol { width: 52px; height: 52px; }
+  .portal-card-title { font-size: 30px; }
+  .portal-card-bottom { margin-top: 15px; padding-top: 12px; }
+  .portal-notice { margin-top: 18px; }
+  .portal-footer { padding-top: 10px; padding-bottom: 10px; }
+}
+@media (min-height: 561px) and (max-height: 740px) and (min-width: 801px) {
+  .portal-header { padding-top: 16px; padding-bottom: 16px; }
+  .portal-workspace { padding-top: 24px; padding-bottom: 24px; }
+  .portal-intro { margin-bottom: 22px; }
+  .portal-card-top { margin-bottom: 16px; }
+  .portal-card-symbol { width: 60px; height: 60px; }
+  .portal-card-bottom { margin-top: 20px; }
+}
+/* 尊重系统减少动态效果设置，触屏仍保留清晰的静态按钮状态。 */
+@media (prefers-reduced-motion: reduce) {
+  .portal-workspace { animation: none; }
+  .portal-action, .portal-card-arrow, .portal-tool { transition: none; }
+  .portal-action:hover, .portal-action:active, .portal-action:hover .portal-card-arrow { transform: none; }
+}
