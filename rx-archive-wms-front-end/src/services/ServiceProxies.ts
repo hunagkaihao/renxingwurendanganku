@@ -4685,7 +4685,7 @@ export class ChecksServiceProxy extends ServiceProxyBase {
      * @param body (optional) 
      * @return Success
      */
-    checkExecute(body: IdIntInput | undefined , cancelToken?: CancelToken | undefined): Promise<boolean> {
+    checkExecute(body: IdIntInput | undefined , cancelToken?: CancelToken | undefined): Promise<CheckExecuteResultDto> {
         let url_ = this.baseUrl + "/Checks/checkExecute";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -4715,7 +4715,7 @@ export class ChecksServiceProxy extends ServiceProxyBase {
         });
     }
 
-    protected processCheckExecute(response: AxiosResponse): Promise<boolean> {
+    protected processCheckExecute(response: AxiosResponse): Promise<CheckExecuteResultDto> {
         const status = response.status;
         let _headers: any = {};
         if (response.headers && typeof response.headers === "object") {
@@ -4729,9 +4729,9 @@ export class ChecksServiceProxy extends ServiceProxyBase {
             const _responseText = response.data;
             let result200: any = null;
             let resultData200  = _responseText;
-                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+                result200 = CheckExecuteResultDto.fromJS(resultData200);
     
-            return Promise.resolve<boolean>(result200);
+            return Promise.resolve<CheckExecuteResultDto>(result200);
 
         } else if (status === 403) {
             const _responseText = response.data;
@@ -4779,7 +4779,7 @@ export class ChecksServiceProxy extends ServiceProxyBase {
             const _responseText = response.data;
             return throwException("An unexpected server error occurred.", status, _responseText, _headers);
         }
-        return Promise.resolve<boolean>(null as any);
+        return Promise.resolve<CheckExecuteResultDto>(null as any);
     }
 
     /**
@@ -18445,6 +18445,73 @@ export class CheckDetailHisDtoPagedResultDto implements ICheckDetailHisDtoPagedR
 export interface ICheckDetailHisDtoPagedResultDto {
     items: CheckDetailHisDto[] | undefined;
     totalCount: number;
+}
+
+/** 盘点计划下达结果，供第三方关联计划和 WCS 批次。 */
+export class CheckExecuteResultDto implements ICheckExecuteResultDto {
+    /** 任务下达成功，不代表盘点完成；失败沿用 HTTP 错误响应。 */
+    success!: boolean;
+    /** 盘点计划下达结果说明。 */
+    message!: string | undefined;
+    /** 本次下达的盘点计划标识。 */
+    checkId!: number;
+    /** 本次下达的盘点计划标识。 */
+    checkCode!: string | undefined;
+    /** WCS 返回并保存的任务批次号。 */
+    batchNo!: string | undefined;
+
+    constructor(data?: ICheckExecuteResultDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    /** 转换盘点计划下达结果的数据。 */
+    init(_data?: any) {
+        if (_data) {
+            this.success = _data["success"];
+            this.message = _data["message"];
+            this.checkId = _data["checkId"];
+            this.checkCode = _data["checkCode"];
+            this.batchNo = _data["batchNo"];
+        }
+    }
+
+    /** 将接口响应转换为下达结果对象。 */
+    static fromJS(data: any): CheckExecuteResultDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new CheckExecuteResultDto();
+        result.init(data);
+        return result;
+    }
+
+    /** 转换盘点计划下达结果的数据。 */
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["success"] = this.success;
+        data["message"] = this.message;
+        data["checkId"] = this.checkId;
+        data["checkCode"] = this.checkCode;
+        data["batchNo"] = this.batchNo;
+        return data;
+    }
+}
+
+/** 盘点计划下达结果的数据契约。 */
+export interface ICheckExecuteResultDto {
+    /** 任务下达成功，不代表盘点完成；失败沿用 HTTP 错误响应。 */
+    success: boolean;
+    /** 盘点计划下达结果说明。 */
+    message: string | undefined;
+    /** 本次下达的盘点计划标识。 */
+    checkId: number;
+    /** 本次下达的盘点计划标识。 */
+    checkCode: string | undefined;
+    /** WCS 返回并保存的任务批次号。 */
+    batchNo: string | undefined;
 }
 
 export class CheckDto implements ICheckDto {

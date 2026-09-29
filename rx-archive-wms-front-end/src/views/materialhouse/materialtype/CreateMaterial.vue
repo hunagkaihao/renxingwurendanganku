@@ -1,7 +1,7 @@
 <template>
   <BasicModal
     :width="600"
-    :title="t('创建物品类型')"
+    :title="t('增加基础物料信息')"
     :canFullscreen="false"
     @ok="submit"
     @cancel="cancel"

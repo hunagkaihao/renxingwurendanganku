@@ -21,7 +21,7 @@ namespace WarehouseManagement.Material
 
         [HttpPost("create")]
         [SwaggerOperation(summary: "创建物料", Tags = new[] { "Material" })]
-        public async Task<MaterialDto> CreateAsync(CreateMaterialDto input)
+        public async Task<CreateMaterialResultDto> CreateAsync(CreateMaterialInputDto input)
         {
             return await _materialAppService.CreateAsync(input);
         }

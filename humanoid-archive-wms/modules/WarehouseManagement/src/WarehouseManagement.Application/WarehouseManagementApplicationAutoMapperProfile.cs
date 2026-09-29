@@ -47,6 +47,13 @@ public class WarehouseManagementApplicationAutoMapperProfile : Profile
             .ForMember(dest => dest.MaterialBoxBarcode, opt => opt.MapFrom(src => src.StockBarcode));
         CreateMap<MaterialAggregate, MaterialDto>(MemberList.None); ;
         CreateMap<CreateMaterialDto, MaterialAggregate>(MemberList.None); ;
+        CreateMap<CreateMaterialInputDto, MaterialAggregate>(MemberList.None);
+        CreateMap<MaterialAggregate, CreateMaterialResultDto>()
+            // 对外创建结果固定使用秒级、24 小时制格式，保留空时间语义。
+            .ForMember(dest => dest.MaterialCreateTime, opt => opt.MapFrom(src =>
+                src.MaterialCreateTime.HasValue
+                    ? src.MaterialCreateTime.Value.ToString("yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture)
+                    : null));
         CreateMap<MaterialBoxDetail, MaterialBoxDetailDto>(MemberList.None); ;
 
         CreateMap<Rfid, RfidCodeDto>();

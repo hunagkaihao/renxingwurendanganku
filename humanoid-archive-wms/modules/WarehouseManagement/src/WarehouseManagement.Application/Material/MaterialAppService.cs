@@ -38,27 +38,23 @@ namespace WarehouseManagement.Material
             _materialBoxDetailRepository = materialBoxDetailRepository;
         }
 
-        public async Task<MaterialDto> CreateAsync(CreateMaterialDto createArchiveBox)
+        /// <summary>
+        /// 创建基础物料，仅映射基础信息，不处理档案标签绑定。
+        /// </summary>
+        /// <param name="input">物料基础信息。</param>
+        /// <returns>已保存的物料 ID 和七项基础信息。</returns>
+        public async Task<CreateMaterialResultDto> CreateAsync(CreateMaterialInputDto input)
         {
-            //检查标签是否存在
-            if (!createArchiveBox.RfidId.IsNullOrEmpty() && !await _rfidManager.CheckExistRfidCode(createArchiveBox.RfidId, 1))
-            {
-                throw new UserFriendlyException("数据库中不存在标签" + createArchiveBox.MaterialBoxRfid);
-            }
-            //检查标签是否绑定
-            if (!createArchiveBox.MaterialRfid.IsNullOrEmpty() && await _materialManager.CheckUsedBoxRfid(createArchiveBox.MaterialRfid))
-            {
-                throw new UserFriendlyException(createArchiveBox.MaterialRfid + "标签已被绑定");
-            }
-            //检查档号不能为空
-            if (createArchiveBox.MaterialCode.IsNullOrEmpty())
+            // 沿用现有物料码校验及 HTTP 错误响应。
+            if (input.MaterialCode.IsNullOrEmpty())
             {
                 throw new UserFriendlyException("档号不能为空");
             }
-            var entity = base.ObjectMapper.Map<CreateMaterialDto, MaterialAggregate>(createArchiveBox);
+            var entity = base.ObjectMapper.Map<CreateMaterialInputDto, MaterialAggregate>(input);
 
-            var archive = await _materialRepository.InsertAsync(entity);
-            return base.ObjectMapper.Map<MaterialAggregate, MaterialDto>(archive);
+            // 先保存以取得数据库生成的主键，避免返回尚未持久化的默认 ID。
+            var archive = await _materialRepository.InsertAsync(entity, autoSave: true);
+            return base.ObjectMapper.Map<MaterialAggregate, CreateMaterialResultDto>(archive);
         }
 
         public async Task DeleteAsync(CreateMaterialDto input)
