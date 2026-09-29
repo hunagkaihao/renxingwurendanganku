@@ -63,7 +63,9 @@ public class WarehouseManagementApplicationAutoMapperProfile : Profile
         CreateMap<Cell, CreateCellDto>();
         CreateMap<UpdateCellDto, Cell>(MemberList.None); 
         CreateMap<Cell, UpdateCellDto>();
-        CreateMap<Cell, CellDto>();
+        CreateMap<Cell, CellDto>()
+            // 库存查询在应用服务中填充实物条码，通用库位映射不负责该字段。
+            .ForMember(dest => dest.MaterialBarcode, opt => opt.Ignore());
 
 
         CreateMap<CreateStockTaskDto, StockTask>(MemberList.None); ;

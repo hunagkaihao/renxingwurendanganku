@@ -559,12 +559,12 @@ namespace WarehouseManagement.StockTasks
                 throw new UserFriendlyException(message: "请求参数不能为空!");
             }
 
-            var materialCode = input.MaterialCode;
+            var materialBarcode = input.MaterialBarcode;
             var cellCode = input.CellCode;
 
-            if (string.IsNullOrWhiteSpace(materialCode) && string.IsNullOrWhiteSpace(cellCode))
+            if (string.IsNullOrWhiteSpace(materialBarcode) && string.IsNullOrWhiteSpace(cellCode))
             {
-                throw new UserFriendlyException(message: "物料码和库位不能同时为空!");
+                throw new UserFriendlyException(message: "物料条码和库位不能同时为空!");
             }
 
             Cell cell = null;
@@ -573,9 +573,9 @@ namespace WarehouseManagement.StockTasks
                 cell = await _cellRepository.FindByCodeAsync(cellCode.Trim());
                 if (cell == null)
                 {
-                    // 同时传入物料码时，以物料当前绑定的实际库位为准继续出库。
+                    // 同时传入物料条码时，以物料当前绑定的实际库位为准继续出库。
                     // 仅传库位码时仍需明确提示库位不存在。
-                    if (string.IsNullOrWhiteSpace(materialCode))
+                    if (string.IsNullOrWhiteSpace(materialBarcode))
                     {
                         throw new UserFriendlyException(message: "库位不存在!");
                     }
@@ -585,18 +585,18 @@ namespace WarehouseManagement.StockTasks
                 {
                     cell.EnsureCanStockOut();
 
-                    if (!string.IsNullOrWhiteSpace(materialCode) &&
-                        !string.Equals(cell.MaterialCode, materialCode.Trim(), StringComparison.Ordinal))
+                    if (!string.IsNullOrWhiteSpace(materialBarcode) &&
+                        !string.Equals(cell.MaterialCode, materialBarcode.Trim(), StringComparison.Ordinal))
                     {
-                        throw new UserFriendlyException(message: "输入库位中的物料码与输入物料码不一致，出库任务下发失败!");
+                        throw new UserFriendlyException(message: "输入库位中的物料条码与输入物料条码不一致，出库任务下发失败!");
                     }
 
-                    materialCode = cell.MaterialCode;
+                    materialBarcode = cell.MaterialCode;
                 }
             }
 
             CreateStockOutTaskDto stockTaskDto = new();
-            var box = await _materialBoxRepository.FindByMaterialBoxcodeAsync(materialCode.Trim());
+            var box = await _materialBoxRepository.FindByMaterialBoxcodeAsync(materialBarcode.Trim());
             if (box == null)
             {
                 throw new UserFriendlyException(message: "物料不存在!");

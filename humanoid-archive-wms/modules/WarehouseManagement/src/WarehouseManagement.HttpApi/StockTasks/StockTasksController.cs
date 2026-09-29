@@ -29,6 +29,24 @@ namespace WarehouseManagement.StockTasks
         }
         [HttpPost("page")]
         [SwaggerOperation(summary: "获取任务清单", Tags = new[] { "StockTasks" })]
+        public async Task<PagedResultDto<StockTaskDto>> GetTaskListAsync(TaskListQueryInput input)
+        {
+            return await _stockTaskAppService.GetPagingListAsync(new PagingStockTaskListInput
+            {
+                PageIndex = input.PageIndex,
+                PageSize = input.PageSize,
+                Filter = input.Filter,
+                StartCreationTime = input.StartCreationTime,
+                EndCreationTime = input.EndCreationTime,
+                TaskStatus = input.TaskStatus
+            });
+        }
+
+        /// <summary>
+        /// 管理页面使用的任务查询，保留计划过滤和隐藏结束任务的选项。
+        /// </summary>
+        [HttpPost("management/page")]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<PagedResultDto<StockTaskDto>> GetPagingListAsync(PagingStockTaskListInput input)
         {
             return await _stockTaskAppService.GetPagingListAsync(input); ;

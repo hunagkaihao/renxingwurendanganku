@@ -13,6 +13,8 @@ using WarehouseManagement.Cells;
 using System.Net.Http;
 using Lion.AbpPro.Extension.Customs.Http;
 using WarehouseManagement.MaterialBoxs;
+using WarehouseManagement.Material;
+using System.Linq;
 
 namespace WarehouseManagement.Cells
 {
@@ -30,16 +32,22 @@ namespace WarehouseManagement.Cells
         private readonly CellManager _cellManagement;
         private readonly IMaterialBoxRepository _materialBoxRepository;
         private readonly MaterialBoxManager _materialBoxManager;
+        /// <summary>
+        /// 基础物料仓储，用于库存查询区分基础编码与实物条码。
+        /// </summary>
+        private readonly IMaterialRepository _materialRepository;
         //private readonly IHttpClientFactory _httpClientFactory;
         public CellAppService(ICellRepository cellRepository,
             CellManager cellManagement,
             IMaterialBoxRepository materialBoxRepository,
-            MaterialBoxManager materialBoxManager)
+            MaterialBoxManager materialBoxManager,
+            IMaterialRepository materialRepository)
         {
             _cellRepository = cellRepository;
             _cellManagement = cellManagement;
             _materialBoxRepository = materialBoxRepository;
             _materialBoxManager = materialBoxManager;
+            _materialRepository = materialRepository;
             //_cellManager = cellManager;
             //GetPolicyName = CellStorePermissions.Cells.Default;
             //GetListPolicyName = CellStorePermissions.Cells.Default;
@@ -158,6 +166,35 @@ namespace WarehouseManagement.Cells
                 skipCount: input.SkipCount,
                 onlyHasMaterial: true);
             result.Items = ObjectMapper.Map<List<Cell>, List<CellDto>>(entities);
+            var barcodes = entities.Select(cell => cell.MaterialCode).Distinct().ToList();
+            var materialBoxQueryable = await _materialBoxRepository.GetQueryableAsync();
+            var materialQueryable = await _materialRepository.GetQueryableAsync();
+            var materialCodes = await AsyncExecuter.ToListAsync(materialBoxQueryable
+                .Where(box => barcodes.Contains(box.MaterialBoxBarcode))
+                .OrderBy(box => box.Id)
+                .Select(box => new
+                {
+                    Barcode = box.MaterialBoxBarcode,
+                    Code = (from detail in box.Details
+                            join material in materialQueryable on detail.MaterialId equals material.Id
+                            where !detail.IsDeleted
+                            orderby detail.Id
+                            select material.MaterialCode).FirstOrDefault()
+                }));
+            var codeByBarcode = materialCodes.GroupBy(item => item.Barcode)
+                .ToDictionary(group => group.Key, group => group.First().Code);
+            // 仅兼容与基础编码完全一致的旧条码，不截取条码猜测物料编码。
+            var legacyCodes = await AsyncExecuter.ToListAsync(materialQueryable
+                .Where(material => barcodes.Contains(material.MaterialCode))
+                .Select(material => material.MaterialCode));
+            foreach (var item in result.Items)
+            {
+                // 库位的 MaterialCode 实际保存实物条码，库存接口分别返回两种标识。
+                item.MaterialBarcode = item.MaterialCode;
+                item.MaterialCode = codeByBarcode.TryGetValue(item.MaterialBarcode, out var code) && code != null
+                    ? code
+                    : legacyCodes.Contains(item.MaterialBarcode) ? item.MaterialBarcode : null;
+            }
             return result;
         }
 

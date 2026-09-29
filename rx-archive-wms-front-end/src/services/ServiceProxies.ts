@@ -10863,7 +10863,8 @@ export class StockTasksServiceProxy extends ServiceProxyBase {
      * @return Success
      */
     page(body: PagingStockTaskListInput | undefined , cancelToken?: CancelToken | undefined): Promise<StockTaskDtoPagedResultDto> {
-        let url_ = this.baseUrl + "/StockTasks/page";
+        // 管理页面保留计划和任务结束状态筛选，使用管理查询路由。
+        let url_ = this.baseUrl + "/StockTasks/management/page";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
@@ -20186,7 +20187,8 @@ export interface ICreateStationDto {
 }
 
 export class ClientOutCellInput implements IClientOutCellInput {
-    materialCode!: string | undefined;
+    /** 物料条码，与库位至少填写一个。 */
+    materialBarcode!: string | undefined;
     cellCode!: string | undefined;
 
     constructor(data?: IClientOutCellInput) {
@@ -20200,7 +20202,7 @@ export class ClientOutCellInput implements IClientOutCellInput {
 
     init(_data?: any) {
         if (_data) {
-            this.materialCode = _data["materialCode"];
+            this.materialBarcode = _data["materialBarcode"];
             this.cellCode = _data["cellCode"];
         }
     }
@@ -20214,7 +20216,7 @@ export class ClientOutCellInput implements IClientOutCellInput {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["materialCode"] = this.materialCode;
+        data["materialBarcode"] = this.materialBarcode;
         data["cellCode"] = this.cellCode;
         return data;
     }
@@ -20228,7 +20230,7 @@ export class ClientOutCellInput implements IClientOutCellInput {
 }
 
 export interface IClientOutCellInput {
-    materialCode: string | undefined;
+    materialBarcode: string | undefined;
     cellCode: string | undefined;
 }
 

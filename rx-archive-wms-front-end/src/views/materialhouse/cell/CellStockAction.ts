@@ -38,6 +38,7 @@ export function buildCellInboundDefaults(cell: CellStockRecord) {
 export function buildCellOutboundInput(cell: CellStockRecord) {
   return {
     cellCode: cell.cellCode,
-    materialCode: cell.materialCode?.trim(),
+    // 库位清单的 materialCode 保存实物条码，出库接口使用明确的条码字段。
+    materialBarcode: cell.materialCode?.trim(),
   };
 }

@@ -54,7 +54,7 @@ namespace WarehouseManagement.Cells
         /// 第三方分页查询库位库存。
         /// </summary>
         /// <param name="input">分页参数及可选库位关键字</param>
-        /// <returns>库位及其物料码；物料码为空表示无货</returns>
+        /// <returns>有货库位、实物条码及基础物料编码；无法关联基础物料时编码为空</returns>
         Task<PagedResultDto<CellDto>> GetInventoryPagingListAsync(PagingInventoryCellInput input);
         Task<ListResultDto<CellDto>> GetCellListByZAsync(PagingCellListInput input);
         /// <summary>
