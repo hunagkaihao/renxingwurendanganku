@@ -18,9 +18,9 @@ namespace WarehouseManagement.Checks
         /// <summary>
         /// 将计划设置为执行
         /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        Task<bool> SetAsExecutingAsync(IdIntInput input);
+        /// <param name="input">待执行的盘点计划 ID。</param>
+        /// <returns>下达结果及计划、WCS 批次标识；失败沿用 HTTP 错误响应。</returns>
+        Task<CheckExecuteResultDto> SetAsExecutingAsync(IdIntInput input);
 
         Task<PagedResultDto<CheckDto>> GetPagingListAsync(PagingCheckListInput input);
 

@@ -157,13 +157,13 @@ namespace WarehouseManagement.Checks
         }
 
         /// <summary>
-        /// 执行盘点计划
+        /// 执行盘点计划，返回下达结果及计划、WCS 批次标识。
         /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
+        /// <param name="input">待执行的盘点计划 ID。</param>
+        /// <returns>WCS 接收任务且计划进入执行中后的结果，不代表盘点完成。</returns>
         /// <exception cref="UserFriendlyException"></exception>
         [AllowAnonymous]
-        public async Task<bool> SetAsExecutingAsync(IdIntInput input)
+        public async Task<CheckExecuteResultDto> SetAsExecutingAsync(IdIntInput input)
         {
             // 盘点期间不允许出入库任务改变现场物料位置，
             // 否则 WMS 冻结的账面快照会与扫描过程发生并发漂移。
@@ -219,7 +219,14 @@ namespace WarehouseManagement.Checks
                 mCheckMain.CheckStatus = CheckStatus.Executing;
                 await _checkManagement.UpdateAsync(mCheckMain, true);
 
-                return true;
+                return new CheckExecuteResultDto
+                {
+                    Success = true,
+                    Message = "盘点计划下达成功",
+                    CheckId = mCheckMain.Id,
+                    CheckCode = mCheckMain.CheckCode,
+                    BatchNo = mCheckMain.BatchNo
+                };
             }
             catch (Exception ex)
             {

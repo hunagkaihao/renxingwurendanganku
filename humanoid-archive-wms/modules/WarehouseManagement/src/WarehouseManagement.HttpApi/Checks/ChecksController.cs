@@ -24,8 +24,8 @@ namespace WarehouseManagement.Checks
             return await _checkAppService.CreateCheckByAreaAsync(input);
         }
         [HttpPost("checkExecute")]
-        [SwaggerOperation(summary: "执行计划", Tags = new[] { "Checks" })]
-        public async Task<bool> SetAsExecutingAsync(IdIntInput input)
+        [SwaggerOperation(summary: "执行盘点计划并返回下达结果（不代表盘点完成）", Tags = new[] { "Checks" })]
+        public async Task<CheckExecuteResultDto> SetAsExecutingAsync(IdIntInput input)
         {
             return await _checkAppService.SetAsExecutingAsync(input);
         }
