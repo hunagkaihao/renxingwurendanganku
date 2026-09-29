@@ -239,8 +239,8 @@
           setDetailTableData([
             {
               id: selectedMaterial.id,
-              materialCode:
-                selectedMaterial.materialBoxBarcode || selectedMaterial.stockBarcode,
+              // 明细中的物料编码来自基础物料，不能使用实物条码替代。
+              materialCode: selectedMaterial.materialCode,
               materialName: selectedMaterial.materialBoxName,
               materialType: selectedMaterial.cellModel,
               materialUnits: selectedMaterial.materialUnit,

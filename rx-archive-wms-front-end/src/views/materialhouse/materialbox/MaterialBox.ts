@@ -23,8 +23,13 @@ const [openFullLoading, closeFullLoading] = useLoading({
 
 export const tableColumns: BasicColumn[] = [
   {
-    title: t('物料码'),
+    title: t('物料条码'),
     dataIndex: 'materialBoxBarcode',
+  },
+  {
+    title: t('物料码'),
+    dataIndex: 'materialCode',
+    customRender: ({ text }) => text || '-',
   },
   {
     title: t('物料名称'),
@@ -102,8 +107,9 @@ export const cellModelSelectItem: SelectItem[] = [
 
 export const tableDetailColumns: BasicColumn[] = [
   {
-    title: t('物料编号'),
+    title: t('物料编码'),
     dataIndex: 'materialCode',
+    customRender: ({ text }) => text || '-',
   },
   {
     title: t('物料名称'),

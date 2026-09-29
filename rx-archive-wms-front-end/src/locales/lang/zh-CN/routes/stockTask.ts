@@ -2,7 +2,7 @@ export default {
   stockTaskManagement: '出入库管理',
   taskManagement: '出入库任务查询',
   taskHisManagement: '出入库记录查询',
-  stockTaskManagement_stockTaskBarcode: '容器条码',
+  stockTaskManagement_stockTaskBarcode: '物料条码',
   stockTaskManagement_manageTypeCode: '任务类型',
   stockTaskManagement_manageStatus: '任务状态',
   stockTaskManagement_creationTime: '创建时间',

@@ -17362,6 +17362,8 @@ export class MaterialBoxDto implements IArchiveBoxDto {
     lastModificationTime!: moment.Moment | undefined;
     lastModifierId!: string | undefined;
     materialBoxName!: string;
+    /** 关联的基础物料编码。 */
+    materialCode!: string | undefined;
     materialBoxBarcode!: string | undefined;
     materialBoxRfid!: string | undefined;
     stockBarcode!: string | undefined;
@@ -17407,6 +17409,7 @@ export class MaterialBoxDto implements IArchiveBoxDto {
             this.lastModificationTime = _data["lastModificationTime"] ? moment(_data["lastModificationTime"].toString()) : <any>undefined;
             this.lastModifierId = _data["lastModifierId"];
             this.materialBoxName = _data["materialBoxName"];
+            this.materialCode = _data["materialCode"];
             this.materialBoxBarcode = _data["materialBoxBarcode"];
             this.materialBoxRfid = _data["materialBoxRfid"];
             this.stockBarcode = _data["stockBarcode"];
@@ -17452,6 +17455,7 @@ export class MaterialBoxDto implements IArchiveBoxDto {
         data["lastModificationTime"] = this.lastModificationTime ? this.lastModificationTime.toISOString() : <any>undefined;
         data["lastModifierId"] = this.lastModifierId;
         data["materialBoxName"] = this.materialBoxName;
+        data["materialCode"] = this.materialCode;
         data["materialBoxBarcode"] = this.materialBoxBarcode;
         data["materialBoxRfid"] = this.materialBoxRfid;
         data["stockBarcode"] = this.stockBarcode;
@@ -17490,6 +17494,8 @@ export interface IArchiveBoxDto {
     lastModificationTime: moment.Moment | undefined;
     lastModifierId: string | undefined;
     materialBoxName: string;
+    /** 关联的基础物料编码。 */
+    materialCode: string | undefined;
     materialBoxBarcode: string | undefined;
     materialBoxRfid: string | undefined;
     stockBarcode: string | undefined;
@@ -20231,6 +20237,7 @@ export class CreateStockTaskDto implements ICreateStockTaskDto {
     storageBoxId!: number;
     stockBarcode!: string | undefined;
     materialBoxId!: number;
+    materialBarcode!: string | undefined;
     materialCode!: string | undefined;
     materialName!: string | undefined;
     materialType!: string | undefined;
@@ -20259,6 +20266,7 @@ export class CreateStockTaskDto implements ICreateStockTaskDto {
             this.storageBoxId = _data["storageBoxId"];
             this.stockBarcode = _data["stockBarcode"];
             this.materialBoxId = _data["materialBoxId"];
+            this.materialBarcode = _data["materialBarcode"];
             this.materialCode = _data["materialCode"];
             this.materialName = _data["materialName"];
             this.materialType = _data["materialType"];
@@ -20287,6 +20295,7 @@ export class CreateStockTaskDto implements ICreateStockTaskDto {
         data["storageBoxId"] = this.storageBoxId;
         data["stockBarcode"] = this.stockBarcode;
         data["materialBoxId"] = this.materialBoxId;
+        data["materialBarcode"] = this.materialBarcode;
         data["materialCode"] = this.materialCode;
         data["materialName"] = this.materialName;
         data["materialType"] = this.materialType;
@@ -20308,6 +20317,7 @@ export interface ICreateStockTaskDto {
     storageBoxId: number;
     stockBarcode: string | undefined;
     materialBoxId: number;
+    materialBarcode: string | undefined;
     materialCode: string | undefined;
     materialName: string | undefined;
     materialType: string | undefined;
@@ -29301,7 +29311,8 @@ export class StockTaskDto implements IStockTaskDto {
     lastModifierId!: string | undefined;
     taskTypeCode!: TaskType;
     taskTypeCodeString!: string | undefined;
-    materialBoxBarcode!: string | undefined;
+    materialBarcode!: string | undefined;
+    materialCode!: string | undefined;
     planTypeCode!: string | undefined;
     startCellId!: number;
     startCellCode!: string | undefined;
@@ -29330,7 +29341,8 @@ export class StockTaskDto implements IStockTaskDto {
             this.lastModifierId = _data["lastModifierId"];
             this.taskTypeCode = _data["taskTypeCode"];
             this.taskTypeCodeString = _data["taskTypeCodeString"];
-            this.materialBoxBarcode = _data["materialBoxBarcode"];
+            this.materialBarcode = _data["materialBarcode"];
+            this.materialCode = _data["materialCode"];
             this.planTypeCode = _data["planTypeCode"];
             this.startCellId = _data["startCellId"];
             this.startCellCode = _data["startCellCode"];
@@ -29359,7 +29371,8 @@ export class StockTaskDto implements IStockTaskDto {
         data["lastModifierId"] = this.lastModifierId;
         data["taskTypeCode"] = this.taskTypeCode;
         data["taskTypeCodeString"] = this.taskTypeCodeString;
-        data["materialBoxBarcode"] = this.materialBoxBarcode;
+        data["materialBarcode"] = this.materialBarcode;
+        data["materialCode"] = this.materialCode;
         data["planTypeCode"] = this.planTypeCode;
         data["startCellId"] = this.startCellId;
         data["startCellCode"] = this.startCellCode;
@@ -29381,7 +29394,8 @@ export interface IStockTaskDto {
     lastModifierId: string | undefined;
     taskTypeCode: TaskType;
     taskTypeCodeString: string | undefined;
-    materialBoxBarcode: string | undefined;
+    materialBarcode: string | undefined;
+    materialCode: string | undefined;
     planTypeCode: string | undefined;
     startCellId: number;
     startCellCode: string | undefined;
@@ -29621,6 +29635,8 @@ export class TaskHisDto implements ITaskHisDto {
     lastModifierId!: string | undefined;
     taskTypeCode!: TaskType;
     materialBarcode!: string | undefined;
+    /** 关联的基础物料编码。 */
+    materialCode!: string | undefined;
     startCellId!: number | undefined;
     startCellPosition!: string | undefined;
     endCellId!: number | undefined;
@@ -29645,6 +29661,7 @@ export class TaskHisDto implements ITaskHisDto {
             this.lastModifierId = _data["lastModifierId"];
             this.taskTypeCode = _data["taskTypeCode"];
             this.materialBarcode = _data["materialBarcode"];
+            this.materialCode = _data["materialCode"];
             this.startCellId = _data["startCellId"];
             this.startCellPosition = _data["startCellPosition"];
             this.endCellId = _data["endCellId"];
@@ -29669,6 +29686,7 @@ export class TaskHisDto implements ITaskHisDto {
         data["lastModifierId"] = this.lastModifierId;
         data["taskTypeCode"] = this.taskTypeCode;
         data["materialBarcode"] = this.materialBarcode;
+        data["materialCode"] = this.materialCode;
         data["startCellId"] = this.startCellId;
         data["startCellPosition"] = this.startCellPosition;
         data["endCellId"] = this.endCellId;
@@ -29686,6 +29704,8 @@ export interface ITaskHisDto {
     lastModifierId: string | undefined;
     taskTypeCode: TaskType;
     materialBarcode: string | undefined;
+    /** 关联的基础物料编码。 */
+    materialCode: string | undefined;
     startCellId: number | undefined;
     startCellPosition: string | undefined;
     endCellId: number | undefined;

@@ -9,6 +9,12 @@ namespace WarehouseManagement.StockTasks.Dto
     public class CreateStockInTaskDto
     {
         /// <summary>
+        /// 客户填写的实物条码，例如 ML010033-20260929010；用于区分同种物料并扫码执行任务。
+        /// </summary>
+        [Required]
+        public string MaterialBarcode { get; set; }
+
+        /// <summary>
         /// 基础物料编码。
         /// </summary>
         [Required]

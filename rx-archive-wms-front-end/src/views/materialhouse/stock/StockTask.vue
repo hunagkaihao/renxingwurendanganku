@@ -126,7 +126,8 @@
             message.error("请选择等待执行的入库任务")
             return
           }
-          const materialBoxBarcode = selectedTask.materialBoxBarcode;
+          // 新预约使用实物条码；旧预约只有基础物料码时沿用原扫码标识。
+          const materialBoxBarcode = selectedTask.materialBarcode || selectedTask.materialCode;
           if (!materialBoxBarcode) {
             message.error("所选入库任务缺少物料码")
             return

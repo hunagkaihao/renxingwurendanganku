@@ -17,6 +17,10 @@ namespace WarehouseManagement.TaskHiss.Dto
         /// </summary>
         public string MaterialBarcode { get; set; }
         /// <summary>
+        /// 关联的基础物料编码；无法确定关联时为空。
+        /// </summary>
+        public string MaterialCode { get; set; }
+        /// <summary>
         /// 开始库位ID
         /// </summary>
         public int? StartCellId { get; set; }

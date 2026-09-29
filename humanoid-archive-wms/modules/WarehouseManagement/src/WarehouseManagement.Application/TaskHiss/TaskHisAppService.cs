@@ -86,13 +86,28 @@ namespace WarehouseManagement.TaskHiss
                     .Skip(input.SkipCount)
                     .Take(input.PageSize);
 
-            // 转换为列表
-            var queryResult = await AsyncExecuter.ToListAsync(query);
+            var materialBoxQueryable = await _materialBoxRepository.GetQueryableAsync();
+            var materialQueryable = await _archiveRepository.GetQueryableAsync();
+            // 分页后关联基础物料编码，保留无法关联物料的历史记录。
+            var queryResult = await AsyncExecuter.ToListAsync(query.Select(x => new
+            {
+                x.taskHis,
+                materialCode = (from box in materialBoxQueryable
+                                from detail in box.Details
+                                join material in materialQueryable on detail.MaterialId equals material.Id
+                                where box.MaterialBoxBarcode == x.taskHis.MaterialBarcode && !detail.IsDeleted
+                                orderby box.Id, detail.Id
+                                select material.MaterialCode).FirstOrDefault()
+                    // 兼容旧记录直接使用基础编码作条码的情况，不截取条码猜测编码。
+                    ?? materialQueryable.Where(material => material.MaterialCode == x.taskHis.MaterialBarcode)
+                        .Select(material => material.MaterialCode).FirstOrDefault()
+            }));
 
             // 返回对象数据
             var taskHisDtos = queryResult.Select(x =>
             {
                 var taskHisDtos = ObjectMapper.Map<TaskHis, TaskHisDto>(x.taskHis);
+                taskHisDtos.MaterialCode = x.materialCode;
                 return taskHisDtos;
             }).ToList();
 
@@ -107,18 +122,34 @@ namespace WarehouseManagement.TaskHiss
         {
             var taskHisQueryable = await _taskHisRepository.GetQueryableAsync();
             var materialBoxQueryable = await _materialBoxRepository.GetQueryableAsync();
+            var materialQueryable = await _archiveRepository.GetQueryableAsync();
             var query = from taskHis in taskHisQueryable
                         join materialBox in materialBoxQueryable
                             on taskHis.MaterialBarcode equals materialBox.MaterialBoxBarcode
                         where taskHis.Id == input.TaskHisId
-                        select new { taskHis, materialBox };
+                        select new
+                        {
+                            taskHis,
+                            materialBox,
+                            // 实物条码与基础物料编码不同，优先通过现有物料明细关系取编码。
+                            materialCode = (from detail in materialBox.Details
+                                            join material in materialQueryable on detail.MaterialId equals material.Id
+                                            where !detail.IsDeleted
+                                            orderby detail.Id
+                                            select material.MaterialCode).FirstOrDefault()
+                                // 兼容旧预约直接使用基础编码作条码的记录，不截取或猜测条码。
+                                ?? materialQueryable
+                                    .Where(material => material.MaterialCode == materialBox.MaterialBoxBarcode)
+                                    .Select(material => material.MaterialCode)
+                                    .FirstOrDefault()
+                        };
 
             var queryResult = await AsyncExecuter.ToListAsync(query);
             var taskHisDetailDtos = queryResult.Select(x => new TaskHisDetailDto
             {
                 Id = x.taskHis.Id,
                 StockBarcode = x.taskHis.MaterialBarcode,
-                GoodsCode = x.materialBox.MaterialBoxBarcode,
+                GoodsCode = x.materialCode,
                 GoodsName = x.materialBox.MaterialBoxName,
                 GoodsSpec = x.materialBox.CellModel,
                 GoodsUnits = x.materialBox.MaterialUnit,

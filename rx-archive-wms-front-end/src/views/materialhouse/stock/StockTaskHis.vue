@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <a-row style="height: 50%">
+  <div class="task-history-page">
+    <div>
       <BasicTable
         @register="registerTable"
         @selection-change="onSelectChange"
@@ -9,10 +9,10 @@
       >
         <!-- <template #toolbar> </template> -->
       </BasicTable>
-    </a-row>
-    <a-row style="height: 50%; margin-left: 15px; margin-right: 15px">
+    </div>
+    <div class="task-history-detail">
       <BasicTable @register="registerDetailTable" size="small" />
-    </a-row>
+    </div>
   </div>
 </template>
 
@@ -50,12 +50,13 @@
         showTableSetting: true,
         useSearchForm: true,
         bordered: true,
-        canResize: true,
+        // 主从表按内容撑开，避免按视口剩余空间计算时挤占明细区域。
+        canResize: false,
+        scroll: { y: 300 },
         showIndexColumn: true,
         rowKey: 'id', //设置选择项的key
         rowSelection: { type: 'radio' }, // 可尝试其它设置
         clearSelectOnPageChange: true, //换页时清空行选择
-        maxHeight: 300,
 
       });
 
@@ -80,8 +81,9 @@
         showTableSetting: true,
         showIndexColumn: true,
         bordered: true,
-        maxHeight: 300,
-        canResize: true,
+        // 明细表始终保留内容高度，多条记录在表内滚动。
+        canResize: false,
+        scroll: { y: 300 },
 
       });
       async function getPageDetaiTableListAsync(params) {
@@ -103,14 +105,13 @@
     },
   });
 </script>
-<style lang="less">
-  @border-color: #cecece4d;
+<style lang="less" scoped>
+  .task-history-detail {
+    margin: 0 15px;
+  }
 
-  @prefix-cls: ~'@{namespace}-basic-table';
-
-  .@{prefix-cls} {
-    .ant-table-body {
-      height: 400px;
-    }
+  // 仅约束本页，少量数据不预留固定空白，明细不会被压缩为零高度。
+  .task-history-page :deep(.ant-table-body) {
+    height: auto;
   }
 </style>

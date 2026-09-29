@@ -147,6 +147,45 @@ namespace WarehouseManagement.StockTasks
                 .Select(stockTask => ObjectMapper.Map<StockTask, StockTaskDto>(stockTask))
                 .ToList();
 
+            // 分页后批量取得实物与基础物料的关联，不把条码截断当作物料编码。
+            var barcodes = stockTaskDtos.Select(task => task.MaterialBoxBarcode).Distinct().ToList();
+            if (barcodes.Count > 0)
+            {
+                var materialQuery = await _materialRepository.GetQueryableAsync();
+                var boxQuery = await _materialBoxRepository.GetQueryableAsync();
+                var materialCodes = await AsyncExecuter.ToListAsync(
+                    from box in boxQuery
+                    from detail in box.Details
+                    join material in materialQuery on detail.MaterialId equals material.Id
+                    where barcodes.Contains(box.MaterialBoxBarcode) && !detail.IsDeleted
+                    select new { box.Id, box.MaterialBoxBarcode, material.MaterialCode });
+                var codeByBarcode = materialCodes.OrderByDescending(item => item.Id)
+                    .GroupBy(item => item.MaterialBoxBarcode)
+                    .ToDictionary(group => group.Key, group => group.First().MaterialCode);
+                var legacyMaterialCodes = await AsyncExecuter.ToListAsync(materialQuery
+                    .Where(material => barcodes.Contains(material.MaterialCode))
+                    .Select(material => material.MaterialCode));
+                foreach (var task in stockTaskDtos)
+                {
+                    if (task.MaterialBoxBarcode != null &&
+                        codeByBarcode.TryGetValue(task.MaterialBoxBarcode, out var code))
+                    {
+                        task.MaterialCode = code;
+                        task.MaterialBarcode = task.MaterialBoxBarcode;
+                    }
+                    else if (legacyMaterialCodes.Contains(task.MaterialBoxBarcode))
+                    {
+                        // 旧预约只有基础物料码，不能把它当作客户填写的实物条码展示。
+                        task.MaterialCode = task.MaterialBoxBarcode;
+                        task.MaterialBarcode = null;
+                    }
+                    else
+                    {
+                        task.MaterialBarcode = task.MaterialBoxBarcode;
+                    }
+                }
+            }
+
             return new PagedResultDto<StockTaskDto>(totalCount, stockTaskDtos);
         }
 
@@ -305,6 +344,16 @@ namespace WarehouseManagement.StockTasks
         [UnitOfWork]
         public async Task<StockTaskDto> CreateWCSIn(CreateStockInTaskDto input)
         {
+            if (string.IsNullOrWhiteSpace(input.MaterialBarcode))
+            {
+                throw new UserFriendlyException("物料条码不能为空");
+            }
+            var materialBarcode = input.MaterialBarcode.Trim();
+            if (await _materialBoxRepository.FindByMaterialBoxcodeAsync(materialBarcode) != null)
+            {
+                throw new UserFriendlyException("物料条码已存在，请勿重复预约");
+            }
+
             if (!DateTime.TryParseExact(
                     input.MaterialCreateTime,
                     "yyyy-MM-dd HH:mm:ss",
@@ -331,7 +380,7 @@ namespace WarehouseManagement.StockTasks
                     throw new UserFriendlyException("目标库位不存在");
                 }
 
-                targetCell.EnsureCanStockIn(materialCode);
+                targetCell.EnsureCanStockIn(materialBarcode);
                 if (!string.Equals(targetCell.CellModel?.Trim(), material.MaterialType?.Trim(), StringComparison.Ordinal))
                 {
                     throw new UserFriendlyException("目标库位规格与物料类型不一致");
@@ -339,9 +388,9 @@ namespace WarehouseManagement.StockTasks
             }
 
             // 每次预约按基础物料信息创建容器记录，物料属性不接受客户端传入值。
-            var materialBoxObj = new MaterialBox(material.MaterialName, materialCode)
+            var materialBoxObj = new MaterialBox(material.MaterialName, materialBarcode)
             {
-                MaterialBoxBarcode = materialCode,
+                MaterialBoxBarcode = materialBarcode,
                 CellModel = material.MaterialType,
                 MaterialUnit = material.MaterialUnit,
                 RetentionPeriod = (material.ValidityDays ?? 0).ToString(CultureInfo.InvariantCulture),
@@ -349,6 +398,8 @@ namespace WarehouseManagement.StockTasks
                 MaterialInDate = materialCreateTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture),
                 CreationTime = materialCreateTime
             };
+            // 使用现有容器明细保存基础物料关联；实物条码用于后续扫码和出入库。
+            materialBoxObj.AddDetail(0, material.Id);
             materialBoxObj = await _materialBoxRepository.InsertAsync(materialBoxObj, true);
 
             // 设置任务类型
@@ -362,7 +413,10 @@ namespace WarehouseManagement.StockTasks
             }
             
             // 放回结果给前端
-            return base.ObjectMapper.Map<StockTask, StockTaskDto>(stockTask);
+            var result = base.ObjectMapper.Map<StockTask, StockTaskDto>(stockTask);
+            result.MaterialCode = materialCode;
+            result.MaterialBarcode = materialBarcode;
+            return result;
         }
         /// <summary>
         /// 一体机扫描物料条码分配库位下发入库任务

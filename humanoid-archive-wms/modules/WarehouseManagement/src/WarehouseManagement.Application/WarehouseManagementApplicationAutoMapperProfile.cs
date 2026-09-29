@@ -75,6 +75,7 @@ public class WarehouseManagementApplicationAutoMapperProfile : Profile
             .ForMember(dest => dest.TaskTypeCode, opt => opt.MapFrom(src => src.TaskTypeCode))
             .ForMember(dest => dest.TaskStatus, opt => opt.MapFrom(src => src.TaskStatus))
             .ForMember(dest => dest.MaterialBoxBarcode, opt => opt.MapFrom(src => src.MaterialBoxBarcode))
+            .ForMember(dest => dest.MaterialBarcode, opt => opt.MapFrom(src => src.MaterialBoxBarcode))
             .ForMember(dest => dest.StartCellId, opt => opt.MapFrom(src => src.StartCellId))
             .ForMember(dest => dest.StartCellCode, opt => opt.MapFrom(src => src.StartCellCode))
             .ForMember(dest => dest.EndCellId, opt => opt.MapFrom(src => src.EndCellId))

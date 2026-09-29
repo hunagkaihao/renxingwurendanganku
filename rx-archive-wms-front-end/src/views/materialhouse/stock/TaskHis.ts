@@ -106,6 +106,11 @@ export const tableColumns: BasicColumn[] = [
     dataIndex: 'materialBarcode',
   },
   {
+    title: t('物料编码'),
+    dataIndex: 'materialCode',
+    customRender: ({ text }) => text || '-',
+  },
+  {
     title: t('routes.stockTask.stockTaskManagement_manageTypeCode'),
     dataIndex: 'taskTypeCode',
     customRender: ({ text }) => {
@@ -138,8 +143,9 @@ export const tableColumns: BasicColumn[] = [
 
 export const tableDetailColumns: BasicColumn[] = [
   {
-    title: t('物料编号'),
+    title: t('物料编码'),
     dataIndex: 'goodsCode',
+    customRender: ({ text }) => text || '-',
   },
   {
     title: t('物料名称'),

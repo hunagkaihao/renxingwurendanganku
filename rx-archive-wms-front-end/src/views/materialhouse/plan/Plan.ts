@@ -102,7 +102,8 @@ export const planDetailColumns: BasicColumn[] = [
   },
   {
     title: t('物料码'),
-    dataIndex: 'materialBoxBarcode',
+    dataIndex: 'materialBarcode',
+    customRender: ({ record }) => record.materialBarcode || record.materialCode || '-',
   },
   {
     title: t('起始库位'),

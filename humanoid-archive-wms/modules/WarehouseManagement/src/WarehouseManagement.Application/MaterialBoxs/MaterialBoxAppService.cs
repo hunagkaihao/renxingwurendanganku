@@ -16,6 +16,10 @@ namespace WarehouseManagement.MaterialBoxs
     {
         private readonly MaterialBoxManager _materialBoxManager;
         private readonly IMaterialBoxRepository _materialBoxRepository;
+        /// <summary>
+        /// 基础物料仓储，用于分页展示实物对应的物料编码。
+        /// </summary>
+        private readonly IMaterialRepository _materialRepository;
         private readonly ICellRepository _cellRepository;
         private readonly RfidCodeManager _rfidManager;
         private readonly MaterialManager _materialManager;
@@ -27,6 +31,7 @@ namespace WarehouseManagement.MaterialBoxs
             , MaterialManager materialManager
             , MaterialBoxDetailManager materialBoxDetailManager
             , ICellRepository cellRepository
+            , IMaterialRepository materialRepository
         )
         {
             _materialBoxManager = materialBoxManager;
@@ -35,6 +40,7 @@ namespace WarehouseManagement.MaterialBoxs
             _materialManager = materialManager;
             _materialBoxDetailManager = materialBoxDetailManager;
             _cellRepository = cellRepository;
+            _materialRepository = materialRepository;
         }
 
         public async Task<MaterialBoxDto> CreateAsync(CreateMaterialBoxDto createMaterialBox)
@@ -140,10 +146,26 @@ namespace WarehouseManagement.MaterialBoxs
             var pageIndex = input.PageIndex > 0 ? input.PageIndex : 1;
             var skipCount = (pageIndex - 1) * pageSize;
             var totalCount = await AsyncExecuter.CountAsync(query);
-            var items = await AsyncExecuter.ToListAsync(query
+            var materialQueryable = await _materialRepository.GetQueryableAsync();
+            var pageResults = await AsyncExecuter.ToListAsync(query
                 .OrderByDescending(archiveBox => archiveBox.Id)
                 .Skip(skipCount)
-                .Take(pageSize));
+                .Take(pageSize)
+                .Select(archiveBox => new
+                {
+                    Box = archiveBox,
+                    // 通过实物明细关联基础物料，不能将实物条码直接显示为物料编码。
+                    MaterialCode = (from detail in archiveBox.Details
+                                    join material in materialQueryable on detail.MaterialId equals material.Id
+                                    where !detail.IsDeleted
+                                    orderby detail.Id
+                                    select material.MaterialCode).FirstOrDefault()
+                        // 旧数据仅在条码与已有基础物料编码完全相同时兼容读取。
+                        ?? materialQueryable.Where(material => material.MaterialCode == archiveBox.MaterialBoxBarcode)
+                            .Select(material => material.MaterialCode).FirstOrDefault()
+                }));
+            var items = pageResults.Select(item => item.Box).ToList();
+            var materialCodeById = pageResults.ToDictionary(item => item.Box.Id, item => item.MaterialCode);
             var cellIds = items.Select(archiveBox => archiveBox.CellId).Distinct().ToList();
             var cells = cellIds.Count == 0
                 ? new List<Cell>()
@@ -153,6 +175,7 @@ namespace WarehouseManagement.MaterialBoxs
             {
                 Id = archiveBox.Id,
                 MaterialBoxBarcode = archiveBox.MaterialBoxBarcode,
+                MaterialCode = materialCodeById[archiveBox.Id],
                 MaterialBoxName = archiveBox.MaterialBoxName,
                 CellModel = archiveBox.CellModel,
                 CellCode = cellCodeById.TryGetValue(archiveBox.CellId, out var cellCode) ? cellCode : null,

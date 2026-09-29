@@ -9,6 +9,10 @@ namespace WarehouseManagement.MaterialBoxs.Dto
     {
         public int Id { get; set; }
         public string MaterialBoxBarcode { get; set; }
+        /// <summary>
+        /// 关联的基础物料编码；无法确定关联时为空，不使用实物条码替代。
+        /// </summary>
+        public string MaterialCode { get; set; }
         public string MaterialBoxName { get; set; }
         public string CellModel { get; set; }
         /// <summary>

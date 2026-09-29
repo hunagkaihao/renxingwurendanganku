@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 using Volo.Abp.Application.Dtos;
 
 namespace WarehouseManagement.StockTasks.Dto
@@ -47,9 +48,18 @@ namespace WarehouseManagement.StockTasks.Dto
         /// </summary>
         public string TaskStatusString { get; set; }
         /// <summary>
-        /// 物料条码
+        /// 内部任务映射使用的实物条码；对外统一通过 MaterialBarcode 返回。
         /// </summary>
+        [JsonIgnore]
         public string MaterialBoxBarcode { get; set; }
+        /// <summary>
+        /// 客户填写的实物条码；仅有基础物料码的旧预约返回空值。
+        /// </summary>
+        public string MaterialBarcode { get; set; }
+        /// <summary>
+        /// 实物关联的基础物料编码，同种物料可共用该编码。
+        /// </summary>
+        public string MaterialCode { get; set; }
         /// <summary>
         /// 计划ID
         /// </summary>

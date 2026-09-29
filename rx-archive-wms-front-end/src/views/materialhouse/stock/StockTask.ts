@@ -144,13 +144,17 @@ export const tableColumns: BasicColumn[] = [
     dataIndex: 'id',
   },
   {
-    title: t('物料码'),
-    dataIndex: 'materialBoxBarcode',
-    width: 150,
+    title: t('物料条码'),
+    dataIndex: 'materialBarcode',
+    width: 220,
     defaultHidden: false,
-    customRender: ({ record }) => {
-      return record.materialBoxBarcode || record.stockBarcode || '-';
-    },
+    customRender: ({ text }) => text || '-',
+  },
+  {
+    title: t('物料编码'),
+    dataIndex: 'materialCode',
+    width: 150,
+    customRender: ({ text }) => text || '-',
   },
   {
     title: t('routes.stockTask.stockTaskManagement_manageTypeCode'),
@@ -288,7 +292,7 @@ export const createFormSchema: FormSchema[] = [
     ifShow: false,
   },
   {
-    field: 'materialCode',
+    field: 'materialBarcode',
     component: 'Input',
     label: '物料条码',
     labelWidth: 100,
@@ -298,7 +302,12 @@ export const createFormSchema: FormSchema[] = [
     },
     componentProps: {
       autocomplete: 'off',
+      placeholder: '例如：ML010033-20260929010',
     },
+  },
+  {
+    field: 'materialCode', component: 'Input', label: '物料码', labelWidth: 100, required: true,
+    colProps: { span: 12 }, componentProps: { autocomplete: 'off' },
   },
   {
     field: 'creatorUserCode', component: 'Input', label: '创建用户 ID', labelWidth: 100, required: true,

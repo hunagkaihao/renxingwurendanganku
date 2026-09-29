@@ -1,4 +1,12 @@
 import { defHttp } from '/@/utils/http/axios';
+import { useGlobSetting } from '/@/hooks/setting';
+
+// 物料路由自带 /api；兼容生产基础地址 /api 和开发环境的完整主机地址。
+const materialRequestOptions = {
+  apiUrl: useGlobSetting().apiUrl.replace(/\/api\/?$/, ''),
+  joinPrefix: false,
+  isTransformResponse: false,
+};
 
 /** 物料基础信息。 */
 export interface MaterialDto {
@@ -42,17 +50,17 @@ enum Api {
 export const getMaterialPage = (params: PagingMaterialListInput) =>
   defHttp.post<MaterialPagedResultDto>(
     { url: Api.Page, params },
-    { isTransformResponse: false }
+    materialRequestOptions
   );
 
 /** 新增物料基础信息。 */
 export const createMaterial = (params: CreateMaterialDto) =>
-  defHttp.post<MaterialDto>({ url: Api.Create, params }, { isTransformResponse: false });
+  defHttp.post<MaterialDto>({ url: Api.Create, params }, materialRequestOptions);
 
 /** 更新物料基础信息。 */
 export const updateMaterial = (params: CreateMaterialDto) =>
-  defHttp.post<MaterialDto>({ url: Api.Update, params }, { isTransformResponse: false });
+  defHttp.post<MaterialDto>({ url: Api.Update, params }, materialRequestOptions);
 
 /** 删除指定物料。 */
 export const deleteMaterial = (id: number) =>
-  defHttp.post<void>({ url: Api.Delete, params: { id } }, { isTransformResponse: false });
+  defHttp.post<void>({ url: Api.Delete, params: { id } }, materialRequestOptions);

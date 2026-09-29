@@ -64,6 +64,10 @@ public static class WarehouseManagementDbContextModelCreatingExtensions
         builder.Entity<MaterialBox>(b =>
         {
             b.ToTable(WarehouseManagementDbProperties.DbTablePrefix + nameof(MaterialBox), WarehouseManagementDbProperties.DbSchema);
+            // 数据库统一使用 MaterialBarcode，保留现有实体属性以兼容内部业务调用。
+            b.Property(q => q.MaterialBoxBarcode).HasColumnName("MaterialBarcode");
+            // 数据库统一使用 MaterialBarcode，保留现有实体属性以兼容内部业务调用。
+            b.Property(q => q.MaterialBoxBarcode).HasColumnName("MaterialBarcode");
             b.HasIndex(q => q.CreationTime);
             b.Property(q => q.MaterialOutTime).HasColumnType("datetime");
             b.ConfigureByConvention();
@@ -103,6 +107,10 @@ public static class WarehouseManagementDbContextModelCreatingExtensions
         builder.Entity<StockTask>(b =>
         {
             b.ToTable(WarehouseManagementDbProperties.DbTablePrefix + nameof(StockTask), WarehouseManagementDbProperties.DbSchema);
+            // 实物条码列已统一命名，任务业务仍通过原实体属性读写。
+            b.Property(q => q.MaterialBoxBarcode).HasColumnName("MaterialBarcode");
+            // 实物条码列已统一命名，任务业务仍通过原实体属性读写。
+            b.Property(q => q.MaterialBoxBarcode).HasColumnName("MaterialBarcode");
             b.HasIndex(q => q.CreationTime);
             b.Property(b => b.TaskTypeCode).HasColumnType("varchar(20)");
             b.Property(b => b.TaskStatus).HasColumnType("varchar(20)");
