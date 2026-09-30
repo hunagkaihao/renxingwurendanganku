@@ -77,9 +77,10 @@ namespace Wcs.Jobs.JobCmds
 
             //获取档案盒编号
             DispatchTask task = _taskManager.GetDispatchTaskByTaskIdAsync(Owner.MyJob.TaskId).Result;
-            string palletCode = task.PlateCode; //对于无人库来讲，该托盘号其实为档案盒编号，是数字
-            if (!int.TryParse(palletCode, out int iPalletCode))
-                return new OpResultInDispatchSvc() { IsOK = false, Message = $"搬运的档案盒编号为{palletCode}，无法转换为int" };
+            string palletCode = task.PlateCode; // 保留 WCS 中的原始档案盒编号。
+            // 当前 PLC 不使用物料码；不能转换为 int 的编号下发 0，数字码沿用原有编码。
+            // 后续传输完整字符串需配套调整 PLC 协议，此处暂时保留 4 字节字段。
+            int.TryParse(palletCode, out int iPalletCode);
 
             ushort hightCode = (ushort)((iPalletCode & 0xffff0000) >> 16);
             ushort lowCode = (ushort)(iPalletCode & 0xffff);
