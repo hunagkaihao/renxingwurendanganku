@@ -27,7 +27,7 @@ export const tableColumns: BasicColumn[] = [
     dataIndex: 'materialBoxBarcode',
   },
   {
-    title: t('物料码'),
+    title: t('物料编码'),
     dataIndex: 'materialCode',
     customRender: ({ text }) => text || '-',
   },

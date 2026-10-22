@@ -146,7 +146,7 @@ export const tableColumns: BasicColumn[] = [
     dataIndex: 'cellName',
   },
   {
-    title: t('物料码'),
+    title: t('物料条码'),
     dataIndex: 'materialCode',
     customRender: ({ text }) => (text && String(text).trim() ? text : '-'),
   },
