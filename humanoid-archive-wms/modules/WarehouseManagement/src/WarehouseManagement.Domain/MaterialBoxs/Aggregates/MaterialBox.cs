@@ -33,7 +33,11 @@ namespace WarehouseManagement.MaterialBoxs.Aggregates
             CellId = cellId;
             if (cellId > 0)
             {
-                MaterialInDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                // 临时出库后回库不重置有效期起算时间，避免反复回库延长物料有效期。
+                if (!MaterialOutTime.HasValue)
+                {
+                    MaterialInDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                }
                 MaterialOutTime = null;
                 BorrowFlag = 0;
             }

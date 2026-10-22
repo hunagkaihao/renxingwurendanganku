@@ -24801,9 +24801,9 @@ export enum TaskStatus {
 
 export enum TaskType {
     NPFullStockIn = 0,
-    HPFullStockIn = 1,
-    NPSortStockOut = 2,
-    HPSortStockOut = 3,
+    HPFullStockIn = 3,
+    NPSortStockOut = 1,
+    HPSortStockOut = 2,
     NPSupllyStockIn = 4,
     HPSupplyStockIn = 5,
     FullSotckUp = 6,
@@ -24813,9 +24813,11 @@ export enum TaskType {
     SealedGoodsDown = 10,
     NpFullStockOut = 11,
     HPBatchStockIn = 12,
-    HpAnnualCheckDown = 13,
-    SurplusIn = 14,
-    LossOut = 15,
+    /** 批量出库，与后端任务类型编码一致。 */
+    HPBatchStockOut = 13,
+    HpAnnualCheckDown = 14,
+    SurplusIn = 15,
+    LossOut = 16,
 }
 
 export class MethodParameterApiDescriptionModel implements IMethodParameterApiDescriptionModel {

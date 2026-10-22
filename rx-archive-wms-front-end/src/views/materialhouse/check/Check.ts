@@ -541,44 +541,57 @@ export const blindBoxFormSchema: FormSchema[] = [
   },
 ];
 
+/** 盘点区域按排、列、层填写，0 表示该坐标方向全部库位。 */
 export const createCheckBatFormSchema: FormSchema[] =[
   {
     field: 'cell_x',
-    component: 'Input',
-    label: t('列数'),
+    component: 'InputNumber',
+    label: t('排号'),
     labelWidth: 85,
     required: true,
+    defaultValue: 0,
     colProps: {
       span: 12,
     },
     componentProps: {
-      autocomplete: 'off',
+      min: 0,
+      max: 2147483647,
+      precision: 0,
+      placeholder: t('0 表示全部排'),
     },
   },
   {
     field: 'cell_y',
-    component: 'Input',
-    label: t('层数'),
+    component: 'InputNumber',
+    label: t('列号'),
     labelWidth: 85,
     required: true,
+    defaultValue: 0,
     colProps: {
       span: 12,
     },
     componentProps: {
-      autocomplete: 'off',
+      min: 0,
+      max: 2147483647,
+      precision: 0,
+      placeholder: t('0 表示全部列'),
     },
   },
   {
     field: 'cell_z',
-    component: 'Input',
-    label: t('排数'),
+    component: 'InputNumber',
+    label: t('层号'),
     labelWidth: 85,
     required: true,
+    defaultValue: 0,
     colProps: {
       span: 12,
     },
     componentProps: {
-      autocomplete: 'off',
+      min: 0,
+      max: 2147483647,
+      precision: 0,
+      placeholder: t('0 表示全部层'),
     },
   }
 ]
@@ -777,7 +790,7 @@ export async function Complete(
   await _checksServiceProxy.checkComplete(params);
   message.success(t('common.operationSuccess'));
 }
-//批量创建cell
+/** 创建指定区域的待下达盘点计划；坐标为非负整数，0 表示全部。 */
 export async function createCheckBatAsync({
   request,
   changeOkLoading,
@@ -786,12 +799,22 @@ export async function createCheckBatAsync({
   resetFields,
 }) {
   changeOkLoading(true);
-  await validate();
-  var param = new CreateCheckDto();
-  param.areaCode = request.cell_z+'-'+ request.cell_x +'-'+ request.cell_y
-  await _checksServiceProxy.createWithArea(param);
-  changeOkLoading(false);
-  message.success(t('common.operationSuccess'));
-  resetFields();
-  closeModal();
+  try {
+    await validate();
+    // 与后端 x-y-z（排-列-层）保持一致，不能把空值自动转换成通配的 0。
+    const coordinates = [request.cell_x, request.cell_y, request.cell_z];
+    if (coordinates.some((value) =>
+      typeof value !== 'number' || !Number.isInteger(value) || value < 0 || value > 2147483647
+    )) {
+      throw new Error(t('排号、列号、层号必须填写 0 或正整数，0 表示全部'));
+    }
+    const param = new CreateCheckDto();
+    param.areaCode = coordinates.join('-');
+    await _checksServiceProxy.createWithArea(param);
+    message.success(t('common.operationSuccess'));
+    resetFields();
+    closeModal();
+  } finally {
+    changeOkLoading(false);
+  }
 }

@@ -28,7 +28,8 @@ export interface CreateMaterialDto extends Omit<MaterialDto, 'id'> {
 /** 物料分页查询条件。 */
 export interface PagingMaterialListInput {
   filter?: string;
-  skipCount?: number;
+  /** 从 1 开始的页码；与后端 PagingBase 及 BasicTable 的分页参数一致。 */
+  pageIndex?: number;
   pageSize?: number;
   [key: string]: unknown;
 }

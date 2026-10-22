@@ -349,10 +349,7 @@ namespace WarehouseManagement.StockTasks
                 throw new UserFriendlyException("物料条码不能为空");
             }
             var materialBarcode = input.MaterialBarcode.Trim();
-            if (await _materialBoxRepository.FindByMaterialBoxcodeAsync(materialBarcode) != null)
-            {
-                throw new UserFriendlyException("物料条码已存在，请勿重复预约");
-            }
+            var existingBox = await _materialBoxRepository.FindByMaterialBoxcodeAsync(materialBarcode);
 
             if (!DateTime.TryParseExact(
                     input.MaterialCreateTime,
@@ -371,6 +368,21 @@ namespace WarehouseManagement.StockTasks
                 throw new UserFriendlyException("基础物料信息无此物料");
             }
 
+            if (existingBox != null)
+            {
+                if (existingBox.CellId > 0 || !existingBox.MaterialOutTime.HasValue)
+                {
+                    throw new UserFriendlyException("物料条码已存在且未完成出库，请勿重复预约");
+                }
+
+                // 回库沿用原实物及基础物料关联，不能用同一条码改绑为其他物料。
+                var materialDetails = existingBox.Details.Where(detail => !detail.IsDeleted).ToList();
+                if (materialDetails.Count == 0 || materialDetails.Any(detail => detail.MaterialId != material.Id))
+                {
+                    throw new UserFriendlyException("回库条码关联的基础物料与请求物料不一致");
+                }
+            }
+
             Cell targetCell = null;
             if (input.EndCellId > 0)
             {
@@ -379,28 +391,58 @@ namespace WarehouseManagement.StockTasks
                 {
                     throw new UserFriendlyException("目标库位不存在");
                 }
+            }
 
-                targetCell.EnsureCanStockIn(materialBarcode);
-                if (!string.Equals(targetCell.CellModel?.Trim(), material.MaterialType?.Trim(), StringComparison.Ordinal))
+            if (!string.IsNullOrWhiteSpace(input.EndCellCode))
+            {
+                var cellByCode = await _cellRepository.FindByCodeAsync(input.EndCellCode.Trim());
+                if (cellByCode == null)
+                {
+                    throw new UserFriendlyException("目标库位不存在");
+                }
+
+                if (targetCell != null && targetCell.Id != cellByCode.Id)
+                {
+                    throw new UserFriendlyException("目标库位主键与编码不一致");
+                }
+
+                targetCell = cellByCode;
+            }
+
+            if (targetCell != null)
+            {
+                targetCell.EnsureCanStockIn();
+                if (targetCell.CellType != CellType.Cell || targetCell.RunStatus != CellRunStatus.Enable ||
+                    targetCell.CellStatus != CellStatus.Nohave)
+                {
+                    throw new UserFriendlyException("目标库位不是可用的空闲货架库位");
+                }
+
+                var cellModel = existingBox?.CellModel ?? material.MaterialType;
+                if (!string.Equals(targetCell.CellModel?.Trim(), cellModel?.Trim(), StringComparison.Ordinal))
                 {
                     throw new UserFriendlyException("目标库位规格与物料类型不一致");
                 }
             }
 
-            // 每次预约按基础物料信息创建容器记录，物料属性不接受客户端传入值。
-            var materialBoxObj = new MaterialBox(material.MaterialName, materialBarcode)
+            // 首次预约按基础物料建档；已出库条码复用原记录，保留原始物料属性和有效期起算时间。
+            var materialBoxObj = existingBox;
+            if (materialBoxObj == null)
             {
-                MaterialBoxBarcode = materialBarcode,
-                CellModel = material.MaterialType,
-                MaterialUnit = material.MaterialUnit,
-                RetentionPeriod = (material.ValidityDays ?? 0).ToString(CultureInfo.InvariantCulture),
-                MaterialPeople = input.CreatorUserCode,
-                MaterialInDate = materialCreateTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture),
-                CreationTime = materialCreateTime
-            };
-            // 使用现有容器明细保存基础物料关联；实物条码用于后续扫码和出入库。
-            materialBoxObj.AddDetail(0, material.Id);
-            materialBoxObj = await _materialBoxRepository.InsertAsync(materialBoxObj, true);
+                materialBoxObj = new MaterialBox(material.MaterialName, materialBarcode)
+                {
+                    MaterialBoxBarcode = materialBarcode,
+                    CellModel = material.MaterialType,
+                    MaterialUnit = material.MaterialUnit,
+                    RetentionPeriod = (material.ValidityDays ?? 0).ToString(CultureInfo.InvariantCulture),
+                    MaterialPeople = input.CreatorUserCode,
+                    MaterialInDate = materialCreateTime.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture),
+                    CreationTime = materialCreateTime
+                };
+                // 使用现有容器明细保存基础物料关联；实物条码用于后续扫码和出入库。
+                materialBoxObj.AddDetail(0, material.Id);
+                materialBoxObj = await _materialBoxRepository.InsertAsync(materialBoxObj, true);
+            }
 
             // 设置任务类型
             // 创建入库任务
@@ -441,7 +483,13 @@ namespace WarehouseManagement.StockTasks
             }
             
             // 根据物料码查找对应物料任务
-            var stockTask = await _stockTaskRepository.FindByBarcodeAsync(materialBoxBarcode);
+            // 同一实物允许多次出入库，只选择本次尚未下发的入库预约，避免命中旧任务。
+            var stockTask = (await _stockTaskRepository.GetListAsync(task =>
+                    task.MaterialBoxBarcode == materialBoxBarcode &&
+                    task.TaskTypeCode == TaskType.NPFullStockIn &&
+                    task.TaskStatus == TaskStatus.WaitingExecute))
+                .OrderByDescending(task => task.Id)
+                .FirstOrDefault();
             if (stockTask == null)
             {
                 throw new UserFriendlyException("预约入库任务不存在,请重新预约入库任务.");

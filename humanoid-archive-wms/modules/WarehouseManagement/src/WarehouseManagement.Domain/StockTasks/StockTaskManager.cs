@@ -388,18 +388,38 @@ namespace WarehouseManagement.StockTasks
         /// <exception cref="UserFriendlyException"></exception>
         public async Task<StockTask> CreateWCSIn(string manageTypeCode, MaterialBox materialBox)
         {
+            Cell boundCell = null;
+            if (materialBox.CellId > 0)
+            {
+                boundCell = await _cellManager.GetByIdAsync(materialBox.CellId);
+                if (boundCell == null)
+                {
+                    throw new UserFriendlyException("物料绑定的库位不存在");
+                }
+
+                // 一体机可先把物料绑定到柜门，只有货架库存禁止重复入库。
+                if (boundCell.CellType != CellType.Station)
+                {
+                    throw new UserFriendlyException("物料已在库，不能重复入库");
+                }
+            }
+
+            // 更新聚合的并发戳后再判断活动任务，防止同条码并发回库分别创建任务。
+            await _materialBoxManager.PrepareStockInAsync(materialBox);
+            var activeTasks = await _stockTaskRepository.GetListAsync(task =>
+                task.MaterialBoxBarcode == materialBox.MaterialBoxBarcode &&
+                task.TaskStatus != TaskStatus.Complete && task.TaskStatus != TaskStatus.Cancel);
+            if (activeTasks.Count > 0)
+            {
+                throw new UserFriendlyException("物料条码已存在未完成任务，请勿重复入库");
+            }
+
             StockTask entity = null;
             try
             {
                 entity = new StockTask(manageTypeCode, materialBox.MaterialBoxBarcode);
-                if (materialBox.CellId > 0)
+                if (boundCell != null)
                 {
-                    var boundCell = await _cellManager.GetByIdAsync(materialBox.CellId);
-                    if (boundCell == null)
-                    {
-                        throw new UserFriendlyException("物料绑定的库位不存在");
-                    }
-
                     entity.StartCellId = boundCell.Id;
                     entity.StartCellCode = boundCell.CellCode;
                 }
@@ -486,9 +506,12 @@ namespace WarehouseManagement.StockTasks
                                 endCell = await _cellManager.GetByIdAsync(last.StartCellId);
                             }
 
-                            if (endCell == null || !string.Equals(endCell.CellModel, cellModel, StringComparison.Ordinal))
+                            if (endCell == null || endCell.CellType != CellType.Cell ||
+                                endCell.RunStatus != CellRunStatus.Enable || endCell.CellStatus != CellStatus.Nohave ||
+                                !string.IsNullOrWhiteSpace(endCell.MaterialCode) ||
+                                !string.Equals(endCell.CellModel, cellModel, StringComparison.Ordinal))
                             {
-                                //复用库位不存在或类型不匹配时，按物料类型重新分配入库库位
+                                // 原库位不可用或规格不符时，按物料类型重新分配入库库位。
                                 endCell = await _cellManager.GetEmptyCell(1, cellModel);
                             }
                         }
@@ -509,7 +532,19 @@ namespace WarehouseManagement.StockTasks
                             throw new UserFriendlyException("目标库位不存在");
                         }
 
-                        endCell.EnsureCanStockIn(box.MaterialBoxBarcode);
+                        if (stockTask.TaskTypeCode == TaskType.NPFullStockIn)
+                        {
+                            endCell.EnsureCanStockIn();
+                            if (endCell.CellType != CellType.Cell || endCell.RunStatus != CellRunStatus.Enable ||
+                                endCell.CellStatus != CellStatus.Nohave)
+                            {
+                                throw new UserFriendlyException("目标库位不是可用的空闲货架库位");
+                            }
+                        }
+                        else
+                        {
+                            endCell.EnsureCanStockIn(box.MaterialBoxBarcode);
+                        }
                         if (!string.Equals(endCell.CellModel?.Trim(), cellModel, StringComparison.Ordinal))
                         {
                             throw new UserFriendlyException("目标库位规格与物料类型不一致");

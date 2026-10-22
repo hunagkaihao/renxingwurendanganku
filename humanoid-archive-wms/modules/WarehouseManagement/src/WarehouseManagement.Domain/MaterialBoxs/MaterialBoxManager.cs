@@ -51,6 +51,17 @@ namespace WarehouseManagement.MaterialBoxs
             return await _materialBoxRepository.FindByIdAsync(id);
         }
 
+        /// <summary>
+        /// 入库建任务前保存实物聚合，使用既有并发戳阻止同一条码的并发预约；不修改原物料属性。
+        /// 必须与后续活动任务检查和任务创建处于同一工作单元。
+        /// </summary>
+        /// <param name="materialBox">已建档的实物记录，保留数据库读取时的并发戳。</param>
+        /// <returns>保存后的实物记录。</returns>
+        public async Task<MaterialBox> PrepareStockInAsync(MaterialBox materialBox)
+        {
+            return await _materialBoxRepository.UpdateAsync(materialBox, true);
+        }
+
         public async Task<List<MaterialBox>> GetAll()
         {
             return await _materialBoxRepository.GetListAsync();

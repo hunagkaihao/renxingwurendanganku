@@ -47,7 +47,7 @@ namespace WarehouseManagement.StockTasks.Dto
         public int EndCellId { get; set; }
 
         /// <summary>
-        /// 指定目标库位编码，仅用于客户端传递和任务展示。
+        /// 指定目标库位编码；与主键均未指定时自动分配，同时指定时必须对应同一库位。
         /// </summary>
         public string EndCellCode { get; set; }
     }
