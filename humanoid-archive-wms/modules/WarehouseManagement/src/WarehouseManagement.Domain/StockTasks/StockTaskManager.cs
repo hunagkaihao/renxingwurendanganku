@@ -1,3 +1,4 @@
+using Volo.Abp.Data;
 using Abp.Domain.Entities;
 using Lion.AbpPro.ConfigurationOptions;
 using Lion.AbpPro.Extension.Customs.Dtos;
@@ -68,6 +69,10 @@ namespace WarehouseManagement.StockTasks
             };
         }
 
+        /// <summary>
+        /// 仅在查询任务终态时读取软删除记录，保留租户过滤。
+        /// </summary>
+        private readonly IDataFilter _statusDataFilter;
         private readonly IStockTaskRepository _stockTaskRepository;
         private readonly IStockTaskDetailRepository _stockTaskDetailRepository;
         private readonly ICellRepository _cellRepository;
@@ -106,6 +111,7 @@ namespace WarehouseManagement.StockTasks
             , CheckManager checkManager
             , PlanManager planManager
             , MaterialManager materialManager
+            , IDataFilter statusDataFilter
             )
         {
             _stockTaskRepository = stockTaskRepository;
@@ -120,6 +126,7 @@ namespace WarehouseManagement.StockTasks
             _checkManager = checkManager;
             _planManager = planManager;
             _archiveManager = materialManager;
+            _statusDataFilter = statusDataFilter;
         }
         //public async Task<StockTask> CreateAsync(StockTask stockTask, List<StockTaskDetail> stockTaskDetails)
         //{
@@ -685,17 +692,62 @@ namespace WarehouseManagement.StockTasks
 
         }
         
-        //从WCS返回更新状态
+        /// <summary>
+        /// 更新 WCS 任务状态；已结束的任务不再重复更新库存或写入历史。
+        /// </summary>
+        /// <param name="stockTaskId">WMS 任务 ID。</param>
+        /// <param name="status">WCS 上报的状态。</param>
+        /// <returns>处理后或已结束的任务。</returns>
         [UnitOfWork]
         public async Task<StockTask> UpdateStatusAsync(int stockTaskId, WcsTaskStatus status)
         {
+            return await ProcessWcsStatusAsync(stockTaskId, status)
+                ?? throw new UserFriendlyException("出入库任务不存在或已完成");
+        }
+
+        /// <summary>
+        /// 回调与轮询的共用入口，在独立事务内锁定任务，提交库存和历史后才释放行锁。
+        /// </summary>
+        /// <returns>任务不存在或非终态记录已删除时返回 null。</returns>
+        private async Task<StockTask> ProcessWcsStatusAsync(int stockTaskId, WcsTaskStatus status)
+        {
+            using var unitOfWork = UnitOfWorkManager.Begin(requiresNew: true, isTransactional: true,
+                isolationLevel: System.Data.IsolationLevel.ReadCommitted);
+            await _stockTaskRepository.LockStatusUpdateAsync(stockTaskId);
+            StockTask entity;
+            using (_statusDataFilter.Disable<Volo.Abp.ISoftDelete>())
+            {
+                entity = await _stockTaskRepository.FindByIdAsync(stockTaskId);
+            }
+
+            if (entity == null)
+                return null;
+
+            if (entity.TaskStatus == TaskStatus.Complete || entity.TaskStatus == TaskStatus.Cancel ||
+                entity.TaskStatus == TaskStatus.ExceptionComplete)
+            {
+                Log.Debug($"Task:{stockTaskId} 已结束（{entity.TaskStatus}），忽略重复或过期的 WCS 状态 {status}。");
+                await unitOfWork.CompleteAsync();
+                return entity;
+            }
+
+            if (entity.IsDeleted)
+                return null;
+
+            // 盘点任务仍由专用的结果确认流程收尾。
+            if (entity.TaskTypeCode != TaskType.HpAnnualCheckDown)
+                entity = await ApplyWcsStatusAsync(entity, status);
+            await unitOfWork.CompleteAsync();
+            return entity;
+        }
+
+        /// <summary>在已持有任务行锁的事务内执行原有状态和库存更新。</summary>
+        private async Task<StockTask> ApplyWcsStatusAsync(StockTask entity, WcsTaskStatus status)
+        {
+            var stockTaskId = entity.Id;
             try
             {
                 Log.Debug($"Task:{stockTaskId} 更新任务状态为 {status}。");
-                var entity = await _stockTaskRepository.FindByIdAsync(stockTaskId);
-                if (entity == null)
-                    throw new UserFriendlyException(message: "出入库任务不存在或已完成");
-
                 switch (status)
                 {
                     case WcsTaskStatus.Unknown:
@@ -828,7 +880,7 @@ namespace WarehouseManagement.StockTasks
             if (!int.TryParse(input.OrderCode, out var stockTaskId))
                 return new ResultWcsTaskDto(false, "订单号格式不正确");
 
-            var stockTask = await FindByIdAsync(stockTaskId);
+            var stockTask = await ProcessWcsStatusAsync(stockTaskId, input.Status);
             if (stockTask == null)
                 return new ResultWcsTaskDto(false, "任务不存在或已完成");
 
@@ -838,7 +890,6 @@ namespace WarehouseManagement.StockTasks
                 return new ResultWcsTaskDto(true, "盘点任务状态已接收");
             }
 
-            await UpdateStatusAsync(stockTaskId, input.Status);
             return new ResultWcsTaskDto(true, "任务状态已更新");
 
         }

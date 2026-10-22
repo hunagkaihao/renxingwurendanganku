@@ -43,6 +43,22 @@ namespace WarehouseManagement.EntityFrameworkCore.StockTasks
                 .LongCountAsync(GetCancellationToken(cancellationToken));
         }
 
+        /// <inheritdoc />
+        public async Task LockStatusUpdateAsync(int id, CancellationToken cancellationToken = default)
+        {
+            var context = await GetDbContextAsync();
+            if (context.Database.CurrentTransaction == null)
+            {
+                throw new InvalidOperationException("任务状态更新必须在数据库事务中加锁。");
+            }
+
+            // 表名来自 EF 映射，任务 ID 使用参数；MySQL 行锁覆盖回调、轮询及多个服务实例。
+            var tableName = ((DbContext)context).Model.FindEntityType(typeof(StockTask)).GetTableName().Replace("`", "``");
+            await context.Database.ExecuteSqlRawAsync(
+                $"SELECT `Id` FROM `{tableName}` WHERE `Id` = {{0}} FOR UPDATE",
+                new object[] { id }, GetCancellationToken(cancellationToken));
+        }
+
         public async Task<StockTask> FindByIdAsync(int id, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
             return await(await GetDbSetAsync())
