@@ -1,0 +1,58 @@
+/* Modal 会挂到 body 下，使用独立前缀限定样式，避免影响其他弹窗。 */
+.terminal-login-modal {
+  padding: 6vh 20px 24px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  color: #263951;
+  .ivu-modal { padding-bottom: 0; }
+  .ivu-modal-content { border-radius: 24px; overflow: hidden; box-shadow: 0 24px 70px rgba(25, 46, 82, .2); }
+  .ivu-modal-header { padding: 28px 32px; background: #f3f7ff; border-bottom: 1px solid #e4ebf5; }
+  .ivu-modal-body { padding: 30px 32px 24px; }
+  .ivu-modal-footer { padding: 22px 32px 28px; border-top: 1px solid #e9eef5; }
+  .terminal-login-heading { display: flex; align-items: center; gap: 16px; }
+  .terminal-login-symbol { display: flex; align-items: center; justify-content: center; flex-shrink: 0; width: 58px; height: 58px; border-radius: 18px; color: #386bd5; background: #e3edff; }
+  h2 { margin: 0; font-size: 27px; line-height: 1.4; font-weight: 600; color: #273a56; }
+  .terminal-login-heading p { margin-top: 6px; font-size: 15px; color: #7b8ba2; line-height: 1.6; }
+  .ivu-form-item { margin-bottom: 26px; }
+  .ivu-form-item:last-child { margin-bottom: 20px; }
+  .ivu-form-item-label { font-size: 18px; line-height: 1.5; padding-bottom: 12px; color: #42536a; }
+  .ivu-input { height: 64px; padding: 0 18px; border: 1px solid #dce4ef; border-radius: 12px; font-size: 22px; color: #263951; background: #f9fbfe; transition: border-color .18s, box-shadow .18s; }
+  .ivu-input::placeholder { font-size: 18px; color: #a0adbf; }
+  .ivu-input:focus { border-color: #668feb; background: #fff; box-shadow: 0 0 0 4px rgba(75, 119, 218, .12); }
+  .ivu-form-item-error-tip { font-size: 14px; }
+  .terminal-login-tools { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+  .terminal-login-tools > span { font-size: 14px; color: #8492a7; }
+  .terminal-login-tools .ivu-btn { min-height: 48px; padding: 0 18px; font-size: 16px; border-radius: 10px; color: #4c6fa9; border-color: #dce5f3; }
+  .terminal-login-error { margin-top: 18px; padding: 13px 16px; border-radius: 10px; font-size: 15px; line-height: 1.7; color: #b45643; background: #fff3ef; overflow-wrap: break-word; }
+  .terminal-login-actions { display: grid; grid-template-columns: 1fr 1.8fr; gap: 16px; }
+  .terminal-login-actions .ivu-btn { width: 100%; min-height: 60px; margin-left: 0; padding: 12px; border-radius: 12px; font-size: 20px; white-space: normal; }
+  .terminal-login-actions .ivu-btn-primary { background: #3e70d8; border-color: #3e70d8; box-shadow: 0 5px 12px rgba(62,112,216,.15); }
+  .ivu-btn { touch-action: manipulation; transition: background .18s, transform .18s; }
+  .ivu-btn:active:not([disabled]) { transform: scale(.98); }
+  .ivu-btn:focus { outline: 3px solid #9bb8f5; outline-offset: 3px; }
+}
+/* 窄屏与软键盘压缩后的视口保留滚动空间，输入和按钮不缩成小触控目标。 */
+@media (max-width: 640px), (max-height: 700px) {
+  .terminal-login-modal {
+    padding: 16px 12px;
+    .ivu-modal-header { padding: 20px 24px; }
+    .ivu-modal-body { padding: 22px 24px 18px; }
+    .ivu-modal-footer { padding: 18px 24px 22px; }
+    .ivu-form-item { margin-bottom: 22px; }
+    .ivu-input { height: 58px; font-size: 20px; }
+    .terminal-login-actions .ivu-btn { min-height: 56px; font-size: 18px; }
+  }
+}
+@media (max-width: 380px) {
+  .terminal-login-modal {
+    .ivu-modal-header, .ivu-modal-body, .ivu-modal-footer { padding-left: 18px; padding-right: 18px; }
+    h2 { font-size: 23px; }
+    .terminal-login-heading { gap: 12px; }
+    .terminal-login-symbol { width: 46px; height: 46px; }
+    .terminal-login-actions { gap: 10px; }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .terminal-login-modal .ivu-btn, .terminal-login-modal .ivu-input { transition: none; }
+  .terminal-login-modal .ivu-btn:active:not([disabled]) { transform: none; }
+}

@@ -1,0 +1,138 @@
+/* 取样进度保留业务提示，通过文字、图标与颜色共同区分步骤状态。 */
+.sample-retention-page .sample-outbound-progress {
+  border-color: #94a9c3;
+  box-shadow: 0 3px 10px rgba(35, 53, 77, .07);
+  h2 { padding-left: 12px; border-left: 4px solid #416da6; }
+  .sample-progress-summary {
+    padding: 5px 12px;
+    border: 1px solid #b5c5d9;
+    border-radius: 16px;
+    background: #e7eef7;
+    color: #3d5574;
+    line-height: 1.5;
+  }
+  .sample-progress-list strong { font-weight: 600; }
+  .sample-progress-list small {
+    max-width: 100%;
+    padding: 0 8px;
+    line-height: 1.5;
+    text-align: center;
+    overflow-wrap: break-word;
+  }
+  .sample-progress-icon { transition: background .2s, border-color .2s; }
+  .is-current { color: #285995; }
+  .is-current .sample-progress-icon {
+    color: #fff;
+    border-color: #37659f;
+    background: #37659f;
+    box-shadow: 0 0 0 3px #d9e5f4;
+  }
+  .is-complete { color: #286956; }
+  .is-complete .sample-progress-icon {
+    color: #286956;
+    border-color: #86b6a4;
+    background: #dceee5;
+  }
+  .sample-progress-list li.is-complete::after { background: #86b6a4; }
+}
+@media (max-width: 480px) {
+  .sample-retention-page .sample-outbound-progress .sample-progress-list small {
+    padding: 0;
+    text-align: left;
+  }
+}
+
+/* 留样、取样入口共用的触屏布局，不影响其他业务页。 */
+.sample-retention-page {
+  width: 100%; height: 100%; min-height: 0; overflow-y: auto; background: #dce3eb;
+  -webkit-overflow-scrolling: touch;
+  /* 退出旧 fixed 容器，让进度与柜门正常撑开页面并参与滚动。 */
+  #building { position: relative; height: auto; min-height: 100%; width: 100%; }
+  .sample-return-button { min-height: 48px; padding: 8px 18px; margin-left: 16px; font-size: 17px; border-radius: 10px; touch-action: manipulation; }
+  /* 两种运行模式共用进度展示，调试模式不推断真实任务完成状态。 */
+  .sample-progress { margin-top: 24px; padding: 22px 26px; border: 1px solid #aab9cc; border-radius: 18px; background: #f7f9fc; box-shadow: 0 2px 5px rgba(35, 53, 77, .06); }
+  .sample-progress header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 24px; }
+  .sample-progress h2 { font-size: 19px; font-weight: 600; color: #304967; }
+  .sample-progress header > span { font-size: 13px; color: #52657d; }
+  .sample-progress-scroll { overflow-x: auto; padding: 4px 0 8px; -webkit-overflow-scrolling: touch; }
+  .sample-progress-list { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); min-width: 660px; margin: 0; padding: 0; list-style: none; }
+  .sample-progress-list li { position: relative; display: flex; flex-direction: column; align-items: center; gap: 8px; color: #52657d; }
+  .sample-progress-list li:not(:last-child)::after { content: ''; position: absolute; top: 24px; left: ~"calc(50% + 34px)"; width: ~"calc(100% - 68px)"; height: 2px; background: #aab9cc; }
+  .sample-progress-icon { display: flex; align-items: center; justify-content: center; width: 50px; height: 50px; margin-bottom: 4px; border: 1px solid #afbdcf; border-radius: 16px; background: #e6edf5; }
+  .sample-progress-list strong { font-size: 16px; font-weight: 500; }
+  .sample-progress-list small { font-size: 13px; }
+  .sample-progress-list .is-current { color: #3f70d1; }
+  .is-current .sample-progress-icon { border-color: #6f99ee; background: #eaf1ff; box-shadow: 0 0 0 4px #f3f7ff; }
+  .sample-progress-list .is-complete { color: #378e7c; }
+  .is-complete .sample-progress-icon { border-color: #c8e6db; background: #edf8f3; }
+  .sample-progress-list li.is-complete::after { background: #a3d9c5; }
+  &.is-wms-only {
+    #building { background: #dce3eb; }
+    .page-body2 { position: static; width: 100%; min-width: 0; max-width: 1920px; margin: 0 auto; padding: 18px 28px; padding: ~"clamp(12px, 1.5vh, 24px) clamp(12px, 2vw, 40px)"; box-sizing: border-box; }
+    .margin-top-1 { margin-top: 0; }
+    .main-header { position: static; display: flex; align-items: center; flex-wrap: wrap; gap: 12px; height: auto; min-height: 72px; padding: 14px 20px; border: 1px solid #aab9cc; border-radius: 16px; background: #f7f9fc; }
+    .navicon-con { display: none; }
+    .header-middle-con { position: static; margin: 0 !important; flex: 1; min-width: 60px; }
+    .header-middle-con h1 { font-size: 28px; color: #2e4564; }
+    .header-avator-con { position: static; width: auto; height: auto; margin: 0 !important; }
+    .user-dropdown-menu-con, .user-dropdown-innercon { position: static; width: auto; height: auto; }
+    .user-dropdown-innercon { margin-left: 0 !important; flex-wrap: wrap; row-gap: 10px; }
+    .main-user-name { display: inline-block; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle; }
+  }
+}
+@media (max-width: 650px) {
+  .sample-retention-page.is-wms-only .page-body2 { padding: 12px; }
+  .sample-retention-page.is-wms-only .main-header { padding: 12px; }
+  .sample-retention-page.is-wms-only .header-avator-con { width: 100%; }
+  .sample-retention-page .sample-progress { padding: 16px; margin-top: 16px; }
+  .sample-retention-page .sample-progress-list { min-width: 560px; }
+}
+/* 横屏低分辨率终端压缩留白，仍保留可触控的返回按钮与完整步骤名称。 */
+@media (max-height: 800px) and (min-width: 901px) {
+  .sample-retention-page {
+    &.is-wms-only .main-header { min-height: 62px; padding: 8px 16px; }
+    .sample-progress { margin-top: 14px; padding: 14px 20px; }
+    .sample-progress header { margin-bottom: 12px; }
+    .sample-progress-list li { gap: 4px; }
+    .sample-progress-icon { width: 42px; height: 42px; border-radius: 13px; }
+    .sample-progress-list li:not(:last-child)::after { top: 20px; }
+    .sample-progress-list strong { font-size: 15px; }
+  }
+}
+/* 横屏一体机按可用高度分配空间，柜门区使用剩余高度，避免内容累计撑出滚动条。 */
+@media (min-width: 901px) and (min-height: 600px) {
+  .sample-retention-page.is-wms-only {
+    #building { height: 100%; min-height: 0; }
+    .page-body2 { height: 100%; display: grid; grid-template-rows: auto auto minmax(0, 1fr); gap: 12px; padding-top: 12px; padding-bottom: 12px; }
+    .margin-top-1 { min-height: 0; }
+    .main-header { min-height: 62px; padding-top: 7px; padding-bottom: 7px; }
+    .sample-progress { margin: 0; padding: 12px 20px; }
+    .sample-progress header { margin-bottom: 10px; }
+    .sample-progress-scroll { padding-top: 3px; padding-bottom: 3px; }
+    .sample-progress-list { min-width: 0; }
+    .sample-progress-list li { gap: 3px; }
+    .sample-progress-icon { width: 38px; height: 38px; margin-bottom: 2px; border-radius: 12px; }
+    .sample-progress-list li:not(:last-child)::after { top: 18px; }
+  }
+}
+@media (min-width: 901px) and (min-height: 600px) and (max-height: 700px) {
+  .sample-retention-page.is-wms-only {
+    .page-body2 { gap: 8px; padding-top: 8px; padding-bottom: 8px; }
+    .sample-progress { padding-top: 8px; padding-bottom: 8px; }
+    .sample-progress header { margin-bottom: 6px; }
+    .sample-progress h2 { font-size: 17px; }
+    .sample-progress-icon { width: 34px; height: 34px; }
+    .sample-progress-list li:not(:last-child)::after { top: 16px; }
+  }
+}
+/* 手机宽度采用纵向进度，文字不挤压，页面只需上下滚动。 */
+@media (max-width: 480px) {
+  .sample-retention-page {
+    .sample-progress-list { min-width: 0; grid-template-columns: 1fr; gap: 16px; }
+    .sample-progress-list li { display: grid; grid-template-columns: 44px 1fr; column-gap: 14px; row-gap: 2px; align-items: center; }
+    .sample-progress-icon { grid-row: span 2; width: 40px; height: 40px; margin: 0; border-radius: 12px; }
+    .sample-progress-list li:not(:last-child)::after { top: 44px; left: 19px; width: 2px; height: 12px; }
+    .sample-progress-list strong { font-size: 15px; }
+    .main-user-name { max-width: 100px; }
+  }
+}
