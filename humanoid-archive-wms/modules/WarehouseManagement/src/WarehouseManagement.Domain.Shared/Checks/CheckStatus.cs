@@ -21,7 +21,7 @@ namespace WarehouseManagement.Checks
         /// </summary>
         Complete,
         /// <summary>
-        /// 审核完毕
+        /// 已结束；兼容历史状态，盘点结果不再需要人工审核。
         /// </summary>
         Finish
     }

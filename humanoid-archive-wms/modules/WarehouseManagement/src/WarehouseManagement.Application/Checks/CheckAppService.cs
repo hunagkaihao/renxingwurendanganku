@@ -415,7 +415,7 @@ namespace WarehouseManagement.Checks
         /// </summary>
         /// <remarks>
         /// 这里只把 Cell.RunStatus 从 Selected 恢复为 Enable，不修改 CellStatus 和档案盒正式绑定；
-        /// 盘盈、盘亏、错位必须经过后续审核流程，不能在盘点回调阶段直接调整正式库存。
+        /// 盘点仅记录实扫结果和账实差异，返回结果后即完成流程，不直接调整正式库存。
         /// </remarks>
         [UnitOfWork]
         public virtual async Task<bool> CompleteCheckCellAsync(
@@ -616,7 +616,7 @@ namespace WarehouseManagement.Checks
                     BeginTime = checkDetail.BeginTime,
                     FinishTime = DateTime.Now.ToString(),
                     // StockBarcode 保存 WMS 冻结的账面条码，BoxBarcode 保存 WCS/PLC 现场实扫条码。
-                    // 两个值必须同时保留，后续审核才能重现盘点时的账实差异。
+                    // 两个值同时保留，便于查询盘点时的账实差异，无需人工确认。
                     BoxBarcode = actualPlateCode ?? string.Empty
                 };
                 checkDetailHisDto.Remark = remark;
@@ -722,10 +722,19 @@ PagingCheckDetailInput input)
             );
         }
 
+        /// <summary>
+        /// 兼容旧调用方的结束入口；执行结果收齐后即可结束，无需审核盘点明细。
+        /// </summary>
+        /// <param name="checkCode">要结束的盘点计划编号。</param>
+        /// <returns>结束成功时返回 true。</returns>
         [UnitOfWork]
         public async Task<bool> CheckComplete(string checkCode)
         {
             CheckHis checkHis = (await _checkHisManager.GetHisAsync(checkCode)).FirstOrDefault();
+            if (checkHis == null)
+            {
+                throw new UserFriendlyException("盘点计划结果不存在");
+            }
             if(checkHis.CheckStatus == CheckStatus.Finish.ToString())
             {
                 throw new UserFriendlyException("盘点计划已结束，不需要重复完成");
@@ -735,11 +744,6 @@ PagingCheckDetailInput input)
             if (stockTasks.Count > 0)
             {
                 throw new UserFriendlyException("盘点任务还未执行完毕，不能完成盘点计划");
-            }
-            List<CheckDetailHis> checkDetailHis = await _checkDetailHisManager.GetList(0, checkHis.Id);
-            if (checkDetailHis.Count > 0)
-            {
-                throw new UserFriendlyException("盘点记录还未审核完毕，不能完成盘点计划");
             }
             checkHis.CheckStatus = CheckStatus.Finish.ToString();
             await _checkHisManager.UpdateAsync(checkHis);

@@ -157,8 +157,8 @@ export const hisColumns: BasicColumn[] = [
         Executing: '执行中',
         '2': '盘点完成',
         Complete: '盘点完成',
-        '3': '审核完成',
-        Finish: '审核完成',
+        '3': '已结束',
+        Finish: '已结束',
       };
       return statusMap[String(text)] || String(text ?? '');
     },
@@ -199,14 +199,6 @@ export const hisDetailColumns: BasicColumn[] = [
   //   title: t('档案标签'),
   //   dataIndex: 'boxBarcode',
   // },
-  {
-    title: t('审核用户'),
-    dataIndex: 'verifyUser',
-  },
-  {
-    title: t('审核完成时间'),
-    dataIndex: 'verifyFinishTime',
-  },
 ]
 export const tableColumns: BasicColumn[] = [
   {

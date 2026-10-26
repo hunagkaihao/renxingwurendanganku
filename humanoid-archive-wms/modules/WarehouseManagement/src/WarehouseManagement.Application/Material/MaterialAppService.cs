@@ -63,37 +63,32 @@ namespace WarehouseManagement.Material
             Console.WriteLine("删除成功");
         }
 
-        public async Task<PagedResultDto<MaterialDto>> PageAsync(PagingMaterialListInput input)
+        /// <summary>
+        /// 按名称筛选并分页返回基础物料信息及审计信息。
+        /// </summary>
+        /// <param name="input">物料名称筛选条件和分页参数。</param>
+        /// <returns>匹配的物料总数和按 ID 倒序排列的当前页。</returns>
+        public async Task<PagedResultDto<MaterialPageDto>> PageAsync(PagingMaterialListInput input)
         {
             var materialQueryable = await _materialRepository.GetQueryableAsync();
 
-            // 左连接 Material 和 ArchiveBoxDetail
             var query = materialQueryable
-                .Where(material => string.IsNullOrEmpty(input.Filter) || material.MaterialName.Contains(input.Filter.Trim()))
-                .Select(material => new { Material = material, MaterialBox = (MaterialBox)null });
+                .Where(material => string.IsNullOrEmpty(input.Filter) || material.MaterialName.Contains(input.Filter.Trim()));
 
             var totalCount = await AsyncExecuter.CountAsync(query);
 
             var pagedQuery = query
-                .OrderByDescending(x => x.Material.Id)
+                .OrderByDescending(material => material.Id)
                 .Skip(input.SkipCount)
                 .Take(input.PageSize);
 
             var queryResult = await AsyncExecuter.ToListAsync(pagedQuery);
 
-            var materialDtos = queryResult.Select(x =>
-            {
-                var materialDto = ObjectMapper.Map<MaterialAggregate, MaterialDto>(x.Material);
-                if (x.MaterialBox != null)  // 注意：可能为 null
-                {
-                    materialDto.MaterialBoxRfid = x.MaterialBox.MaterialBoxBarcode;
-                    materialDto.MaterialBoxName = x.MaterialBox.MaterialBoxName;
-                    materialDto.MaterialBoxId = x.MaterialBox.Id;
-                }
-                return materialDto;
-            }).ToList();
+            var materialDtos = queryResult
+                .Select(material => ObjectMapper.Map<MaterialAggregate, MaterialPageDto>(material))
+                .ToList();
 
-            return new PagedResultDto<MaterialDto>(totalCount, materialDtos);
+            return new PagedResultDto<MaterialPageDto>(totalCount, materialDtos);
         }
 
         public async Task<MaterialDto> UpdateAsync(CreateMaterialDto input)

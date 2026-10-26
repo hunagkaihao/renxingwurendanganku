@@ -56,13 +56,26 @@ namespace WarehouseManagement.CheckHiss
                 checkHisDtos
             );
         }
+        /// <summary>
+        /// 按盘点计划编号查询历史明细，保留时间筛选和分页规则。
+        /// </summary>
+        /// <param name="input">必填的盘点计划编号，以及可选的明细创建时间范围和分页参数。</param>
+        /// <returns>对应计划的盘点结果总数和当前页明细；编号不存在时返回空页。</returns>
         public async Task<PagedResultDto<CheckDetailHisDto>> GetPagingDetailListAsync(PagingCheckDetailHisDto input)
         {
+            var checkCode = input.CheckCode?.Trim();
+            if (string.IsNullOrWhiteSpace(checkCode))
+            {
+                throw new UserFriendlyException("盘点计划编号不能为空");
+            }
 
             var queryable = await _checkDetailHisRepository.GetQueryableAsync();
 
+            // 对外使用业务编号定位计划，明细仍通过历史主记录 ID 关联，避免混入未关联的旧明细。
             var query = from checkDetailHis in queryable
-                        where checkDetailHis.CheckId == input.CheckHisId
+                        join checkHis in await _checkHisRepository.GetQueryableAsync()
+                            on checkDetailHis.CheckId equals checkHis.Id
+                        where checkHis.CheckCode == checkCode
                               && (!input.StartCreationTime.HasValue ||
                                checkDetailHis.CreationTime >= input.StartCreationTime.Value)
                               && (!input.EndCreationTime.HasValue ||

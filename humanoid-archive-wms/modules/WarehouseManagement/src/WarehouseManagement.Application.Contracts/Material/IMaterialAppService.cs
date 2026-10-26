@@ -17,7 +17,11 @@ namespace WarehouseManagement.Material
         Task<MaterialDto> UpdateAsync(CreateMaterialDto inpuit);
         //删除档案
         Task DeleteAsync(CreateMaterialDto inpuit);
-        //获取档案清单
-        Task<PagedResultDto<MaterialDto>> PageAsync(PagingMaterialListInput input);
+        /// <summary>
+        /// 分页查询基础物料，仅返回基础信息及审计信息。
+        /// </summary>
+        /// <param name="input">物料名称筛选条件和分页参数。</param>
+        /// <returns>匹配的物料总数和当前页基础物料信息。</returns>
+        Task<PagedResultDto<MaterialPageDto>> PageAsync(PagingMaterialListInput input);
     }
 }

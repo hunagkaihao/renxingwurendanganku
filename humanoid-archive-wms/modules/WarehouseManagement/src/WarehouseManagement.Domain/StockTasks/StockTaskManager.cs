@@ -896,7 +896,7 @@ namespace WarehouseManagement.StockTasks
         /// <summary>
         /// 标记单库位盘点执行任务完成。
         /// 此方法只结束任务生命周期，不修改档案盒绑定和库位库存状态；
-        /// 盘盈、盘亏、错位等差异必须由 WMS 审核后通过独立业务流程处理。
+        /// 盘点只返回现场结果和账实差异，不要求人工确认，也不自动调整正式库存。
         /// </summary>
         public async Task<StockTask> CompleteCheckTaskAsync(int stockTaskId)
         {

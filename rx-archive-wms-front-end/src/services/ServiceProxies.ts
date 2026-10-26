@@ -25829,7 +25829,8 @@ export class PagingCheckDetailHisDto implements IPagingCheckDetailHisDto {
     pageSize!: number;
     /** 跳过多少条 */
     readonly skipCount!: number;
-    checkHisId!: number;
+    /** 盘点计划编号，必填，按完整编号精确查询盘点结果。 */
+    checkCode!: string;
     startCreationTime!: moment.Moment | undefined;
     endCreationTime!: moment.Moment | undefined;
 
@@ -25847,7 +25848,7 @@ export class PagingCheckDetailHisDto implements IPagingCheckDetailHisDto {
             this.pageIndex = _data["pageIndex"];
             this.pageSize = _data["pageSize"];
             (<any>this).skipCount = _data["skipCount"];
-            this.checkHisId = _data["checkHisId"];
+            this.checkCode = _data["checkCode"];
             this.startCreationTime = _data["startCreationTime"] ? moment(_data["startCreationTime"].toString()) : <any>undefined;
             this.endCreationTime = _data["endCreationTime"] ? moment(_data["endCreationTime"].toString()) : <any>undefined;
         }
@@ -25865,7 +25866,7 @@ export class PagingCheckDetailHisDto implements IPagingCheckDetailHisDto {
         data["pageIndex"] = this.pageIndex;
         data["pageSize"] = this.pageSize;
         data["skipCount"] = this.skipCount;
-        data["checkHisId"] = this.checkHisId;
+        data["checkCode"] = this.checkCode;
         data["startCreationTime"] = this.startCreationTime ? this.startCreationTime.toISOString() : <any>undefined;
         data["endCreationTime"] = this.endCreationTime ? this.endCreationTime.toISOString() : <any>undefined;
         return data;
@@ -25879,7 +25880,8 @@ export interface IPagingCheckDetailHisDto {
     pageSize: number;
     /** 跳过多少条 */
     skipCount: number;
-    checkHisId: number;
+    /** 盘点计划编号，必填，按完整编号精确查询盘点结果。 */
+    checkCode: string;
     startCreationTime: moment.Moment | undefined;
     endCreationTime: moment.Moment | undefined;
 }

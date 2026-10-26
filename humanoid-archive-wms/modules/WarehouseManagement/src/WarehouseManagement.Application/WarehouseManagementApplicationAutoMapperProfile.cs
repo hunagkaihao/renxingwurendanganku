@@ -46,6 +46,7 @@ public class WarehouseManagementApplicationAutoMapperProfile : Profile
         CreateMap<CreateMaterialBoxDto, MaterialBox>(MemberList.None)
             .ForMember(dest => dest.MaterialBoxBarcode, opt => opt.MapFrom(src => src.StockBarcode));
         CreateMap<MaterialAggregate, MaterialDto>(MemberList.None); ;
+        CreateMap<MaterialAggregate, MaterialPageDto>(MemberList.None);
         CreateMap<CreateMaterialDto, MaterialAggregate>(MemberList.None); ;
         CreateMap<CreateMaterialInputDto, MaterialAggregate>(MemberList.None);
         CreateMap<MaterialAggregate, CreateMaterialResultDto>()

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,9 +11,10 @@ namespace WarehouseManagement.CheckHiss.Dto
     public class PagingCheckDetailHisDto : PagingBase
     {
         /// <summary>
-        /// 盘点历史主记录 ID。
+        /// 盘点计划编号，必填；按完整编号精确匹配对应的盘点历史明细。
         /// </summary>
-        public int CheckHisId { get; set; }
+        [Required(ErrorMessage = "盘点计划编号不能为空")]
+        public string CheckCode { get; set; }
 
         /// <summary>
         /// 盘点历史明细创建时间筛选起点（含）。
