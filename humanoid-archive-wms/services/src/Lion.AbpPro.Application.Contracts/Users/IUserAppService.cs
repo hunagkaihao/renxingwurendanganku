@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Lion.AbpPro.Users.Dtos;
 using Lion.AbpPro.Extension.Customs.Dtos;
 using Volo.Abp.Account;
@@ -57,5 +58,14 @@ namespace Lion.AbpPro.Users
         /// <param name="input"></param>
         /// <returns></returns>
         Task LockAsync(LockUserInput input);
+
+        /// <summary>查询指定用户在当前租户下的全部生物识别绑定。</summary>
+        Task<List<UserBiometricBindingDto>> GetBiometricBindingsAsync(Guid userId);
+
+        /// <summary>新增或修改指定用户的一组人脸、指静脉编号绑定。</summary>
+        Task<UserBiometricBindingDto> SaveBiometricBindingAsync(Guid userId, SaveUserBiometricBindingInput input);
+
+        /// <summary>解除一组用户绑定；不删除识别服务内的人脸样本或设备模板。</summary>
+        Task DeleteBiometricBindingAsync(Guid userId, Guid bindingId);
     }
 }

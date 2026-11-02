@@ -5,6 +5,8 @@ import iView from 'iview';
 import Util from '../lib/util';
 import Cookies from 'js-cookie'
 import { appRouters,otherRouters} from './router'
+import { sampleDestinations } from '../lib/terminal-auth';
+import { isTerminalAdmin } from '../lib/terminal-registration';
 
 Vue.use(VueRouter);
 
@@ -26,6 +28,27 @@ router.beforeEach((to, from, next) => {
         });
     }else if (Cookies.get('locking') === '0' && to.name === 'locking') {
         next(false);
+    }
+    else if (to.name === 'terminal-login') {
+        // 三种登录入口不受旧版单一人脸验证 Cookie 的重定向影响。
+        next();
+    }
+    else if (to.name === 'userregister') {
+        // 注册页面必须持有真实的管理员会话；服务端再次校验角色和编辑权限。
+        const session = router.app && router.app.$store && router.app.$store.state.session;
+        if (Util.abp.auth.getToken() && session && isTerminalAdmin(session.user)) next();
+        else next({ name: 'terminal-login', query: { next: 'userregister' }, replace: true });
+    }
+    else if (sampleDestinations.indexOf(to.name || '') >= 0) {
+        // 样品业务只接受已建立的 WMS 会话，单独设置 userId Cookie 不能跳过登录。
+        const session = router.app && router.app.$store && router.app.$store.state.session;
+        if (Util.abp.auth.getToken() && session && session.user && session.user.id) {
+            next();
+        } else {
+            Cookies.set('facing', '0');
+            Cookies.set('userId', '0');
+            next({ name: 'terminal-login', query: { next: to.name }, replace: true });
+        }
     }
     else if (Cookies.get('facing') === '1' && to.name !== 'face') {
         next({
@@ -72,9 +95,6 @@ router.beforeEach((to, from, next) => {
         next();
     }
     else if (to.name === 'opendoor') {
-        next();
-    }
-    else if (to.name === 'userregister') {
         next();
     }
     else if (to.name === 'stockin') {

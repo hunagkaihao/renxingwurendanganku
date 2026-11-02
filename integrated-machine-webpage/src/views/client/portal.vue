@@ -39,7 +39,7 @@
           <span class="portal-card-title">留样</span>
           <span class="portal-card-description">样品入库 · 有序留存</span>
           <span class="portal-card-bottom">
-            <span>{{ wmsOnly ? (wmsPageDebug ? '进入留样调试' : '设备待接入') : '进入留样流程' }}</span>
+            <span>登录后进入留样流程</span>
             <span v-if="!wmsOnly && taskInCount > 0" class="portal-task-count">{{ taskInCount }} 项待处理</span>
             <span class="portal-card-arrow"><Icon type="ios-arrow-forward" size="24" /></span>
           </span>
@@ -53,7 +53,7 @@
           <span class="portal-card-title">取样</span>
           <span class="portal-card-description">样品出库 · 便捷取用</span>
           <span class="portal-card-bottom">
-            <span>{{ wmsOnly ? (wmsPageDebug ? '进入取样调试' : '设备待接入') : '进入取样流程' }}</span>
+            <span>登录后进入取样流程</span>
             <span v-if="!wmsOnly && taskOutCount > 0" class="portal-task-count">{{ taskOutCount }} 项待处理</span>
             <span class="portal-card-arrow"><Icon type="ios-arrow-forward" size="24" /></span>
           </span>
@@ -62,7 +62,7 @@
 
       <div v-if="wmsOnly" id="portal-device-notice" class="portal-notice" role="status">
         <span class="portal-notice-icon"><Icon type="ios-information-circle-outline" size="24" /></span>
-        <div><strong>{{ wmsPageDebug ? '页面调试模式' : '设备尚未接入' }}</strong><p>{{ wmsPageDebug ? 'WMS 连接后可通过账号密码进入留样、取样页面；设备业务尚未接入。' : '当前可查看 WMS 连接状态，设备接入后可办理留样、取样业务。' }}</p></div>
+        <div><strong>设备连接待确认</strong><p>可先选择业务并登录，办理留样、取样前请确认设备服务已就绪。</p></div>
         <button type="button" @click="openStatus">查看状态 <Icon type="ios-arrow-forward" /></button>
       </div>
       <p v-else class="portal-guide"><Icon type="ios-hand-outline" size="20" /> 点击业务卡片，按照页面提示完成操作</p>
@@ -141,38 +141,13 @@ export default class Login extends AbpBase {
     this.statusModalShow=true;
    
  }
+  /** 人员注册始终要求本轮管理员账号密码登录，设备是否可用由录入接口检查。 */
   userRegister()
   {
-    if (this.wmsOnly) {
-      this.$Message.info('设备服务未接入，暂不支持特征注册');
-      return;
-    }
-    //   let lockScreenBack = document.getElementById('lock_screen_back') as HTMLElement;
-    //   if(lockScreenBack){
-    //   lockScreenBack.style.transition = 'all 1s';
-    //   lockScreenBack.style.zIndex = "10000";
-    //   lockScreenBack.style.boxShadow = '0 0 0 ' + this.lockScreenSize + 'px #667aa6 inset';
-    //   this.showUnlock = true;
-    //   let name=this.$route.name?this.$route.name:'';
-    //   Cookies.set('last_page_name', 'userregister');
-    //   //console.log('lock'+name);
-    //   Cookies.set('facing', '0')
-    //  Cookies.set('userId', '0')
-    //   //console.log(Cookies.get('facing'));
-    //   setTimeout(() => {
-    //       lockScreenBack.style.transition = 'all 0s';
-    //       this.$router.push({
-    //           name: 'opendoor'
-    //       });
-    //   }, 500);
-    //   //Cookies.set('facing', '1');
-    //   }
-          // this.$router.push({
-          //     name: 'userregister'
-          // });
       Cookies.set('last_page_name', 'userregister');
-      this.createModalShow=true;
-
+      Cookies.set('facing', '0');
+      Cookies.set('userId', '0');
+      this.$router.push({ name: 'terminal-login', query: { next: 'userregister' } });
  }
  stockin() {
   //  if(this.taskInCount==0)
@@ -206,53 +181,18 @@ export default class Login extends AbpBase {
       //Cookies.set('facing', '1');
       }
   }
-     stockincnt() {
-      if (this.wmsOnly && (!this.wmsPageDebug || !this.serviceConnect)) {
-        this.$Message.info(this.wmsPageDebug ? 'WMS 尚未连接，请先检查服务状态' : '设备服务未接入，暂不支持留样操作');
-        return;
-      }
-                   // bound.aa();//用于和我inform后台进行交互
-  //  if(this.taskInCount==0)
-  //  {
-  //    //alert("当前无待处理任务");
-  //    this.$Message.info('当前无待处理任务');
-  //    return;
-  //  }
-      //let lockScreenBack = document.getElementById('lock_screen_back') as HTMLElement;
-      //if(lockScreenBack){
-      // lockScreenBack.style.transition = 'all 1s';
-      // lockScreenBack.style.zIndex = "10000";
-      // lockScreenBack.style.boxShadow = '0 0 0 ' + this.lockScreenSize + 'px #667aa6 inset';
-      //this.showUnlock = true;
-      let name=this.$route.name?this.$route.name:'';
-      //选择展示柜门数
-      if(this.CabinetQty == "5"){
-      Cookies.set('last_page_name', 'stockinstepctn2');
-      }
-      else{
-      Cookies.set('last_page_name', 'stockinstepctn');
-      }
-      if (this.wmsPageDebug) {
-        this.createModalShow = true;
-        return;
-      }
-      if(this.ClientVerifyMethod == "FaceAndVein" || this.ClientVerifyMethod == "FaceOnly"){
-      
-          //console.log('lock'+name);
-          Cookies.set('facing', '0')
-          Cookies.set('userId', '0')
-          //console.log(Cookies.get('facing'));
-          setTimeout(() => {
-              //lockScreenBack.style.transition = 'all 0s';
-              this.$router.push({
-                  name: 'faceverification'
-              });
-          }, 500);
-        }else{
-          this.createModalShow=true;
-        }
-      //Cookies.set('facing', '1');
-      //}
+  /** 点击留样后进入统一登录页，认证后继续原柜门数量对应的页面。 */
+  stockincnt() { this.openSampleLogin('in'); }
+
+  /** 记录本次业务目标，并始终要求本轮人工登录。 */
+  openSampleLogin(direction: string) {
+    const destination = direction === 'in'
+      ? (this.CabinetQty === '5' ? 'stockinstepctn2' : 'stockinstepctn')
+      : (this.CabinetQty === '5' ? 'stockoutstepctn2' : 'stockoutstepctn');
+    Cookies.set('last_page_name', destination);
+    Cookies.set('facing', '0');
+    Cookies.set('userId', '0');
+    this.$router.push({ name: 'terminal-login', query: { next: destination } });
   }
      stockout() {
    if(this.taskOutCount==0)
@@ -281,51 +221,8 @@ export default class Login extends AbpBase {
       //Cookies.set('facing', '1');
       }
   }
-      stockoutcnt() {
-      if (this.wmsOnly && (!this.wmsPageDebug || !this.serviceConnect)) {
-        this.$Message.info(this.wmsPageDebug ? 'WMS 尚未连接，请先检查服务状态' : '设备服务未接入，暂不支持取样操作');
-        return;
-      }
-  //            if(this.taskOutCount==0)
-  //  {
-  //    //alert("当前无待处理任务");
-  //   this.$Message.info('当前无待处理任务');
-  //    return;
-  //  }
-      //let lockScreenBack = document.getElementById('lock_screen_back') as HTMLElement;
-      //if(lockScreenBack){
-      // lockScreenBack.style.transition = 'all 1s';
-      // lockScreenBack.style.zIndex = "10000";
-      // lockScreenBack.style.boxShadow = '0 0 0 ' + this.lockScreenSize + 'px #667aa6 inset';
-      this.showUnlock = true;
-      let name=this.$route.name?this.$route.name:'';
-      //选择展示柜门数
-      if(this.CabinetQty == "5"){
-      Cookies.set('last_page_name', 'stockoutstepctn2');
-      }
-      else{
-        Cookies.set('last_page_name', 'stockoutstepctn');
-      }
-      if (this.wmsPageDebug) {
-        this.createModalShow = true;
-        return;
-      }
-      //console.log('lock'+name);
-      Cookies.set('facing', '0')
-      Cookies.set('userId', '0')
-
-      if(this.ClientVerifyMethod == "FaceAndVein" || this.ClientVerifyMethod == "FaceOnly"){
-          setTimeout(() => {
-
-              this.$router.push({
-                  name: 'faceverification'
-              });
-          }, 500);
-        }else{
-          this.createModalShow=true;
-        }
-
-  }
+  /** 点击取样后进入统一登录页，认证后继续原取样流程。 */
+  stockoutcnt() { this.openSampleLogin('out'); }
     batin() {
     if(this.batInCount!=0)
    {

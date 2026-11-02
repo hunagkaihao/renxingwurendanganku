@@ -15,8 +15,9 @@ class SessionStore implements Module<SessionState,any>{
         tenant:null
     }
     actions={
-        async init(content:ActionContext<SessionState,any>){
-            const rep = await ajax.get('/api/abp/application-configuration');
+        /** 初始化当前会话；终端登录可传入取消令牌，防止返回后写入迟到的用户信息。 */
+        async init(content:ActionContext<SessionState,any>,payload:any = {}){
+            const rep = await ajax.get('/api/abp/application-configuration', { cancelToken: payload.cancelToken });
             const configuration = adaptApplicationConfiguration(rep.data);
             util.abp = util.extend(true, util.abp, configuration.abp);
             // 授权集合整体替换，避免重新加载配置后残留旧权限。

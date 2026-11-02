@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 using Lion.AbpPro.ConfigurationOptions;
 using Lion.AbpPro.Users.Dtos;
 using IdentityModel;
@@ -32,6 +33,8 @@ namespace Lion.AbpPro.Users
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly ICurrentTenant _currentTenant;
         private readonly IHttpContextAccessor _contextAccessor;
+        /// <summary>识别设备身份并解析数据库中的用户绑定。</summary>
+        private readonly BiometricLoginService _biometricLoginService;
 
 
         public AccountAppService(
@@ -39,7 +42,8 @@ namespace Lion.AbpPro.Users
             IOptionsSnapshot<JwtOptions> jwtOptions,
             Microsoft.AspNetCore.Identity.SignInManager<IdentityUser> signInManager,
             IHttpClientFactory httpClientFactory, ICurrentTenant currentTenant,
-            IHttpContextAccessor contextAccessor)
+            IHttpContextAccessor contextAccessor,
+            BiometricLoginService biometricLoginService)
         {
             _userManager = userManager;
             _jwtOptions = jwtOptions.Value;
@@ -47,6 +51,7 @@ namespace Lion.AbpPro.Users
             _httpClientFactory = httpClientFactory;
             _currentTenant = currentTenant;
             _contextAccessor = contextAccessor;
+            _biometricLoginService = biometricLoginService;
         }
 
 
@@ -66,6 +71,17 @@ namespace Lion.AbpPro.Users
             var user = await _userManager.FindByNameAsync(input.Name);
             return await BuildResult(user);
         }
+        /// <summary>通过服务端真实识别和绑定账号登录，沿用账号状态、角色及 JWT 签发规则。</summary>
+        public async Task<LoginOutput> BiometricLoginAsync(BiometricLoginInput input, CancellationToken cancellationToken = default)
+        {
+            var userId = await _biometricLoginService.RecognizeUserIdAsync(input, cancellationToken);
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user != null && user.TenantId != _currentTenant.Id)
+                throw new UserFriendlyException("绑定账号与当前租户不一致，请联系管理员。");
+            cancellationToken.ThrowIfCancellationRequested();
+            return await BuildResult(user);
+        }
+
         //人脸登录
         public async Task<LoginOutput> FaceLoginAsync(string input)
         {
@@ -93,7 +109,11 @@ namespace Lion.AbpPro.Users
 
         private async Task<LoginOutput> BuildResult(IdentityUser user)
         {
-            if (user.LockoutEnabled) throw new UserFriendlyException("当前用户已被锁定");
+            if (user == null) throw new UserFriendlyException("绑定的 WMS 账号不存在，请联系管理员。");
+            // LockoutEnabled 只表示允许锁定，实际锁定状态由 Identity 的结束时间判断。
+            if (!user.IsActive || !await _signInManager.CanSignInAsync(user)
+                || await _userManager.IsLockedOutAsync(user))
+                throw new UserFriendlyException("当前用户已停用、锁定或不允许登录。");
             var roles = await _userManager.GetRolesAsync(user);
             if (roles == null || roles.Count == 0) throw new UserFriendlyException("当前用户未分配角色");
             var token = GenerateJwt(user.Id, user.UserName, user.Name, user.Email,
@@ -120,9 +140,9 @@ namespace Lion.AbpPro.Users
                 new Claim(JwtClaimTypes.Audience, _jwtOptions.Audience),
                 new Claim(JwtClaimTypes.Issuer, _jwtOptions.Issuer),
                 new Claim(AbpClaimTypes.UserId, userId.ToString()),
-                new Claim(AbpClaimTypes.Name, name),
+                new Claim(AbpClaimTypes.Name, name ?? string.Empty),
                 new Claim(AbpClaimTypes.UserName, userName),
-                new Claim(AbpClaimTypes.Email, email),
+                new Claim(AbpClaimTypes.Email, email ?? string.Empty),
                 new Claim(AbpClaimTypes.TenantId, tenantId)
             };
 

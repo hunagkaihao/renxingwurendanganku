@@ -265,6 +265,9 @@ namespace Lion.AbpPro
             //增加获取WCS配置
             context.Services.Configure<WCSOptions>(context.Services.GetConfiguration()
                 .GetSection("WCS"));
+            // 一体机生物识别服务连接配置；用户与识别编号的关联存储在数据库。
+            context.Services.Configure<BiometricLoginOptions>(context.Services.GetConfiguration()
+                .GetSection("BiometricLogin"));
             //增加获取分配库位规则配置
             context.Services.Configure<AllocationRulesOptions>(context.Services.GetConfiguration()
                 .GetSection("AllocationRules"));

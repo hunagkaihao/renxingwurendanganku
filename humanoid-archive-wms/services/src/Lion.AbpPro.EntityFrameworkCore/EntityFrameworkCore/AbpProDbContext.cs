@@ -17,6 +17,7 @@ using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using WarehouseManagement.EntityFrameworkCore;
+using Lion.AbpPro.Users;
 
 namespace Lion.AbpPro.EntityFrameworkCore
 {
@@ -52,6 +53,8 @@ namespace Lion.AbpPro.EntityFrameworkCore
         public DbSet<TenantConnectionString> TenantConnectionStrings { get; }
         public DbSet<BackgroundJobRecord> BackgroundJobs { get; }
         public DbSet<AuditLog> AuditLogs { get; }
+        /// <summary>用户与人脸、指静脉编号的登录绑定。</summary>
+        public DbSet<UserBiometricBinding> UserBiometricBindings { get; set; }
         
         /* Add DbSet properties for your Aggregate Roots / Entities here.
          * Also map them inside AbpProDbContextModelCreatingExtensions.ConfigureAbpPro

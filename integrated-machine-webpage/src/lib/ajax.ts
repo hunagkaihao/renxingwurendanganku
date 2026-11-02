@@ -25,6 +25,8 @@ let vm=new Vue({});
 ajax.interceptors.response.use((respon)=>{    
     return respon
 },(error)=>{
+    // 终端登录页自行展示失败原因；主动取消也不弹出网络异常提示。
+    if (axios.isCancel(error) || (error.config && error.config.terminalLogin)) return Promise.reject(error);
     if(!!error.response&&!!error.response.data.error&&!!error.response.data.error.message&&error.response.data.error.details){
         vm.$Modal.error({title:error.response.data.error.message,content:error.response.data.error.details})
     }else if(!!error.response&&!!error.response.data.error&&!!error.response.data.error.message){

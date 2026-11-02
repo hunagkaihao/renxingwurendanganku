@@ -14,15 +14,15 @@
                 <span class="terminal-login-symbol"><Icon type="ios-person-outline" size="32" /></span>
                 <div><h2>用户登录</h2><p>请使用您的 WMS 账号继续操作</p></div>
             </div>
-            <Form ref="userForm"  label-position="top" :rules="userRule" :model="loginModel">
+            <Form ref="userForm"  label-position="top" :rules="userRule" :model="loginModel" autocomplete="off">
                         <FormItem :label="L('用户名')" prop="userNameOrEmailAddress">
                             <Input ref="accountInput" v-model="loginModel.userNameOrEmailAddress" :disabled="submitting"
-                              :maxlength="32" :minlength="2" placeholder="请输入用户名" autocomplete="username"
+                              :maxlength="32" :minlength="2" placeholder="请输入用户名" autocomplete="off"
                               @on-focus="activeInput = 'accountInput'" @on-enter="focusPassword"></Input>
                         </FormItem>
                         <FormItem :label="L('密码')" prop="password">
                             <Input ref="passwordInput" v-model="loginModel.password" type="password" :disabled="submitting"
-                              :maxlength="32" placeholder="请输入密码" autocomplete="current-password"
+                              :maxlength="32" placeholder="请输入密码" autocomplete="new-password"
                               @on-focus="activeInput = 'passwordInput'" @on-enter="save"></Input>
                         </FormItem>        
             </Form>
@@ -53,7 +53,7 @@
         /** 唤起系统键盘前恢复到用户最近选择的输入框。 */
         activeInput:string = 'accountInput';
             loginModel={
-                userNameOrEmailAddress:'admin',
+                userNameOrEmailAddress:'',
                 password:'',
                 rememberMe:false
             }
@@ -138,6 +138,9 @@
             }
             else
             {
+                // 每次打开都要求重新输入，避免沿用上一次人员的账号或密码。
+                this.loginModel.userNameOrEmailAddress = '';
+                this.loginModel.password = '';
                 this.loginError = '';
                 this.activeInput = 'accountInput';
                 this.changeLanguage('zh-Hans');

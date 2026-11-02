@@ -1,4 +1,6 @@
 using System.Threading.Tasks;
+using System;
+using System.Collections.Generic;
 using Lion.AbpPro.Users;
 using Lion.AbpPro.Users.Dtos;
 using Lion.AbpPro.Extension.Customs.Dtos;
@@ -68,6 +70,30 @@ namespace Lion.AbpPro.Controllers.Systems
         public Task LockAsync(LockUserInput input)
         {
             return _userAppService.LockAsync(input);
+        }
+
+        /// <summary>获取当前租户指定用户的全部人脸、指静脉绑定。</summary>
+        [HttpGet("{userId:guid}/biometric-bindings")]
+        [SwaggerOperation(summary: "查询用户生物识别绑定", Tags = new[] { "Users" })]
+        public Task<List<UserBiometricBindingDto>> GetBiometricBindingsAsync(Guid userId)
+        {
+            return _userAppService.GetBiometricBindingsAsync(userId);
+        }
+
+        /// <summary>新增或修改用户的一组编号绑定，需要用户编辑权限；修改时携带并发标记。</summary>
+        [HttpPost("{userId:guid}/biometric-bindings")]
+        [SwaggerOperation(summary: "保存用户生物识别绑定", Tags = new[] { "Users" })]
+        public Task<UserBiometricBindingDto> SaveBiometricBindingAsync(Guid userId, [FromBody] SaveUserBiometricBindingInput input)
+        {
+            return _userAppService.SaveBiometricBindingAsync(userId, input);
+        }
+
+        /// <summary>解除用户的一组绑定，需要用户编辑权限；不删除设备中的样本或模板。</summary>
+        [HttpDelete("{userId:guid}/biometric-bindings/{bindingId:guid}")]
+        [SwaggerOperation(summary: "解除用户生物识别绑定", Tags = new[] { "Users" })]
+        public Task DeleteBiometricBindingAsync(Guid userId, Guid bindingId)
+        {
+            return _userAppService.DeleteBiometricBindingAsync(userId, bindingId);
         }
     }
 }

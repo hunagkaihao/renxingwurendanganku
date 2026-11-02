@@ -1,0 +1,34 @@
+.registration-card { width: 820px; }
+.registration-tabs { display: flex; gap: 12px; margin: 24px 0; }
+.registration-tabs button { flex: 1; min-height: 56px; padding: 10px; border: 1px solid #dce4ef; border-radius: 12px; background: #fafcff; color: #667992; font-size: 19px; cursor: pointer; }
+.registration-tabs button.active { color: #3e70d8; border-color: #7d9fe5; background: #eef4ff; }
+.registration-search { display: flex; gap: 12px; margin-top: 22px; }
+.registration-search input { flex: 1; min-width: 0; }
+.registration-search button, .registration-pagination button, .registration-bindings button { padding: 10px 16px; border: 1px solid #dce4ef; border-radius: 10px; background: white; color: #41699f; font-size: 17px; cursor: pointer; }
+.sample-login-panel > select { width: 100%; min-height: 60px; padding: 10px 14px; border: 1px solid #dce4ef; border-radius: 12px; background: #f9fbfe; color: #263951; font-size: 20px; }
+.registration-pagination { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 16px 0 24px; color: #72829b; }
+.registration-selected { margin: 22px 0; font-size: 20px; }
+.registration-bindings { padding: 18px; border-radius: 12px; background: #f2f6fc; font-size: 17px; line-height: 1.8; }
+.registration-roles { margin: 24px 0; padding: 12px 18px; border: 1px solid #dce4ef; border-radius: 12px; }
+.registration-roles label { display: inline-flex; align-items: center; gap: 8px; margin: 10px 20px 10px 0; }
+.registration-roles input { width: 22px; height: 22px; }
+.registration-success { margin-top: 18px; padding: 14px 16px; border-radius: 10px; color: #236c48; background: #eef9f2; font-size: 17px; line-height: 1.6; }
+.registration-vein-progress { margin: 20px 0; padding: 20px 16px; border: 2px solid #94b5ef; border-radius: 14px; background: #eef4ff; text-align: center; }
+.sample-login-device .registration-vein-prompt { margin: 0; color: #234e94; font-size: 24px; font-weight: 600; line-height: 1.6; }
+.sample-login-device .registration-vein-count { margin: 12px 0; color: #526c91; font-size: 18px; }
+.registration-vein-steps { display: flex; justify-content: center; gap: 12px; margin: 0; padding: 0; list-style: none; }
+.registration-vein-steps li { display: flex; align-items: center; justify-content: center; width: 38px; height: 38px; border: 1px solid #bdd0eb; border-radius: 50%; background: white; color: #667992; font-size: 20px; }
+.registration-vein-steps li.completed { border-color: #299660; background: #299660; color: white; }
+.registration-vein-progress.is-remove { border-color: #d9a44c; background: #fff7e9; }
+.registration-vein-progress.is-remove .registration-vein-prompt { color: #885a12; }
+.registration-vein-progress.is-failed, .registration-vein-progress.is-unavailable { border-color: #df9b87; background: #fff3ef; }
+.registration-vein-progress.is-failed .registration-vein-prompt, .registration-vein-progress.is-unavailable .registration-vein-prompt { color: #ad442a; }
+.registration-vein-progress.is-completed { border-color: #82ba99; background: #eef9f2; }
+.registration-vein-progress.is-completed .registration-vein-prompt { color: #236c48; }
+.sample-login-device .registration-progress-warning { color: #ad442a; font-size: 17px; }
+@media (max-width: 480px) {
+  .registration-vein-steps { gap: 6px; }
+  .registration-vein-steps li { width: 30px; height: 30px; }
+  .sample-login-device .registration-vein-prompt { font-size: 21px; }
+}
+select:focus { outline: 3px solid #a6bff0; outline-offset: 3px; }

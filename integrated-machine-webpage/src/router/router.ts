@@ -33,6 +33,13 @@ export const client = {
     },
     component: () => import('../views/client/portal.vue')
 };
+/** 留样、取样使用三种方式验证，人员注册只接受管理员账号密码验证。 */
+export const terminalLogin = {
+    path: '/terminal-login',
+    name: 'terminal-login',
+    meta: { title: '用户登录' },
+    component: () => import('../views/client/terminal-login.vue')
+};
 export const autol = {
     path: '/autol',
     name: 'autol',
@@ -156,9 +163,9 @@ export const userregister = {
     path: '/userregister',
     name: 'userregister',
     meta: {
-        title: '用户特征数据'
+        title: '人员注册'
     },
-    component: () => import('../views/setting/user/userregister.vue')
+    component: () => import('../views/client/terminal-register.vue')
 };
 export const checktask = {
     path: '/checktask',
@@ -235,6 +242,7 @@ export const routers = [
     loginRouter,
     locking,
     client,
+    terminalLogin,
     autol,
     face,
     faceverification,
