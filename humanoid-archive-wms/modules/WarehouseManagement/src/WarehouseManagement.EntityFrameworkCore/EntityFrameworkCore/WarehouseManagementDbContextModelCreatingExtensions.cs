@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
+using System.Linq;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 using WarehouseManagement.MaterialBoxs.Aggregates;
 using WarehouseManagement.Cells;
@@ -70,6 +71,10 @@ public static class WarehouseManagementDbContextModelCreatingExtensions
             b.Property(q => q.MaterialBoxBarcode).HasColumnName("MaterialBarcode");
             b.HasIndex(q => q.CreationTime);
             b.Property(q => q.MaterialOutTime).HasColumnType("datetime");
+            // 支持实物条码、名称及所在库位的精确查找。
+            b.HasIndex(q => q.MaterialBoxBarcode);
+            b.HasIndex(q => q.MaterialBoxName);
+            b.HasIndex(q => q.CellId);
             b.ConfigureByConvention();
         });
         builder.Entity<Cell>(b =>
@@ -80,12 +85,17 @@ public static class WarehouseManagementDbContextModelCreatingExtensions
         {
             b.ToTable(WarehouseManagementDbProperties.DbTablePrefix + nameof(MaterialBoxDetail), WarehouseManagementDbProperties.DbSchema);
             b.HasIndex(q => q.CreationTime);
+            // 支持按物料关联未删除的库存明细。
+            b.HasIndex(q => new { q.MaterialId, q.IsDeleted });
             b.ConfigureByConvention();
         });
         builder.Entity<MaterialAggregate>(b =>
         {
             b.ToTable(WarehouseManagementDbProperties.DbTablePrefix + nameof(Material), WarehouseManagementDbProperties.DbSchema);
             b.HasIndex(q => q.CreationTime);
+            // 支持物料编码和 RFID 的精确定位。
+            b.HasIndex(q => q.MaterialCode);
+            b.HasIndex(q => q.RfidId);
             b.ConfigureByConvention();
         });
         builder.Entity<Rfid>(b =>
@@ -99,6 +109,10 @@ public static class WarehouseManagementDbContextModelCreatingExtensions
         {
             b.ToTable(WarehouseManagementDbProperties.DbTablePrefix + nameof(Cell), WarehouseManagementDbProperties.DbSchema);
             b.HasIndex(q => q.CreationTime);
+            // 编码和名称分别用于 OR 查询；物料编码用于占位校验。
+            b.HasIndex(q => q.CellCode);
+            b.HasIndex(q => q.CellName);
+            b.HasIndex(q => q.MaterialCode);
             b.Property(b => b.CellType).HasColumnType("varchar(20)");
             b.Property(b => b.CellStatus).HasColumnType("varchar(20)");
             b.Property(b => b.RunStatus).HasColumnType("varchar(20)");
@@ -113,6 +127,8 @@ public static class WarehouseManagementDbContextModelCreatingExtensions
             b.Property(q => q.MaterialBoxBarcode).HasColumnName("MaterialBarcode");
             b.HasIndex(q => q.CreationTime);
             b.Property(b => b.TaskTypeCode).HasColumnType("varchar(20)");
+            // 支持按实物条码查找任务并筛选执行状态。
+            b.HasIndex(q => new { q.MaterialBoxBarcode, q.TaskStatus });
             b.Property(b => b.TaskStatus).HasColumnType("varchar(20)");
             //b.HasMany(u => u.Goodss).WithOne().HasForeignKey(ur => ur.StorageBoxId).IsRequired();
             b.ConfigureByConvention();
@@ -196,6 +212,9 @@ public static class WarehouseManagementDbContextModelCreatingExtensions
         {
             b.ToTable(WarehouseManagementDbProperties.DbTablePrefix + nameof(CheckDetailHis), WarehouseManagementDbProperties.DbSchema);
             b.HasIndex(q => q.CreationTime);
+            // 支持历史盘点明细按盘点单、关联任务查询。
+            b.HasIndex(q => q.CheckId);
+            b.HasIndex(q => q.TaskId);
             // 盘点历史明细数据库列已统一为 TaskId。
             b.Property(b => b.TaskId).HasColumnName("TaskId");
             b.ConfigureByConvention();
@@ -235,5 +254,33 @@ public static class WarehouseManagementDbContextModelCreatingExtensions
             b.HasIndex(q => q.CreationTime);
             b.ConfigureByConvention();
         });
+
+        ConfigureStringLengths(builder);
+    }
+
+    /// <summary>
+    /// 为本模块声明的普通字符串设置默认字符上限，保留已有长度、显式列类型和长内容字段。
+    /// 不处理 ABP 基类中的扩展属性或并发标记，也不影响其他模块。
+    /// </summary>
+    /// <param name="builder">已注册仓储实体的模型构建器。</param>
+    private static void ConfigureStringLengths(ModelBuilder builder)
+    {
+        foreach (var entity in builder.Model.GetEntityTypes()
+                     .Where(entity => entity.ClrType.Assembly == typeof(Cell).Assembly))
+        {
+            foreach (var property in entity.GetProperties())
+            {
+                if (property.ClrType != typeof(string)
+                    || property.PropertyInfo?.DeclaringType?.Assembly != typeof(Cell).Assembly
+                    || property.GetMaxLength().HasValue
+                    || property.GetColumnType() != null
+                    || (entity.ClrType == typeof(Face) && property.Name == nameof(Face.ImageDate)))
+                {
+                    continue;
+                }
+
+                property.SetMaxLength(WarehouseManagementDbProperties.DefaultStringMaxLength);
+            }
+        }
     }
 }
