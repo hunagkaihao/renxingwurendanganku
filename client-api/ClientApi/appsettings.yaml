@@ -1,0 +1,45 @@
+Logging:
+  LogLevel:
+    Default: Information
+    Microsoft.AspNetCore: Warning
+AllowedHosts: '*'
+# 服务监听地址，修改后需重启。
+urls: 'http://*:5032'
+# 前端跨域地址。
+CorsOrigins: 'http://localhost:8080,http://localhost:8081,http://localhost:5023'
+# true 沿用允许任意来源的现有行为；false 时只允许 CorsOrigins，修改后需重启。
+Cors:
+  AllowAnyOrigin: true
+# 档案库后台接口地址，支持热重载。d
+AMSApiUrl: 'http://localhost:8085'
+# 指静脉串口启动参数，修改后需重启。
+Vein:
+  Enable: true
+  # 串口设备为 true；false 时直接使用 SDK 设备枚举，修改后需重启。
+  UseSerialPort: true
+  ComName: COM3
+  comRate: 9600
+  comProtocol: 2
+# 人脸配置：启动参数需重启；Matching、Storage、Liveness 在后续请求中生效。
+FaceRecognition:
+  Enabled: true
+  StartupTimeoutSeconds: 180
+  # 单次内部请求超时（正整数秒），修改后在后续请求中生效。
+  RequestTimeoutSeconds: 180
+  DataPath: data/face-recognition
+  # 可选运行环境路径；省略时优先使用随程序打包的 FaceRecognition 目录。
+  # ProjectPath: 'E:/'
+  Matching:
+    # 最大余弦距离，范围 0～2，越小越严格；当前默认值未经设备校准。
+    DistanceThreshold: 0.593
+    # 第一和第二候选身份的最小距离差，范围 0～2。
+    CandidateMargin: 0.05
+  Storage:
+    # 每用户样本上限，必须为正整数；降低上限不会删除已录入数据。
+    MaxSamplesPerUser: 10 
+  Liveness:
+    # 单帧反欺骗总开关；启用前需要准备 YuNet 与 MiniFASNet 权重。
+    Enabled: false
+    # 总开关启用时，分别控制录入和识别前的检查。
+    CheckOnEnroll: true
+    CheckOnMatch: true
