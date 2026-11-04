@@ -1,0 +1,1322 @@
+{
+  "host/Lion.AbpPro.HttpApi.Host/AbpProHttpApiHostConsts.cs": {
+    "mtime": 1787278528.6043565,
+    "seen": 1788928481.6378999,
+    "ast_hash": "58eba56a9a8098078ca9bb9e266fd977",
+    "semantic_hash": "58eba56a9a8098078ca9bb9e266fd977"
+  },
+  "host/Lion.AbpPro.HttpApi.Host/AbpProHttpApiHostModule.cs": {
+    "mtime": 1787278528.6054306,
+    "seen": 1788928481.6379101,
+    "ast_hash": "a2d9cd917d550106d403161c13fa1fae",
+    "semantic_hash": "a2d9cd917d550106d403161c13fa1fae"
+  },
+  "host/Lion.AbpPro.HttpApi.Host/Controllers/HomeController.cs": {
+    "mtime": 1787278528.6064339,
+    "seen": 1788928481.6379147,
+    "ast_hash": "63a43b535034946d52a1514019301fba",
+    "semantic_hash": "63a43b535034946d52a1514019301fba"
+  },
+  "host/Lion.AbpPro.HttpApi.Host/Extensions/Hangfire/AutoDeleteAfterSuccessAttributer.cs": {
+    "mtime": 1787278528.6074233,
+    "seen": 1788928481.6379175,
+    "ast_hash": "441b44a0724005a27a1c1b45ad14eab5",
+    "semantic_hash": "441b44a0724005a27a1c1b45ad14eab5"
+  },
+  "host/Lion.AbpPro.HttpApi.Host/Extensions/Hangfire/CronType.cs": {
+    "mtime": 1787278528.6074233,
+    "seen": 1788928481.6379201,
+    "ast_hash": "3157b882e8f19e8c0596844ae507682a",
+    "semantic_hash": "3157b882e8f19e8c0596844ae507682a"
+  },
+  "host/Lion.AbpPro.HttpApi.Host/Extensions/Hangfire/CustomHangfireAuthorizeFilter.cs": {
+    "mtime": 1787278528.6084278,
+    "seen": 1788928481.6379225,
+    "ast_hash": "f8cc197f3dce813fb398c23b93f4f712",
+    "semantic_hash": "f8cc197f3dce813fb398c23b93f4f712"
+  },
+  "host/Lion.AbpPro.HttpApi.Host/Extensions/Hangfire/JobRetryLastFilter.cs": {
+    "mtime": 1787278528.6084278,
+    "seen": 1788928481.6379254,
+    "ast_hash": "b001d764ee950078097c442ba79fc183",
+    "semantic_hash": "b001d764ee950078097c442ba79fc183"
+  },
+  "host/Lion.AbpPro.HttpApi.Host/Extensions/RecurringJobsExtensions.cs": {
+    "mtime": 1787278528.6094403,
+    "seen": 1788928481.6379278,
+    "ast_hash": "a35b9f88dcac64ead5876b397be0709d",
+    "semantic_hash": "a35b9f88dcac64ead5876b397be0709d"
+  },
+  "host/Lion.AbpPro.HttpApi.Host/Extensions/SerilogToEsExtensions.cs": {
+    "mtime": 1787278528.6094403,
+    "seen": 1788928481.63793,
+    "ast_hash": "6acdf655acd0767c61467803f3c29e06",
+    "semantic_hash": "6acdf655acd0767c61467803f3c29e06"
+  },
+  "host/Lion.AbpPro.HttpApi.Host/Jobs/PlcJob.cs": {
+    "mtime": 1788853099.92,
+    "seen": 1788928481.6379325,
+    "ast_hash": "2d45abcc2445eff31b9ebb106f16a1b9",
+    "semantic_hash": "2d45abcc2445eff31b9ebb106f16a1b9"
+  },
+  "host/Lion.AbpPro.HttpApi.Host/Lion.AbpPro.HttpApi.Host.csproj": {
+    "mtime": 1788401910.477356,
+    "seen": 1788928481.637935,
+    "ast_hash": "4cd28c86b5e588866d9f19097ab0dec9",
+    "semantic_hash": "4cd28c86b5e588866d9f19097ab0dec9"
+  },
+  "host/Lion.AbpPro.HttpApi.Host/Pages/Login.cshtml": {
+    "mtime": 1787278528.6123838,
+    "seen": 1788928481.6379375,
+    "ast_hash": "0aac654db59e528f55a9bb387e1ce503",
+    "semantic_hash": "0aac654db59e528f55a9bb387e1ce503"
+  },
+  "host/Lion.AbpPro.HttpApi.Host/Pages/Login.cshtml.cs": {
+    "mtime": 1787278528.6133473,
+    "seen": 1788928481.63794,
+    "ast_hash": "76e7b582ad6134ddff1978b01c3fd692",
+    "semantic_hash": "76e7b582ad6134ddff1978b01c3fd692"
+  },
+  "host/Lion.AbpPro.HttpApi.Host/Pages/Monitor.cshtml": {
+    "mtime": 1787278528.6133473,
+    "seen": 1788928481.6379423,
+    "ast_hash": "d6f050b61e1eb870c71afab9fc224b7b",
+    "semantic_hash": "d6f050b61e1eb870c71afab9fc224b7b"
+  },
+  "host/Lion.AbpPro.HttpApi.Host/Pages/Monitor.cshtml.cs": {
+    "mtime": 1787278528.6133473,
+    "seen": 1788928481.6379445,
+    "ast_hash": "3891777035420886f1906ad1efdd59b6",
+    "semantic_hash": "3891777035420886f1906ad1efdd59b6"
+  },
+  "host/Lion.AbpPro.HttpApi.Host/Program.cs": {
+    "mtime": 1788401910.4803479,
+    "seen": 1788928481.6379468,
+    "ast_hash": "5df0e2ef94b015bd33aaf4a5d6001f91",
+    "semantic_hash": "5df0e2ef94b015bd33aaf4a5d6001f91"
+  },
+  "host/Lion.AbpPro.HttpApi.Host/Properties/launchSettings.json": {
+    "mtime": 1788397998.583,
+    "seen": 1788928481.637949,
+    "ast_hash": "6ae39543658f2226090e90c9b574377e",
+    "semantic_hash": "6ae39543658f2226090e90c9b574377e"
+  },
+  "host/Lion.AbpPro.HttpApi.Host/Startup.cs": {
+    "mtime": 1787278528.61603,
+    "seen": 1788928481.6379511,
+    "ast_hash": "a1d0f972df2d17751bf15543aac22275",
+    "semantic_hash": "a1d0f972df2d17751bf15543aac22275"
+  },
+  "host/Lion.AbpPro.HttpApi.Host/dotnet-tools.json": {
+    "mtime": 1787278528.61603,
+    "seen": 1788928481.6379538,
+    "ast_hash": "841ac9416c094d24e8fa3dc79d5ed14c",
+    "semantic_hash": "841ac9416c094d24e8fa3dc79d5ed14c"
+  },
+  "host/Lion.AbpPro.IdentityServer/AbpProBrandingProvider.cs": {
+    "mtime": 1787278528.624077,
+    "seen": 1788928481.637956,
+    "ast_hash": "1070a9dd9c53a424a5f652764b0a494a",
+    "semantic_hash": "1070a9dd9c53a424a5f652764b0a494a"
+  },
+  "host/Lion.AbpPro.IdentityServer/AbpProIdentityServerModule.cs": {
+    "mtime": 1787278528.6251159,
+    "seen": 1788928481.6379583,
+    "ast_hash": "a1f1b49f9632a9fb97179b8307099999",
+    "semantic_hash": "a1f1b49f9632a9fb97179b8307099999"
+  },
+  "host/Lion.AbpPro.IdentityServer/Extensions/SameSiteCookiesServiceCollectionExtensions.cs": {
+    "mtime": 1787278528.6260378,
+    "seen": 1788928481.637961,
+    "ast_hash": "f1c9ffbc77148af0ed20e3e4783d285f",
+    "semantic_hash": "f1c9ffbc77148af0ed20e3e4783d285f"
+  },
+  "host/Lion.AbpPro.IdentityServer/Lion.AbpPro.IdentityServer.csproj": {
+    "mtime": 1787278528.6260378,
+    "seen": 1788928481.6379642,
+    "ast_hash": "204fd15295c991eaf6022cba2f420dfa",
+    "semantic_hash": "204fd15295c991eaf6022cba2f420dfa"
+  },
+  "host/Lion.AbpPro.IdentityServer/Pages/Account/LoggedOut.cshtml": {
+    "mtime": 1787278528.62904,
+    "seen": 1788928481.6379669,
+    "ast_hash": "4d17932b6056c7e222a23cacc735b138",
+    "semantic_hash": "4d17932b6056c7e222a23cacc735b138"
+  },
+  "host/Lion.AbpPro.IdentityServer/Pages/Account/Login.cshtml": {
+    "mtime": 1787278528.62904,
+    "seen": 1788928481.6379693,
+    "ast_hash": "a3db57238aa8254f2f53ac59fe3549f4",
+    "semantic_hash": "a3db57238aa8254f2f53ac59fe3549f4"
+  },
+  "host/Lion.AbpPro.IdentityServer/Pages/Index.cshtml": {
+    "mtime": 1787278528.6300366,
+    "seen": 1788928481.6379714,
+    "ast_hash": "6691a96c5edb04a8ead7bb5de21c1906",
+    "semantic_hash": "6691a96c5edb04a8ead7bb5de21c1906"
+  },
+  "host/Lion.AbpPro.IdentityServer/Pages/Index.cshtml.cs": {
+    "mtime": 1787278528.6300366,
+    "seen": 1788928481.637974,
+    "ast_hash": "ec8e05f372c60f8e124ecb1f47af0b5d",
+    "semantic_hash": "ec8e05f372c60f8e124ecb1f47af0b5d"
+  },
+  "host/Lion.AbpPro.IdentityServer/Pages/Welcome.cshtml": {
+    "mtime": 1787278528.631036,
+    "seen": 1788928481.6379764,
+    "ast_hash": "3740fe7728fcfa742abda45d4f2ea242",
+    "semantic_hash": "3740fe7728fcfa742abda45d4f2ea242"
+  },
+  "host/Lion.AbpPro.IdentityServer/Pages/Welcome.cshtml.cs": {
+    "mtime": 1787278528.631036,
+    "seen": 1788928481.6379788,
+    "ast_hash": "cfa015a7054678dc1abc4ebe90951e62",
+    "semantic_hash": "cfa015a7054678dc1abc4ebe90951e62"
+  },
+  "host/Lion.AbpPro.IdentityServer/Pages/_ViewImports.cshtml": {
+    "mtime": 1787278528.632036,
+    "seen": 1788928481.6379812,
+    "ast_hash": "a89bd934ecb94cc7c719a12cbd1cc044",
+    "semantic_hash": "a89bd934ecb94cc7c719a12cbd1cc044"
+  },
+  "host/Lion.AbpPro.IdentityServer/Program.cs": {
+    "mtime": 1787278528.632036,
+    "seen": 1788928481.6379838,
+    "ast_hash": "130040cfa3689fe98e014b59733a9f56",
+    "semantic_hash": "130040cfa3689fe98e014b59733a9f56"
+  },
+  "host/Lion.AbpPro.IdentityServer/Properties/launchSettings.json": {
+    "mtime": 1787278528.632036,
+    "seen": 1788928481.6379867,
+    "ast_hash": "931c41084c3df2baac38d5d6a7a6962b",
+    "semantic_hash": "931c41084c3df2baac38d5d6a7a6962b"
+  },
+  "host/Lion.AbpPro.IdentityServer/Startup.cs": {
+    "mtime": 1787278528.6334832,
+    "seen": 1788928481.6379888,
+    "ast_hash": "75a410887ff430bb996aeab225bcad4b",
+    "semantic_hash": "75a410887ff430bb996aeab225bcad4b"
+  },
+  "host/Lion.AbpPro.IdentityServer/abp.resourcemapping.js": {
+    "mtime": 1787278528.6334832,
+    "seen": 1788928481.6379914,
+    "ast_hash": "e25c1a48b5b0bd3718f830aee354697f",
+    "semantic_hash": "e25c1a48b5b0bd3718f830aee354697f"
+  },
+  "host/Lion.AbpPro.IdentityServer/appsettings.json": {
+    "mtime": 1787278528.6344473,
+    "seen": 1788928481.637994,
+    "ast_hash": "e485ea81c20d8b95cc847cc8411e6d23",
+    "semantic_hash": "e485ea81c20d8b95cc847cc8411e6d23"
+  },
+  "host/Lion.AbpPro.IdentityServer/package.json": {
+    "mtime": 1787278528.6344473,
+    "seen": 1788928481.637996,
+    "ast_hash": "b06f91df3fd78b21d5b21e19cf2910bf",
+    "semantic_hash": "b06f91df3fd78b21d5b21e19cf2910bf"
+  },
+  "src/Lion.AbpPro.Application.Contracts/AbpProApplicationContractsModule.cs": {
+    "mtime": 1787278528.9615157,
+    "seen": 1788928481.6379983,
+    "ast_hash": "f1c550e3d586d8e3017c2e8d9e871e79",
+    "semantic_hash": "f1c550e3d586d8e3017c2e8d9e871e79"
+  },
+  "src/Lion.AbpPro.Application.Contracts/AbpProDtoExtensions.cs": {
+    "mtime": 1787278528.962537,
+    "seen": 1788928481.638001,
+    "ast_hash": "5369a69aaa530dcc75c691c6f7efa338",
+    "semantic_hash": "5369a69aaa530dcc75c691c6f7efa338"
+  },
+  "src/Lion.AbpPro.Application.Contracts/AuditLogs/GetAuditLogPageListOutput.cs": {
+    "mtime": 1787278528.9635236,
+    "seen": 1788928481.638003,
+    "ast_hash": "3088fe3eab8ff4aa3328703c67e21b52",
+    "semantic_hash": "3088fe3eab8ff4aa3328703c67e21b52"
+  },
+  "src/Lion.AbpPro.Application.Contracts/AuditLogs/IAuditLogAppService.cs": {
+    "mtime": 1787278528.9635236,
+    "seen": 1788928481.6380053,
+    "ast_hash": "fd18089d5c94a2042416b8e1640f1e5d",
+    "semantic_hash": "fd18089d5c94a2042416b8e1640f1e5d"
+  },
+  "src/Lion.AbpPro.Application.Contracts/AuditLogs/PagingAuditLogListInput.cs": {
+    "mtime": 1787278528.964522,
+    "seen": 1788928481.6380079,
+    "ast_hash": "8fcb74c20d349b0a0e049ec62ff5a3cd",
+    "semantic_hash": "8fcb74c20d349b0a0e049ec62ff5a3cd"
+  },
+  "src/Lion.AbpPro.Application.Contracts/ConfigurationOptions/AGVOptions.cs": {
+    "mtime": 1787278528.9655194,
+    "seen": 1788928481.63801,
+    "ast_hash": "ff0e3489db231570e197bf2c2bb7bcde",
+    "semantic_hash": "ff0e3489db231570e197bf2c2bb7bcde"
+  },
+  "src/Lion.AbpPro.Application.Contracts/ConfigurationOptions/AllocationRulesOptions.cs": {
+    "mtime": 1787278528.9655194,
+    "seen": 1788928481.6380122,
+    "ast_hash": "f21a9b9f574b410df81d710faa415112",
+    "semantic_hash": "f21a9b9f574b410df81d710faa415112"
+  },
+  "src/Lion.AbpPro.Application.Contracts/ConfigurationOptions/ERPOptions.cs": {
+    "mtime": 1787278528.9655194,
+    "seen": 1788928481.6380155,
+    "ast_hash": "a5f97bc21deef7f4ef23c4df48dbc0c8",
+    "semantic_hash": "a5f97bc21deef7f4ef23c4df48dbc0c8"
+  },
+  "src/Lion.AbpPro.Application.Contracts/ConfigurationOptions/FbqOptions.cs": {
+    "mtime": 1787278528.96652,
+    "seen": 1788928481.6380181,
+    "ast_hash": "c48edc8ca940ea60a2909338a7f891d3",
+    "semantic_hash": "c48edc8ca940ea60a2909338a7f891d3"
+  },
+  "src/Lion.AbpPro.Application.Contracts/ConfigurationOptions/JwtOptions.cs": {
+    "mtime": 1787278528.96652,
+    "seen": 1788928481.6380203,
+    "ast_hash": "5d902149f58680a57d92ed1de0c5a96e",
+    "semantic_hash": "5d902149f58680a57d92ed1de0c5a96e"
+  },
+  "src/Lion.AbpPro.Application.Contracts/ConfigurationOptions/MesOptions.cs": {
+    "mtime": 1787278528.9675174,
+    "seen": 1788928481.6380227,
+    "ast_hash": "7b6127a48ee121c45ba5986b57aebbff",
+    "semantic_hash": "7b6127a48ee121c45ba5986b57aebbff"
+  },
+  "src/Lion.AbpPro.Application.Contracts/ConfigurationOptions/WCSOptions.cs": {
+    "mtime": 1788348107.9609048,
+    "seen": 1788928481.638025,
+    "ast_hash": "c81ec4ea51dd967dba5c18adb545965d",
+    "semantic_hash": "c81ec4ea51dd967dba5c18adb545965d"
+  },
+  "src/Lion.AbpPro.Application.Contracts/ElasticSearchs/Dto/PagingElasticSearchLogInput.cs": {
+    "mtime": 1787278528.9685185,
+    "seen": 1788928481.6380272,
+    "ast_hash": "3efc79edc41ff194fc513fcc937ffa83",
+    "semantic_hash": "3efc79edc41ff194fc513fcc937ffa83"
+  },
+  "src/Lion.AbpPro.Application.Contracts/ElasticSearchs/Dto/PagingElasticSearchLogOutput.cs": {
+    "mtime": 1787278528.9685185,
+    "seen": 1788928481.6380296,
+    "ast_hash": "df8607a80d2bd2d1a5c6ae37c159cb41",
+    "semantic_hash": "df8607a80d2bd2d1a5c6ae37c159cb41"
+  },
+  "src/Lion.AbpPro.Application.Contracts/ElasticSearchs/ILionAbpProLogAppService.cs": {
+    "mtime": 1787278528.9685185,
+    "seen": 1788928481.638032,
+    "ast_hash": "ebe0601ec25ffd65d2584359c00b8da7",
+    "semantic_hash": "ebe0601ec25ffd65d2584359c00b8da7"
+  },
+  "src/Lion.AbpPro.Application.Contracts/IdentityServers/ApiResources/Dtos/ApiResourceOutput.cs": {
+    "mtime": 1787278528.9705167,
+    "seen": 1788928481.638034,
+    "ast_hash": "bb468e98521d80cf0ce3207da853c7e6",
+    "semantic_hash": "bb468e98521d80cf0ce3207da853c7e6"
+  },
+  "src/Lion.AbpPro.Application.Contracts/IdentityServers/ApiResources/Dtos/CreateApiResourceInput.cs": {
+    "mtime": 1787278528.9705167,
+    "seen": 1788928481.6380367,
+    "ast_hash": "bb593d6a7ec1d36f62be572b904f3426",
+    "semantic_hash": "bb593d6a7ec1d36f62be572b904f3426"
+  },
+  "src/Lion.AbpPro.Application.Contracts/IdentityServers/ApiResources/Dtos/PagingApiRseourceListInput.cs": {
+    "mtime": 1787278528.9705167,
+    "seen": 1788928481.638039,
+    "ast_hash": "3f609cf43cf8afd51ad329834a1ce441",
+    "semantic_hash": "3f609cf43cf8afd51ad329834a1ce441"
+  },
+  "src/Lion.AbpPro.Application.Contracts/IdentityServers/ApiResources/Dtos/UpdateApiResourceInput.cs": {
+    "mtime": 1787278528.971526,
+    "seen": 1788928481.638041,
+    "ast_hash": "30ed64af5b2c57bd447f60995f973945",
+    "semantic_hash": "30ed64af5b2c57bd447f60995f973945"
+  },
+  "src/Lion.AbpPro.Application.Contracts/IdentityServers/ApiResources/IApiResourceAppService.cs": {
+    "mtime": 1787278528.971526,
+    "seen": 1788928481.6380434,
+    "ast_hash": "ec2ac1601dddeac1d4815fb47a1f17b8",
+    "semantic_hash": "ec2ac1601dddeac1d4815fb47a1f17b8"
+  },
+  "src/Lion.AbpPro.Application.Contracts/IdentityServers/ApiScopes/Dtos/CreateApiScopeInput.cs": {
+    "mtime": 1787278528.972525,
+    "seen": 1788928481.6380458,
+    "ast_hash": "ea8cc9cf39d1c7fb527f4e312c869a43",
+    "semantic_hash": "ea8cc9cf39d1c7fb527f4e312c869a43"
+  },
+  "src/Lion.AbpPro.Application.Contracts/IdentityServers/ApiScopes/Dtos/PagingApiScopeListInput.cs": {
+    "mtime": 1787278528.972525,
+    "seen": 1788928481.638048,
+    "ast_hash": "82ac916901fd74caa8143af8d48d1dad",
+    "semantic_hash": "82ac916901fd74caa8143af8d48d1dad"
+  },
+  "src/Lion.AbpPro.Application.Contracts/IdentityServers/ApiScopes/Dtos/PagingApiScopeListOutput.cs": {
+    "mtime": 1787278528.9735255,
+    "seen": 1788928481.6380503,
+    "ast_hash": "e057a435dad3c2aca3761879fcb336de",
+    "semantic_hash": "e057a435dad3c2aca3761879fcb336de"
+  },
+  "src/Lion.AbpPro.Application.Contracts/IdentityServers/ApiScopes/Dtos/UpdateCreateApiScopeInput.cs": {
+    "mtime": 1787278528.9735255,
+    "seen": 1788928481.6380527,
+    "ast_hash": "506dcbcb941da8d314f03afc64060f79",
+    "semantic_hash": "506dcbcb941da8d314f03afc64060f79"
+  },
+  "src/Lion.AbpPro.Application.Contracts/IdentityServers/ApiScopes/IApiScopeAppService.cs": {
+    "mtime": 1787278528.9735255,
+    "seen": 1788928481.6380546,
+    "ast_hash": "2db9c74adf1c6be15480afceceeed2f8",
+    "semantic_hash": "2db9c74adf1c6be15480afceceeed2f8"
+  },
+  "src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/Dtos/AddCorsInput.cs": {
+    "mtime": 1787278528.9745238,
+    "seen": 1788928481.638057,
+    "ast_hash": "79f05b58e54ed3d10352c046060e8a96",
+    "semantic_hash": "79f05b58e54ed3d10352c046060e8a96"
+  },
+  "src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/Dtos/AddRedirectUriInput.cs": {
+    "mtime": 1787278528.9745238,
+    "seen": 1788928481.638059,
+    "ast_hash": "8f3cc221b5d4329c68f699f94ad3826e",
+    "semantic_hash": "8f3cc221b5d4329c68f699f94ad3826e"
+  },
+  "src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/Dtos/ClientClaimOutput.cs": {
+    "mtime": 1787278528.9755256,
+    "seen": 1788928481.6380613,
+    "ast_hash": "141f4c9891fac36f9037bc40f2e016e5",
+    "semantic_hash": "141f4c9891fac36f9037bc40f2e016e5"
+  },
+  "src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/Dtos/ClientCorsOriginOutput.cs": {
+    "mtime": 1787278528.9755256,
+    "seen": 1788928481.6380637,
+    "ast_hash": "e3c969bd02995432e53f5f8b68a5bf17",
+    "semantic_hash": "e3c969bd02995432e53f5f8b68a5bf17"
+  },
+  "src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/Dtos/ClientGrantTypeOutput.cs": {
+    "mtime": 1787278528.9755256,
+    "seen": 1788928481.6380658,
+    "ast_hash": "4964eddcdd516a32c27cf08bfd81c590",
+    "semantic_hash": "4964eddcdd516a32c27cf08bfd81c590"
+  },
+  "src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/Dtos/ClientIdPRestrictionOutput.cs": {
+    "mtime": 1787278528.9765253,
+    "seen": 1788928481.6380682,
+    "ast_hash": "9dec6010e3055b5cdbca6be60dfae8e2",
+    "semantic_hash": "9dec6010e3055b5cdbca6be60dfae8e2"
+  },
+  "src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/Dtos/ClientPostLogoutRedirectUriOutput.cs": {
+    "mtime": 1787278528.9765253,
+    "seen": 1788928481.6380703,
+    "ast_hash": "26ba64471ce9558f5097941eaa597afa",
+    "semantic_hash": "26ba64471ce9558f5097941eaa597afa"
+  },
+  "src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/Dtos/ClientPropertyOutput.cs": {
+    "mtime": 1787278528.9775245,
+    "seen": 1788928481.6380725,
+    "ast_hash": "85f254f0723d8b29f3976549b534ae98",
+    "semantic_hash": "85f254f0723d8b29f3976549b534ae98"
+  },
+  "src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/Dtos/ClientRedirectUriOutput.cs": {
+    "mtime": 1787278528.9775245,
+    "seen": 1788928481.6380749,
+    "ast_hash": "cea0a10d76304888b1f07a7f3f4bcf6b",
+    "semantic_hash": "cea0a10d76304888b1f07a7f3f4bcf6b"
+  },
+  "src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/Dtos/ClientScopeOutput.cs": {
+    "mtime": 1787278528.9775245,
+    "seen": 1788928481.638077,
+    "ast_hash": "f87abcab28fd97cc2a82edd8041b9c03",
+    "semantic_hash": "f87abcab28fd97cc2a82edd8041b9c03"
+  },
+  "src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/Dtos/ClientSecretOutput.cs": {
+    "mtime": 1787278528.9785266,
+    "seen": 1788928481.6380792,
+    "ast_hash": "5a04b6f2ed504f45d01beefca3321ae5",
+    "semantic_hash": "5a04b6f2ed504f45d01beefca3321ae5"
+  },
+  "src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/Dtos/CreateClientInput.cs": {
+    "mtime": 1787278528.9785266,
+    "seen": 1788928481.6380816,
+    "ast_hash": "eedce6fb3deb67e75e067a6b7ef47928",
+    "semantic_hash": "eedce6fb3deb67e75e067a6b7ef47928"
+  },
+  "src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/Dtos/EnabledInput.cs": {
+    "mtime": 1787278528.9795268,
+    "seen": 1788928481.638084,
+    "ast_hash": "44c12c69a4329874bdf35cc4814c7157",
+    "semantic_hash": "44c12c69a4329874bdf35cc4814c7157"
+  },
+  "src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/Dtos/PagingClientListInput.cs": {
+    "mtime": 1787278528.9795268,
+    "seen": 1788928481.638086,
+    "ast_hash": "6f5fd45cc5821ee6040da2c8d6936f20",
+    "semantic_hash": "6f5fd45cc5821ee6040da2c8d6936f20"
+  },
+  "src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/Dtos/PagingClientListOutput.cs": {
+    "mtime": 1787278528.9805274,
+    "seen": 1788928481.6380882,
+    "ast_hash": "13d79fbfee6fdc9d3e2c7a444cd0d109",
+    "semantic_hash": "13d79fbfee6fdc9d3e2c7a444cd0d109"
+  },
+  "src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/Dtos/RemoveCorsInput.cs": {
+    "mtime": 1787278528.9815283,
+    "seen": 1788928481.6380908,
+    "ast_hash": "aa8aafbd67692669f40b0e6f45ca8506",
+    "semantic_hash": "aa8aafbd67692669f40b0e6f45ca8506"
+  },
+  "src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/Dtos/RemoveRedirectUriInput.cs": {
+    "mtime": 1787278528.9815283,
+    "seen": 1788928481.6380932,
+    "ast_hash": "ec4dbf33150d4b19011615d234e6ba25",
+    "semantic_hash": "ec4dbf33150d4b19011615d234e6ba25"
+  },
+  "src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/Dtos/UpdataBasicDataInput.cs": {
+    "mtime": 1787278528.9825268,
+    "seen": 1788928481.6380959,
+    "ast_hash": "23aa318533136bdb9f8bbfdf7b12e2f7",
+    "semantic_hash": "23aa318533136bdb9f8bbfdf7b12e2f7"
+  },
+  "src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/Dtos/UpdateScopeInput.cs": {
+    "mtime": 1787278528.9825268,
+    "seen": 1788928481.6380982,
+    "ast_hash": "091beb2ff538f6b107c03dbbe81c724f",
+    "semantic_hash": "091beb2ff538f6b107c03dbbe81c724f"
+  },
+  "src/Lion.AbpPro.Application.Contracts/IdentityServers/Clients/IIdentityServerClientAppService.cs": {
+    "mtime": 1787278528.9825268,
+    "seen": 1788928481.6381004,
+    "ast_hash": "a763bd30b8e203b1daf8db65641cd383",
+    "semantic_hash": "a763bd30b8e203b1daf8db65641cd383"
+  },
+  "src/Lion.AbpPro.Application.Contracts/IdentityServers/IdentityResources/Dtos/CreateIdentityResourceInput.cs": {
+    "mtime": 1787278528.9835255,
+    "seen": 1788928481.6381028,
+    "ast_hash": "1d88189ee7cb5d40bf135bd9da0f9291",
+    "semantic_hash": "1d88189ee7cb5d40bf135bd9da0f9291"
+  },
+  "src/Lion.AbpPro.Application.Contracts/IdentityServers/IdentityResources/Dtos/PagingIdentityResourceListInput.cs": {
+    "mtime": 1787278528.9845247,
+    "seen": 1788928481.6381052,
+    "ast_hash": "86ae389854aa996beb29b3e40cd232f4",
+    "semantic_hash": "86ae389854aa996beb29b3e40cd232f4"
+  },
+  "src/Lion.AbpPro.Application.Contracts/IdentityServers/IdentityResources/Dtos/PagingIdentityResourceListOutput.cs": {
+    "mtime": 1787278528.9845247,
+    "seen": 1788928481.6381075,
+    "ast_hash": "4bf9f11dc0d93c615bd319a88f7a6c26",
+    "semantic_hash": "4bf9f11dc0d93c615bd319a88f7a6c26"
+  },
+  "src/Lion.AbpPro.Application.Contracts/IdentityServers/IdentityResources/Dtos/UpdateIdentityResourceInput.cs": {
+    "mtime": 1787278528.9845247,
+    "seen": 1788928481.63811,
+    "ast_hash": "efd04cdf09a5a19c89e2e12815c73789",
+    "semantic_hash": "efd04cdf09a5a19c89e2e12815c73789"
+  },
+  "src/Lion.AbpPro.Application.Contracts/IdentityServers/IdentityResources/IIdentityResourceAppService.cs": {
+    "mtime": 1787278528.9855254,
+    "seen": 1788928481.6381123,
+    "ast_hash": "f9941803ed8f9c5de560bfc9c2b05ebb",
+    "semantic_hash": "f9941803ed8f9c5de560bfc9c2b05ebb"
+  },
+  "src/Lion.AbpPro.Application.Contracts/Jobs/IRecurringJob.cs": {
+    "mtime": 1787278528.9855254,
+    "seen": 1788928481.6381161,
+    "ast_hash": "a8e60ed9cd118aa263786ee1bb7bcf08",
+    "semantic_hash": "a8e60ed9cd118aa263786ee1bb7bcf08"
+  },
+  "src/Lion.AbpPro.Application.Contracts/Lion.AbpPro.Application.Contracts.csproj": {
+    "mtime": 1787278528.9865253,
+    "seen": 1788928481.638119,
+    "ast_hash": "e50535b5da184176e18904874e0ec28a",
+    "semantic_hash": "e50535b5da184176e18904874e0ec28a"
+  },
+  "src/Lion.AbpPro.Application.Contracts/Permissions/AbpProPermissionDefinitionProvider.cs": {
+    "mtime": 1787278528.9870338,
+    "seen": 1788928481.6381211,
+    "ast_hash": "9b991a5a83fcde7cab709abe34621f27",
+    "semantic_hash": "9b991a5a83fcde7cab709abe34621f27"
+  },
+  "src/Lion.AbpPro.Application.Contracts/Permissions/AbpProPermissions.cs": {
+    "mtime": 1787278528.9870338,
+    "seen": 1788928481.6381235,
+    "ast_hash": "5949d89107991ee1084bdb8761aa6155",
+    "semantic_hash": "5949d89107991ee1084bdb8761aa6155"
+  },
+  "src/Lion.AbpPro.Application.Contracts/Roles/Dtos/GetPermissionInput.cs": {
+    "mtime": 1787278528.988044,
+    "seen": 1788928481.638126,
+    "ast_hash": "df21500d4857da19293b78ec345b3527",
+    "semantic_hash": "df21500d4857da19293b78ec345b3527"
+  },
+  "src/Lion.AbpPro.Application.Contracts/Roles/Dtos/PagingRoleListInput.cs": {
+    "mtime": 1787278528.988044,
+    "seen": 1788928481.638128,
+    "ast_hash": "7aa9f7713efcb9ed9870f73c353ca312",
+    "semantic_hash": "7aa9f7713efcb9ed9870f73c353ca312"
+  },
+  "src/Lion.AbpPro.Application.Contracts/Roles/Dtos/PermissionOutput.cs": {
+    "mtime": 1787278528.9890447,
+    "seen": 1788928481.6381307,
+    "ast_hash": "cf82ea28cdc80cf71b6debe6f8db8f1a",
+    "semantic_hash": "cf82ea28cdc80cf71b6debe6f8db8f1a"
+  },
+  "src/Lion.AbpPro.Application.Contracts/Roles/Dtos/UpdateRoleInput.cs": {
+    "mtime": 1787278528.9890447,
+    "seen": 1788928481.638133,
+    "ast_hash": "1a383b6a186c8e847c8824055ec7c6c8",
+    "semantic_hash": "1a383b6a186c8e847c8824055ec7c6c8"
+  },
+  "src/Lion.AbpPro.Application.Contracts/Roles/Dtos/UpdateRolePermissionsInput.cs": {
+    "mtime": 1787278528.9900405,
+    "seen": 1788928481.6381354,
+    "ast_hash": "41bf6844ffe6f96614fc75dea6477f16",
+    "semantic_hash": "41bf6844ffe6f96614fc75dea6477f16"
+  },
+  "src/Lion.AbpPro.Application.Contracts/Roles/IRoleAppService.cs": {
+    "mtime": 1787278528.9900405,
+    "seen": 1788928481.6381378,
+    "ast_hash": "2270192bdce0d0034c2c820da6e8588a",
+    "semantic_hash": "2270192bdce0d0034c2c820da6e8588a"
+  },
+  "src/Lion.AbpPro.Application.Contracts/Roles/IRolePermissionAppService.cs": {
+    "mtime": 1787278528.9910405,
+    "seen": 1788928481.6381404,
+    "ast_hash": "a9e23093cd5b4f8c0c0285fba054d7f5",
+    "semantic_hash": "a9e23093cd5b4f8c0c0285fba054d7f5"
+  },
+  "src/Lion.AbpPro.Application.Contracts/Settings/Dtos/SettingOutput.cs": {
+    "mtime": 1787278528.9920404,
+    "seen": 1788928481.638143,
+    "ast_hash": "ca7ff1320e20ee319c7ead14f9d132b7",
+    "semantic_hash": "ca7ff1320e20ee319c7ead14f9d132b7"
+  },
+  "src/Lion.AbpPro.Application.Contracts/Settings/Dtos/UpdateSettingInput.cs": {
+    "mtime": 1787278528.9920404,
+    "seen": 1788928481.6381452,
+    "ast_hash": "7688b2e4f8ffcb984800ba461ad4ea7b",
+    "semantic_hash": "7688b2e4f8ffcb984800ba461ad4ea7b"
+  },
+  "src/Lion.AbpPro.Application.Contracts/Settings/ISettingAppService.cs": {
+    "mtime": 1787278528.9920404,
+    "seen": 1788928481.6381476,
+    "ast_hash": "d1b83fa4fe68321f24c7458744de8161",
+    "semantic_hash": "d1b83fa4fe68321f24c7458744de8161"
+  },
+  "src/Lion.AbpPro.Application.Contracts/Tenants/Dtos/FindTenantByNameInput.cs": {
+    "mtime": 1787278528.9930398,
+    "seen": 1788928481.63815,
+    "ast_hash": "14e9049ab3ba80a7d1929b32ac4c52fd",
+    "semantic_hash": "14e9049ab3ba80a7d1929b32ac4c52fd"
+  },
+  "src/Lion.AbpPro.Application.Contracts/Tenants/Dtos/PagingTenantInput.cs": {
+    "mtime": 1787278528.9940412,
+    "seen": 1788928481.6381521,
+    "ast_hash": "d463c2b4aa91af01d16f97eac8f8d78c",
+    "semantic_hash": "d463c2b4aa91af01d16f97eac8f8d78c"
+  },
+  "src/Lion.AbpPro.Application.Contracts/Tenants/Dtos/UpdateDefaultConnectionStringInput.cs": {
+    "mtime": 1787278528.9940412,
+    "seen": 1788928481.6381545,
+    "ast_hash": "26d0fdfc70f8e2c5a848b85aa0d8e938",
+    "semantic_hash": "26d0fdfc70f8e2c5a848b85aa0d8e938"
+  },
+  "src/Lion.AbpPro.Application.Contracts/Tenants/Dtos/UpdateTenantInput.cs": {
+    "mtime": 1787278528.9940412,
+    "seen": 1788928481.638157,
+    "ast_hash": "24c9d3fe8eff977126d021e2bba6a7f1",
+    "semantic_hash": "24c9d3fe8eff977126d021e2bba6a7f1"
+  },
+  "src/Lion.AbpPro.Application.Contracts/Tenants/IVoloTenantAppService.cs": {
+    "mtime": 1787278528.9950414,
+    "seen": 1788928481.638159,
+    "ast_hash": "878e9cebc1c7d5e5562d280b2efc7e02",
+    "semantic_hash": "878e9cebc1c7d5e5562d280b2efc7e02"
+  },
+  "src/Lion.AbpPro.Application.Contracts/Users/Dtos/LockUserInput.cs": {
+    "mtime": 1787278528.9960408,
+    "seen": 1788928481.6381614,
+    "ast_hash": "799685bbd22fc940a14c22848320a409",
+    "semantic_hash": "799685bbd22fc940a14c22848320a409"
+  },
+  "src/Lion.AbpPro.Application.Contracts/Users/Dtos/LoginInput.cs": {
+    "mtime": 1787278528.9970405,
+    "seen": 1788928481.6381638,
+    "ast_hash": "037480a5c40dbed220e782ff08b9243f",
+    "semantic_hash": "037480a5c40dbed220e782ff08b9243f"
+  },
+  "src/Lion.AbpPro.Application.Contracts/Users/Dtos/LoginOutput.cs": {
+    "mtime": 1787278528.9970405,
+    "seen": 1788928481.638166,
+    "ast_hash": "04233e106670b09266b7edc8a1ef5eeb",
+    "semantic_hash": "04233e106670b09266b7edc8a1ef5eeb"
+  },
+  "src/Lion.AbpPro.Application.Contracts/Users/Dtos/LoginStsOutput.cs": {
+    "mtime": 1787278528.9970405,
+    "seen": 1788928481.638168,
+    "ast_hash": "7ed4a6777f7ebbe089fda389189e20d0",
+    "semantic_hash": "7ed4a6777f7ebbe089fda389189e20d0"
+  },
+  "src/Lion.AbpPro.Application.Contracts/Users/Dtos/PagingUserListInput.cs": {
+    "mtime": 1787278528.9980402,
+    "seen": 1788928481.6381705,
+    "ast_hash": "900fc848db8ff68d3aff7c48d4b30ecc",
+    "semantic_hash": "900fc848db8ff68d3aff7c48d4b30ecc"
+  },
+  "src/Lion.AbpPro.Application.Contracts/Users/Dtos/UpdateUserInput.cs": {
+    "mtime": 1787278528.9980402,
+    "seen": 1788928481.6381726,
+    "ast_hash": "f406267dd91a12eb85cf2503117a5cc7",
+    "semantic_hash": "f406267dd91a12eb85cf2503117a5cc7"
+  },
+  "src/Lion.AbpPro.Application.Contracts/Users/IAccountAppService.cs": {
+    "mtime": 1787278528.9980402,
+    "seen": 1788928481.638175,
+    "ast_hash": "1335d1de1cc0a74d97125bdbc8525b31",
+    "semantic_hash": "1335d1de1cc0a74d97125bdbc8525b31"
+  },
+  "src/Lion.AbpPro.Application.Contracts/Users/IUserAppService.cs": {
+    "mtime": 1787278528.9990394,
+    "seen": 1788928481.6381774,
+    "ast_hash": "148d66eb3a36830dbb87829419f71119",
+    "semantic_hash": "148d66eb3a36830dbb87829419f71119"
+  },
+  "src/Lion.AbpPro.Application/AbpProAppService.cs": {
+    "mtime": 1787278529.0000398,
+    "seen": 1788928481.6381795,
+    "ast_hash": "c4139871e5553c8d1954ff501ca1afcf",
+    "semantic_hash": "c4139871e5553c8d1954ff501ca1afcf"
+  },
+  "src/Lion.AbpPro.Application/AbpProApplicationAutoMapperProfile.cs": {
+    "mtime": 1787278529.0000398,
+    "seen": 1788928481.638182,
+    "ast_hash": "6f45d2303e5b93b5f136b54e442f1946",
+    "semantic_hash": "6f45d2303e5b93b5f136b54e442f1946"
+  },
+  "src/Lion.AbpPro.Application/AbpProApplicationModule.cs": {
+    "mtime": 1787278529.0000398,
+    "seen": 1788928481.6381845,
+    "ast_hash": "9d975a1eab9fa9b6364060c5e521d7e9",
+    "semantic_hash": "9d975a1eab9fa9b6364060c5e521d7e9"
+  },
+  "src/Lion.AbpPro.Application/AuditLogs/AuditLogAppService.cs": {
+    "mtime": 1787278529.0010402,
+    "seen": 1788928481.6381867,
+    "ast_hash": "8fb517f9b675cd616f9c5b8ce9c6628b",
+    "semantic_hash": "8fb517f9b675cd616f9c5b8ce9c6628b"
+  },
+  "src/Lion.AbpPro.Application/AuditLogs/Mappers/AuditLogApplicationAutoMapperProfile.cs": {
+    "mtime": 1787278529.0017529,
+    "seen": 1788928481.638189,
+    "ast_hash": "2310e38f157fa47997ae9488b47e66b3",
+    "semantic_hash": "2310e38f157fa47997ae9488b47e66b3"
+  },
+  "src/Lion.AbpPro.Application/ElasticSearchs/Dto/PagingElasticSearchLogDto.cs": {
+    "mtime": 1787278529.002906,
+    "seen": 1788928481.6381915,
+    "ast_hash": "e4547a571b27f10346c91cf67d444df7",
+    "semantic_hash": "e4547a571b27f10346c91cf67d444df7"
+  },
+  "src/Lion.AbpPro.Application/ElasticSearchs/ElasticSearchApplicationAutoMapperProfile.cs": {
+    "mtime": 1787278529.002906,
+    "seen": 1788928481.6381934,
+    "ast_hash": "933058890c43a5f88b84037d4178ac60",
+    "semantic_hash": "933058890c43a5f88b84037d4178ac60"
+  },
+  "src/Lion.AbpPro.Application/ElasticSearchs/LionAbpProLogAppService.cs": {
+    "mtime": 1787278529.002906,
+    "seen": 1788928481.638196,
+    "ast_hash": "837c72ffbd3360bdc93422965d7321fd",
+    "semantic_hash": "837c72ffbd3360bdc93422965d7321fd"
+  },
+  "src/Lion.AbpPro.Application/ElasticSearchs/Providers/ElasticsearchBasicService.cs": {
+    "mtime": 1787278529.0042548,
+    "seen": 1788928481.638198,
+    "ast_hash": "dd8d9fdb6fc4d83e6c3137e21c88928e",
+    "semantic_hash": "dd8d9fdb6fc4d83e6c3137e21c88928e"
+  },
+  "src/Lion.AbpPro.Application/ElasticSearchs/Providers/ElasticsearchProvider.cs": {
+    "mtime": 1787278529.0042548,
+    "seen": 1788928481.6382003,
+    "ast_hash": "3363959b865ad0f6940448592e2a72e1",
+    "semantic_hash": "3363959b865ad0f6940448592e2a72e1"
+  },
+  "src/Lion.AbpPro.Application/ElasticSearchs/Providers/IElasticsearchProvider.cs": {
+    "mtime": 1787278529.0042548,
+    "seen": 1788928481.6382027,
+    "ast_hash": "a8cf202f4c3bfe6bf61f488602bab9e8",
+    "semantic_hash": "a8cf202f4c3bfe6bf61f488602bab9e8"
+  },
+  "src/Lion.AbpPro.Application/HttpClientNameConsts.cs": {
+    "mtime": 1787278529.005259,
+    "seen": 1788928481.6382048,
+    "ast_hash": "61e8db66bb336f6966fb5e25906526d5",
+    "semantic_hash": "61e8db66bb336f6966fb5e25906526d5"
+  },
+  "src/Lion.AbpPro.Application/IdentityServers/ApiResources/ApiResourceAppService.cs": {
+    "mtime": 1787278529.005259,
+    "seen": 1788928481.6382072,
+    "ast_hash": "8d5c594faae867cb2a844ebede079113",
+    "semantic_hash": "8d5c594faae867cb2a844ebede079113"
+  },
+  "src/Lion.AbpPro.Application/IdentityServers/ApiScopes/ApiScopeAppService.cs": {
+    "mtime": 1787278529.0066311,
+    "seen": 1788928481.6382093,
+    "ast_hash": "0d3dc014b80809f0893e2d99f6d0546d",
+    "semantic_hash": "0d3dc014b80809f0893e2d99f6d0546d"
+  },
+  "src/Lion.AbpPro.Application/IdentityServers/Clients/IdentityServerClientAppService.cs": {
+    "mtime": 1787278529.0066311,
+    "seen": 1788928481.6382117,
+    "ast_hash": "8d5ef77e38490691e5175d45fec190ba",
+    "semantic_hash": "8d5ef77e38490691e5175d45fec190ba"
+  },
+  "src/Lion.AbpPro.Application/IdentityServers/IdentityResources/IdentityResourceAppService.cs": {
+    "mtime": 1787278529.0077732,
+    "seen": 1788928481.6382139,
+    "ast_hash": "7efc55040f42e5ef174b44e51af4c96e",
+    "semantic_hash": "7efc55040f42e5ef174b44e51af4c96e"
+  },
+  "src/Lion.AbpPro.Application/IdentityServers/IdentityServerApplicationAutoMapperProfile.cs": {
+    "mtime": 1787278529.0077732,
+    "seen": 1788928481.6382163,
+    "ast_hash": "a7930bf739e9f89dd3c1d5b6e6d177e7",
+    "semantic_hash": "a7930bf739e9f89dd3c1d5b6e6d177e7"
+  },
+  "src/Lion.AbpPro.Application/Jobs/TestJob.cs": {
+    "mtime": 1787278529.0087783,
+    "seen": 1788928481.6382184,
+    "ast_hash": "04330384aefc11b58baa35dc18c7ed3b",
+    "semantic_hash": "04330384aefc11b58baa35dc18c7ed3b"
+  },
+  "src/Lion.AbpPro.Application/Lion.AbpPro.Application.csproj": {
+    "mtime": 1787278529.0087783,
+    "seen": 1788928481.6382208,
+    "ast_hash": "f099ca331e4f140a0a4876a3317be02c",
+    "semantic_hash": "f099ca331e4f140a0a4876a3317be02c"
+  },
+  "src/Lion.AbpPro.Application/Properties/AssemblyInfo.cs": {
+    "mtime": 1787278529.0087783,
+    "seen": 1788928481.6382232,
+    "ast_hash": "83b96b277743a3d57c8bdc1ad58721d8",
+    "semantic_hash": "83b96b277743a3d57c8bdc1ad58721d8"
+  },
+  "src/Lion.AbpPro.Application/Roles/RoleAppService.cs": {
+    "mtime": 1787278529.009778,
+    "seen": 1788928481.6382253,
+    "ast_hash": "877d5c617ea2b9145f531b8df5f45e37",
+    "semantic_hash": "877d5c617ea2b9145f531b8df5f45e37"
+  },
+  "src/Lion.AbpPro.Application/Roles/RolePermissionAppService.cs": {
+    "mtime": 1787278529.009778,
+    "seen": 1788928481.6382277,
+    "ast_hash": "32bab5d8ed93e8be6306df023ed913e3",
+    "semantic_hash": "32bab5d8ed93e8be6306df023ed913e3"
+  },
+  "src/Lion.AbpPro.Application/Settings/SettingAppService.cs": {
+    "mtime": 1787278529.010778,
+    "seen": 1788928481.63823,
+    "ast_hash": "01f69d2fd999905da2cf70de5ade32b5",
+    "semantic_hash": "01f69d2fd999905da2cf70de5ade32b5"
+  },
+  "src/Lion.AbpPro.Application/Tenants/VoloTenantAppService.cs": {
+    "mtime": 1787278529.0127838,
+    "seen": 1788928481.6382322,
+    "ast_hash": "d34fb8defaa0fb211b6ddf31ae1cceb9",
+    "semantic_hash": "d34fb8defaa0fb211b6ddf31ae1cceb9"
+  },
+  "src/Lion.AbpPro.Application/Users/AccountAppService.cs": {
+    "mtime": 1787278529.0148058,
+    "seen": 1788928481.6382346,
+    "ast_hash": "96aba5fd822f77bffb4821aef7db903a",
+    "semantic_hash": "96aba5fd822f77bffb4821aef7db903a"
+  },
+  "src/Lion.AbpPro.Application/Users/Mappers/UserApplicationAutoMapperProfile.cs": {
+    "mtime": 1787278529.015796,
+    "seen": 1788928481.6382372,
+    "ast_hash": "f3b7d24ccb7ff1280d43477256ee2c20",
+    "semantic_hash": "f3b7d24ccb7ff1280d43477256ee2c20"
+  },
+  "src/Lion.AbpPro.Application/Users/UserAppService.cs": {
+    "mtime": 1787278529.0167806,
+    "seen": 1788928481.6382391,
+    "ast_hash": "0e96bbf9bb54411ea77f6f8b5df19005",
+    "semantic_hash": "0e96bbf9bb54411ea77f6f8b5df19005"
+  },
+  "src/Lion.AbpPro.DbMigrator/AbpProDbMigratorModule.cs": {
+    "mtime": 1787278529.0172856,
+    "seen": 1788928481.6382418,
+    "ast_hash": "d0e0749f7d030ecc72ee13bcdaef0d4f",
+    "semantic_hash": "d0e0749f7d030ecc72ee13bcdaef0d4f"
+  },
+  "src/Lion.AbpPro.DbMigrator/DbMigratorHostedService.cs": {
+    "mtime": 1787278529.0172856,
+    "seen": 1788928481.6382444,
+    "ast_hash": "00eef3442312a4749ec821031896712b",
+    "semantic_hash": "00eef3442312a4749ec821031896712b"
+  },
+  "src/Lion.AbpPro.DbMigrator/Lion.AbpPro.DbMigrator.csproj": {
+    "mtime": 1787278529.0182915,
+    "seen": 1788928481.6382468,
+    "ast_hash": "e137547aa9a12a9717ab2abfa374c7c9",
+    "semantic_hash": "e137547aa9a12a9717ab2abfa374c7c9"
+  },
+  "src/Lion.AbpPro.DbMigrator/Program.cs": {
+    "mtime": 1787278529.0182915,
+    "seen": 1788928481.638249,
+    "ast_hash": "ff20295402d0b55338e7e05c4b4f872b",
+    "semantic_hash": "ff20295402d0b55338e7e05c4b4f872b"
+  },
+  "src/Lion.AbpPro.DbMigrator/appsettings.json": {
+    "mtime": 1787278529.0182915,
+    "seen": 1788928481.6382513,
+    "ast_hash": "cd1fd0941e9af4738ecc5049e6c42eb1",
+    "semantic_hash": "cd1fd0941e9af4738ecc5049e6c42eb1"
+  },
+  "src/Lion.AbpPro.Domain.Shared/AbpProDomainErrorCodes.cs": {
+    "mtime": 1787278529.020291,
+    "seen": 1788928481.6382535,
+    "ast_hash": "01d1e591ee18fea560da12a2524c0e8d",
+    "semantic_hash": "01d1e591ee18fea560da12a2524c0e8d"
+  },
+  "src/Lion.AbpPro.Domain.Shared/AbpProDomainSharedModule.cs": {
+    "mtime": 1787278529.020291,
+    "seen": 1788928481.6382558,
+    "ast_hash": "6db5c75b99578249828627256c189b40",
+    "semantic_hash": "6db5c75b99578249828627256c189b40"
+  },
+  "src/Lion.AbpPro.Domain.Shared/AbpProGlobalFeatureConfigurator.cs": {
+    "mtime": 1787278529.020291,
+    "seen": 1788928481.6382582,
+    "ast_hash": "17e711a5722e17c98c0b8b179ee4dba2",
+    "semantic_hash": "17e711a5722e17c98c0b8b179ee4dba2"
+  },
+  "src/Lion.AbpPro.Domain.Shared/AbpProModuleExtensionConfigurator.cs": {
+    "mtime": 1787278529.0212915,
+    "seen": 1788928481.6382604,
+    "ast_hash": "6d55d1d6c2901b1fa79ed2e89ee58742",
+    "semantic_hash": "6d55d1d6c2901b1fa79ed2e89ee58742"
+  },
+  "src/Lion.AbpPro.Domain.Shared/IdentityServers/ApiResources/Dtos/ApiResourceClaimOutput.cs": {
+    "mtime": 1787278529.0222914,
+    "seen": 1788928481.6382627,
+    "ast_hash": "19cb607180da8317954ed8ba8688c708",
+    "semantic_hash": "19cb607180da8317954ed8ba8688c708"
+  },
+  "src/Lion.AbpPro.Domain.Shared/IdentityServers/ApiResources/Dtos/ApiResourcePropertyOutput.cs": {
+    "mtime": 1787278529.0222914,
+    "seen": 1788928481.6382651,
+    "ast_hash": "96e21dbe78eb40a09c545154a46b0ab5",
+    "semantic_hash": "96e21dbe78eb40a09c545154a46b0ab5"
+  },
+  "src/Lion.AbpPro.Domain.Shared/IdentityServers/ApiResources/Dtos/ApiResourceScopeOutput.cs": {
+    "mtime": 1787278529.0232902,
+    "seen": 1788928481.6382685,
+    "ast_hash": "97de6d683633d705fb7a81fbfe149d51",
+    "semantic_hash": "97de6d683633d705fb7a81fbfe149d51"
+  },
+  "src/Lion.AbpPro.Domain.Shared/IdentityServers/ApiResources/Dtos/ApiResourceSecretOutput.cs": {
+    "mtime": 1787278529.0232902,
+    "seen": 1788928481.6382713,
+    "ast_hash": "5f683fbde6feeb10c59ef55d69c1c1a3",
+    "semantic_hash": "5f683fbde6feeb10c59ef55d69c1c1a3"
+  },
+  "src/Lion.AbpPro.Domain.Shared/Lion.AbpPro.Domain.Shared.csproj": {
+    "mtime": 1787278529.0232902,
+    "seen": 1788928481.638275,
+    "ast_hash": "98562b0e8e1c710ff2bcbd8282ef4293",
+    "semantic_hash": "98562b0e8e1c710ff2bcbd8282ef4293"
+  },
+  "src/Lion.AbpPro.Domain.Shared/Localization/AbpProResource.cs": {
+    "mtime": 1787278529.031291,
+    "seen": 1788928481.6382778,
+    "ast_hash": "f5f4b18677140c2b4ab95afe9a1c06f0",
+    "semantic_hash": "f5f4b18677140c2b4ab95afe9a1c06f0"
+  },
+  "src/Lion.AbpPro.Domain.Shared/Localization/AbpPro/ar.json": {
+    "mtime": 1787278529.024291,
+    "seen": 1788928481.6382809,
+    "ast_hash": "9ceb0a5d0e86ac6bca7d97347facbee8",
+    "semantic_hash": "9ceb0a5d0e86ac6bca7d97347facbee8"
+  },
+  "src/Lion.AbpPro.Domain.Shared/Localization/AbpPro/cs.json": {
+    "mtime": 1787278529.024291,
+    "seen": 1788928481.6382837,
+    "ast_hash": "77f61f15dba5bc8bd01af7d959629bbf",
+    "semantic_hash": "77f61f15dba5bc8bd01af7d959629bbf"
+  },
+  "src/Lion.AbpPro.Domain.Shared/Localization/AbpPro/de-DE.json": {
+    "mtime": 1787278529.0252912,
+    "seen": 1788928481.638287,
+    "ast_hash": "05f19d83f46482732267ee7e3a3227ec",
+    "semantic_hash": "05f19d83f46482732267ee7e3a3227ec"
+  },
+  "src/Lion.AbpPro.Domain.Shared/Localization/AbpPro/en-GB.json": {
+    "mtime": 1787278529.0252912,
+    "seen": 1788928481.6382904,
+    "ast_hash": "f96ca605e4916ed74b6410075e9306c6",
+    "semantic_hash": "f96ca605e4916ed74b6410075e9306c6"
+  },
+  "src/Lion.AbpPro.Domain.Shared/Localization/AbpPro/en.json": {
+    "mtime": 1787278529.0252912,
+    "seen": 1788928481.6382935,
+    "ast_hash": "66cb7101dcf4596b6419bc10a9d3ecf9",
+    "semantic_hash": "66cb7101dcf4596b6419bc10a9d3ecf9"
+  },
+  "src/Lion.AbpPro.Domain.Shared/Localization/AbpPro/es.json": {
+    "mtime": 1787278529.0262911,
+    "seen": 1788928481.6382966,
+    "ast_hash": "a95e049316c13af2be2a9de0f379d282",
+    "semantic_hash": "a95e049316c13af2be2a9de0f379d282"
+  },
+  "src/Lion.AbpPro.Domain.Shared/Localization/AbpPro/fr.json": {
+    "mtime": 1787278529.027291,
+    "seen": 1788928481.6383002,
+    "ast_hash": "f2af2a0ad54019872a2ac4d2679a2327",
+    "semantic_hash": "f2af2a0ad54019872a2ac4d2679a2327"
+  },
+  "src/Lion.AbpPro.Domain.Shared/Localization/AbpPro/hu.json": {
+    "mtime": 1787278529.028296,
+    "seen": 1788928481.6383033,
+    "ast_hash": "e69073cbb2c6e9974e04b525b07b27d2",
+    "semantic_hash": "e69073cbb2c6e9974e04b525b07b27d2"
+  },
+  "src/Lion.AbpPro.Domain.Shared/Localization/AbpPro/nl.json": {
+    "mtime": 1787278529.028296,
+    "seen": 1788928481.6383064,
+    "ast_hash": "c679d43e296b0a73dd2b74b27b2ef546",
+    "semantic_hash": "c679d43e296b0a73dd2b74b27b2ef546"
+  },
+  "src/Lion.AbpPro.Domain.Shared/Localization/AbpPro/pl-PL.json": {
+    "mtime": 1787278529.028296,
+    "seen": 1788928481.6383097,
+    "ast_hash": "b76375ee759f55ae1951405435951460",
+    "semantic_hash": "b76375ee759f55ae1951405435951460"
+  },
+  "src/Lion.AbpPro.Domain.Shared/Localization/AbpPro/pt-BR.json": {
+    "mtime": 1787278529.0293183,
+    "seen": 1788928481.6383128,
+    "ast_hash": "a706c6a0fbe48f2f8138e6ad5968ae98",
+    "semantic_hash": "a706c6a0fbe48f2f8138e6ad5968ae98"
+  },
+  "src/Lion.AbpPro.Domain.Shared/Localization/AbpPro/ru.json": {
+    "mtime": 1787278529.0293183,
+    "seen": 1788928481.6383157,
+    "ast_hash": "68a6d1759bf39e6a0484f865f2f403b7",
+    "semantic_hash": "68a6d1759bf39e6a0484f865f2f403b7"
+  },
+  "src/Lion.AbpPro.Domain.Shared/Localization/AbpPro/sl.json": {
+    "mtime": 1787278529.0302916,
+    "seen": 1788928481.6383188,
+    "ast_hash": "5b711fe7e7f3e166e06c01c0de0ee0d4",
+    "semantic_hash": "5b711fe7e7f3e166e06c01c0de0ee0d4"
+  },
+  "src/Lion.AbpPro.Domain.Shared/Localization/AbpPro/tr.json": {
+    "mtime": 1787278529.0302916,
+    "seen": 1788928481.6383219,
+    "ast_hash": "b0297228e71722a9118816cd31346de1",
+    "semantic_hash": "b0297228e71722a9118816cd31346de1"
+  },
+  "src/Lion.AbpPro.Domain.Shared/Localization/AbpPro/vi.json": {
+    "mtime": 1787278529.0302916,
+    "seen": 1788928481.638325,
+    "ast_hash": "c60b6d05396c3f1881c4c1426a49809e",
+    "semantic_hash": "c60b6d05396c3f1881c4c1426a49809e"
+  },
+  "src/Lion.AbpPro.Domain.Shared/Localization/AbpPro/zh-Hans.json": {
+    "mtime": 1787278529.031291,
+    "seen": 1788928481.6383278,
+    "ast_hash": "8aed5acd5cb6d1d0e90acda142a6fddd",
+    "semantic_hash": "8aed5acd5cb6d1d0e90acda142a6fddd"
+  },
+  "src/Lion.AbpPro.Domain.Shared/Localization/AbpPro/zh-Hant.json": {
+    "mtime": 1787278529.031291,
+    "seen": 1788928481.6383355,
+    "ast_hash": "af652b20fd5c6e66cb23ca96a16990fd",
+    "semantic_hash": "af652b20fd5c6e66cb23ca96a16990fd"
+  },
+  "src/Lion.AbpPro.Domain.Shared/Localization/Extensions/EnumLocalicationExtension.cs": {
+    "mtime": 1787278529.0327952,
+    "seen": 1788928481.6383383,
+    "ast_hash": "ab23edf84daf12cde6abcf35b5db5b06",
+    "semantic_hash": "ab23edf84daf12cde6abcf35b5db5b06"
+  },
+  "src/Lion.AbpPro.Domain.Shared/Localization/LocalizationHelper.cs": {
+    "mtime": 1787278529.0327952,
+    "seen": 1788928481.6383412,
+    "ast_hash": "0fb753c68f1497cc70487ec1baa8a385",
+    "semantic_hash": "0fb753c68f1497cc70487ec1baa8a385"
+  },
+  "src/Lion.AbpPro.Domain.Shared/MultiTenancy/MultiTenancyConsts.cs": {
+    "mtime": 1787278529.0338013,
+    "seen": 1788928481.638344,
+    "ast_hash": "a986bf8b4d5e919e2511e226662f1fe6",
+    "semantic_hash": "a986bf8b4d5e919e2511e226662f1fe6"
+  },
+  "src/Lion.AbpPro.Domain/AbpProConsts.cs": {
+    "mtime": 1787278529.0340421,
+    "seen": 1788928481.6383467,
+    "ast_hash": "6c1f6fb9e500f68d4ef02c60e8124000",
+    "semantic_hash": "6c1f6fb9e500f68d4ef02c60e8124000"
+  },
+  "src/Lion.AbpPro.Domain/AbpProDomainModule.cs": {
+    "mtime": 1787278529.0340421,
+    "seen": 1788928481.6383498,
+    "ast_hash": "bd9a96e70d4504c9f59a6025719f5d51",
+    "semantic_hash": "bd9a96e70d4504c9f59a6025719f5d51"
+  },
+  "src/Lion.AbpPro.Domain/AbpProDomainService.cs": {
+    "mtime": 1787278529.035047,
+    "seen": 1788928481.6383526,
+    "ast_hash": "0472c200f84478e9663c8dbd25e338eb",
+    "semantic_hash": "0472c200f84478e9663c8dbd25e338eb"
+  },
+  "src/Lion.AbpPro.Domain/Data/AbpProDbMigrationService.cs": {
+    "mtime": 1787278529.035047,
+    "seen": 1788928481.6383555,
+    "ast_hash": "25b5cc1d56f37d1d0c940b0b513a84c5",
+    "semantic_hash": "25b5cc1d56f37d1d0c940b0b513a84c5"
+  },
+  "src/Lion.AbpPro.Domain/Data/IAbpProDbSchemaMigrator.cs": {
+    "mtime": 1787278529.0360472,
+    "seen": 1788928481.6383586,
+    "ast_hash": "a85db6f68129a983ea733569afb9a29c",
+    "semantic_hash": "a85db6f68129a983ea733569afb9a29c"
+  },
+  "src/Lion.AbpPro.Domain/Data/NullAbpProDbSchemaMigrator.cs": {
+    "mtime": 1787278529.0360472,
+    "seen": 1788928481.6383617,
+    "ast_hash": "97454c947dbec59caab53450e4af5be3",
+    "semantic_hash": "97454c947dbec59caab53450e4af5be3"
+  },
+  "src/Lion.AbpPro.Domain/Data/Seeds/AbpSettingDataSeedContributor.cs": {
+    "mtime": 1787278529.0370474,
+    "seen": 1788928481.6383646,
+    "ast_hash": "96b415991f74d7f037862c313b6cafc9",
+    "semantic_hash": "96b415991f74d7f037862c313b6cafc9"
+  },
+  "src/Lion.AbpPro.Domain/Data/Seeds/IdentityServerDataSeedContributor.cs": {
+    "mtime": 1787278529.0370474,
+    "seen": 1788928481.6383674,
+    "ast_hash": "b88eee4e9d257a0a08ced34f2e6151e5",
+    "semantic_hash": "b88eee4e9d257a0a08ced34f2e6151e5"
+  },
+  "src/Lion.AbpPro.Domain/Data/Seeds/UserDataSeedContributor.cs": {
+    "mtime": 1787278529.0370474,
+    "seen": 1788928481.6383705,
+    "ast_hash": "aadd95a66ad8ff27a3f0e954baaaf4df",
+    "semantic_hash": "aadd95a66ad8ff27a3f0e954baaaf4df"
+  },
+  "src/Lion.AbpPro.Domain/IdentityServer/IdenityServerApiResourceManager.cs": {
+    "mtime": 1787278529.0380466,
+    "seen": 1788928481.6383736,
+    "ast_hash": "08c49754e5976d641af8615cffa9aa5e",
+    "semantic_hash": "08c49754e5976d641af8615cffa9aa5e"
+  },
+  "src/Lion.AbpPro.Domain/IdentityServer/IdenityServerApiScopeManager.cs": {
+    "mtime": 1787278529.0380466,
+    "seen": 1788928481.6383765,
+    "ast_hash": "ea4d1ae2a484e029cc96e8c824681fb4",
+    "semantic_hash": "ea4d1ae2a484e029cc96e8c824681fb4"
+  },
+  "src/Lion.AbpPro.Domain/IdentityServer/IdenityServerClientManager.cs": {
+    "mtime": 1787278529.0390477,
+    "seen": 1788928481.6383793,
+    "ast_hash": "2f4b551e2a098f05939d326c7eda1a5a",
+    "semantic_hash": "2f4b551e2a098f05939d326c7eda1a5a"
+  },
+  "src/Lion.AbpPro.Domain/IdentityServer/IdentityResourceManager.cs": {
+    "mtime": 1787278529.0390477,
+    "seen": 1788928481.6383822,
+    "ast_hash": "c9e4783785b7e4662f8f006bd27dc3fb",
+    "semantic_hash": "c9e4783785b7e4662f8f006bd27dc3fb"
+  },
+  "src/Lion.AbpPro.Domain/Lion.AbpPro.Domain.csproj": {
+    "mtime": 1787278529.0400462,
+    "seen": 1788928481.6383848,
+    "ast_hash": "8473b149203eed10f54db27b23c37296",
+    "semantic_hash": "8473b149203eed10f54db27b23c37296"
+  },
+  "src/Lion.AbpPro.Domain/Properties/AssemblyInfo.cs": {
+    "mtime": 1787278529.0400462,
+    "seen": 1788928481.6383877,
+    "ast_hash": "25b9d8cccabe1d2c94a358218ebb6af2",
+    "semantic_hash": "25b9d8cccabe1d2c94a358218ebb6af2"
+  },
+  "src/Lion.AbpPro.Domain/Settings/AbpProSettingDefinitionProvider.cs": {
+    "mtime": 1787278529.0410473,
+    "seen": 1788928481.6383908,
+    "ast_hash": "fc9252a5b831ce5a575d37b95b434cac",
+    "semantic_hash": "fc9252a5b831ce5a575d37b95b434cac"
+  },
+  "src/Lion.AbpPro.Domain/Settings/AbpProSettings.cs": {
+    "mtime": 1787278529.0410473,
+    "seen": 1788928481.6383936,
+    "ast_hash": "cd818e4a61b3b5bb0594ebda298ce9c7",
+    "semantic_hash": "cd818e4a61b3b5bb0594ebda298ce9c7"
+  },
+  "src/Lion.AbpPro.EntityFrameworkCore/EntityFrameworkCore/AbpProDbContext.cs": {
+    "mtime": 1787278529.043048,
+    "seen": 1788928481.6383965,
+    "ast_hash": "ff47e91841b4d7470a48187bb392e14f",
+    "semantic_hash": "ff47e91841b4d7470a48187bb392e14f"
+  },
+  "src/Lion.AbpPro.EntityFrameworkCore/EntityFrameworkCore/AbpProDbContextModelCreatingExtensions.cs": {
+    "mtime": 1787278529.043048,
+    "seen": 1788928481.6383996,
+    "ast_hash": "df8a4b7b2e5b7c3033d057ec666bf1fa",
+    "semantic_hash": "df8a4b7b2e5b7c3033d057ec666bf1fa"
+  },
+  "src/Lion.AbpPro.EntityFrameworkCore/EntityFrameworkCore/AbpProEfCoreEntityExtensionMappings.cs": {
+    "mtime": 1787278529.043048,
+    "seen": 1788928481.6384025,
+    "ast_hash": "3a2f8d6c0b88b4e3543ba383f459e4d2",
+    "semantic_hash": "3a2f8d6c0b88b4e3543ba383f459e4d2"
+  },
+  "src/Lion.AbpPro.EntityFrameworkCore/EntityFrameworkCore/AbpProEntityFrameworkCoreModule.cs": {
+    "mtime": 1787278529.0440476,
+    "seen": 1788928481.6384058,
+    "ast_hash": "bd1332ba5083354b2afbcaeb57ec6aa2",
+    "semantic_hash": "bd1332ba5083354b2afbcaeb57ec6aa2"
+  },
+  "src/Lion.AbpPro.EntityFrameworkCore/EntityFrameworkCore/AbpProMigrationsDbContextFactory.cs": {
+    "mtime": 1788401910.4843483,
+    "seen": 1788928481.6384087,
+    "ast_hash": "14ae1d04a04b00d527d2eef936223c31",
+    "semantic_hash": "14ae1d04a04b00d527d2eef936223c31"
+  },
+  "src/Lion.AbpPro.EntityFrameworkCore/EntityFrameworkCore/EntityFrameworkCoreAbpProDbSchemaMigrator.cs": {
+    "mtime": 1787278529.0450523,
+    "seen": 1788928481.638412,
+    "ast_hash": "87f3b71fbb7aa06fd19ca1fb65ea3302",
+    "semantic_hash": "87f3b71fbb7aa06fd19ca1fb65ea3302"
+  },
+  "src/Lion.AbpPro.EntityFrameworkCore/EntityFrameworkCore/IAbpProDbContext.cs": {
+    "mtime": 1787278529.0450523,
+    "seen": 1788928481.638415,
+    "ast_hash": "04a338594bf339639231896c75f92af2",
+    "semantic_hash": "04a338594bf339639231896c75f92af2"
+  },
+  "src/Lion.AbpPro.EntityFrameworkCore/Lion.AbpPro.EntityFrameworkCore.csproj": {
+    "mtime": 1788401910.4853537,
+    "seen": 1788928481.6384182,
+    "ast_hash": "d6e98ac26451cb156566d425dabed57c",
+    "semantic_hash": "d6e98ac26451cb156566d425dabed57c"
+  },
+  "src/Lion.AbpPro.EntityFrameworkCore/Properties/AssemblyInfo.cs": {
+    "mtime": 1787278529.0500245,
+    "seen": 1788928481.6384215,
+    "ast_hash": "01e231d8d6eda7f99966386d292b58f6",
+    "semantic_hash": "01e231d8d6eda7f99966386d292b58f6"
+  },
+  "src/Lion.AbpPro.HttpApi.Client/AbpProHttpApiClientModule.cs": {
+    "mtime": 1787278529.0510287,
+    "seen": 1788928481.6384246,
+    "ast_hash": "7c32b7a8c5cf612eab34f41dde3248f8",
+    "semantic_hash": "7c32b7a8c5cf612eab34f41dde3248f8"
+  },
+  "src/Lion.AbpPro.HttpApi.Client/Lion.AbpPro.HttpApi.Client.csproj": {
+    "mtime": 1787278529.0510287,
+    "seen": 1788928481.6384277,
+    "ast_hash": "9e89fe98c2f47a242ad9eb9c396b1353",
+    "semantic_hash": "9e89fe98c2f47a242ad9eb9c396b1353"
+  },
+  "src/Lion.AbpPro.HttpApi/AbpApplicationConfigurationController.cs": {
+    "mtime": 1787278529.0520296,
+    "seen": 1788928481.6384308,
+    "ast_hash": "1cf489fb80ef52ac4049f06c00c0de1e",
+    "semantic_hash": "1cf489fb80ef52ac4049f06c00c0de1e"
+  },
+  "src/Lion.AbpPro.HttpApi/AbpProHttpApiModule.cs": {
+    "mtime": 1787278529.0520296,
+    "seen": 1788928481.6384332,
+    "ast_hash": "af13de54a8e268648e7ed2ce445a6966",
+    "semantic_hash": "af13de54a8e268648e7ed2ce445a6966"
+  },
+  "src/Lion.AbpPro.HttpApi/Controllers/AbpProController.cs": {
+    "mtime": 1787278529.053029,
+    "seen": 1788928481.638436,
+    "ast_hash": "1a01953bfdd94637617d52b93c083478",
+    "semantic_hash": "1a01953bfdd94637617d52b93c083478"
+  },
+  "src/Lion.AbpPro.HttpApi/Controllers/IdentityServers/ApiResourceController.cs": {
+    "mtime": 1787278529.054029,
+    "seen": 1788928481.6384392,
+    "ast_hash": "1084b32365c363c7acd35bc40c4336cf",
+    "semantic_hash": "1084b32365c363c7acd35bc40c4336cf"
+  },
+  "src/Lion.AbpPro.HttpApi/Controllers/IdentityServers/ApiScopeController.cs": {
+    "mtime": 1787278529.054029,
+    "seen": 1788928481.638442,
+    "ast_hash": "549886306fad93aeeff3835cf2fda4fe",
+    "semantic_hash": "549886306fad93aeeff3835cf2fda4fe"
+  },
+  "src/Lion.AbpPro.HttpApi/Controllers/IdentityServers/ClientController.cs": {
+    "mtime": 1787278529.054029,
+    "seen": 1788928481.638445,
+    "ast_hash": "6e88bc74db469c1030b8bfcbc4c4b68a",
+    "semantic_hash": "6e88bc74db469c1030b8bfcbc4c4b68a"
+  },
+  "src/Lion.AbpPro.HttpApi/Controllers/IdentityServers/IdentityResourceController.cs": {
+    "mtime": 1787278529.0550294,
+    "seen": 1788928481.6384482,
+    "ast_hash": "d9e398d45f906e1920bbbc10e5a12861",
+    "semantic_hash": "d9e398d45f906e1920bbbc10e5a12861"
+  },
+  "src/Lion.AbpPro.HttpApi/Controllers/Systems/AccountController.cs": {
+    "mtime": 1787278529.0560308,
+    "seen": 1788928481.6384509,
+    "ast_hash": "4fa8035362c5a6f04d9dd61d15f3b69f",
+    "semantic_hash": "4fa8035362c5a6f04d9dd61d15f3b69f"
+  },
+  "src/Lion.AbpPro.HttpApi/Controllers/Systems/AuditLogController.cs": {
+    "mtime": 1787278529.0560308,
+    "seen": 1788928481.6384537,
+    "ast_hash": "1c5683e588b91d1108a8988ea1babb63",
+    "semantic_hash": "1c5683e588b91d1108a8988ea1babb63"
+  },
+  "src/Lion.AbpPro.HttpApi/Controllers/Systems/LionAbpProLogController.cs": {
+    "mtime": 1787278529.0560308,
+    "seen": 1788928481.6384566,
+    "ast_hash": "d5a47d6479a3b19688419f3890a5a55b",
+    "semantic_hash": "d5a47d6479a3b19688419f3890a5a55b"
+  },
+  "src/Lion.AbpPro.HttpApi/Controllers/Systems/PermissionController.cs": {
+    "mtime": 1787278529.0570297,
+    "seen": 1788928481.63846,
+    "ast_hash": "f87663007bfe0c125a0d7a04827dcc84",
+    "semantic_hash": "f87663007bfe0c125a0d7a04827dcc84"
+  },
+  "src/Lion.AbpPro.HttpApi/Controllers/Systems/RoleController.cs": {
+    "mtime": 1787278529.0570297,
+    "seen": 1788928481.6384633,
+    "ast_hash": "c0a63f9eb11d956a465f588cb693d69e",
+    "semantic_hash": "c0a63f9eb11d956a465f588cb693d69e"
+  },
+  "src/Lion.AbpPro.HttpApi/Controllers/Systems/SettingController.cs": {
+    "mtime": 1787278529.0580282,
+    "seen": 1788928481.6384666,
+    "ast_hash": "46c7d68bd7ed31a950eed95bd7dd03c9",
+    "semantic_hash": "46c7d68bd7ed31a950eed95bd7dd03c9"
+  },
+  "src/Lion.AbpPro.HttpApi/Controllers/Systems/UserController.cs": {
+    "mtime": 1787278529.0580282,
+    "seen": 1788928481.63847,
+    "ast_hash": "6c36c64ce3dca7e09e693eb2756dfab5",
+    "semantic_hash": "6c36c64ce3dca7e09e693eb2756dfab5"
+  },
+  "src/Lion.AbpPro.HttpApi/Controllers/Tenants/AbpTenantController.cs": {
+    "mtime": 1787278529.0590296,
+    "seen": 1788928481.6384735,
+    "ast_hash": "f06d3d3035764e9a83c3073af81e7be3",
+    "semantic_hash": "f06d3d3035764e9a83c3073af81e7be3"
+  },
+  "src/Lion.AbpPro.HttpApi/Controllers/Tenants/TenantController.cs": {
+    "mtime": 1787278529.0590296,
+    "seen": 1788928481.6384768,
+    "ast_hash": "8b7385efad601fdbc0288724e77ac451",
+    "semantic_hash": "8b7385efad601fdbc0288724e77ac451"
+  },
+  "src/Lion.AbpPro.HttpApi/Lion.AbpPro.HttpApi.csproj": {
+    "mtime": 1787278529.06003,
+    "seen": 1788928481.6384802,
+    "ast_hash": "3985e0fa742714705c241d7cdc5c0908",
+    "semantic_hash": "3985e0fa742714705c241d7cdc5c0908"
+  }
+}

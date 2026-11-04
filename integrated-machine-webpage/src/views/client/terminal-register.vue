@@ -60,12 +60,7 @@
                   <button type="button" role="tab" :aria-selected="method === 'face'" :class="{ active: method === 'face' }" :disabled="busy" @click="changeMethod('face')">录入人脸</button>
                   <button type="button" role="tab" :aria-selected="method === 'vein'" :class="{ active: method === 'vein' }" :disabled="busy" @click="changeMethod('vein')">录入指静脉</button>
                 </div>
-                <template v-if="method === 'face'">
-                  <label for="registration-identifier">人脸人员编号</label>
-                  <input id="registration-identifier" v-model="identifier" inputmode="numeric" placeholder="填写未使用的正整数编号" :disabled="busy">
-                  <p class="sample-login-description">请填写未被其他人员使用的编号；失败后可为同一人员使用原预留编号重试。</p>
-                </template>
-                <p v-else class="sample-login-description">指静脉模板编号由系统自动生成，无需填写；录入失败后为同一人员重试会自动沿用预留编号。</p>
+                <p class="sample-login-description">{{ method === 'face' ? '人脸人员编号' : '指静脉模板编号' }}由系统自动生成，无需填写；录入失败后为同一人员重试会自动沿用预留编号。</p>
                 <terminal-camera-preview v-if="method === 'face'" ref="camera" :disabled="busy" />
                 <div v-else class="sample-login-device">
                   <div class="sample-login-finger"><img src="../../images/finger.png" alt="指静脉采集示意"></div>
@@ -101,7 +96,7 @@ import Util from '../../lib/util';
 import AppConsts from '../../lib/appconst';
 import TerminalCameraPreview from './terminal-camera-preview.vue';
 import { RegistrationUser, RegistrationProgress, isTerminalAdmin, checkRegistrationAccess, searchRegistrationUsers, registrationRoles,
-  createRegistrationUser, registrationBindings, enrollRegistrationUser, registrationIdentifier, registrationError,
+  createRegistrationUser, registrationBindings, enrollRegistrationUser, registrationError,
   createRegistrationOperationId, registrationProgress } from '../../lib/terminal-registration';
 
 /** 管理员专用人员注册页，复用 WMS 账号和绑定，所有设备操作均经 WMS 授权后执行。 */
@@ -133,8 +128,6 @@ export default class TerminalRegister extends AbpBase {
   confirmPassword: string = '';
   /** 当前录入方式：face 或 vein。 */
   method: string = 'face';
-  /** 人脸录入使用的正整数编号文本；指静脉由后端自动分配。 */
-  identifier: string = '';
   /** 最近一次操作失败原因。 */
   errorMessage: string = '';
   /** 最近一次创建或录入的确认结果。 */
@@ -191,10 +184,9 @@ export default class TerminalRegister extends AbpBase {
     finally { this.busy = false; }
   }
 
-  /** 选人后清空旧编号与提示并重新查询绑定。 */
+  /** 选人后清空旧提示并重新查询绑定。 */
   async selectUser() {
     this.clearProgress();
-    this.identifier = '';
     this.successMessage = '';
     this.bindings = [];
     await this.refreshBindings();
@@ -245,7 +237,6 @@ export default class TerminalRegister extends AbpBase {
       this.users = [user];
       this.selectedUserId = user.id;
       this.bindings = [];
-      this.identifier = '';
       this.mode = 'existing';
       this.pageIndex = 1;
       this.totalCount = 1;
@@ -256,12 +247,11 @@ export default class TerminalRegister extends AbpBase {
     finally { this.busy = false; }
   }
 
-  /** 切换录入方式时清空编号，防止误用另一类特征的模板编号。 */
+  /** 切换录入方式时清空上一次操作提示。 */
   changeMethod(method: string) {
     if (this.busy || this.method === method) return;
     this.clearProgress();
     this.method = method;
-    this.identifier = '';
     this.errorMessage = '';
     this.successMessage = '';
   }
@@ -273,11 +263,10 @@ export default class TerminalRegister extends AbpBase {
     this.errorMessage = '';
     this.successMessage = '';
     try {
-      const identifier = this.method === 'face' ? registrationIdentifier(this.identifier) : undefined;
       const image = this.method === 'face' ? (this.$refs.camera as TerminalCameraPreview).capture() : '';
       const operationId = this.method === 'vein' ? createRegistrationOperationId() : undefined;
       this.busy = true;
-      const enrollment = enrollRegistrationUser(this.selectedUserId, this.method, identifier, image, this.request.token, operationId);
+      const enrollment = enrollRegistrationUser(this.selectedUserId, this.method, undefined, image, this.request.token, operationId);
       if (operationId) this.startProgress(this.selectedUserId, operationId);
       const binding = await enrollment;
       if (this.disposed) return;
@@ -286,7 +275,6 @@ export default class TerminalRegister extends AbpBase {
       if (this.veinProgress) this.veinProgress = { ...this.veinProgress, stage: 'completed', message: this.successMessage,
         completedSamples: 6, isComplete: true, success: true };
       this.progressWarning = '';
-      this.identifier = '';
     } catch (error) {
       this.reportError(error);
       if (!this.disposed && this.veinProgress) this.veinProgress = { ...this.veinProgress, stage: 'failed',

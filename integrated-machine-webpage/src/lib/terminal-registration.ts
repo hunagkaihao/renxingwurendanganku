@@ -90,11 +90,11 @@ export async function registrationBindings(userId: string, cancelToken: CancelTo
     return result.data;
 }
 
-/** 服务端完成录入并启用绑定；指静脉不提交模板编号，由后端分配，六次采集最多等待 240 秒。 */
+/** 服务端自动分配人脸或指静脉编号并完成录入绑定；编号参数仅兼容旧调用方，不再发送。 */
 export async function enrollRegistrationUser(userId: string, method: string, identifier: number | undefined,
     imageData: string, cancelToken: CancelToken, operationId?: string): Promise<any> {
     const result = await Ajax.post('/api/terminal-registration/users/' + encodeURIComponent(userId) + '/enroll',
-        { method, identifier, imageData, operationId }, requestConfig(cancelToken, 250000));
+        { method, imageData, operationId }, requestConfig(cancelToken, 250000));
     return result.data;
 }
 
