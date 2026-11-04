@@ -23,10 +23,17 @@ h1 { margin: 14px 0 8px; font-size: 30px; color: #273a56; }
 .sample-login-camera-controls select { flex: 1; min-width: 0; min-height: 48px; padding: 8px 12px; border: 1px solid #dce4ef; border-radius: 10px; color: #263951; background: #f9fbfe; font-size: 17px; }
 .sample-login-camera-controls button { padding: 8px 12px; border: 1px solid #dce4ef; border-radius: 10px; color: #5577ab; background: white; font-size: 16px; cursor: pointer; }
 .sample-login-camera-controls select:focus { outline: 3px solid #a6bff0; outline-offset: 3px; }
+.sample-login-camera-authorization { margin: 14px 0; padding: 14px 16px; border: 1px solid #dce4ef; border-radius: 12px; background: #f4f7fd; text-align: left; }
+.sample-login-camera-authorization p { margin: 0 0 12px; color: #586d8c; font-size: 16px; line-height: 1.7; }
+.sample-login-camera-authorization p:last-child { margin: 12px 0 0; }
+.sample-login-camera-authorization button { min-height: 44px; padding: 8px 14px; border: 1px solid #7d9fe5; border-radius: 9px; background: white; color: #355d9f; font-size: 17px; cursor: pointer; }
+.sample-login-camera-notice, .sample-login-device > .sample-login-camera-notice { margin: 14px 0; color: #586d8c; font-size: 17px; line-height: 1.7; text-align: left; }
 .sample-login-camera { position: relative; width: 100%; height: 240px; overflow: hidden; border-radius: 16px; background: #e8eef7; }
 .sample-login-camera video { width: 100%; height: 100%; object-fit: contain; transform: scaleX(-1); }
 .sample-login-camera > span { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #8492a7; font-size: 18px; }
-.sample-login-face-frame { position: absolute; top: 12%; left: 31%; width: 38%; height: 76%; border: 2px dashed rgba(76, 127, 220, .6); border-radius: 45%; pointer-events: none; }
+// 固定纵向人脸比例，额头和脸颊较宽、下颌渐收，避免随宽屏预览拉成横向椭圆。
+.sample-login-face-frame { position: absolute; top: 50%; left: 50%; width: auto; height: 84%; max-width: 70%; transform: translate(-50%, -50%); pointer-events: none; }
+.sample-login-face-frame path { fill: none; stroke: rgba(76, 127, 220, .6); stroke-width: 2; stroke-dasharray: 7 6; vector-effect: non-scaling-stroke; }
 .sample-login-finger { display: flex; align-items: center; justify-content: center; height: 210px; border-radius: 16px; background: #f2f6ff; }
 .sample-login-finger img { width: 112px; height: 112px; object-fit: contain; }
 .sample-login-error { margin-top: 18px; padding: 13px 16px; border-radius: 10px; color: #a64c39; background: #fff2ed; font-size: 16px; line-height: 1.6; overflow-wrap: break-word; }

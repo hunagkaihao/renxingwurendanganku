@@ -34,9 +34,9 @@ namespace Lion.AbpPro.Controllers.Systems
         [HttpGet("roles")]
         public Task<ListResultDto<IdentityRoleDto>> GetRolesAsync() => _registration.GetRolesAsync();
 
-        /// <summary>创建新的 WMS 人员账号，复用现有密码、权限和唯一性校验。</summary>
+        /// <summary>创建新的 WMS 人员账号，邮箱选填，密码、账号及角色继续使用 Identity 校验。</summary>
         [HttpPost("users")]
-        public Task<IdentityUserDto> CreateUserAsync([FromBody] IdentityUserCreateDto input)
+        public Task<IdentityUserDto> CreateUserAsync([FromBody] CreateTerminalUserInput input)
             => _registration.CreateUserAsync(input);
 
         /// <summary>录入人脸或连续采集六次指静脉，成功后启用与所选账号的绑定。</summary>

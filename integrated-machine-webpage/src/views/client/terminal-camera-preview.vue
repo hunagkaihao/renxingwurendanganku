@@ -10,10 +10,18 @@
       </select>
       <button type="button" :disabled="disabled || opening" @click="refresh">刷新设备</button>
     </div>
+    <div v-if="needsAuthorization" class="sample-login-camera-authorization">
+      <p>读取完整设备列表可能短暂打开浏览器默认摄像头，列出设备后立即关闭，不用于预览或拍照。</p>
+      <button type="button" :disabled="disabled || opening" @click="authorize">{{ permissionState === 'granted' ? '初始化并刷新设备' : '授权并刷新设备' }}</button>
+      <p>如不希望打开默认摄像头，请在浏览器地址栏的站点设置中允许摄像头，并在浏览器摄像头设置中选择外接 RGB Camera，再点击刷新设备。</p>
+    </div>
+    <p v-if="needsAuthorization && deviceNotice" class="sample-login-camera-notice" role="status">{{ deviceNotice }}</p>
     <div class="sample-login-camera">
       <video ref="video" autoplay muted playsinline @loadeddata="ready = true"></video>
       <span v-if="!ready">{{ opening ? '正在开启外接摄像头…' : '请开启外接摄像头' }}</span>
-      <div class="sample-login-face-frame" aria-hidden="true"></div>
+      <svg class="sample-login-face-frame" viewBox="0 0 180 240" aria-hidden="true" focusable="false">
+        <path d="M90 8 C48 8 20 31 18 74 C15 122 29 175 54 211 C65 227 77 234 90 234 C103 234 115 227 126 211 C151 175 165 122 162 74 C160 31 132 8 90 8 Z" />
+      </svg>
     </div>
     <button type="button" class="sample-login-submit" :disabled="disabled || opening" @click="open">{{ ready ? '重新开启摄像头' : '开启外接摄像头' }}</button>
     <p v-if="errorMessage" class="sample-login-error" role="alert">{{ errorMessage }}</p>
@@ -21,7 +29,7 @@
 </template>
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { externalCameraDevices, selectExternalCamera, externalCameraConstraints, terminalCameraError } from '../../lib/terminal-camera';
+import { CameraPermissionState, readCameraPermissionState, inspectExternalCameras, authorizeCameraDevices, selectExternalCamera, externalCameraConstraints, terminalCameraError } from '../../lib/terminal-camera';
 
 /** 注册页的外接摄像头预览，仅在内存中采集当前照片，销毁时释放所有设备轨道。 */
 @Component
@@ -38,6 +46,12 @@ export default class TerminalCameraPreview extends Vue {
   opening: boolean = false;
   /** 摄像头操作失败原因。 */
   errorMessage: string = '';
+  /** 设备信息被浏览器隐藏时显示独立授权入口，正式开启仍要求精确选择设备。 */
+  needsAuthorization: boolean = false;
+  /** 设备列表的授权说明或双目通道选择提示。 */
+  deviceNotice: string = '';
+  /** 只读查询得到的当前站点权限，不代表设备一定可读取。 */
+  permissionState: CameraPermissionState = 'unknown';
   /** 本组件独占的视频流。 */
   private stream: MediaStream | null = null;
   /** 异步操作代次，拦截组件销毁后的设备响应。 */
@@ -56,16 +70,51 @@ export default class TerminalCameraPreview extends Vue {
     try {
       if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices)
         throw new Error('请通过 localhost、127.0.0.1 或 HTTPS 访问并允许摄像头权限。');
-      const devices = await navigator.mediaDevices.enumerateDevices();
+      const [devices, permission] = await Promise.all([
+        navigator.mediaDevices.enumerateDevices(), readCameraPermissionState(navigator.permissions)
+      ]);
       if (generation !== this.generation) return;
-      this.devices = externalCameraDevices(devices);
-      this.deviceId = selectExternalCamera(this.devices, this.deviceId);
-      if (!this.devices.length) this.errorMessage = '未找到外接摄像头，请检查连接和摄像头权限后刷新。';
+      this.permissionState = permission;
+      this.updateDevices(devices);
     } catch (error) {
       if (generation === this.generation) this.errorMessage = error.message || terminalCameraError(error);
     } finally {
       if (generation === this.generation) this.opening = false;
     }
+  }
+
+  /** 显式申请浏览器权限后重新列举设备；临时默认流不进入预览，也不自动开启候选设备。 */
+  async authorize() {
+    if (this.disabled || this.opening) return;
+    const generation = ++this.generation;
+    this.close();
+    this.opening = true;
+    this.errorMessage = '';
+    try {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia)
+        throw new Error('请通过 localhost、127.0.0.1 或 HTTPS 访问并允许摄像头权限。');
+      const devices = await authorizeCameraDevices(navigator.mediaDevices,
+        () => generation === this.generation, stream => { this.stream = stream; });
+      const permission = await readCameraPermissionState(navigator.permissions);
+      if (generation !== this.generation) return;
+      this.permissionState = permission;
+      this.updateDevices(devices);
+    } catch (error) {
+      if (generation === this.generation)
+        this.errorMessage = error.name === 'Error' ? error.message : terminalCameraError(error);
+    } finally {
+      if (generation === this.generation) { this.close(); this.opening = false; }
+    }
+  }
+
+  /** 按原始列表分析权限；已有视频流时禁止自动换选其他设备，保留双目各通道的准确对应。 */
+  private updateDevices(devices: MediaDeviceInfo[], allowAutoSelect: boolean = true) {
+    const discovery = inspectExternalCameras(devices, this.permissionState);
+    this.devices = discovery.devices;
+    this.needsAuthorization = discovery.needsAuthorization;
+    this.deviceNotice = discovery.message;
+    if (!this.devices.some(device => device.deviceId === this.deviceId))
+      this.deviceId = allowAutoSelect ? selectExternalCamera(this.devices, '') : '';
   }
 
   /** 切换设备时先释放旧摄像头，再打开管理员选择的设备。 */
@@ -74,7 +123,10 @@ export default class TerminalCameraPreview extends Vue {
   /** 打开所选设备，权限响应延迟时仍确保流只属于当前组件。 */
   async open() {
     if (this.disabled || this.opening) return;
-    if (!this.deviceId) { this.errorMessage = '请先选择外接摄像头，首次授权前名称可能不可见。'; return; }
+    if (!this.deviceId) {
+      this.errorMessage = this.needsAuthorization ? '请先点击上方的设备初始化或授权按钮刷新列表，再选择外接 RGB 摄像头。' : '请先选择外接摄像头。';
+      return;
+    }
     const generation = ++this.generation;
     this.close();
     this.opening = true;
@@ -85,9 +137,12 @@ export default class TerminalCameraPreview extends Vue {
       const stream = await navigator.mediaDevices.getUserMedia(externalCameraConstraints(this.deviceId));
       if (generation !== this.generation) { stream.getTracks().forEach(track => track.stop()); return; }
       this.stream = stream;
-      const devices = await navigator.mediaDevices.enumerateDevices();
+      const [devices, permission] = await Promise.all([
+        navigator.mediaDevices.enumerateDevices(), readCameraPermissionState(navigator.permissions)
+      ]);
       if (generation !== this.generation) return;
-      this.devices = externalCameraDevices(devices);
+      this.permissionState = permission;
+      this.updateDevices(devices, false);
       if (!this.devices.some(device => device.deviceId === this.deviceId)) {
         this.deviceId = '';
         throw new Error('该设备不是可用的外接摄像头，请重新选择。');
@@ -98,6 +153,7 @@ export default class TerminalCameraPreview extends Vue {
     } catch (error) {
       if (generation === this.generation) {
         this.close();
+        if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') this.needsAuthorization = true;
         this.errorMessage = error.name === 'Error' ? error.message : terminalCameraError(error);
       }
     } finally {

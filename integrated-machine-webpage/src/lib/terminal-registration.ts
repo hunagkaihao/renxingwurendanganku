@@ -116,3 +116,38 @@ export function registrationError(error: any): string {
     if (error && error.code === 'ECONNABORTED') return '操作响应超时，请先查询人员或绑定状态、核查设备日志，再决定是否重试。';
     return error && error.message ? error.message : '操作未完成，请检查服务连接。';
 }
+
+/** 将新增人员时 Identity 返回的英文校验说明转为中文，兼容旧后端合并返回多项密码规则。 */
+export function registrationUserError(error: any): string {
+    const message = registrationError(error);
+    const translations: Array<{ pattern: RegExp; text: string }> = [
+        { pattern: /Passwords must have at least one non[ -]alphanumeric character\.?/gi, text: '密码必须至少包含一个特殊字符。' },
+        { pattern: /Passwords must have at least one uppercase \('A'-'Z'\)\.?/gi, text: '密码必须至少包含一个大写字母（A-Z）。' },
+        { pattern: /Passwords must have at least one lowercase \('a'-'z'\)\.?/gi, text: '密码必须至少包含一个小写字母（a-z）。' },
+        { pattern: /Passwords must have at least one digit \('0'-'9'\)\.?/gi, text: '密码必须至少包含一个数字（0-9）。' },
+        { pattern: /Passwords must be at least (\d+) characters\.?/gi, text: '密码长度不能少于 $1 个字符。' },
+        { pattern: /Passwords must use at least (\d+) different characters\.?/gi, text: '密码必须至少包含 $1 个不同的字符。' },
+        { pattern: /User name '[\s\S]*?' is already taken\.?/gi, text: '该登录账号已被使用，请更换账号。' },
+        { pattern: /Email '[\s\S]*?' is already taken\.?/gi, text: '该邮箱已被使用，请更换邮箱。' },
+        { pattern: /Email '[\s\S]*?' is invalid\.?/gi, text: '邮箱格式不正确，请重新填写。' },
+        { pattern: /User name '[\s\S]*?' is invalid, can only contain letters or digits\.?/gi, text: '登录账号格式不正确，请使用系统允许的字母、数字或字符。' },
+        { pattern: /The (?:UserName|User name) field is required\.?/gi, text: '请填写登录账号。' },
+        { pattern: /The Name field is required\.?/gi, text: '请填写姓名。' },
+        { pattern: /The Password field is required\.?/gi, text: '请填写初始密码。' },
+        { pattern: /The Email field is not a valid e-mail address\.?/gi, text: '邮箱格式不正确，请重新填写。' }
+    ];
+    const messages: string[] = [];
+    let remaining = message;
+    translations.forEach(rule => {
+        remaining = remaining.replace(rule.pattern, (...match: any[]) => {
+            const translated = rule.text.replace('$1', match[1]);
+            if (messages.indexOf(translated) < 0) messages.push(translated);
+            return '';
+        });
+    });
+    remaining = remaining.replace(/^[\s.,;，。；]+|[\s.,;，。；]+$/g, '');
+    // 保留服务端已有的中文业务提示；未知英文错误使用中文提示，不向用户展示英文异常。
+    if (remaining) messages.push(/[\u4e00-\u9fff]/.test(remaining)
+        ? remaining : '新增人员失败，请检查填写内容；如仍无法创建，请联系管理员查看服务日志。');
+    return messages.join('') || '新增人员失败，请检查填写内容后重试。';
+}

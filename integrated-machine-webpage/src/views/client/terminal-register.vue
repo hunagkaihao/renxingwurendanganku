@@ -12,7 +12,7 @@
         <p v-if="!authorized && !errorMessage" role="status">正在验证管理员权限…</p>
         <template v-if="authorized">
           <div class="registration-tabs" role="tablist" aria-label="人员来源">
-            <button type="button" role="tab" :aria-selected="mode === 'existing'" :class="{ active: mode === 'existing' }" :disabled="busy" @click="mode = 'existing'">已有 WMS 人员</button>
+            <button type="button" role="tab" :aria-selected="mode === 'existing'" :class="{ active: mode === 'existing' }" :disabled="busy" @click="showExisting">已有 WMS 人员</button>
             <button type="button" role="tab" :aria-selected="mode === 'new'" :class="{ active: mode === 'new' }" :disabled="busy" @click="showCreate">新增人员</button>
           </div>
           <div class="sample-login-panel">
@@ -21,8 +21,8 @@
               <input id="new-person-account" v-model="newUser.userName" required maxlength="256" autocomplete="off" :disabled="busy">
               <label for="new-person-name">姓名</label>
               <input id="new-person-name" v-model="newUser.name" required maxlength="64" :disabled="busy">
-              <label for="new-person-email">邮箱</label>
-              <input id="new-person-email" v-model="newUser.email" type="email" required maxlength="256" :disabled="busy">
+              <label for="new-person-email">邮箱（选填）</label>
+              <input id="new-person-email" v-model="newUser.email" type="email" maxlength="256" placeholder="可不填写" :disabled="busy">
               <label for="new-person-password">初始密码</label>
               <input id="new-person-password" v-model="newUser.password" type="password" required autocomplete="new-password" :disabled="busy">
               <label for="new-person-confirm">确认初始密码</label>
@@ -34,19 +34,21 @@
               <button type="submit" class="sample-login-submit" :disabled="busy || !roles.length">{{ busy ? '正在处理…' : '创建账号并继续录入' }}</button>
             </form>
             <template v-else>
-              <form class="registration-search" @submit.prevent="search(1)">
-                <input v-model="filter" aria-label="搜索人员" placeholder="按账号或姓名搜索人员" :disabled="busy">
-                <button type="submit" :disabled="busy">查询人员</button>
-              </form>
               <label for="registration-person">选择 WMS 人员</label>
-              <select id="registration-person" v-model="selectedUserId" :disabled="busy" @change="selectUser">
-                <option value="" disabled>请选择需要录入的人员</option>
-                <option v-for="user in users" :key="user.id" :value="user.id" :disabled="user.isActive === false">{{ user.userName }}{{ user.name ? ' · ' + user.name : '' }}{{ user.isActive === false ? '（已停用）' : '' }}</option>
-              </select>
+              <AutoComplete v-model="personQuery" element-id="registration-person" class="registration-person-picker"
+                placeholder="输入账号或姓名查询，或展开选择人员" icon="ios-arrow-down" size="large" clearable :disabled="busy"
+                @on-change="queueUserSearch" @on-select="choosePerson">
+                <Option v-if="usersLoading" value="__registration_loading__" :label="personQuery" disabled>正在查询人员…</Option>
+                <Option v-else-if="!users.length" value="__registration_empty__" :label="personQuery" disabled>未找到匹配人员，请修改账号或姓名</Option>
+                <Option v-for="user in usersLoading ? [] : users" :key="user.id" :value="personLabel(user)" :disabled="user.isActive === false">
+                  {{ personLabel(user) }}{{ user.isActive === false ? '（已停用）' : '' }}
+                </Option>
+              </AutoComplete>
+              <p class="registration-person-hint" role="status">{{ usersLoading ? '正在查询人员，请稍候…' : '支持输入账号或姓名查询；请从下拉结果中选择需要录入的人员。' }}</p>
               <div class="registration-pagination">
-                <button type="button" :disabled="busy || pageIndex <= 1" @click="search(pageIndex - 1)">上一页</button>
+                <button type="button" :disabled="busy || usersLoading || pageIndex <= 1" @click="search(pageIndex - 1)">上一页</button>
                 <span>第 {{ pageIndex }} 页 · 共 {{ totalCount }} 人</span>
-                <button type="button" :disabled="busy || pageIndex * 20 >= totalCount" @click="search(pageIndex + 1)">下一页</button>
+                <button type="button" :disabled="busy || usersLoading || pageIndex * 20 >= totalCount" @click="search(pageIndex + 1)">下一页</button>
               </div>
               <template v-if="selectedUser">
                 <p class="registration-selected">正在为 <strong>{{ selectedUser.name || selectedUser.userName }}</strong>（{{ selectedUser.userName }}）录入</p>
@@ -60,7 +62,6 @@
                   <button type="button" role="tab" :aria-selected="method === 'face'" :class="{ active: method === 'face' }" :disabled="busy" @click="changeMethod('face')">录入人脸</button>
                   <button type="button" role="tab" :aria-selected="method === 'vein'" :class="{ active: method === 'vein' }" :disabled="busy" @click="changeMethod('vein')">录入指静脉</button>
                 </div>
-                <p class="sample-login-description">{{ method === 'face' ? '人脸人员编号' : '指静脉模板编号' }}由系统自动生成，无需填写；录入失败后为同一人员重试会自动沿用预留编号。</p>
                 <terminal-camera-preview v-if="method === 'face'" ref="camera" :disabled="busy" />
                 <div v-else class="sample-login-device">
                   <div class="sample-login-finger"><img src="../../images/finger.png" alt="指静脉采集示意"></div>
@@ -96,7 +97,7 @@ import Util from '../../lib/util';
 import AppConsts from '../../lib/appconst';
 import TerminalCameraPreview from './terminal-camera-preview.vue';
 import { RegistrationUser, RegistrationProgress, isTerminalAdmin, checkRegistrationAccess, searchRegistrationUsers, registrationRoles,
-  createRegistrationUser, registrationBindings, enrollRegistrationUser, registrationError,
+  createRegistrationUser, registrationBindings, enrollRegistrationUser, registrationError, registrationUserError,
   createRegistrationOperationId, registrationProgress } from '../../lib/terminal-registration';
 
 /** 管理员专用人员注册页，复用 WMS 账号和绑定，所有设备操作均经 WMS 授权后执行。 */
@@ -110,6 +111,10 @@ export default class TerminalRegister extends AbpBase {
   mode: string = 'existing';
   /** 当前查询关键词。 */
   filter: string = '';
+  /** 合并选择框中的查询文本或已选人员显示名称，实际录入目标始终由 GUID 指定。 */
+  personQuery: string = '';
+  /** 人员列表查询单独加载，不锁定输入，支持继续输入及取消过时查询。 */
+  usersLoading: boolean = false;
   /** 当前人员列表页，从 1 开始。 */
   pageIndex: number = 1;
   /** 查询匹配的人员总数。 */
@@ -146,6 +151,12 @@ export default class TerminalRegister extends AbpBase {
   private request: CancelTokenSource = axios.CancelToken.source();
   /** 组件是否已经离开，避免异步响应触发新操作。 */
   private disposed: boolean = false;
+  /** 输入查询的短延迟定时器，减少连续按键带来的后台请求。 */
+  private userSearchTimer: ReturnType<typeof setTimeout> | null = null;
+  /** 当前人员查询请求，输入新关键词、切换页面或离开时取消。 */
+  private userSearchRequest: CancelTokenSource | null = null;
+  /** 查询代次，禁止旧关键词或旧分页的迟到结果覆盖当前列表。 */
+  private userSearchGeneration: number = 0;
 
   /** 当前选定的人员，搜索翻页后必须重新选择，避免将特征录给隐藏的旧选择。 */
   get selectedUser(): RegistrationUser | undefined { return this.users.find(user => user.id === this.selectedUserId); }
@@ -166,26 +177,90 @@ export default class TerminalRegister extends AbpBase {
     }
   }
 
-  /** 查询指定页人员，开始查询时清空旧目标，确保录入对象与界面一致。 */
-  async search(page: number) {
-    if (!this.authorized || this.busy) return;
-    this.clearProgress();
-    this.busy = true;
-    this.errorMessage = '';
+  /** 下拉选项显示账号和姓名，避免仅凭同名人员选择录入对象。 */
+  personLabel(user: RegistrationUser): string { return user.userName + (user.name ? ' · ' + user.name : ''); }
+
+  /** 输入即清除旧录入目标，停顿 250 毫秒后按账号或姓名查询，清空时恢复全部人员。 */
+  queueUserSearch(query: string) {
+    if (!this.authorized || this.busy || this.mode !== 'existing') return;
+    query = typeof query === 'string' ? query : '';
+    if (this.selectedUser && query === this.personLabel(this.selectedUser)) return;
+    this.cancelUserSearch();
+    this.filter = query.trim();
     this.selectedUserId = '';
     this.bindings = [];
+    this.successMessage = '';
+    this.clearProgress();
+    this.usersLoading = true;
+    this.userSearchTimer = setTimeout(() => {
+      this.userSearchTimer = null;
+      this.search(1);
+    }, 250);
+  }
+
+  /** 只有明确选择下拉候选才设置账号 GUID，手工输入的文本不能直接成为录入目标。 */
+  async choosePerson(label: string) {
+    if (!this.authorized || this.busy || this.usersLoading) return;
+    const user = this.users.find(item => this.personLabel(item) === label && item.isActive !== false);
+    if (!user) return;
+    this.cancelUserSearch();
+    this.selectedUserId = user.id;
+    this.personQuery = this.personLabel(user);
+    await this.selectUser();
+  }
+
+  /** 从新增模式返回已有人员时重新打开完整列表，不继承上一次输入的筛选条件。 */
+  async showExisting() {
+    if (this.busy || this.mode === 'existing') return;
+    this.mode = 'existing';
+    this.personQuery = '';
+    this.filter = '';
+    await this.search(1);
+  }
+
+  /** 查询指定页人员，独立管理加载状态，并以请求代次阻止旧结果覆盖新关键词。 */
+  async search(page: number) {
+    if (!this.authorized || this.busy) return;
+    this.cancelUserSearch();
+    const generation = this.userSearchGeneration;
+    const request = axios.CancelToken.source();
+    this.userSearchRequest = request;
+    this.clearProgress();
+    this.usersLoading = true;
+    this.errorMessage = '';
+    this.personQuery = this.filter;
+    this.selectedUserId = '';
+    this.bindings = [];
+    this.users = [];
+    this.totalCount = 0;
+    this.pageIndex = page;
+    this.successMessage = '';
     try {
-      const result = await searchRegistrationUsers(this.filter.trim(), page, this.request.token);
-      if (this.disposed) return;
+      const result = await searchRegistrationUsers(this.filter.trim(), page, request.token);
+      if (this.disposed || generation !== this.userSearchGeneration) return;
       this.users = result.items || [];
       this.totalCount = result.totalCount;
       this.pageIndex = page;
-    } catch (error) { this.reportError(error); }
-    finally { this.busy = false; }
+    } catch (error) {
+      if (generation === this.userSearchGeneration) this.reportError(error);
+    } finally {
+      if (generation === this.userSearchGeneration) { this.usersLoading = false; this.userSearchRequest = null; }
+    }
+  }
+
+  /** 取消人员查询及延迟操作，离开模式后不再接受旧列表响应。 */
+  private cancelUserSearch() {
+    this.userSearchGeneration++;
+    if (this.userSearchTimer !== null) clearTimeout(this.userSearchTimer);
+    this.userSearchTimer = null;
+    if (this.userSearchRequest) this.userSearchRequest.cancel('registration user query replaced');
+    this.userSearchRequest = null;
+    this.usersLoading = false;
   }
 
   /** 选人后清空旧提示并重新查询绑定。 */
   async selectUser() {
+    this.cancelUserSearch();
     this.clearProgress();
     this.successMessage = '';
     this.bindings = [];
@@ -207,6 +282,7 @@ export default class TerminalRegister extends AbpBase {
   /** 新增账号前加载可分配角色，不假定某个业务角色必然存在。 */
   async showCreate() {
     if (this.busy) return;
+    this.cancelUserSearch();
     this.clearProgress();
     this.mode = 'new';
     this.errorMessage = '';
@@ -223,8 +299,8 @@ export default class TerminalRegister extends AbpBase {
   async createUser() {
     if (!this.authorized || this.busy) return;
     this.errorMessage = '';
-    if (!this.newUser.userName.trim() || !this.newUser.name.trim() || !this.newUser.email.trim() || !this.newUser.password) {
-      this.errorMessage = '请完整填写账号、姓名、邮箱和初始密码。'; return;
+    if (!this.newUser.userName.trim() || !this.newUser.name.trim() || !this.newUser.password) {
+      this.errorMessage = '请完整填写账号、姓名和初始密码。'; return;
     }
     if (this.newUser.password !== this.confirmPassword) { this.errorMessage = '两次输入的初始密码不一致。'; return; }
     if (!this.newUser.roleNames.length) { this.errorMessage = '请至少分配一个角色。'; return; }
@@ -232,10 +308,12 @@ export default class TerminalRegister extends AbpBase {
     this.successMessage = '';
     try {
       const user = await createRegistrationUser({ ...this.newUser, userName: this.newUser.userName.trim(),
-        name: this.newUser.name.trim(), email: this.newUser.email.trim(), isActive: true }, this.request.token);
+        name: this.newUser.name.trim(), email: this.newUser.email.trim() || null, isActive: true }, this.request.token);
       if (this.disposed) return;
       this.users = [user];
       this.selectedUserId = user.id;
+      this.personQuery = this.personLabel(user);
+      this.filter = '';
       this.bindings = [];
       this.mode = 'existing';
       this.pageIndex = 1;
@@ -243,7 +321,7 @@ export default class TerminalRegister extends AbpBase {
       this.newUser = { userName: '', name: '', email: '', password: '', roleNames: [] };
       this.confirmPassword = '';
       this.successMessage = 'WMS 账号创建成功，请继续录入人脸或指静脉。';
-    } catch (error) { this.reportError(error); }
+    } catch (error) { this.reportError(error, registrationUserError); }
     finally { this.busy = false; }
   }
 
@@ -331,10 +409,10 @@ export default class TerminalRegister extends AbpBase {
     this.progressWarning = '';
   }
 
-  /** 只处理仍属于本页面的失败；权限失效时立即隐藏操作区域。 */
-  private reportError(error: any) {
+  /** 只处理仍属于本页面的失败，可按操作转换提示；权限失效时立即隐藏操作区域。 */
+  private reportError(error: any, formatError: (error: any) => string = registrationError) {
     if (this.disposed || axios.isCancel(error)) return;
-    this.errorMessage = registrationError(error);
+    this.errorMessage = formatError(error);
     if (error.response && (error.response.status === 401 || error.response.status === 403)) this.authorized = false;
   }
 
@@ -347,6 +425,7 @@ export default class TerminalRegister extends AbpBase {
   /** 离开页面清除管理员身份、敏感表单和迟到请求，防止下一位使用者继承管理会话。 */
   beforeDestroy() {
     this.disposed = true;
+    this.cancelUserSearch();
     this.stopProgress();
     this.request.cancel('registration page closed');
     this.newUser.password = '';

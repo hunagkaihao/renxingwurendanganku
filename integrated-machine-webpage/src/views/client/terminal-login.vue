@@ -43,10 +43,18 @@
               </select>
               <button type="button" :disabled="cameraOpening || submitting" @click="refreshCameras">刷新设备</button>
             </div>
+            <div v-if="cameraNeedsAuthorization" class="sample-login-camera-authorization">
+              <p>读取完整设备列表可能短暂打开浏览器默认摄像头，列出设备后立即关闭，不用于预览或拍照。</p>
+              <button type="button" :disabled="cameraOpening || submitting" @click="authorizeCameras">{{ cameraPermissionState === 'granted' ? '初始化并刷新设备' : '授权并刷新设备' }}</button>
+              <p>如不希望打开默认摄像头，请在浏览器地址栏的站点设置中允许摄像头，并在浏览器摄像头设置中选择外接 RGB Camera，再点击刷新设备。</p>
+            </div>
+            <p v-if="cameraNeedsAuthorization && cameraNotice" class="sample-login-camera-notice" role="status">{{ cameraNotice }}</p>
             <div class="sample-login-camera">
               <video ref="camera" autoplay playsinline muted @loadeddata="cameraReady = true"></video>
               <span v-if="!cameraReady">{{ cameraOpening ? '正在开启摄像头…' : '请开启摄像头' }}</span>
-              <div class="sample-login-face-frame" aria-hidden="true"></div>
+              <svg class="sample-login-face-frame" viewBox="0 0 180 240" aria-hidden="true" focusable="false">
+                <path d="M90 8 C48 8 20 31 18 74 C15 122 29 175 54 211 C65 227 77 234 90 234 C103 234 115 227 126 211 C151 175 165 122 162 74 C160 31 132 8 90 8 Z" />
+              </svg>
             </div>
             <p>请正对摄像头，保持面部清晰无遮挡</p>
             <button v-if="!cameraReady" type="button" class="sample-login-submit" :disabled="cameraOpening || submitting" @click="openCamera">开启摄像头</button>
@@ -77,7 +85,7 @@ import AbpBase from '../../lib/abpbase';
 import Util from '../../lib/util';
 import AppConsts from '../../lib/appconst';
 import { passwordLogin, biometricLogin, sampleDestinations, terminalLoginError } from '../../lib/terminal-auth';
-import { externalCameraDevices, selectExternalCamera, externalCameraConstraints, terminalCameraError } from '../../lib/terminal-camera';
+import { CameraPermissionState, readCameraPermissionState, inspectExternalCameras, authorizeCameraDevices, selectExternalCamera, externalCameraConstraints, terminalCameraError } from '../../lib/terminal-camera';
 import { isTerminalAdmin, checkRegistrationAccess, registrationError } from '../../lib/terminal-registration';
 
 @Component
@@ -108,6 +116,12 @@ export default class TerminalLogin extends AbpBase {
   cameraDevices: MediaDeviceInfo[] = [];
   /** 用户选定的外接摄像头 ID，只用于当前页面，不允许失败后回退到默认设备。 */
   cameraDeviceId: string = '';
+  /** 浏览器未提供完整视频设备信息时，显示用户主动触发的授权入口。 */
+  cameraNeedsAuthorization: boolean = false;
+  /** 摄像头授权状态或双目通道选择说明。 */
+  cameraNotice: string = '';
+  /** 当前站点的摄像头权限；不支持查询时为 unknown。 */
+  cameraPermissionState: CameraPermissionState = 'unknown';
   /** 打开系统键盘前恢复焦点的输入框。 */
   activeInput: string = 'account';
   /** 本页面持有的摄像头流，切换方式或离开页面时释放。 */
@@ -183,13 +197,13 @@ export default class TerminalLogin extends AbpBase {
         this.errorMessage = '当前浏览器无法列出摄像头，请通过 localhost、127.0.0.1 或 HTTPS 访问。';
         return;
       }
-      const devices = await navigator.mediaDevices.enumerateDevices();
+      const [devices, permission] = await Promise.all([
+        navigator.mediaDevices.enumerateDevices(), readCameraPermissionState(navigator.permissions)
+      ]);
       if (generation !== this.generation || this.method !== 'face') return;
-      this.cameraDevices = externalCameraDevices(devices);
-      this.cameraDeviceId = selectExternalCamera(this.cameraDevices, this.cameraDeviceId);
-      if (!this.cameraDevices.length) {
-        this.errorMessage = '未找到可选的外接摄像头，请检查 USB 连接和站点摄像头权限后刷新设备。';
-      } else if (!this.cameraDeviceId) {
+      this.cameraPermissionState = permission;
+      this.updateCameraDevices(devices);
+      if (this.cameraDevices.length && !this.cameraDeviceId && !this.cameraNeedsAuthorization) {
         this.errorMessage = '请选择外接摄像头；首次授权前名称可能不可见，请在浏览器授权时确认外接设备。';
       }
     } catch (error) {
@@ -197,6 +211,40 @@ export default class TerminalLogin extends AbpBase {
     } finally {
       if (generation === this.generation) this.cameraOpening = false;
     }
+  }
+
+  /** 主动申请摄像头权限，临时默认流只用来列举设备，随后关闭并等待用户选择外接设备。 */
+  async authorizeCameras() {
+    if (this.cameraOpening || this.submitting || this.method !== 'face') return;
+    const generation = ++this.generation;
+    this.closeCamera();
+    this.cameraOpening = true;
+    this.errorMessage = '';
+    try {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia)
+        throw new Error('请通过 localhost、127.0.0.1 或 HTTPS 访问并允许摄像头权限。');
+      const devices = await authorizeCameraDevices(navigator.mediaDevices,
+        () => generation === this.generation && this.method === 'face', stream => { this.stream = stream; });
+      const permission = await readCameraPermissionState(navigator.permissions);
+      if (generation !== this.generation || this.method !== 'face') return;
+      this.cameraPermissionState = permission;
+      this.updateCameraDevices(devices);
+    } catch (error) {
+      if (generation === this.generation)
+        this.errorMessage = error.name === 'Error' ? error.message : terminalCameraError(error);
+    } finally {
+      if (generation === this.generation) { this.closeCamera(); this.cameraOpening = false; }
+    }
+  }
+
+  /** 按完整列表解释权限状态；已有视频流时禁止自动换选其他设备，确保预览和选择一致。 */
+  private updateCameraDevices(devices: MediaDeviceInfo[], allowAutoSelect: boolean = true) {
+    const discovery = inspectExternalCameras(devices, this.cameraPermissionState);
+    this.cameraDevices = discovery.devices;
+    this.cameraNeedsAuthorization = discovery.needsAuthorization;
+    this.cameraNotice = discovery.message;
+    if (!this.cameraDevices.some(device => device.deviceId === this.cameraDeviceId))
+      this.cameraDeviceId = allowAutoSelect ? selectExternalCamera(this.cameraDevices, '') : '';
   }
 
   /** 切换设备前释放旧流，随后只申请当前选定的摄像头。 */
@@ -229,9 +277,12 @@ export default class TerminalLogin extends AbpBase {
       }
       this.stream = stream;
       // 授权后重新获取名称，避免保留匿名设备选项；不改变用户选择的设备。
-      const devices = await navigator.mediaDevices.enumerateDevices();
+      const [devices, permission] = await Promise.all([
+        navigator.mediaDevices.enumerateDevices(), readCameraPermissionState(navigator.permissions)
+      ]);
       if (generation !== this.generation || this.method !== 'face') return;
-      this.cameraDevices = externalCameraDevices(devices);
+      this.cameraPermissionState = permission;
+      this.updateCameraDevices(devices, false);
       if (!this.cameraDevices.some(device => device.deviceId === this.cameraDeviceId)) {
         this.closeCamera();
         this.cameraDeviceId = '';
@@ -244,6 +295,7 @@ export default class TerminalLogin extends AbpBase {
     } catch (error) {
       if (generation === this.generation) {
         this.closeCamera();
+        if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') this.cameraNeedsAuthorization = true;
         this.errorMessage = terminalCameraError(error);
       }
     } finally {

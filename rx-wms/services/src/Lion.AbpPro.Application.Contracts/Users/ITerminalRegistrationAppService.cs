@@ -19,8 +19,8 @@ namespace Lion.AbpPro.Users
         /// <summary>取得新账号可分配的角色。</summary>
         Task<ListResultDto<IdentityRoleDto>> GetRolesAsync();
 
-        /// <summary>使用现有用户管理能力创建账号，密码规则及唯一性由 Identity 验证。</summary>
-        Task<IdentityUserDto> CreateUserAsync(IdentityUserCreateDto input);
+        /// <summary>创建一体机人员账号，邮箱选填，账号、密码及角色规则由 Identity 验证。</summary>
+        Task<IdentityUserDto> CreateUserAsync(CreateTerminalUserInput input);
 
         /// <summary>为指定人员录入特征，设备确认成功后启用登录绑定；失败保留停用的编号。</summary>
         Task<UserBiometricBindingDto> EnrollAsync(Guid userId, EnrollUserBiometricInput input);

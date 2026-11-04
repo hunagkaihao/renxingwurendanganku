@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Lion.AbpPro.ConfigurationOptions;
 using Lion.AbpPro.Users.Dtos;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
@@ -17,6 +18,7 @@ using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Uow;
+using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
 namespace Lion.AbpPro.Users
 {
@@ -47,12 +49,17 @@ namespace Lion.AbpPro.Users
         private readonly BiometricLoginOptions _options;
         /// <summary>持久化人脸和指静脉编号序列，跨租户及 WMS 实例避免同类编号重复分配。</summary>
         private readonly IBiometricNumberAllocator _biometricNumbers;
+        /// <summary>为无邮箱的一体机人员复用账号、密码和角色的领域校验。</summary>
+        private readonly IdentityUserManager _userManager;
+        /// <summary>加载当前租户的密码及账号规则，不修改全局 Identity 配置。</summary>
+        private readonly IOptions<IdentityOptions> _identityOptions;
 
         /// <summary>注入账号、角色、绑定仓储、工作单元及设备服务配置。</summary>
         public TerminalRegistrationAppService(IUserAppService users, IIdentityRoleAppService roles,
             IIdentityUserRepository userRepository, IRepository<UserBiometricBinding, Guid> bindings,
             IUnitOfWorkManager workManager, IHttpClientFactory clients, IOptionsSnapshot<BiometricLoginOptions> options,
-            IBiometricNumberAllocator biometricNumbers)
+            IBiometricNumberAllocator biometricNumbers, IdentityUserManager userManager,
+            IOptions<IdentityOptions> identityOptions)
         {
             _users = users;
             _roles = roles;
@@ -62,6 +69,8 @@ namespace Lion.AbpPro.Users
             _clients = clients;
             _options = options.Value;
             _biometricNumbers = biometricNumbers;
+            _userManager = userManager;
+            _identityOptions = identityOptions;
         }
 
         /// <summary>显式检查当前登录者角色，避免仅依赖前端入口或可伪造的 Cookie。</summary>
@@ -94,12 +103,49 @@ namespace Lion.AbpPro.Users
 
         /// <inheritdoc />
         [Authorize(IdentityPermissions.Users.Create)]
-        public Task<IdentityUserDto> CreateUserAsync(IdentityUserCreateDto input)
+        public async Task<IdentityUserDto> CreateUserAsync(CreateTerminalUserInput input)
         {
             EnsureAdmin();
-            if (input.RoleNames == null || !input.RoleNames.Any())
+            if (input == null || input.RoleNames == null || !input.RoleNames.Any())
                 throw new UserFriendlyException("请至少为新人员分配一个角色，否则无法登录。");
-            return _users.CreateAsync(input);
+            if (!string.IsNullOrEmpty(input.Email))
+                return await _users.CreateAsync(new IdentityUserCreateDto
+                {
+                    UserName = input.UserName.Trim(), Name = input.Name.Trim(), Email = input.Email,
+                    Password = input.Password, RoleNames = input.RoleNames, IsActive = true
+                });
+
+            await _identityOptions.SetAsync();
+            var originalOptions = _userManager.Options;
+            try
+            {
+                // 只替换当前作用域管理器的选项引用，空邮箱不参与唯一性检查；密码和账号规则完整保留。
+                // 不能直接修改 originalOptions.User，否则会影响使用同一配置对象的其他请求。
+                _userManager.Options = new IdentityOptions
+                {
+                    ClaimsIdentity = originalOptions.ClaimsIdentity, Password = originalOptions.Password,
+                    Lockout = originalOptions.Lockout, SignIn = originalOptions.SignIn,
+                    Tokens = originalOptions.Tokens, Stores = originalOptions.Stores,
+                    User = new UserOptions
+                    {
+                        AllowedUserNameCharacters = originalOptions.User.AllowedUserNameCharacters,
+                        RequireUniqueEmail = false
+                    }
+                };
+                // ABP 5.1 的实体构造函数不接受 null，未填写邮箱存为空字符串，不生成虚构邮箱。
+                var user = new IdentityUser(GuidGenerator.Create(), input.UserName.Trim(), string.Empty, CurrentTenant.Id)
+                {
+                    Name = input.Name.Trim()
+                };
+                (await _userManager.CreateAsync(user, input.Password)).CheckErrors();
+                (await _userManager.SetRolesAsync(user, input.RoleNames)).CheckErrors();
+                await CurrentUnitOfWork.SaveChangesAsync();
+                return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
+            }
+            finally
+            {
+                _userManager.Options = originalOptions;
+            }
         }
 
         /// <inheritdoc />
