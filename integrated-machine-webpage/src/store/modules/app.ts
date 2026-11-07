@@ -248,17 +248,14 @@ class AppModule implements Module<AppState, any>{
         },
 
         async getWMSStatus(content: ActionContext<AppState, any>, payload: any) {
-            if (appconst.wmsOnly) {
-                // 仅检查当前 WMS 的可访问性，不依赖旧设备服务，也不将网络失败弹窗循环播报。
-                const response = await axios.get(appconst.remoteServiceBaseUrl + '/api/abp/application-configuration', {
-                    timeout: 5000
-                });
-                if (!response.data || !response.data.currentUser || !response.data.auth) {
-                    throw new Error('WMS 应用配置响应无效');
-                }
-                return response;
+            // 两种模式都检查配置的当前 WMS；通信可达不代表 PLC 或机械手已就绪。
+            const response = await axios.get(appconst.remoteServiceBaseUrl + '/api/abp/application-configuration', {
+                timeout: 5000
+            });
+            if (!response.data || !response.data.currentUser || !response.data.auth) {
+                throw new Error('WMS 应用配置响应无效');
             }
-            return await ajax.get("/api/services/app/DAClient/GetWMSServerStatus");
+            return response;
         },
         async getWCSStatus(content: ActionContext<AppState, any>, payload: any) {
             return await ajax.get("/api/services/app/DAClient/GetWCSServerStatus");

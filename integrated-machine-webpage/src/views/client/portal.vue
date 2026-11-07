@@ -8,9 +8,9 @@
       </div>
       <nav class="portal-tools" aria-label="终端工具">
         <button type="button" class="portal-status" @click="openStatus"
-          :class="{ 'is-offline': !serviceConnect || (!wmsOnly && !(wcsStatusFlag && mjgStatusFlag && scadaStatusFlag && plcStatusFlag)) }">
+          :class="{ 'is-offline': !serviceConnect }">
           <span class="portal-status-dot"></span>
-          {{ serviceConnect && (wmsOnly || (wcsStatusFlag && mjgStatusFlag && scadaStatusFlag && plcStatusFlag)) ? (wmsOnly ? 'WMS 已连接' : '服务正常') : '服务待检查' }}
+          {{ wmsStatusPending ? '正在检查 WMS' : (serviceConnect ? 'WMS 已连接' : 'WMS 待检查') }}
           <Icon type="ios-arrow-forward" size="16" />
         </button>
         <button type="button" class="portal-tool" @click="userRegister" title="人员注册">
@@ -69,7 +69,11 @@
     </main>
 
     <footer class="portal-footer"><span>智慧无人库 · 自助操作台</span><span>请按页面指引操作</span></footer>
-    <serviceStatus v-model="statusModalShow" :servicesFlag="serviceConnect" @save-success="GetServicesFlag" @never-tip="GetneverTip"></serviceStatus>
+    <Modal v-model="statusModalShow" title="服务连接状态" :footer-hide="true">
+      <p>{{ serviceConnect ? 'WMS 服务已连接。' : 'WMS 服务暂时无法访问，请检查服务连接。' }}</p>
+      <p style="margin-top:12px">设备运行状态请以业务任务反馈及现场状态为准。</p>
+      <Button style="margin-top:16px" :loading="wmsStatusPending" @click="validator">重新检查</Button>
+    </Modal>
     <userlogin v-model="createModalShow"></userlogin>
   </div>
 </template>
@@ -77,14 +81,12 @@
 import { Component, Vue,Inject, Prop,Watch } from 'vue-property-decorator';
 import iView from 'iview';
 import Cookies from 'js-cookie';
-import ServiceStatus from './serviceStatus.vue'
-import axios from 'axios';
 import AbpBase from '../../lib/abpbase'
 import userlogin from './userlogin.vue'
 import AppConsts from '../../lib/appconst';
 
   @Component({
-    components:{ServiceStatus,userlogin}
+    components:{userlogin}
   })
 export default class Login extends AbpBase {
   /** 仅 WMS 模式不调用旧任务统计及设备服务。 */
@@ -98,7 +100,7 @@ export default class Login extends AbpBase {
   showUnlock:boolean=false;
   intervalId:number=0;
   statusModalShow:boolean=false;
-  serviceConnect:boolean=true;//服务器连接状态
+  serviceConnect:boolean=false;//首次检查通过前不显示已连接
   wcsStatusFlag:boolean=true;//WCS服务器连接状态
   mjgStatusFlag:boolean=true;//密集架连接状态
   scadaStatusFlag:boolean=true;//SCADA连接状态
@@ -318,13 +320,11 @@ export default class Login extends AbpBase {
     }
   }
 get taskInCount(){
-  if (this.wmsOnly) return null;
-  return this.$store.state.app.taskInCount;
+  // 首页尚未验证本轮身份，不展示旧接口缓存的业务数量。
+  return null;
 }
 get taskOutCount(){
-  if (this.wmsOnly) return null;
-  //console.log(this.$store.state.app.taskOutCount)
-  return this.$store.state.app.taskOutCount;
+  return null;
 }
   get batInCount(){
   return this.$store.state.app.batInCount;
@@ -332,176 +332,15 @@ get taskOutCount(){
   get checkOutCount(){
   return this.$store.state.app.checkOutCount;
 }
+/** 只检查当前配置的 WMS，首页不再探测旧地址或未验证的设备状态。 */
 validator () {
-    if (this.wmsOnly) {
-      if (this.wmsStatusPending) return;
-      this.wmsStatusPending = true;
-      this.$store.dispatch('app/getWMSStatus')
-        .then(() => { this.serviceConnect = true; })
-        .catch(() => { this.serviceConnect = false; })
-        .then(() => { this.wmsStatusPending = false; });
-      return;
-    }
-      // await this.$store.dispatch({
-      //     type:'app/faceinfo',
-      //      data: {
-      //           "RequestValue":  2818,
-      //           "pass":  "123456"
-      //           }
-      // }) 
-
-        this.$store.dispatch({
-          type:'app/getTaskCt'
-        }).then( async (response) => {
-          this.serviceConnect=true;
-                      })
-                      .catch( (error) => {
-                          // console.log(error);
-                          this.serviceConnect=false;
-                          this.openStatus2();
-                          alert("WMS后台服务器连接异常，请检查服务器");
-                          //语音报警
-                          try{
-                            // @ts-ignore:无法被执行的代码的错误
-                            bound.speakmsg("后台服务器异常")
-                          }catch(error){
-
-                          }
-                      }); 
-             //alert(1);
-      if(!this.statusModalShow)
-      {
-                //检查WCS服务状态
-        axios.get('http://192.168.1.188:21021/api/services/app/DAClient/GetWCSServerStatus')
-        .then(async (response) => {
-          // this.serviceConnect=false;
-          // console.log(response);
-          if (response.data.result) {
-            this.wcsStatusFlag=true;
-          } else {
-            this.wcsStatusFlag=false;
-            this.openStatus2();
-            // alert("WCS后台服务器连接异常，请检查服务器");
-            try{
-              // @ts-ignore:无法被执行的代码的错误
-              bound.speakmsg("WCS控制系统异常")
-             }catch(error){
-
-             }
-          }
-        })
-        .catch((error) => {
-          // console.log(error);
-          this.wcsStatusFlag=false;
-            this.openStatus2();
-            // alert("WCS后台服务器连接异常，请检查服务器");
-            try{
-              // @ts-ignore:无法被执行的代码的错误
-              bound.speakmsg("WCS控制系统异常")
-             }catch(error){
-
-             }
-
-        });
-        //检查密集架服务状态
-            axios.get('http://192.168.1.188:21021/api/services/app/DAClient/GetMJJServerStatus?mjjName=DAK')
-        .then(async (response) => {
-          if (response.data.result) {
-            this.mjgStatusFlag = true;
-          } else {
-            this.mjgStatusFlag = false;
-            this.openStatus2();
-            try{
-              // @ts-ignore:无法被执行的代码的错误
-              bound.speakmsg("密集架接口异常")
-             }catch(error){
-
-             }
-          }
-        })
-        .catch((error) => {
-          this.mjgStatusFlag = false;
-          this.openStatus2();
-          try{
-              // @ts-ignore:无法被执行的代码的错误
-              bound.speakmsg("密集架接口异常")
-             }catch(error){
-
-             }
-        }); 
-        //龙门机械手运行状态
-            axios.get('http://192.168.1.188:21021/api/services/app/DAClient/GetScadaServerStatus')
-        .then(async (response) => {
-          if (response.data.result) {
-            this.scadaStatusFlag = true;
-          } else {
-            this.scadaStatusFlag = false;
-            this.openStatus2();
-          }
-        })
-        .catch((error) => {
-          this.scadaStatusFlag = false;
-          this.openStatus2();
-        }); 
-        
-                //PLC状态       
-            axios.get("http://192.168.1.188:21021/api/services/app/DAClient/GetPLCServerStatus")
-          .then(async (response) => {
-            var nodes = response.data.result.items;
-            //  console.log(nodes);
-            if (nodes.find((f) => f.commQuality == "Bad"&&f.nodeName == "EmergencyStop")) {
-              this.plcStatusFlag = false;
-              try{
-                  // @ts-ignore:无法被执行的代码的错误
-                  bound.speakmsg("PLC通讯异常")
-                }catch(error){
-
-               }
-            } else {
-              if (nodes.find((f) => f.nodeName == "EmergencyStop").value == "0") {
-                this.plcStatusFlag = false;
-                this.openStatus2();
-                // alert("设备急停被拍下");
-                try{
-                  // @ts-ignore:无法被执行的代码的错误
-                  bound.speakmsg("急停按钮被按下")
-                }catch(error){
-
-               }
-              }
-              else
-              {
-                this.plcStatusFlag = true;
-              }
-              //龙门原点状态
-              if (nodes.find((f) => f.nodeName == "LM_Zero").value == "0") {
-                if(this.taskInCount+this.taskOutCount==0)
-                {
-                    this.plcStatusFlag = false;
-                }
-              }
-              else
-              {
-                // this.plcStatusFlag = true;
-              }
-            }
-          })
-          .catch(async (error) => {
-            // console.log(error);
-            this.plcStatusFlag = false;
-            this.openStatus2();
-            try{
-                  // @ts-ignore:无法被执行的代码的错误
-                  bound.speakmsg("PLC通讯异常")
-                }catch(error){
-
-               }
-
-          });
-      }
-
-
-  }
+  if (this.wmsStatusPending) return;
+  this.wmsStatusPending = true;
+  this.$store.dispatch('app/getWMSStatus')
+    .then(() => { this.serviceConnect = true; })
+    .catch(() => { this.serviceConnect = false; })
+    .then(() => { this.wmsStatusPending = false; });
+}
   openStatus2 () {
     if(!this.neverTip){
       this.openStatus();
