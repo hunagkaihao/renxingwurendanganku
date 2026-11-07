@@ -70,7 +70,8 @@ public static class WarehouseManagementDbContextModelCreatingExtensions
             // 数据库统一使用 MaterialBarcode，保留现有实体属性以兼容内部业务调用。
             b.Property(q => q.MaterialBoxBarcode).HasColumnName("MaterialBarcode");
             b.HasIndex(q => q.CreationTime);
-            b.Property(q => q.MaterialOutTime).HasColumnType("datetime");
+            // 保留已有出库记录的微秒精度，数据库使用日期类型支持比较和排序。
+            b.Property(q => q.MaterialOutTime).HasColumnType("datetime(6)");
             // 支持实物条码、名称及所在库位的精确查找。
             b.HasIndex(q => q.MaterialBoxBarcode);
             b.HasIndex(q => q.MaterialBoxName);
@@ -80,6 +81,8 @@ public static class WarehouseManagementDbContextModelCreatingExtensions
         builder.Entity<Cell>(b =>
         {
             b.Property(q => q.MaterialCode).HasMaxLength(128);
+            // 按排读取有效库位并按层、列排序，覆盖 ABP 软删除过滤。
+            b.HasIndex(q => new { q.Cell_z, q.CellType, q.IsDeleted, q.Cell_y, q.Cell_x });
         });
         builder.Entity<MaterialBoxDetail>(b =>
         {
@@ -100,6 +103,8 @@ public static class WarehouseManagementDbContextModelCreatingExtensions
         });
         builder.Entity<Rfid>(b =>
         {
+            // RFID 编码匹配及编码/类型组合校验共用联合索引。
+            b.HasIndex(q => new { q.RfidCode, q.RfidTypeCode });
             b.ToTable(WarehouseManagementDbProperties.DbTablePrefix + nameof(Rfid), WarehouseManagementDbProperties.DbSchema);
             b.HasIndex(q => q.CreationTime);
             b.ConfigureByConvention();
@@ -129,6 +134,8 @@ public static class WarehouseManagementDbContextModelCreatingExtensions
             b.Property(b => b.TaskTypeCode).HasColumnType("varchar(20)");
             // 支持按实物条码查找任务并筛选执行状态。
             b.HasIndex(q => new { q.MaterialBoxBarcode, q.TaskStatus });
+            // 任务列表按状态筛选未删除记录，再按任务 ID 倒序分页。
+            b.HasIndex(q => new { q.TaskStatus, q.IsDeleted, q.Id });
             b.Property(b => b.TaskStatus).HasColumnType("varchar(20)");
             //b.HasMany(u => u.Goodss).WithOne().HasForeignKey(ur => ur.StorageBoxId).IsRequired();
             b.ConfigureByConvention();
@@ -243,6 +250,8 @@ public static class WarehouseManagementDbContextModelCreatingExtensions
 
         builder.Entity<Face>(b =>
         {
+            // 兼容现有终端按人员编号查找人脸记录。
+            b.HasIndex(q => q.UserId);
             b.ToTable(WarehouseManagementDbProperties.DbTablePrefix + nameof(Face), WarehouseManagementDbProperties.DbSchema);
             b.HasIndex(q => q.CreationTime);
             b.ConfigureByConvention();
@@ -250,6 +259,8 @@ public static class WarehouseManagementDbContextModelCreatingExtensions
 
         builder.Entity<Vein>(b =>
         {
+            // 指静脉登录按人员编号查找绑定记录。
+            b.HasIndex(q => q.UserId);
             b.ToTable(WarehouseManagementDbProperties.DbTablePrefix + nameof(Vein), WarehouseManagementDbProperties.DbSchema);
             b.HasIndex(q => q.CreationTime);
             b.ConfigureByConvention();

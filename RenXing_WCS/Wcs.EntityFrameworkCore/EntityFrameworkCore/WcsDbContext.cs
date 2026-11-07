@@ -52,6 +52,8 @@ public class WcsDbContext :
     {
         base.OnModelCreating(builder);
 
+        builder.ConfigureDispatchQueryIndexes();
+
 
         // 配置所有实体适应SQLite
         foreach (var entity in builder.Model.GetEntityTypes())
